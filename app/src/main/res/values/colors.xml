@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="black">#1E2326</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="green0">#E3E9Ef</color>
+    <color name="green100">#CAF4E2</color>
+    <color name="green200">#A7ECCF</color>
+    <color name="green300">#75E2B4</color>
     <color name="green400">#41D797</color>
+    <color name="green500">#39BE85</color>
+    <color name="green600">#31A473</color>
+    <color name="green700">#28835C</color>
+    <color name="green800">#1F6748</color>
+    <color name="green900">#195239</color>
+
+    <color name="pink0">#FFF6FE</color>
+    <color name="pink100">#FEEAFD</color>
+    <color name="pink200">#FCBCF9</color>
+    <color name="pink300">#FA96F6</color>
+    <color name="pink400">#F86EF3</color>
+    <color name="pink500">#DB61D6</color>
+    <color name="pink600">#BD54B9</color>
+    <color name="pink700">#974394</color>
+    <color name="pink800">#773574</color>
+    <color name="pink900">#4A2148</color>
+
+    <color name="blue0">#7FBAFC</color>
+    <color name="blue100">#CEE5FE</color>
+    <color name="blue200">#AED3FD</color>
+    <color name="blue300">#7FBAFC</color>
+    <color name="blue400">#4EA0FB</color>
+    <color name="blue500">#458DDD</color>
+    <color name="blue600">#3B7ABF</color>
+    <color name="blue700">#306199</color>
+    <color name="blue800">#1F3D5F</color>
+    <color name="blue900">#17304B</color>
+
+    <color name="red0">#FFECEE</color>
+    <color name="red100">#FFC8CE</color>
+    <color name="red200">#FFA5AD</color>
+    <color name="red300">#FF7883</color>
+    <color name="red400">#FF1B36</color>
+    <color name="red500">#E61931</color>
+    <color name="red600">#E61931</color>
+    <color name="red700">#BB1024</color>
+    <color name="red800">#800E1B</color>
+    <color name="red900">#40070E</color>
+
+    <color name="gray0">#F8F9F9</color>
+    <color name="gray100">#F3F5F6</color>
+    <color name="gray200">#E9EBED</color>
+    <color name="gray300">#D8DCDE</color>
+    <color name="gray400">#C2C8CC</color>
+    <color name="gray500">#A1AAB0</color>
+    <color name="gray600">#7E8991</color>
+    <color name="gray700">#68737D</color>
+    <color name="gray800">#49545C</color>
+    <color name="gray900">#2C3338</color>
 </resources>
