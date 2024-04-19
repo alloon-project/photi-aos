@@ -3,57 +3,142 @@
     <style name="Base.Theme.Alloonaos" parent="Theme.AppCompat.Light">
         <item name="android:layout_width">360dp</item>
         <item name="android:layout_height">780dp</item>
-        <item name="colorPrimary">@color/color_green</item>
-        <item name="colorSecondary">@color/color_pink</item>
-        <item name="colorTertiary">@color/color_blue</item>
     </style>
     <style name="Theme.Alloonaos" parent="Base.Theme.Alloonaos" />
 
-    <!-- Round Button -->
-    <style name="Theme.xlarge_btn" parent="Base.Theme.Alloonaos" >
+    <!-- ////////////////////// Round Button ////////////////////////// -->
+    <!-- round button -->
+    <style name="Theme.round_btn" parent="Theme.Alloonaos">
+        <item name="colorPrimary">@color/btn_color_green</item>
+        <item name="colorSecondary">@color/btn_color_pink</item>
+        <item name="colorTertiary">@color/btn_color_blue</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="Theme.xlarge_round" parent="Theme.round_btn">
         <item name="android:width">312dp</item>
         <item name="android:height">56dp</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:bottomLeftRadius">16dp</item>
         <item name="android:bottomRightRadius">16dp</item>
         <item name="android:topLeftRadius">16dp</item>
         <item name="android:topRightRadius">16dp</item>
     </style>
-    <style name="Theme.large_btn" parent="Base.Theme.Alloonaos" >
+    <style name="Theme.large_round" parent="Theme.round_btn" >
         <item name="android:width">264dp</item>
         <item name="android:height">56dp</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:bottomLeftRadius">16dp</item>
         <item name="android:bottomRightRadius">16dp</item>
         <item name="android:topLeftRadius">16dp</item>
         <item name="android:topRightRadius">16dp</item>
     </style>
-    <style name="Theme.medium_btn" parent="Base.Theme.Alloonaos" >
+    <style name="Theme.medium_round" parent="Theme.round_btn" >
         <item name="android:width">141dp</item>
         <item name="android:height">52dp</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:bottomLeftRadius">14dp</item>
         <item name="android:bottomRightRadius">14dp</item>
         <item name="android:topLeftRadius">14dp</item>
         <item name="android:topRightRadius">14dp</item>
     </style>
-    <style name="Theme.small_btn" parent="Base.Theme.Alloonaos" >
+    <style name="Theme.small_round" parent="Theme.round_btn" >
         <item name="android:width">120dp</item>
         <item name="android:height">46dp</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:bottomLeftRadius">12dp</item>
         <item name="android:bottomRightRadius">12dp</item>
         <item name="android:topLeftRadius">12dp</item>
         <item name="android:topRightRadius">12dp</item>
     </style>
-    <style name="Theme.xsmall_btn" parent="Base.Theme.Alloonaos" >
+    <style name="Theme.xsmall_round" parent="Theme.round_btn" >
         <item name="android:width">70dp</item>
         <item name="android:height">34dp</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">10sp</item>
         <item name="android:bottomLeftRadius">10dp</item>
         <item name="android:bottomRightRadius">10dp</item>
         <item name="android:topLeftRadius">10dp</item>
         <item name="android:topRightRadius">10dp</item>
     </style>
+
+    <!-- icon+text button -->
+    <style name="Theme.icon_text_btn" parent="Theme.Alloonaos">
+        <item name="backgroundTint">@color/green400</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="Theme.xlarge_icon_text" parent="Theme.icon_text_btn">
+        <item name="android:width">312dp</item>
+        <item name="android:height">56dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:bottomLeftRadius">16dp</item>
+        <item name="android:bottomRightRadius">16dp</item>
+        <item name="android:topLeftRadius">16dp</item>
+        <item name="android:topRightRadius">16dp</item>
+    </style>
+    <style name="Theme.large_icon_text" parent="Theme.icon_text_btn" >
+        <item name="android:width">264dp</item>
+        <item name="android:height">56dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:bottomLeftRadius">16dp</item>
+        <item name="android:bottomRightRadius">16dp</item>
+        <item name="android:topLeftRadius">16dp</item>
+        <item name="android:topRightRadius">16dp</item>
+    </style>
+    <style name="Theme.medium_icon_text" parent="Theme.icon_text_btn" >
+        <item name="android:width">141dp</item>
+        <item name="android:height">52dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:bottomLeftRadius">14dp</item>
+        <item name="android:bottomRightRadius">14dp</item>
+        <item name="android:topLeftRadius">14dp</item>
+        <item name="android:topRightRadius">14dp</item>
+    </style>
+    <style name="Theme.small_icon_text" parent="Theme.icon_text_btn" >
+        <item name="android:width">120dp</item>
+        <item name="android:height">46dp</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:bottomLeftRadius">12dp</item>
+        <item name="android:bottomRightRadius">12dp</item>
+        <item name="android:topLeftRadius">12dp</item>
+        <item name="android:topRightRadius">12dp</item>
+    </style>
+    <style name="Theme.xsmall_icon_text" parent="Theme.icon_text_btn" >
+        <item name="android:width">70dp</item>
+        <item name="android:height">34dp</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:bottomLeftRadius">10dp</item>
+        <item name="android:bottomRightRadius">10dp</item>
+        <item name="android:topLeftRadius">10dp</item>
+        <item name="android:topRightRadius">10dp</item>
+    </style>
+
+    <!-- line button text color -->
+    <style name="Theme.green_text" parent="Theme.Alloonaos">
+        <item name="android:textColor">@color/green500</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="Theme.green_small_text" parent="Theme.Alloonaos">
+        <item name="android:textColor">@color/green500</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="Theme.pink_text" parent="Theme.Alloonaos">
+        <item name="android:textColor">@color/pink500</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="Theme.pink_small_text" parent="Theme.Alloonaos">
+        <item name="android:textColor">@color/pink500</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="Theme.blue_text" parent="Theme.Alloonaos">
+        <item name="android:textColor">@color/blue500</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="Theme.blue_small_text" parent="Theme.Alloonaos">
+        <item name="android:textColor">@color/green500</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+
+    <!-- ////////////////////// Icon Button ////////////////////////// -->
+    <!-- Priamry Button -->
 
 </resources>
