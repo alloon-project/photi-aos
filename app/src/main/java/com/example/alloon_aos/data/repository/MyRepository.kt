@@ -15,7 +15,7 @@ interface MainRepositoryCallback<T> {
 }
 
 class MyRepository(private val apiService: ApiService) {
-    private val email : Map<String, String> = mapOf("email" to "tester@alloon.com")
+    private val email : Map<String, String> = mapOf("email" to "ejsong428@gmail.com")
 
     fun sendEmailCode(callback: MainRepositoryCallback<AuthDTO>) {
         apiService.post_sendEmailCode(email).enqueue(object : Callback<AuthDTO> {
