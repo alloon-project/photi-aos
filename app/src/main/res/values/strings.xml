@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">alloon-aos</string>
-    <string name="btn_text"><u>button</u></string>
+    <string name="login"><u>로그인</u></string>
+    <string name="signup"><u>회원가입</u></string>
 </resources>
