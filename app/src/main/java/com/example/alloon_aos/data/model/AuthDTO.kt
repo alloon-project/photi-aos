@@ -9,14 +9,18 @@ data class AuthDTO(
     @field:Json(name = "message")
     val message: String,
     @field:Json(name = "data")
-    val `data`: List<Data?>?
+    val `data`: Data
 )
 
 data class Data(
     @field:Json(name = "userId")
     val userId : Int,
     @field:Json(name = "username")
-    val username : String
+    val username : String,
+    @field:Json(name = "imageUrl")
+    val imageUrl : String,
+    @field:Json(name = "temporaryPasswordYn")
+    val temporaryPasswordYn : Boolean
 )
 
 data class UserData(
@@ -24,13 +28,13 @@ data class UserData(
     var verificationCode : String?=null,
     var username : String? =null,
     var password : String? =null,
-    var passwordReEntered : String? =null
+    var passwordReEnter : String? =null
 )
 
 data class NewPwd(
     var password : String? = null,
     var newPassword : String? = null,
-    var newPasswordReEntered : String ?= null
+    var newPasswordReEnter : String ?= null
 )
 
 data class EmailCode(

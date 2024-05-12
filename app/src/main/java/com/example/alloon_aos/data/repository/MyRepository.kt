@@ -15,29 +15,11 @@ interface MainRepositoryCallback<T> {
 }
 
 class MyRepository(private val apiService: ApiService) {
-    private val email : Map<String, String> = mapOf("email" to "ejsong428@gmail.com")
+    private val email : Map<String, String> = mapOf("email" to "byeolstar12@naver.com")
 
-    fun sendEmailCode(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.post_sendEmailCode(email).enqueue(object : Callback<AuthDTO> {
-            override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
-                if (response.isSuccessful) {
-                    callback.onSuccess(response.body()!!)
-                } else {
-                    //Exception 400 : ex.이메일 인증을 먼저 해주세요.
-                    var stringToJson = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(stringToJson))
-                }
-            }
-
-            override fun onFailure(call: Call<AuthDTO>, t: Throwable) {
-                callback.onFailure(t)
-
-            }
-        })
-    }
 
     fun verifyEmailCode(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.patch_verifyEmailCode(EmailCode("tester@alloon.com","000000")).enqueue(object : Callback<AuthDTO> {
+        apiService.patch_verifyEmailCode(EmailCode("byeolstar12@naver.com","NwEkGX")).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
@@ -55,7 +37,7 @@ class MyRepository(private val apiService: ApiService) {
     }
 
     fun verifyId(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.get_verifyId("tester").enqueue(object : Callback<AuthDTO> {
+        apiService.get_verifyId("byeolstar12").enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
@@ -73,7 +55,7 @@ class MyRepository(private val apiService: ApiService) {
     }
 
     fun signUp(callback: MainRepositoryCallback<AuthDTO>) {
-        val data = UserData("tester@alloon.com","000000","tester","password1!","password1!")
+        val data = UserData("byeolstar12@naver.com","NwEkGX","hb_hb_hb","password1!","password1!")
         apiService.post_signUp(data).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
@@ -111,7 +93,7 @@ class MyRepository(private val apiService: ApiService) {
     }
 
     fun findPwd(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.post_findPwd(UserData(email = "tester@alloon.com", username = "tester")).enqueue(object : Callback<AuthDTO> {
+        apiService.post_findPwd(UserData(email = "byeolstar12@naver.com", username = "hbhbhb")).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
@@ -129,7 +111,7 @@ class MyRepository(private val apiService: ApiService) {
     }
 
     fun login(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.post_login(UserData(username = "tester", password = "password1!")).enqueue(object : Callback<AuthDTO> {
+        apiService.post_login(UserData(username = "hbhbhb", password = "Q9y20Y3q")).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
@@ -147,7 +129,7 @@ class MyRepository(private val apiService: ApiService) {
     }
 
     fun modifyPwd(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.patch_modifyPwd(NewPwd("password1!","password2!","password2!")).enqueue(object : Callback<AuthDTO> {
+        apiService.patch_modifyPwd(NewPwd("Q9y20Y3q!","password2!","password2!")).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)

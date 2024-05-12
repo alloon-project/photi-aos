@@ -14,42 +14,42 @@ import retrofit2.http.PATCH
 
 interface ApiService {
     @Headers("Content-Type: application/json")
-    @POST("/api/v1/contacts")
+    @POST("/api/contacts")
     fun post_sendEmailCode(
         @Body params:Map<String, String>)
     : Call<AuthDTO>
 
-    @PATCH("/api/v1/contacts/verify")
+    @PATCH("/api/contacts/verify")
     fun patch_verifyEmailCode(
         @Body params:EmailCode)
             : Call<AuthDTO>
 
-    @GET("/api/v1/users/username")
+    @GET("/api/users/username")
     fun get_verifyId(
         @Query("username") name : String)
     : Call<AuthDTO>
 
-    @POST("/api/v1/users/register")
+    @POST("/api/users/register")
     fun post_signUp(
         @Body parmas:UserData
     ): Call<AuthDTO>
 
-    @POST("/api/v1/users/find-username")
+    @POST("/api/users/find-username")
     fun post_findId(
         @Body parmas:Map<String,String>
     ): Call<AuthDTO>
 
-    @POST("/api/v1/users/find-password")
+    @POST("/api/users/find-password")
     fun post_findPwd(
         @Body parmas:UserData
     ): Call<AuthDTO>
 
-    @POST("/api/v1/users/login")
+    @POST("/api/users/login")
     fun post_login(
         @Body parmas:UserData
     ): Call<AuthDTO>
 
-    @PATCH("/api/v1/users/password")
+    @PATCH("/api/users/password")
     fun patch_modifyPwd(
         @Body parmas:NewPwd
     ): Call<AuthDTO>
