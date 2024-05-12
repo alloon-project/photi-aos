@@ -175,7 +175,6 @@
     <!-- ////////////////////// Text Button ////////////////////////// -->
     <style name="Theme.text_btn" parent="Theme.Alloonaos">
         <item name="android:textColor">@color/btn_text</item>
-        <item name="backgroundTint">#00FF0000</item>
     </style>
     <style name="Theme.text_xlarge" parent="Theme.text_btn">
         <item name="android:height">59dp</item>
@@ -183,6 +182,8 @@
         <item name="android:padding">12dp</item>
     </style>
     <style name="Theme.text_small" parent="Theme.text_btn">
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">70dp</item>
         <item name="android:height">25dp</item>
         <item name="android:textSize">9dp</item>
         <item name="android:padding">8dp</item>

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">alloon-aos</string>
-    <string name="login"><u>로그인</u></string>
-    <string name="signup"><u>회원가입</u></string>
+    <string name="login">로그인</string>
+    <string name="signup">회원가입</string>
+    <string name="findid"><u>아이디 찾기</u></string>
+    <string name="findpw"><u>비밀번호 찾기</u></string>
 </resources>
