@@ -33,10 +33,9 @@ class MainActivity : AppCompatActivity() {
             2 -> {
                 ft.replace(R.id.main_frame , SignUpFragment()).commit()
             }
-//            3 -> {
-//                //mainframe만큼 교체하고 Fragement1이랑 교체를 하고 저장(commit)
-//                ft.replace(R.id.main_frame, Fragment3()).commit()
-//            }
+            3 -> {
+                println("!!")
+            }
         }
     }
 }

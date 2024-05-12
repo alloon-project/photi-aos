@@ -33,13 +33,17 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentLoginBinding.inflate(inflater)
+        val binding = FragmentLoginBinding.inflate(inflater,container, false)
         var id = null
         var loginId = binding.loginId
         var loginPw = binding.loginPw
 
         binding.loginBtn.setOnClickListener { view: View ->
             authViewModel.getData()
+        }
+
+        binding.findId.setOnClickListener {view: View ->
+            println("아이디 찾기 프래그먼트로 이동")
         }
 
         loginId.addTextChangedListener(object: TextWatcher{
@@ -82,7 +86,7 @@ class LoginFragment : Fragment() {
             view.findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
 
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        return binding.root
     }
 
     companion object {
