@@ -90,30 +90,30 @@ class AuthViewModel:ViewModel() {
 //            }
 //        })
 //
-//        repository.login(object :
-//            MainRepositoryCallback<AuthDTO> {
-//            override fun onSuccess(data: AuthDTO) {
-//                val result = data.code
-//                val mes = data.message
-//                Log.d("TAG","login: $mes $result")
-//            }
-//
-//            override fun onFailure(error: Throwable) {
-//                Log.d("TAG","login" + error.message.toString())
-//            }
-//        })
-//
-        repository.modifyPwd(object :
+        repository.login(object :
             MainRepositoryCallback<AuthDTO> {
             override fun onSuccess(data: AuthDTO) {
                 val result = data.code
                 val mes = data.message
-                Log.d("TAG","modifyPwd: $mes $result")
+                Log.d("TAG","login: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
-                Log.d("TAG","modifyPwd"+ error.message.toString())
+                Log.d("TAG","login" + error.message.toString())
             }
         })
+
+//        repository.modifyPwd(object :
+//            MainRepositoryCallback<AuthDTO> {
+//            override fun onSuccess(data: AuthDTO) {
+//                val result = data.code
+//                val mes = data.message
+//                Log.d("TAG","modifyPwd: $mes $result")
+//            }
+//
+//            override fun onFailure(error: Throwable) {
+//                Log.d("TAG","modifyPwd"+ error.message.toString())
+//            }
+//        })
     }
 }
