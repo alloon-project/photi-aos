@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityMainBinding
@@ -21,5 +19,24 @@ class MainActivity : AppCompatActivity() {
 
         authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
         authViewModel.getData()
+
+        setFrag(1)
+    }
+    //프래그먼트를 교체해주는 함수
+    public fun setFrag(fragNum : Int) {
+        //프래그먼트를 관리하는 클래스
+        val ft = supportFragmentManager.beginTransaction()
+        when(fragNum){
+            1 -> {
+                ft.replace(R.id.main_frame  , LoginFragment()).commit()
+            }
+            2 -> {
+                ft.replace(R.id.main_frame , SignUpFragment()).commit()
+            }
+//            3 -> {
+//                //mainframe만큼 교체하고 Fragement1이랑 교체를 하고 저장(commit)
+//                ft.replace(R.id.main_frame, Fragment3()).commit()
+//            }
+        }
     }
 }
