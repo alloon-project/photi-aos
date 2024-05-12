@@ -34,6 +34,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentLoginBinding.inflate(inflater,container, false)
+        val mActivity = activity as MainActivity
         var id = null
         var loginId = binding.loginId
         var loginPw = binding.loginPw
@@ -44,6 +45,7 @@ class LoginFragment : Fragment() {
 
         binding.findId.setOnClickListener {view: View ->
             println("아이디 찾기 프래그먼트로 이동")
+            mActivity.setFrag(3)
         }
 
         loginId.addTextChangedListener(object: TextWatcher{

@@ -1,12 +1,11 @@
 package com.example.alloon_aos.view.activity
 
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityMainBinding
+import com.example.alloon_aos.view.fragment.FindIdFragment
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                 ft.replace(R.id.main_frame , SignUpFragment()).commit()
             }
             3 -> {
-                println("!!")
+                ft.replace(R.id.main_frame , FindIdFragment()).commit()
             }
         }
     }

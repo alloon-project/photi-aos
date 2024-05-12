@@ -3,6 +3,6 @@
     <!--font일괄적용-->
     <font android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/suit_medium"/>
+        android:font="@font/suit_regular"/>
 
 </font-family>
