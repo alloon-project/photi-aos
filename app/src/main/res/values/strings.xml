@@ -4,4 +4,7 @@
     <string name="signup">회원가입</string>
     <string name="findid"><u>아이디 찾기</u></string>
     <string name="findpw"><u>비밀번호 찾기</u></string>
+    <string name="emailerror1">x&#160;&#160;&#160;이메일 형태가 올바르지 않아요</string>
+    <string name="emailerror2">!&#160;&#160;&#160;가입되지 않은 이메일이에요</string>
+
 </resources>

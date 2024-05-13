@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.alloon_aos.view.fragment.FindIdFragment" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue100">
     <LinearLayout
-        android:layout_width="360dp"
-        android:layout_height="780dp"
+        style="@style/Theme.Alloonaos"
         android:orientation="vertical"
-        tools:ignore="MissingConstraints"
-        android:background="@color/white">
+        android:background="@color/white"
+        tools:ignore="MissingConstraints">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/action_bar"
             android:layout_width="360dp"
@@ -42,7 +47,7 @@
             android:layout_marginTop="74dp"
             android:layout_marginRight="24dp"
             android:layout_marginLeft="24dp"
-            android:text="가입 시 사용했던 \n 이메일을 입력해주세요"
+            android:text="가입 시 사용했던 \n이메일을 입력해주세요"
             android:textSize="18sp"
             android:textColor="@color/gray900"
             android:fontFamily="@font/suit_bold"
@@ -57,18 +62,32 @@
             android:inputType="textEmailAddress"
             android:layout_marginTop="24dp"
             android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"/>
+            android:layout_marginRight="24dp"
+            android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/error_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/emailerror1"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
+            android:textSize="12sp"
+            android:textColor="@color/red400"
+            android:visibility="invisible"/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:theme="@style/Theme.xlarge_round"
-            android:backgroundTint="@color/green200"
-            android:layout_marginTop = "452dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:text="다음"/>
+            android:layout_marginTop="394dp"
+            android:backgroundTint="@color/green200"
+            android:text="다음"
+            android:theme="@style/Theme.xlarge_round" />
 
 
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
