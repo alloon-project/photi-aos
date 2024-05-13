@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,13 +11,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFindIdBinding
 import com.example.alloon_aos.view.activity.MainActivity
-import com.example.alloon_aos.viewmodel.AuthViewModel
 import com.example.alloon_aos.viewmodel.MainViewModel
-import java.util.regex.Pattern
 
 class FindIdFragment : Fragment() {
     private lateinit var binding : FragmentFindIdBinding
@@ -34,7 +32,7 @@ class FindIdFragment : Fragment() {
         binding.back.setOnClickListener{
             mActivity.setFrag(1)
         }
-        mainViewModel.findId()
+
         // addTextChangedListener의 경우 익명클래스이니 필수 함수들을 import 해줘야 함
         binding.emailEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -57,9 +55,9 @@ class FindIdFragment : Fragment() {
             binding.errorTextView.visibility = View.INVISIBLE
             binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
             //아이디찾기API
-            //mainViewModel.findId(email)
+            //mainViewModel.findId("ejsong428@gmail.com")
             //if(가입된 이메일)
-                //이메일에 인증코드 전송
+                //버튼 활성화
             //else
                 // binding.errorTextView.visibility = View.VISIBLE
                 // binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)

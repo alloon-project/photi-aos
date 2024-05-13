@@ -14,9 +14,8 @@ class MainViewModel : ViewModel() {
 //    var email = MutableLiveData("")
 //    var password = MutableLiveData("")
 
-    fun findId(){
-                repository.findId(object :
-            MainRepositoryCallback<AuthDTO> {
+    fun findId(email_str: String){
+                repository.findId(mapOf("email" to email_str),object : MainRepositoryCallback<AuthDTO> {
             override fun onSuccess(data: AuthDTO) {
                 val result = data.code
                 val mes = data.message

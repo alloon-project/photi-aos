@@ -15,8 +15,7 @@ interface MainRepositoryCallback<T> {
 }
 
 class MyRepository(private val apiService: ApiService) {
-    private val email : Map<String, String> = mapOf("email" to "byeolstar12@naver.com")
-
+    //private val email : Map<String, String> = mapOf("email" to "ejsong428@gmail.com")
 
     fun verifyEmailCode(callback: MainRepositoryCallback<AuthDTO>) {
         apiService.patch_verifyEmailCode(EmailCode("byeolstar12@naver.com","NwEkGX")).enqueue(object : Callback<AuthDTO> {
@@ -74,7 +73,7 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun findId(callback: MainRepositoryCallback<AuthDTO>) {
+    fun findId(email: Map<String, String>,callback: MainRepositoryCallback<AuthDTO>) {
         apiService.post_findId(email).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
