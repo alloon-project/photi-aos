@@ -6,8 +6,8 @@
     app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.alloon_aos.view.adapter.LoginFragment"
-        android:label="fragment_login"
+        android:name="com.example.alloon_aos.view.fragment.LoginFragment"
+        android:label=" "
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
@@ -16,6 +16,6 @@
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.example.alloon_aos.view.fragment.SignUpFragment"
-        android:label="fragment_sign_up"
+        android:label=" "
         tools:layout="@layout/fragment_sign_up" />
 </navigation>
