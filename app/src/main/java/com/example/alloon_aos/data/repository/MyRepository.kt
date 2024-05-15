@@ -97,7 +97,8 @@ class MyRepository(private val apiService: ApiService) {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
-                } else {
+                }
+                else {
                     var stringToJson = response.errorBody()?.string()!!
                     callback.onFailure(Throwable(stringToJson))
                 }
