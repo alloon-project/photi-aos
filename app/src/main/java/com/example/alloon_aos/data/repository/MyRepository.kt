@@ -17,6 +17,25 @@ interface MainRepositoryCallback<T> {
 class MyRepository(private val apiService: ApiService) {
     //private val email : Map<String, String> = mapOf("email" to "ejsong428@gmail.com")
 
+    fun sendEmailCode(email: Map<String, String>,callback: MainRepositoryCallback<AuthDTO>) {
+        apiService.post_sendEmailCode(email).enqueue(object : Callback<AuthDTO> {
+            override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(response.body()!!)
+                } else {
+                    //Exception 400 : ex.이메일 인증을 먼저 해주세요.
+                    var stringToJson = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(stringToJson))
+                }
+            }
+
+            override fun onFailure(call: Call<AuthDTO>, t: Throwable) {
+                callback.onFailure(t)
+
+            }
+        })
+    }
+
     fun verifyEmailCode(callback: MainRepositoryCallback<AuthDTO>) {
         apiService.patch_verifyEmailCode(EmailCode("byeolstar12@naver.com","NwEkGX")).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
@@ -109,8 +128,8 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun login(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.post_login(UserData(username = "hbhbhb", password = "Q9y20Y3q")).enqueue(object : Callback<AuthDTO> {
+    fun login(user: UserData,callback: MainRepositoryCallback<AuthDTO>) {
+        apiService.post_login(user).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
