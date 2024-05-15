@@ -31,7 +31,7 @@ class FindIdFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_find_id, container, false)
         binding.fragment = this
         binding.viewModel = mainViewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         val mActivity = activity as HomeActivity
         mActivity.setAppBar("아이디 찾기")
@@ -62,7 +62,7 @@ class FindIdFragment : Fragment() {
                     view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment)
                 }
                 else if(it == "0"){
-                    Toast.makeText(getActivity(), "가입하지 않은 이메일임", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(getActivity(), "가입하지 않은 이메일임", Toast.LENGTH_SHORT).show()
                     binding.errorTextView.visibility = View.VISIBLE
                     binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
                     binding.errorTextView.text = resources.getString(R.string.emailerror2)
