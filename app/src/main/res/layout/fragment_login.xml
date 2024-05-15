@@ -88,7 +88,8 @@
                 android:theme="@style/Theme.xlarge_round"
                 android:layout_marginTop="284dp"
                 android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp" />
+                android:layout_marginRight="24dp"
+                android:onClick="@{() ->fragment.moveFrag(4)}"/>
 
             <Button
                 android:id="@+id/find_id"

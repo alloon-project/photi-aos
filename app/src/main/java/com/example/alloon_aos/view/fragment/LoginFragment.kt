@@ -14,11 +14,12 @@ import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentLoginBinding
 import com.example.alloon_aos.view.activity.HomeActivity
+import com.example.alloon_aos.viewmodel.AuthViewModel
 import com.example.alloon_aos.viewmodel.MainViewModel
 
 class LoginFragment : Fragment() {
     private lateinit var binding : FragmentLoginBinding
-    private val mainViewModel by viewModels<MainViewModel>()
+    private val authViewModel by viewModels<AuthViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,10 +31,6 @@ class LoginFragment : Fragment() {
         val mActivity = activity as HomeActivity
         mActivity.setAppBar("로그인")
 
-
-        binding.loginBtn.setOnClickListener { view: View ->
-            println("홈 화면으로 이동")
-        }
 
         binding.loginId.onFocusChangeListener =
             OnFocusChangeListener { view, hasFocus ->
@@ -69,7 +66,6 @@ class LoginFragment : Fragment() {
             binding.loginPw.setSelection(binding.loginPw.text!!.length)
         }
 
-
         return binding.root
     }
 
@@ -91,7 +87,9 @@ class LoginFragment : Fragment() {
             3 ->{
                 ft?.navigate(R.id.action_loginFragment_to_findPasswordFragment)
             }
-
+            4 -> {
+                authViewModel.login()
+            }
         }
     }
 }

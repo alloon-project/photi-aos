@@ -3,6 +3,7 @@ package com.example.alloon_aos.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.alloon_aos.data.model.AuthDTO
+import com.example.alloon_aos.data.model.UserData
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.MainRepositoryCallback
 import com.example.alloon_aos.data.repository.MyRepository
@@ -115,5 +116,20 @@ class AuthViewModel:ViewModel() {
 //                Log.d("TAG","modifyPwd"+ error.message.toString())
 //            }
 //        })
+    }
+    fun login() {
+        val user  = UserData(username = "seulseul", password = "password1!")
+        repository.login(user,object :
+            MainRepositoryCallback<AuthDTO> {
+            override fun onSuccess(data: AuthDTO) {
+                val result = data.code
+                val mes = data.message
+                Log.d("TAG","login: $mes $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                Log.d("TAG","login" + error.message.toString())
+            }
+        })
     }
 }
