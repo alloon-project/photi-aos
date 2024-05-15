@@ -12,10 +12,26 @@
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_findIdFragment"
+            app:destination="@id/findIdFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_findPasswordFragment"
+            app:destination="@id/findPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.example.alloon_aos.view.fragment.SignUpFragment"
         android:label=" "
         tools:layout="@layout/fragment_sign_up" />
+    <fragment
+        android:id="@+id/findIdFragment"
+        android:name="com.example.alloon_aos.view.fragment.FindIdFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_find_id" />
+    <fragment
+        android:id="@+id/findPasswordFragment"
+        android:name="com.example.alloon_aos.view.fragment.FindPasswordFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_find_password" />
 </navigation>

@@ -97,7 +97,8 @@
                 android:background="#00ff0000"
                 android:layout_marginTop="364dp"
                 android:layout_marginLeft="97dp"
-                android:layout_marginRight="193dp" />
+                android:layout_marginRight="193dp"
+                android:onClick="@{() ->fragment.moveFrag(2)}"/>
 
             <Button
                 android:layout_width="1dp"
@@ -114,7 +115,8 @@
                 android:layout_marginTop="364dp"
                 android:layout_marginRight="97dp"
                 android:background="#00ff0000"
-                android:text="@string/findpw" />
+                android:text="@string/findpw"
+                android:onClick="@{() ->fragment.moveFrag(3)}"/>
 
             <Button
                 android:id="@+id/sign_up"
@@ -126,7 +128,8 @@
                 android:theme="@style/Theme.green_text"
                 android:layout_marginTop="620dp"
                 android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp" />
+                android:layout_marginRight="24dp"
+                android:onClick="@{() ->fragment.moveFrag(1)}" />
 
         </FrameLayout>
     </LinearLayout>

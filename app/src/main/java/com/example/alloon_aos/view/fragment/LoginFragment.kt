@@ -35,10 +35,6 @@ class LoginFragment : Fragment() {
             println("홈 화면으로 이동")
         }
 
-        binding.findId.setOnClickListener {view: View ->
-            println("아이디 찾기 프래그먼트로 이동")
-        }
-
         binding.loginId.onFocusChangeListener =
             OnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
@@ -73,10 +69,29 @@ class LoginFragment : Fragment() {
             binding.loginPw.setSelection(binding.loginPw.text!!.length)
         }
 
-        binding.signUp.setOnClickListener { view: View ->
-            view.findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
-        }
 
         return binding.root
+    }
+
+    fun moveFrag(fragNum : Int){
+        /*
+        * 1 : login to signUp
+        * 2 : login to findId
+        * 3 : login to findPassword
+        * */
+
+        val ft = view?.findNavController()
+        when(fragNum){
+            1 -> {
+                ft?.navigate(R.id.action_loginFragment_to_signUpFragment)
+            }
+            2 -> {
+                ft?.navigate(R.id.action_loginFragment_to_findIdFragment)
+            }
+            3 ->{
+                ft?.navigate(R.id.action_loginFragment_to_findPasswordFragment)
+            }
+
+        }
     }
 }

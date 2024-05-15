@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFindIdBinding
+import com.example.alloon_aos.view.activity.HomeActivity
 import com.example.alloon_aos.view.activity.MainActivity
 import com.example.alloon_aos.viewmodel.MainViewModel
 
@@ -27,11 +28,9 @@ class FindIdFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_find_id, container, false)
         binding.fragment = this
 
-        val mActivity = activity as MainActivity
+        val mActivity = activity as HomeActivity
+        mActivity.setAppBar("아이디 찾기")
 
-        binding.back.setOnClickListener{
-            mActivity.setFrag(1)
-        }
 
         // addTextChangedListener의 경우 익명클래스이니 필수 함수들을 import 해줘야 함
         binding.emailEditText.addTextChangedListener(object : TextWatcher {
