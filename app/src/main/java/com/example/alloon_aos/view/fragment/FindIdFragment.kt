@@ -1,6 +1,5 @@
 package com.example.alloon_aos.view.fragment
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,19 +7,16 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFindIdBinding
 import com.example.alloon_aos.view.activity.HomeActivity
-import com.example.alloon_aos.view.activity.MainActivity
 import com.example.alloon_aos.viewmodel.MainViewModel
 
-class FindIdFragment : Fragment() {
+class FindIdFragment : Fragment(),CustomDialogInterface {
     private lateinit var binding : FragmentFindIdBinding
     private val mainViewModel by activityViewModels<MainViewModel>()
 
@@ -37,7 +33,6 @@ class FindIdFragment : Fragment() {
         mActivity.setAppBar("아이디 찾기")
 
         setObserve()
-
 
         binding.emailEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -57,12 +52,11 @@ class FindIdFragment : Fragment() {
     fun setObserve(){
         mainViewModel.code.observe(viewLifecycleOwner){
             if(it != null) {
-                if (it == "1"){
-                    //Toast.makeText(getActivity(), "이메일로 전송", Toast.LENGTH_SHORT).show()
-                    view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment)
-                }
+                if (it == "1")
+                    CustomDialog(this,"이메일로 회원정보를 보내드렸어요","다시 로그인해주세요","확인")
+                    .show(activity?.supportFragmentManager!!, "CustomDialog")
+
                 else if(it == "0"){
-                    //Toast.makeText(getActivity(), "가입하지 않은 이메일임", Toast.LENGTH_SHORT).show()
                     binding.errorTextView.visibility = View.VISIBLE
                     binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
                     binding.errorTextView.text = resources.getString(R.string.emailerror2)
@@ -89,6 +83,10 @@ class FindIdFragment : Fragment() {
 
             return false
         }
+    }
+
+    override fun onClickYesButton() {
+        view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment)
     }
 
 }
