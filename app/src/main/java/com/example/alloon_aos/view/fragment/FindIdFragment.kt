@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFindIdBinding
 import com.example.alloon_aos.view.activity.HomeActivity
@@ -30,14 +31,13 @@ class FindIdFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_find_id, container, false)
         binding.fragment = this
         binding.viewModel = mainViewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         val mActivity = activity as HomeActivity
         mActivity.setAppBar("아이디 찾기")
 
-        //setObserve()
+        setObserve()
 
-        mainViewModel.login()
 
         binding.emailEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -53,15 +53,20 @@ class FindIdFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setObserve()
-        }
 
     fun setObserve(){
         mainViewModel.code.observe(viewLifecycleOwner){
-            println("HI!!!!!!!!!!!!2 $it")
-            if(!it.isEmpty()){ //결과값이 안 비어 있을 때
-                println("HI!!!!!!!!!!!!")
+            if(it != null) {
+                if (it == "1"){
+                    //Toast.makeText(getActivity(), "이메일로 전송", Toast.LENGTH_SHORT).show()
+                    view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment)
+                }
+                else if(it == "0"){
+                    //Toast.makeText(getActivity(), "가입하지 않은 이메일임", Toast.LENGTH_SHORT).show()
+                    binding.errorTextView.visibility = View.VISIBLE
+                    binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
+                    binding.errorTextView.text = resources.getString(R.string.emailerror2)
+                }
             }
         }
     }
@@ -75,15 +80,9 @@ class FindIdFragment : Fragment() {
             binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
             binding.nextButton.isEnabled = true
 
-
-            //if(가입된 이메일)
-                //정보보냈음
-            //else
-                // binding.errorTextView.visibility = View.VISIBLE
-                // binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
-                // binding.errorTextView.text = resources.getString(R.string.emailerror2)
             return true
         } else {
+            binding.errorTextView.text = resources.getString(R.string.emailerror1)
             binding.errorTextView.visibility = View.VISIBLE
             binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
             binding.nextButton.isEnabled = false

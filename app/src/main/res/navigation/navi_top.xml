@@ -28,7 +28,11 @@
         android:id="@+id/findIdFragment"
         android:name="com.example.alloon_aos.view.fragment.FindIdFragment"
         android:label=" "
-        tools:layout="@layout/fragment_find_id" />
+        tools:layout="@layout/fragment_find_id">
+        <action
+            android:id="@+id/action_findIdFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/findPasswordFragment"
         android:name="com.example.alloon_aos.view.fragment.FindPasswordFragment"
