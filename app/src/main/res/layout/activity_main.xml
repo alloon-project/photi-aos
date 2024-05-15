@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.alloon_aos.view.activity.MainActivity" />
+    </data>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/main"
     tools:context=".view.activity.MainActivity"
@@ -13,8 +20,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".MainActivity">
-<!--        <include-->
-<!--            layout="@layout/actionbar_login" />-->
+
         <FrameLayout
             android:id="@+id/main_frame"
             android:layout_width="match_parent"
