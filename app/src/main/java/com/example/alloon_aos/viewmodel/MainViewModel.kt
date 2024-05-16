@@ -20,7 +20,9 @@ class MainViewModel : ViewModel() {
     var id = ""
     var password = ""
     var hello = ""
-
+    init{
+        println("!!!!!!!!!생성")
+    }
     fun login(){
         val email : Map<String, String> = mapOf("email" to "ejsong428@gmail.com")
 //                repository.sendEmailCode(email,object :

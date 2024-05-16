@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFindIdBinding
@@ -18,7 +19,7 @@ import com.example.alloon_aos.viewmodel.MainViewModel
 
 class FindIdFragment : Fragment(),CustomDialogInterface {
     private lateinit var binding : FragmentFindIdBinding
-    private val mainViewModel by activityViewModels<MainViewModel>()
+    private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,7 +87,8 @@ class FindIdFragment : Fragment(),CustomDialogInterface {
     }
 
     override fun onClickYesButton() {
-        view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment)
+        //view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment)
+        view?.findNavController()?.popBackStack(R.id.loginFragment, false)
     }
 
 }

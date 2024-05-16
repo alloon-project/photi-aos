@@ -30,7 +30,8 @@ class SignUpFragment : Fragment() {
         mActivity.setAppBar("회원가입")
 
         binding.click.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_signUpFragment_to_loginFragment)
+            //view?.findNavController()?.navigate(R.id.action_signUpFragment_to_loginFragment) 스택o
+            view?.findNavController()?.popBackStack(R.id.loginFragment, false) //스택x
         }
 
         return binding.root

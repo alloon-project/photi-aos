@@ -12,13 +12,10 @@ import com.example.alloon_aos.viewmodel.MainViewModel
 
 class HomeActivity : AppCompatActivity() {
     private val binding by lazy {ActivityHomeBinding.inflate(layoutInflater)}
-    private lateinit var mainViewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        //authViewModel.getData()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav) as NavHostFragment
