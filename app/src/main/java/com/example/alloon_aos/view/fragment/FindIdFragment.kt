@@ -35,7 +35,7 @@ class FindIdFragment : Fragment(),CustomDialogInterface {
         mActivity.setAppBar("아이디 찾기")
 
         setObserve()
-        mainViewModel.doIt()
+
         binding.emailEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 

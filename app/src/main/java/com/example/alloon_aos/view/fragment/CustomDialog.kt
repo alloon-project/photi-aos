@@ -27,8 +27,8 @@ class CustomDialog(val customDialogInterface: CustomDialogInterface,val title: S
         binding.messageTextView.text = message
         binding.dialogBtn.text = buttonText
 
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialog?.setCanceledOnTouchOutside(false)
 
         // 레이아웃 배경을 투명하게 해줌
@@ -46,5 +46,4 @@ class CustomDialog(val customDialogInterface: CustomDialogInterface,val title: S
         super.onDestroyView()
         _binding = null
     }
-    override fun getTheme(): Int = R.style.OnBoardingDialog
 }
