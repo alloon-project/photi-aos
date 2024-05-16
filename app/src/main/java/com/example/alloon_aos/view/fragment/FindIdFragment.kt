@@ -7,6 +7,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -53,14 +54,19 @@ class FindIdFragment : Fragment(),CustomDialogInterface {
     fun setObserve(){
         mainViewModel.code.observe(viewLifecycleOwner){
             if(it != null) {
-                if (it == "1")
-                    CustomDialog(this,"이메일로 회원정보를 보내드렸어요","다시 로그인해주세요","확인")
-                    .show(activity?.supportFragmentManager!!, "CustomDialog")
-
-                else if(it == "0"){
-                    binding.errorTextView.visibility = View.VISIBLE
-                    binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
-                    binding.errorTextView.text = resources.getString(R.string.emailerror2)
+                when(it){
+                    "USERNAME_SENT" -> {
+                        CustomDialog(this,"이메일로 회원정보를 보내드렸어요","다시 로그인해주세요","확인")
+                            .show(activity?.supportFragmentManager!!, "CustomDialog")
+                    }
+                    "USER_NOT_FOUND" ->{
+                        binding.errorTextView.visibility = View.VISIBLE
+                        binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
+                        binding.errorTextView.text = resources.getString(R.string.emailerror2)
+                    }
+                    "EMAIL_SEND_ERROR" -> {
+                        Toast.makeText(getActivity(), "이메일 전송 중 서버 에러가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

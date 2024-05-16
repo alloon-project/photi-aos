@@ -11,8 +11,7 @@
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/blue100">
+    android:layout_height="match_parent">
     <LinearLayout
         style="@style/Theme.Alloonaos"
         android:orientation="vertical"
