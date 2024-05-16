@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignUpBinding
 import com.example.alloon_aos.view.activity.HomeActivity
@@ -22,9 +23,15 @@ class SignUpFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_up, container, false)
         binding.fragment = this
+        binding.viewModel = mainViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         val mActivity = activity as HomeActivity
         mActivity.setAppBar("회원가입")
+
+        binding.click.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_signUpFragment_to_loginFragment)
+        }
 
         return binding.root
     }

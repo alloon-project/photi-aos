@@ -117,19 +117,25 @@ class AuthViewModel:ViewModel() {
 //            }
 //        })
     }
-    fun login() {
-        val user  = UserData(username = "seulseul", password = "password1!")
-        repository.login(user,object :
-            MainRepositoryCallback<AuthDTO> {
-            override fun onSuccess(data: AuthDTO) {
-                val result = data.code
-                val mes = data.message
-                Log.d("TAG","login: $mes $result")
-            }
-
-            override fun onFailure(error: Throwable) {
-                Log.d("TAG","login" + error.message.toString())
-            }
-        })
-    }
+//    fun login() {
+//        //val user  = UserData(username = "seulseul", password = "password1!")
+//        val user  = UserData(username = id, password = password)
+//        repository.login(user,object :
+//            MainRepositoryCallback<AuthDTO> {
+//            override fun onSuccess(data: AuthDTO) {
+//                val result = data.code
+//                val mes = data.message
+//                //200
+//                code.value = "USER_LOGIN"
+//                Log.d("TAG","login: $mes $result")
+//            }
+//
+//            override fun onFailure(error: Throwable) {
+//                // 이 message 변수에 에러 코드 넣어주시면 돼용!!
+//                val message = "USERNAME_FIELD_REQUIRED"
+//                code.value = "USERNAME_FIELD_REQUIRED"
+//                Log.d("TAG","login" + error.message.toString())
+//            }
+//        })
+//    }
 }

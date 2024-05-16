@@ -5,6 +5,9 @@
         <variable
             name="fragment"
             type="com.example.alloon_aos.view.fragment.LoginFragment" />
+        <variable
+            name="viewModel"
+            type="com.example.alloon_aos.viewmodel.MainViewModel" />
     </data>
 
     <LinearLayout
@@ -21,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input_line_default"
                 android:ems="10"
+                android:text="@={viewModel.id}"
                 android:inputType="text"
                 android:hint="아이디를 입력해주세요."
                 android:textColorHint="@color/gray400"
@@ -51,6 +55,7 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:background="@drawable/input_line_default"
+                android:text="@={viewModel.password}"
                 android:ems="10"
                 android:inputType="textPassword"
                 android:hint="비밀번호를 입력해주세요."
@@ -89,7 +94,7 @@
                 android:layout_marginTop="284dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:onClick="@{() ->fragment.moveFrag(4)}"/>
+                android:onClick="@{() ->viewModel.login()}"/>
 
             <Button
                 android:id="@+id/find_id"

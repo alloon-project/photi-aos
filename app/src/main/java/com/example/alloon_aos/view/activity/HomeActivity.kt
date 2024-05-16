@@ -8,16 +8,16 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityHomeBinding
-import com.example.alloon_aos.viewmodel.AuthViewModel
+import com.example.alloon_aos.viewmodel.MainViewModel
 
 class HomeActivity : AppCompatActivity() {
     private val binding by lazy {ActivityHomeBinding.inflate(layoutInflater)}
-    private lateinit var authViewModel: AuthViewModel
+    private lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         //authViewModel.getData()
 
         val navHostFragment =
