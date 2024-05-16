@@ -2,6 +2,7 @@ package com.example.alloon_aos.data.model
 
 
 import com.squareup.moshi.Json
+import retrofit2.http.Header
 
 data class AuthDTO(
     @field:Json(name = "code")

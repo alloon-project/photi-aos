@@ -9,6 +9,7 @@ import retrofit2.http.Query
 import com.example.alloon_aos.data.model.AuthDTO
 import com.example.alloon_aos.data.model.UserData
 import com.example.alloon_aos.data.model.NewPwd
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.PATCH
 
@@ -51,6 +52,8 @@ interface ApiService {
 
     @PATCH("/api/users/password")
     fun patch_modifyPwd(
+        @Header("Authorization") accessToken : String ,
         @Body parmas:NewPwd
     ): Call<AuthDTO>
 }
+

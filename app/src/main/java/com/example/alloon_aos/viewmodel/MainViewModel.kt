@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.alloon_aos.data.model.AuthDTO
-import com.example.alloon_aos.data.model.EmailCode
 import com.example.alloon_aos.data.model.UserData
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.MyRepository
 import com.example.alloon_aos.data.repository.MainRepositoryCallback
+import okhttp3.Headers
 import org.json.JSONObject
 
 class MainViewModel : ViewModel() {
@@ -22,28 +22,30 @@ class MainViewModel : ViewModel() {
     var hello = ""
 
         fun login() {
-        //val user  = UserData(username = "seulseul", password = "password1!")
         val user  = UserData(username = id, password = password)
         repository.login(user,object :
-            MainRepositoryCallback<AuthDTO> {
-            override fun onSuccess(data: AuthDTO) {
-                val result = data.code
-                val mes = data.message
-                //200
+            MainRepositoryCallback<Pair<AuthDTO, Headers>> {
+            override fun onSuccess(data: Pair<AuthDTO, Headers>) {
+                val (_data,header) = data
+                val result = _data.code //ex."USERNAME_SENT"
+                val mes = _data.message
+                val access_token = header.get("Authorization").toString()
+                val refresh_token = header.get("Refresh-Token").toString()
                 code.value = result
-                Log.d("TAG","login: $id $mes $result")
+                Log.d("TAG","login: $id $result")
+                Log.d("TAG","1~~  $access_token")
+                Log.d("TAG","2~~ $refresh_token")
             }
 
             override fun onFailure(error: Throwable) {
-                //4xx
                 val jObjError = JSONObject(error.message.toString())
-                code.value = jObjError.getString("code")
+                code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
                 Log.d("TAG","login id : $id pwd: $password response: " +code.value )
             }
         })
     }
     fun doIt(){
-        val email : Map<String, String> = mapOf("email" to "ejsong428@gmail.com")
+        val email : Map<String, String> = mapOf("email" to "jse05150@naver.com")
 //                repository.sendEmailCode(email,object :
 //            MainRepositoryCallback<AuthDTO> {
 //            override fun onSuccess(data: AuthDTO) {
@@ -57,7 +59,7 @@ class MainViewModel : ViewModel() {
 //            }
 //        })
 
-//        repository.verifyEmailCode(EmailCode("ejsong428@gmail.com","l29jl7"),object :
+//        repository.verifyEmailCode(EmailCode("jse05150@naver.com","3jMba2"),object :
 //            MainRepositoryCallback<AuthDTO> {
 //            override fun onSuccess(data: AuthDTO) {
 //                val result = data.code
@@ -70,7 +72,7 @@ class MainViewModel : ViewModel() {
 //            }
 //        })
 //
-//        repository.verifyId("seulseul",object :
+//        repository.verifyId("seulnaver",object :
 //            MainRepositoryCallback<AuthDTO> {
 //            override fun onSuccess(data: AuthDTO) {
 //                val result = data.code
@@ -83,11 +85,18 @@ class MainViewModel : ViewModel() {
 //            }
 //        })
 
-//        repository.signUp(UserData("ejsong428@gmail.com","l29jl7","seulseul","password1!","password1!")
-//            ,object : MainRepositoryCallback<AuthDTO> {
-//            override fun onSuccess(data: AuthDTO) {
-//                val result = data.code
-//                val mes = data.message
+//        repository.signUp(UserData("jse05150@naver.com","3jMba2","seulnaver","password1!","password1!")
+//            ,object : MainRepositoryCallback<Pair<AuthDTO,Headers>> {
+//            override fun onSuccess(data: Pair<AuthDTO,Headers>) {
+//                val (_data,header) = data
+//                val result = _data.code //ex."USERNAME_SENT"
+//                val mes = _data.message
+//                val access_token = header.get("Authorization").toString()
+//                val refresh_token = header.get("Refresh-Token").toString()
+//                code.value = result
+//                Log.d("TAG","login: $id $result")
+//                Log.d("TAG","a_token:  $access_token")
+//                Log.d("TAG","r_token:  $refresh_token")
 //                Log.d("TAG","signUp: $mes $result")
 //            }
 //
@@ -96,17 +105,19 @@ class MainViewModel : ViewModel() {
 //            }
 //        })
 
-//        val user  = UserData(username = "seulseul", password = "password1!")
-//        repository.login(user,object :
+
+//        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzE1ODg3ODE4LCJleHAiOjE3MTU4ODk2MTgsImlzcyI6Im5vZ2Ftc3VuZy5jb20iLCJyb2xlcyI6WyJVU0VSIl19.JDIzJw8zNSSIKbtPracux3XZapuQ520iblHzLQcWsr8"
+//        val newPwd = NewPwd("password2!","password3!","password3!")
+//        repository.modifyPwd(token,newPwd,object :
 //            MainRepositoryCallback<AuthDTO> {
 //            override fun onSuccess(data: AuthDTO) {
 //                val result = data.code
 //                val mes = data.message
-//                Log.d("TAG","login: $mes $result")
+//                Log.d("TAG","modifyPwd: $mes $result")
 //            }
 //
 //            override fun onFailure(error: Throwable) {
-//                Log.d("TAG","login" + error.message.toString())
+//                Log.d("TAG","modifyPwd"+ error.message.toString())
 //            }
 //        })
     }

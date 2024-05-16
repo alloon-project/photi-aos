@@ -5,6 +5,7 @@ import com.example.alloon_aos.data.model.AuthDTO
 import com.example.alloon_aos.data.model.UserData
 import com.example.alloon_aos.data.model.NewPwd
 import com.example.alloon_aos.data.remote.ApiService
+import okhttp3.Headers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,8 +25,8 @@ class MyRepository(private val apiService: ApiService) {
                     callback.onSuccess(response.body()!!)
                 } else {
                     //Exception 400 : ex.이메일 인증을 먼저 해주세요.
-                    var stringToJson = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(stringToJson))
+                    var error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
                 }
             }
 
@@ -42,8 +43,8 @@ class MyRepository(private val apiService: ApiService) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
-                    var stringToJson = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(stringToJson))
+                    var error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
                 }
             }
 
@@ -60,8 +61,8 @@ class MyRepository(private val apiService: ApiService) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
-                    var stringToJson = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(stringToJson))
+                    var error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
                 }
             }
 
@@ -72,15 +73,16 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun signUp(userData: UserData,callback: MainRepositoryCallback<AuthDTO>) {
+    fun signUp(userData: UserData,callback: MainRepositoryCallback<Pair<AuthDTO, Headers>>) {
         //val data = UserData("byeolstar12@naver.com","NwEkGX","hb_hb_hb","password1!","password1!")
         apiService.post_signUp(userData).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
-                    callback.onSuccess(response.body()!!)
+                    val pair = Pair(response.body()!!, response.headers())
+                    callback.onSuccess(pair)
                 } else {
-                    var stringToJson = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(stringToJson))
+                    var error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
                 }
 
             }
@@ -99,8 +101,8 @@ class MyRepository(private val apiService: ApiService) {
                     callback.onSuccess(response.body()!!)
                 }
                 else {
-                    var stringToJson = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(stringToJson))
+                    var error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
                 }
             }
 
@@ -117,8 +119,8 @@ class MyRepository(private val apiService: ApiService) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
-                    var stringToJson = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(stringToJson))
+                    var error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
                 }
             }
 
@@ -129,14 +131,15 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun login(user: UserData,callback: MainRepositoryCallback<AuthDTO>) {
+    fun login(user: UserData,callback: MainRepositoryCallback<Pair<AuthDTO, Headers>>) {
         apiService.post_login(user).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
-                    callback.onSuccess(response.body()!!)
+                    val pair = Pair(response.body()!!, response.headers())
+                    callback.onSuccess(pair)
                 } else {
-                    var stringToJson = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(stringToJson))
+                    var error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
                 }
             }
 
@@ -147,14 +150,14 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun modifyPwd(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.patch_modifyPwd(NewPwd("Q9y20Y3q!","password2!","password2!")).enqueue(object : Callback<AuthDTO> {
+    fun modifyPwd(token : String,newPwd : NewPwd, callback: MainRepositoryCallback<AuthDTO>) {
+        apiService.patch_modifyPwd("Bearer $token",newPwd).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
-                    var stringToJson = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(stringToJson))
+                    var error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
                 }
             }
 

@@ -35,7 +35,7 @@ class FindIdFragment : Fragment(),CustomDialogInterface {
         mActivity.setAppBar("아이디 찾기")
 
         setObserve()
-
+        mainViewModel.doIt()
         binding.emailEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
@@ -93,7 +93,6 @@ class FindIdFragment : Fragment(),CustomDialogInterface {
     }
 
     override fun onClickYesButton() {
-        //view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment)
         view?.findNavController()?.popBackStack(R.id.loginFragment, false)
     }
 
