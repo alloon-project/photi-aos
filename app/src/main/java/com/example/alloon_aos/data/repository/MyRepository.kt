@@ -36,8 +36,8 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun verifyEmailCode(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.patch_verifyEmailCode(EmailCode("byeolstar12@naver.com","NwEkGX")).enqueue(object : Callback<AuthDTO> {
+    fun verifyEmailCode(emailCode: EmailCode,callback: MainRepositoryCallback<AuthDTO>) {
+        apiService.patch_verifyEmailCode(emailCode).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
@@ -54,8 +54,8 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun verifyId(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.get_verifyId("byeolstar12").enqueue(object : Callback<AuthDTO> {
+    fun verifyId(name:String, callback: MainRepositoryCallback<AuthDTO>) {
+        apiService.get_verifyId(name).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
@@ -72,9 +72,9 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun signUp(callback: MainRepositoryCallback<AuthDTO>) {
-        val data = UserData("byeolstar12@naver.com","NwEkGX","hb_hb_hb","password1!","password1!")
-        apiService.post_signUp(data).enqueue(object : Callback<AuthDTO> {
+    fun signUp(userData: UserData,callback: MainRepositoryCallback<AuthDTO>) {
+        //val data = UserData("byeolstar12@naver.com","NwEkGX","hb_hb_hb","password1!","password1!")
+        apiService.post_signUp(userData).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)

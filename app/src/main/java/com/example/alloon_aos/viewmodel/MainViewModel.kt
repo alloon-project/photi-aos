@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.alloon_aos.data.model.AuthDTO
+import com.example.alloon_aos.data.model.EmailCode
 import com.example.alloon_aos.data.model.UserData
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.MyRepository
@@ -32,7 +33,7 @@ class MainViewModel : ViewModel() {
 //            }
 //        })
 
-//        repository.verifyEmailCode(object :
+//        repository.verifyEmailCode(EmailCode("ejsong428@gmail.com","l29jl7"),object :
 //            MainRepositoryCallback<AuthDTO> {
 //            override fun onSuccess(data: AuthDTO) {
 //                val result = data.code
@@ -45,7 +46,7 @@ class MainViewModel : ViewModel() {
 //            }
 //        })
 //
-//        repository.verifyId(object :
+//        repository.verifyId("seulseul",object :
 //            MainRepositoryCallback<AuthDTO> {
 //            override fun onSuccess(data: AuthDTO) {
 //                val result = data.code
@@ -58,8 +59,8 @@ class MainViewModel : ViewModel() {
 //            }
 //        })
 
-//        repository.signUp(object :
-//            MainRepositoryCallback<AuthDTO> {
+//        repository.signUp(UserData("ejsong428@gmail.com","l29jl7","seulseul","password1!","password1!")
+//            ,object : MainRepositoryCallback<AuthDTO> {
 //            override fun onSuccess(data: AuthDTO) {
 //                val result = data.code
 //                val mes = data.message
