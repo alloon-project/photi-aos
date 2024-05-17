@@ -32,7 +32,7 @@
                 android:textColor="@color/black"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
-                android:layout_marginTop="96dp"/>
+                android:layout_marginTop="40dp"/>
 
             <TextView
                 android:id="@+id/no_id"
@@ -45,13 +45,13 @@
                 android:textColor="@color/red400"
                 android:textSize="9dp"
                 android:layout_marginLeft="28dp"
-                android:layout_marginTop="152dp"/>
+                android:layout_marginTop="97.5dp"/>
 
             <EditText
                 android:id="@+id/login_pw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="178dp"
+                android:layout_marginTop="124dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:background="@drawable/input_line_default"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/eye_off"
                 android:tag="0"
-                android:layout_marginTop="192dp"
+                android:layout_marginTop="138dp"
                 android:layout_marginLeft="302dp"/>
 
             <TextView
@@ -82,7 +82,7 @@
                 android:textSize="9dp"
                 android:visibility="invisible"
                 android:layout_marginLeft="28dp"
-                android:layout_marginTop="234dp"/>
+                android:layout_marginTop="181.5dp"/>
 
             <Button
                 android:id="@+id/login_btn"
@@ -91,7 +91,7 @@
                 android:backgroundTint="?attr/colorPrimary"
                 android:text="로그인"
                 android:theme="@style/Theme.xlarge_round"
-                android:layout_marginTop="284dp"
+                android:layout_marginTop="232dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:onClick="@{() ->viewModel.login()}"/>
@@ -101,7 +101,7 @@
                 android:text="@string/findid"
                 style="@style/Theme.text_small"
                 android:background="#00ff0000"
-                android:layout_marginTop="364dp"
+                android:layout_marginTop="320dp"
                 android:layout_marginLeft="97dp"
                 android:layout_marginRight="193dp"
                 android:onClick="@{() ->fragment.moveFrag(2)}"/>
@@ -110,7 +110,7 @@
                 android:layout_width="1dp"
                 android:layout_height="10dp"
                 android:background="@drawable/divider"
-                android:layout_marginTop="376dp"
+                android:layout_marginTop="330dp"
                 android:layout_marginLeft="175dp"
                 android:stateListAnimator="@null"/>
 
@@ -118,7 +118,7 @@
                 android:id="@+id/find_pw"
                 style="@style/Theme.text_small"
                 android:layout_marginLeft="183dp"
-                android:layout_marginTop="364dp"
+                android:layout_marginTop="320dp"
                 android:layout_marginRight="97dp"
                 android:background="#00ff0000"
                 android:text="@string/findpw"
@@ -132,7 +132,7 @@
                 android:text="회원가입"
                 android:stateListAnimator="@null"
                 android:theme="@style/Theme.green_text"
-                android:layout_marginTop="620dp"
+                android:layout_marginTop="564dp"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:onClick="@{() ->fragment.moveFrag(1)}" />
