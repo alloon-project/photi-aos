@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -99,6 +100,11 @@ class LoginFragment : Fragment() {
     }
 
     fun setObserve(){
+        mainViewModel.toast_message.observe(viewLifecycleOwner){
+            if(it.isNotEmpty())
+                Toast.makeText(getActivity(), it, Toast.LENGTH_SHORT).show()
+        }
+
         mainViewModel.code.observe(viewLifecycleOwner){
             if(it != null) {
                 when(it) {

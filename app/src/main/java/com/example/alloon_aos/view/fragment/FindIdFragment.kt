@@ -52,8 +52,12 @@ class FindIdFragment : Fragment(),CustomDialogInterface {
 
 
     fun setObserve(){
+        mainViewModel.toast_message.observe(viewLifecycleOwner){
+            if(it.isNotEmpty())
+                Toast.makeText(getActivity(), it, Toast.LENGTH_SHORT).show()
+        }
         mainViewModel.code.observe(viewLifecycleOwner){
-            if(it != null) {
+            if(it.isNotEmpty()) {
                 when(it){
                     "USERNAME_SENT" -> {
                         CustomDialog(this,"이메일로 회원정보를 보내드렸어요","다시 로그인해주세요","확인")

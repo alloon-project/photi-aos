@@ -1,5 +1,6 @@
 package com.example.alloon_aos.viewmodel
 
+import android.net.http.NetworkException
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,41 +10,21 @@ import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.MyRepository
 import com.example.alloon_aos.data.repository.MainRepositoryCallback
 import okhttp3.Headers
+import okio.IOException
 import org.json.JSONObject
 
 class MainViewModel : ViewModel() {
     private val apiService = RetrofitClient.apiService
     private val repository = MyRepository(apiService)
 
+    var toast_message = MutableLiveData("")
     var code =  MutableLiveData("") //observer가 필요한 경우만 Mutable
     var email = ""
     var id = ""
     var password = ""
     var hello = ""
 
-        fun login() {
-        val user  = UserData(username = id, password = password)
-        repository.login(user,object :
-            MainRepositoryCallback<Pair<AuthDTO, Headers>> {
-            override fun onSuccess(data: Pair<AuthDTO, Headers>) {
-                val (_data,header) = data
-                val result = _data.code //ex."USERNAME_SENT"
-                val mes = _data.message
-                val access_token = header.get("Authorization").toString()
-                val refresh_token = header.get("Refresh-Token").toString()
-                code.value = result
-                Log.d("TAG","login: $id $result")
-                Log.d("TAG","1~~  $access_token")
-                Log.d("TAG","2~~ $refresh_token")
-            }
 
-            override fun onFailure(error: Throwable) {
-                val jObjError = JSONObject(error.message.toString())
-                code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
-                Log.d("TAG","login id : $id pwd: $password response: " +code.value )
-            }
-        })
-    }
     fun doIt(){
         val email : Map<String, String> = mapOf("email" to "jse05150@naver.com")
 //                repository.sendEmailCode(email,object :
@@ -122,6 +103,40 @@ class MainViewModel : ViewModel() {
 //        })
     }
 
+
+    fun login() {
+        val user  = UserData(username = id, password = password)
+        repository.login(user,object :
+            MainRepositoryCallback<Pair<AuthDTO, Headers>> {
+            override fun onSuccess(data: Pair<AuthDTO, Headers>) {
+                val (_data,header) = data
+                val result = _data.code //ex."USERNAME_SENT"
+                val mes = _data.message
+                val access_token = header.get("Authorization").toString()
+                val refresh_token = header.get("Refresh-Token").toString()
+                code.value = result
+                Log.d("TAG","login: $id $result")
+                Log.d("TAG","1~~  $access_token")
+                Log.d("TAG","2~~ $refresh_token")
+            }
+
+            override fun onFailure(error: Throwable) {
+                Log.d("TAG","onFailure : ${error.toString()} " )
+                when(error){
+                    is IOException -> {
+                        toast_message.value = "인터넷이나 서버을 연결 확인해주세요"
+
+                    }
+                    else -> {
+                        val jObjError = JSONObject(error.message.toString())
+                        code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
+                        Log.d("TAG","login id : $id pwd: $password response: " +code.value )
+                    }
+                }
+            }
+        })
+    }
+    
     fun checkSignedUp(){
         repository.findId(mapOf("email" to email),object : MainRepositoryCallback<AuthDTO> {
             override fun onSuccess(data: AuthDTO) {
@@ -133,9 +148,17 @@ class MainViewModel : ViewModel() {
             }
 
             override fun onFailure(error: Throwable) {
-                val jObjError = JSONObject(error.message.toString())
-                code.value = jObjError.getString("code")
-                Log.d("TAG","error: " + code.value)
+                when(error){
+                    is IOException -> {
+                        toast_message.value = "인터넷이나 서버 연결을 확인해주세요"
+
+                    }
+                    else -> {
+                        val jObjError = JSONObject(error.message.toString())
+                        code.value = jObjError.getString("code")
+                        Log.d("TAG","error: " + code.value)
+                    }
+                }
             }
         })
     }
