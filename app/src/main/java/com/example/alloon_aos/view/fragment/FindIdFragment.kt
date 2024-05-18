@@ -97,7 +97,8 @@ class FindIdFragment : Fragment(),CustomDialogInterface {
     }
 
     override fun onClickYesButton() {
-        view?.findNavController()?.popBackStack(R.id.loginFragment, false)
+        //확인해야함
+        view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment) //스택o
     }
 
 }

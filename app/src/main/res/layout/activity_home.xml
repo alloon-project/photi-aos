@@ -12,7 +12,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home"
         tools:context=".view.activity.HomeActivity"
-        style="@style/Theme.Alloonaos"
+        android:layout_height="656dp"
+        android:layout_width="360dp"
         android:background="@color/white"
         >
 
@@ -47,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
-                app:navGraph="@navigation/navi_top"/>
+                app:navGraph="@navigation/navi_top" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
