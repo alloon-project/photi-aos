@@ -3,10 +3,10 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.SignUpFragment" />
+            type="com.example.alloon_aos.view.fragment.Auth.SignUpFragment" />
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.MainViewModel" />
+            type="com.example.alloon_aos.viewmodel.AuthViewModel" />
     </data>
     <LinearLayout
         style="@style/Theme.Alloonaos"

@@ -1,4 +1,4 @@
-package com.example.alloon_aos.view.fragment
+package com.example.alloon_aos.view.fragment.Auth
 
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -16,12 +16,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentLoginBinding
-import com.example.alloon_aos.view.activity.HomeActivity
-import com.example.alloon_aos.viewmodel.MainViewModel
+import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class LoginFragment : Fragment() {
     private lateinit var binding : FragmentLoginBinding
-    private val mainViewModel by viewModels<MainViewModel>()
+    private val authViewModel by viewModels<AuthViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,10 +29,10 @@ class LoginFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.fragment = this
-        binding.viewModel = mainViewModel
+        binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as HomeActivity
+        val mActivity = activity as AuthActivity
         mActivity.setAppBar("로그인")
 
         setObserve()
@@ -98,12 +98,12 @@ class LoginFragment : Fragment() {
     }
 
     fun setObserve(){
-        mainViewModel.toast_message.observe(viewLifecycleOwner){
+        authViewModel.toast_message.observe(viewLifecycleOwner){
             if(it.isNotEmpty())
                 Toast.makeText(getActivity(), it, Toast.LENGTH_SHORT).show()
         }
 
-        mainViewModel.code.observe(viewLifecycleOwner){
+        authViewModel.code.observe(viewLifecycleOwner){
             if(it != null) {
                 when(it) {
                     "USER_LOGIN" -> {

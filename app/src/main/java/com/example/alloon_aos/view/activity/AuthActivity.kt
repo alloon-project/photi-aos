@@ -2,15 +2,13 @@ package com.example.alloon_aos.view.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityHomeBinding
-import com.example.alloon_aos.viewmodel.MainViewModel
 
-class HomeActivity : AppCompatActivity() {
+class AuthActivity : AppCompatActivity() {
     private val binding by lazy {ActivityHomeBinding.inflate(layoutInflater)}
 
     override fun onCreate(savedInstanceState: Bundle?) {

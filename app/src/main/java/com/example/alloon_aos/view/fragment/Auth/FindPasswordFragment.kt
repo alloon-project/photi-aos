@@ -1,4 +1,4 @@
-package com.example.alloon_aos.view.fragment
+package com.example.alloon_aos.view.fragment.Auth
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,14 +9,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFindPasswordBinding
-import com.example.alloon_aos.databinding.FragmentSignUpBinding
-import com.example.alloon_aos.view.activity.HomeActivity
-import com.example.alloon_aos.viewmodel.MainViewModel
+import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.viewmodel.AuthViewModel
 
 
 class FindPasswordFragment : Fragment() {
     private lateinit var binding : FragmentFindPasswordBinding
-    private val mainViewModel by viewModels<MainViewModel>()
+    private val authViewModel by viewModels<AuthViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,7 +24,7 @@ class FindPasswordFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_find_password, container, false)
         binding.fragment = this
 
-        val mActivity = activity as HomeActivity
+        val mActivity = activity as AuthActivity
         mActivity.setAppBar("비밀번호 찾기")
 
         return binding.root

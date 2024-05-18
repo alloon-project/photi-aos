@@ -6,12 +6,12 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.activity.HomeActivity" />
+            type="com.example.alloon_aos.view.activity.AuthActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home"
-        tools:context=".view.activity.HomeActivity"
+        tools:context=".view.activity.AuthActivity"
         style="@style/Theme.Alloonaos.Activity"
         android:background="@color/white"
         >

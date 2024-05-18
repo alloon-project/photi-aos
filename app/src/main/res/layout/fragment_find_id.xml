@@ -4,10 +4,10 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.FindIdFragment" />
+            type="com.example.alloon_aos.view.fragment.Auth.FindIdFragment" />
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.MainViewModel" />
+            type="com.example.alloon_aos.viewmodel.AuthViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

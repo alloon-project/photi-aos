@@ -16,7 +16,7 @@
             android:name=".view.activity.MainActivity"
             android:exported="true">
         </activity>
-        <activity android:name=".view.activity.HomeActivity"
+        <activity android:name=".view.activity.AuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
