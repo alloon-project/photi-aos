@@ -12,8 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home"
         tools:context=".view.activity.HomeActivity"
-        android:layout_height="656dp"
-        android:layout_width="360dp"
+        style="@style/Theme.Alloonaos.Activity"
         android:background="@color/white"
         >
 
