@@ -26,7 +26,13 @@
         android:id="@+id/signUpFragment"
         android:name="com.example.alloon_aos.view.fragment.SignUpFragment"
         android:label=" "
-        tools:layout="@layout/fragment_sign_up" />
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/findIdFragment"
         android:name="com.example.alloon_aos.view.fragment.FindIdFragment"

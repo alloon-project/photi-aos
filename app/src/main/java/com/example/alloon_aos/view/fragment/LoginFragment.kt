@@ -41,22 +41,20 @@ class LoginFragment : Fragment() {
             OnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
                     binding.loginId.setBackgroundResource(R.drawable.input_line_focus)
-                    binding.noId.isVisible = false
                 } else {
                     binding.loginId.setBackgroundResource(R.drawable.input_line_default)
-                    binding.noId.isVisible = false
                 }
+                binding.errorId.isVisible = false
             }
 
         binding.loginPw.onFocusChangeListener =
             OnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
                     binding.loginPw.setBackgroundResource(R.drawable.input_line_focus)
-                    binding.noPw.isVisible = false
                 } else {
                     binding.loginPw.setBackgroundResource(R.drawable.input_line_default)
-                    binding.noPw.isVisible = false
                 }
+                binding.errorPw.isVisible = false
             }
 
         binding.hideBtn.setOnClickListener {
@@ -111,33 +109,13 @@ class LoginFragment : Fragment() {
                     "USER_LOGIN" -> {
                         Log.d("TAG","홈 화면으로 이동~")
                     }
-                    "USERNAME_FIELD_REQUIRED" -> {
-//                        Log.d("TAG","아이디 필수 입력")
+                    "USERNAME_FIELD_REQUIRED", "PASSWORD_FIELD_REQUIRED", "LOGIN_UNAUTHENTICATED" -> {
                         binding.loginId.setBackgroundResource(R.drawable.input_line_error)
                         binding.loginPw.setBackgroundResource(R.drawable.input_line_error)
-                        binding.noId.isVisible = true
-                        binding.noId.setText("아이디는 필수 입력입니다.")
-                        binding.noPw.isVisible = true
-                        binding.noPw.setText("아이디는 필수 입력입니다.")
+                        binding.errorId.isVisible = true
+                        binding.errorPw.isVisible = true
                     }
-                    "PASSWORD_FIELD_REQUIRED" -> {
-                        //Log.d("TAG","비밀번호 필수 입력")
-                        binding.loginId.setBackgroundResource(R.drawable.input_line_error)
-                        binding.loginPw.setBackgroundResource(R.drawable.input_line_error)
-                        binding.noId.isVisible = true
-                        binding.noId.setText("비밀번호는 필수 입력입니다.")
-                        binding.noPw.isVisible = true
-                        binding.noPw.setText("비밀번호는 필수 입력입니다.")
-                    }
-                    "LOGIN_UNAUTHENTICATED" -> {
-                        //Log.d("TAG","아이디 또는 비번틀림ㅅㄱ")
-                        binding.loginId.setBackgroundResource(R.drawable.input_line_error)
-                        binding.loginPw.setBackgroundResource(R.drawable.input_line_error)
-                        binding.noId.isVisible = true
-                        binding.noId.setText("아이디 또는 비밀번호가 틀렸습니다.")
-                        binding.noPw.isVisible = true
-                        binding.noPw.setText("아이디 또는 비밀번호가 틀렸습니다.")
-                    }
+
                 }
             }
         }

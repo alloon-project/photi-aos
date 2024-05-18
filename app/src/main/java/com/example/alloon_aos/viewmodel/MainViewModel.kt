@@ -125,7 +125,6 @@ class MainViewModel : ViewModel() {
                 when(error){
                     is IOException -> {
                         toast_message.value = "인터넷이나 서버을 연결 확인해주세요"
-
                     }
                     else -> {
                         val jObjError = JSONObject(error.message.toString())

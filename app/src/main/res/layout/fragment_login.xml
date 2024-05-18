@@ -35,12 +35,12 @@
                 android:layout_marginTop="40dp"/>
 
             <TextView
-                android:id="@+id/no_id"
+                android:id="@+id/error_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/close"
                 android:drawablePadding="6dp"
-                android:text="아이디 또는 비밀번호가 일치하지 않아요"
+                android:text="@string/loginerror"
                 android:visibility="invisible"
                 android:textColor="@color/red400"
                 android:textSize="9dp"
@@ -72,12 +72,12 @@
                 android:layout_marginLeft="302dp"/>
 
             <TextView
-                android:id="@+id/no_pw"
+                android:id="@+id/error_pw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/close"
                 android:drawablePadding="6dp"
-                android:text="아이디 또는 비밀번호가 일치하지 않아요"
+                android:text="@string/loginerror"
                 android:textColor="@color/red400"
                 android:textSize="9dp"
                 android:visibility="invisible"
