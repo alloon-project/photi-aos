@@ -1,4 +1,4 @@
-package com.example.alloon_aos.view.fragment.Auth
+package com.example.alloon_aos.view.fragment.auth
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

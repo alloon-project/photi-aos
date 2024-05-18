@@ -3,7 +3,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.Auth.SignUpFragment" />
+            type="com.example.alloon_aos.view.fragment.auth.SignUpFragment" />
         <variable
             name="viewModel"
             type="com.example.alloon_aos.viewmodel.AuthViewModel" />

@@ -5,6 +5,6 @@
     app:startDestination="@id/findIdFragment">
     <fragment
         android:id="@+id/findIdFragment"
-        android:name="com.example.alloon_aos.view.fragment.Auth.FindIdFragment"
+        android:name="com.example.alloon_aos.view.fragment.auth.FindIdFragment"
         android:label="FindIdFragment" />
 </navigation>
