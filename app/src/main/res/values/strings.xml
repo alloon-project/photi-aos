@@ -8,6 +8,10 @@
     <string name="emailerror1">x&#160;&#160;&#160;이메일 형태가 올바르지 않아요</string>
     <string name="emailerror2">!&#160;&#160;&#160;가입되지 않은 이메일이에요</string>
     <string name="loginerror">아이디 또는 비밀번호가 일치하지 않아요.</string>
+    <string name="enterId">아이디를 입력해주세요</string>
+    <string name="enterEmail">가입 시 사용했던 이메일을 입력해주세요</string>
+    <string name="email">이메일</string>
+    <string name="id">아이디</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
