@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.alloon_aos.view.fragment.auth.SignupEmailFragment" />
+        <variable
+            name="viewModel"
+            type="com.example.alloon_aos.viewmodel.AuthViewModel" />
+    </data>
+    <LinearLayout
+        style="@style/Theme.Alloonaos"
+        android:background="@color/white">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/email_progress"
+                android:max="100"
+                android:layout_width="312dp"
+                android:layout_height="6dp"
+                android:progressDrawable="@drawable/signup_progress"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="24dp"/>
+            
+            <TextView
+                android:layout_width="312dp"
+                android:layout_height="wrap_content"
+                android:text="@string/signupemail"
+                android:textSize="18dp"
+                android:textColor="@color/gray900"
+                android:layout_marginTop="62dp"
+                android:layout_marginLeft="24dp"/>
+
+            <EditText
+                android:id="@+id/signup_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_line_default"
+                android:ems="10"
+                android:inputType="text"
+                android:hint="이메일"
+                android:textColorHint="@color/gray400"
+                android:textSize="14dp"
+                android:layout_marginTop="136dp"
+                android:layout_marginLeft="24dp"/>
+
+            <TextView
+                android:id="@+id/error_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/error"
+                android:drawablePadding="6dp"
+                android:visibility="invisible"
+                android:text="@string/emailerror"
+                android:textColor="@color/red400"
+                android:textSize="9dp"
+                android:layout_marginLeft="28dp"
+                android:layout_marginTop="193.5dp"/>
+
+            <Button
+                android:id="@+id/next_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimary"
+                android:theme="@style/Theme.xlarge_round"
+                android:text="다음"
+                android:layout_marginTop="564dp"
+                android:layout_marginLeft="24dp"/>
+        </FrameLayout>
+    </LinearLayout>
+</layout>

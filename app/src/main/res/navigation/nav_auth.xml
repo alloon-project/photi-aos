@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navi_top"
+    android:id="@+id/nav_auth"
     app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
@@ -21,6 +21,9 @@
             android:id="@+id/action_loginFragment_to_findPasswordFragment"
             app:destination="@id/findPasswordFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_loginFragment_to_signupEmailFragment"
+            app:destination="@id/signupEmailFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -49,4 +52,38 @@
         android:name="com.example.alloon_aos.view.fragment.auth.FindPasswordFragment"
         android:label=" "
         tools:layout="@layout/fragment_find_password" />
+    <fragment
+        android:id="@+id/signupAuthFragment"
+        android:name="com.example.alloon_aos.view.fragment.auth.SignupAuthFragment"
+        android:label=" " >
+        <action
+            android:id="@+id/action_signupAuthFragment_to_signupIdFragment"
+            app:destination="@id/signupIdFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupIdFragment"
+        android:name="com.example.alloon_aos.view.fragment.auth.SignupIdFragment"
+        android:label=" " >
+        <action
+            android:id="@+id/action_signupIdFragment_to_signupPwFragment"
+            app:destination="@id/signupPwFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupEmailFragment"
+        android:name="com.example.alloon_aos.view.fragment.auth.SignupEmailFragment"
+        android:label=" " >
+        <action
+            android:id="@+id/action_signupEmailFragment_to_signupAuthFragment"
+            app:destination="@id/signupAuthFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupPwFragment"
+        android:name="com.example.alloon_aos.view.fragment.auth.SignupPwFragment"
+        android:label=" " >
+        <action
+            android:id="@+id/action_signupPwFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

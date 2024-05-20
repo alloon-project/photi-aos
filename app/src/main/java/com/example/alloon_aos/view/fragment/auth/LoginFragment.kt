@@ -86,7 +86,7 @@ class LoginFragment : Fragment() {
         val ft = view?.findNavController()
         when(fragNum){
             1 -> {
-                ft?.navigate(R.id.action_loginFragment_to_signUpFragment)
+                ft?.navigate(R.id.action_loginFragment_to_signupEmailFragment)
             }
             2 -> {
                 ft?.navigate(R.id.action_loginFragment_to_findIdFragment)

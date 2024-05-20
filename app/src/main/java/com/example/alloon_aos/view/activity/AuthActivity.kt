@@ -28,7 +28,7 @@ class AuthActivity : AppCompatActivity() {
     }
 
     fun setAppBar(appTitle : String) {
-        binding.actionBar.setNavigationIcon(R.drawable.nev_back)
+        binding.actionBar.setNavigationIcon(R.drawable.nav_back)
         binding.title.setText(appTitle)
     }
 }
