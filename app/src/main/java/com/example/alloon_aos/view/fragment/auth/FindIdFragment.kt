@@ -7,7 +7,6 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,10 +32,17 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
         binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("아이디 찾기")
 
         setObserve()
+        setListener()
+
+        return binding.root
+    }
+
+    fun setListener(){
 
         binding.emailEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -44,14 +50,24 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                checkEmailValidation()
+                var email =binding.emailEditText.text.toString().trim()
+                val pattern = Patterns.EMAIL_ADDRESS
+
+                if (pattern.matcher(email).matches()) {
+                    binding.errorTextView.visibility = View.INVISIBLE
+                    binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
+                    binding.nextButton.isEnabled = true
+
+                } else {
+                    binding.errorTextView.text = resources.getString(R.string.emailerror1)
+                    binding.errorTextView.visibility = View.VISIBLE
+                    binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
+                    binding.nextButton.isEnabled = false
+
+                }
             }
         })
-        
-
-        return binding.root
     }
-
 
     fun setObserve(){
         authViewModel.toast_message.observe(viewLifecycleOwner){
@@ -78,30 +94,9 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
         }
     }
 
-    fun checkEmailValidation():Boolean{
-        var email =binding.emailEditText.text.toString().trim() //공백제거
-        val pattern = Patterns.EMAIL_ADDRESS
-        //binding.emailEditText.setTextColor(resources.getColor(R.color.black))
-
-        if (pattern.matcher(email).matches()) {
-            binding.errorTextView.visibility = View.INVISIBLE
-            binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
-            binding.nextButton.isEnabled = true
-
-            return true
-        } else {
-            binding.errorTextView.text = resources.getString(R.string.emailerror1)
-            binding.errorTextView.visibility = View.VISIBLE
-            binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
-            binding.nextButton.isEnabled = false
-
-            return false
-        }
-    }
 
     override fun onClickYesButton() {
-        //확인해야함
-        view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment) //스택o
+        view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment)
     }
 
 }

@@ -51,7 +51,22 @@
         android:id="@+id/findPasswordFragment"
         android:name="com.example.alloon_aos.view.fragment.auth.FindPasswordFragment"
         android:label=" "
-        tools:layout="@layout/fragment_find_password" />
+        tools:layout="@layout/fragment_find_password">
+        <action
+            android:id="@+id/action_findPasswordFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.alloon_aos.view.fragment.auth.ChangePasswordFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_change_password">
+        <action
+            android:id="@+id/action_changePasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
     <fragment
         android:id="@+id/signupAuthFragment"
         android:name="com.example.alloon_aos.view.fragment.auth.SignupAuthFragment"

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">alloon-aos</string>
+    <!-- AUTH -->
     <string name="login">로그인</string>
     <string name="signup">회원가입</string>
     <string name="findid">아이디 찾기</string>
@@ -11,7 +12,16 @@
     <string name="enterEmail">가입 시 사용했던 이메일을 입력해주세요</string>
     <string name="email">이메일</string>
     <string name="id">아이디</string>
+    <string name="enternewpwd">새 비밀번호를 입력해주세요</string>
+    <string name="findpwd">이메일로 임시 비밀번호를 보내드렸습니다\n임시 비밀번호를 입력해주세요</string>
+    <string name ="newPw">새 비밀번호</string>
+    <string name="temporarypassword">임시 비밀번호</string>
+    <string name="requirePw1">영문 포함</string>
+    <string name="requirePw2">숫자 포함</string>
+    <string name="requirePw3">특수문자 포함</string>
+    <string name="requirePw4">8~30자</string>
     <string name="loginerror">아이디 또는 비밀번호가 일치하지 않아요</string>
+
     <string name="signupemail">환영합니다! \n이메일을 입력해주세요</string>
     <string name="signupauth">이메일로 인증코드를 보내드렸습니다 \n숫자 4자리를 입력해주세요</string>
     <string name="signupid">아이디를 입력해주세요</string>
