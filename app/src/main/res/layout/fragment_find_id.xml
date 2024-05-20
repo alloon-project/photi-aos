@@ -33,6 +33,8 @@
         <EditText
             android:id="@+id/email_editText"
             android:text="@={viewModel.email}"
+            android:hint="@string/email"
+            android:textColorHint="@color/gray400"
             android:layout_width="295dp"
             android:layout_height="46dp"
             android:background="@drawable/input_line_default"

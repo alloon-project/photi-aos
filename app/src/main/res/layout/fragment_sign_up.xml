@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_xlarge_green_line"
-                android:text="@={viewModel.hello}"
+                android:text="@={viewModel.id}"
                 android:inputType="text"
                 android:ems="10"
                 android:textSize="14dp"
@@ -37,6 +37,7 @@
 
             <Button
                 android:id="@+id/click"
+                android:onClick="@{() ->viewModel.signUp()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorPrimary"

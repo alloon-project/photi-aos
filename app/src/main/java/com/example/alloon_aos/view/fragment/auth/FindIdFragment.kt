@@ -80,6 +80,7 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
     fun checkEmailValidation():Boolean{
         var email =binding.emailEditText.text.toString().trim() //공백제거
         val pattern = Patterns.EMAIL_ADDRESS
+        //binding.emailEditText.setTextColor(resources.getColor(R.color.black))
 
         if (pattern.matcher(email).matches()) {
             binding.errorTextView.visibility = View.INVISIBLE
