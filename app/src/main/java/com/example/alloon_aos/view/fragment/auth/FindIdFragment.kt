@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFindIdBinding
+import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.fragment.CustomDialog
 import com.example.alloon_aos.view.fragment.CustomDialogInterface
@@ -55,7 +56,7 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
     fun setObserve(){
         authViewModel.toast_message.observe(viewLifecycleOwner){
             if(it.isNotEmpty())
-                Toast.makeText(getActivity(), it, Toast.LENGTH_SHORT).show()
+                CustomToast.createToast(getActivity(),it)?.show()
         }
         authViewModel.code.observe(viewLifecycleOwner){
             if(it.isNotEmpty()) {
@@ -70,7 +71,7 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
                         binding.errorTextView.text = resources.getString(R.string.emailerror2)
                     }
                     "EMAIL_SEND_ERROR" -> {
-                        Toast.makeText(getActivity(), "이메일 전송 중 서버 에러가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                        CustomToast.createToast(getActivity(),"이메일 전송 중 서버 에러가 발생했습니다.")?.show()
                     }
                 }
             }

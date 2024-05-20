@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentLoginBinding
+import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
@@ -100,7 +101,7 @@ class LoginFragment : Fragment() {
     fun setObserve(){
         authViewModel.toast_message.observe(viewLifecycleOwner){
             if(it.isNotEmpty())
-                Toast.makeText(getActivity(), it, Toast.LENGTH_SHORT).show()
+                CustomToast.createToast(getActivity(),it)?.show()
         }
 
         authViewModel.code.observe(viewLifecycleOwner){

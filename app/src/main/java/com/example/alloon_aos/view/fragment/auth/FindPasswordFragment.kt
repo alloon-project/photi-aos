@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFindPasswordBinding
+import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
@@ -27,6 +28,7 @@ class FindPasswordFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("비밀번호 찾기")
 
+        CustomToast.createToast(getActivity(),"뿅")?.show()
         return binding.root
     }
 }
