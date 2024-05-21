@@ -70,15 +70,20 @@
     <fragment
         android:id="@+id/signupAuthFragment"
         android:name="com.example.alloon_aos.view.fragment.auth.SignupAuthFragment"
-        android:label=" " >
+        android:label=" "
+        tools:layout="@layout/fragment_signup_auth">
         <action
             android:id="@+id/action_signupAuthFragment_to_signupIdFragment"
             app:destination="@id/signupIdFragment" />
+        <argument
+            android:name="userdata"
+            app:argType="com.example.alloon_aos.data.model.UserData" />
     </fragment>
     <fragment
         android:id="@+id/signupIdFragment"
         android:name="com.example.alloon_aos.view.fragment.auth.SignupIdFragment"
-        android:label=" " >
+        android:label=" "
+        tools:layout="@layout/fragment_signup_id">
         <action
             android:id="@+id/action_signupIdFragment_to_signupPwFragment"
             app:destination="@id/signupPwFragment" />
@@ -86,7 +91,8 @@
     <fragment
         android:id="@+id/signupEmailFragment"
         android:name="com.example.alloon_aos.view.fragment.auth.SignupEmailFragment"
-        android:label=" " >
+        android:label=" "
+        tools:layout="@layout/fragment_signup_email">
         <action
             android:id="@+id/action_signupEmailFragment_to_signupAuthFragment"
             app:destination="@id/signupAuthFragment" />
@@ -94,7 +100,8 @@
     <fragment
         android:id="@+id/signupPwFragment"
         android:name="com.example.alloon_aos.view.fragment.auth.SignupPwFragment"
-        android:label=" " >
+        android:label=" "
+        tools:layout="@layout/fragment_signup_pw">
         <action
             android:id="@+id/action_signupPwFragment_to_loginFragment"
             app:destination="@id/loginFragment"

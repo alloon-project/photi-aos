@@ -1,7 +1,9 @@
 package com.example.alloon_aos.data.model
 
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 import retrofit2.http.Header
 
 data class AuthDTO(
@@ -24,13 +26,14 @@ data class Data(
     val temporaryPasswordYn : Boolean
 )
 
+@Parcelize
 data class UserData(
     var email : String? =null ,
     var verificationCode : String?=null,
     var username : String? =null,
     var password : String? =null,
     var passwordReEnter : String? =null
-)
+) : Parcelable
 
 data class NewPwd(
     var password : String? = null,

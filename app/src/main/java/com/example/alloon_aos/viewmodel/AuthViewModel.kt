@@ -187,7 +187,15 @@ class AuthViewModel : ViewModel() {
                     }
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
-                        code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
+                        val errorCode = jObjError.getString("code")
+                        when(errorCode){
+                            "USERNAME_FIELD_REQUIRED", "PASSWORD_FIELD_REQUIRED" -> {
+                                toast_message.value = "아이디와 비밀번호 모두 입력해주세요"
+                            }
+                            else -> {
+                                code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
+                            }
+                        }
                         Log.d("TAG","login id : $id pwd: $password response: " +code.value )
                     }
                 }

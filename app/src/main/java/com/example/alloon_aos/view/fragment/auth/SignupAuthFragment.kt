@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupAuthBinding
 import com.example.alloon_aos.view.activity.AuthActivity
@@ -29,6 +30,11 @@ class SignupAuthFragment : Fragment() {
 
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
+
+        val args : SignupAuthFragmentArgs by navArgs()
+        val email = args.userdata.email
+
+        binding.emailText.text = email
 
         binding.nextBtn.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
