@@ -1,4 +1,4 @@
-package com.example.alloon_aos.view.fragment
+package com.example.alloon_aos.view
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -8,14 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
-import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.DialogOneBtnBinding
 
 interface CustomDialogInterface {
     fun onClickYesButton()
 }
 
-class CustomDialog(val customDialogInterface: CustomDialogInterface,val title: String, val message: String, val buttonText: String) : DialogFragment() {
+class CustomDialog(val customDialogInterface: CustomDialogInterface, val title: String, val message: String, val buttonText: String) : DialogFragment() {
     private var _binding: DialogOneBtnBinding? = null
     private val binding get() = _binding!!
 
