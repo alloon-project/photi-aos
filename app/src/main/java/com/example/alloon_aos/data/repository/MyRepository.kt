@@ -113,8 +113,8 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun findPwd(callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.post_findPwd(UserData(email = "byeolstar12@naver.com", username = "hbhbhb")).enqueue(object : Callback<AuthDTO> {
+    fun sendNewPassword(user: UserData, callback: MainRepositoryCallback<AuthDTO>) {
+        apiService.post_findPwd(user).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
@@ -150,7 +150,7 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun modifyPwd(token : String,newPwd : NewPwd, callback: MainRepositoryCallback<AuthDTO>) {
+    fun modifyPassword(token : String,newPwd : NewPwd, callback: MainRepositoryCallback<AuthDTO>) {
         apiService.patch_modifyPwd("Bearer $token",newPwd).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {

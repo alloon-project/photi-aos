@@ -110,6 +110,9 @@ class LoginFragment : Fragment() {
         authViewModel.code.observe(viewLifecycleOwner){
             if(it.isNotEmpty()) {
                 when(it) {
+                    "USERNAME_FIELD_REQUIRED", "PASSWORD_FIELD_REQUIRED" -> {
+                        CustomToast.createToast(getActivity(), "아이디와 비밀번호 모두 입력해주세요")?.show()
+                    }
                     "USER_LOGIN" -> {
                         Log.d("TAG","홈 화면으로 이동~")
                     }

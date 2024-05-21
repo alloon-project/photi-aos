@@ -188,14 +188,7 @@ class AuthViewModel : ViewModel() {
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
                         val errorCode = jObjError.getString("code")
-                        when(errorCode){
-                            "USERNAME_FIELD_REQUIRED", "PASSWORD_FIELD_REQUIRED" -> {
-                                toast_message.value = "아이디와 비밀번호 모두 입력해주세요"
-                            }
-                            else -> {
-                                code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
-                            }
-                        }
+                        code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
                         Log.d("TAG","login id : $id pwd: $password response: " +code.value )
                     }
                 }
@@ -229,5 +222,28 @@ class AuthViewModel : ViewModel() {
         })
     }
 
+    //임시 비밀번호 전송
+    fun sendNewPassword(){
+        repository.sendNewPassword(UserData(email = email,username = id),object : MainRepositoryCallback<AuthDTO> {
+            override fun onSuccess(data: AuthDTO) {
+                val result = data.code
+                val mes = data.message
+                code.value = result
+                Log.d("TAG1","findId: ${mes} $result")
+            }
 
+            override fun onFailure(error: Throwable) {
+                when(error){
+                    is IOException -> {
+                        code.value = "IO_Exception"
+                    }
+                    else -> {
+                        val jObjError = JSONObject(error.message.toString())
+                        code.value = jObjError.getString("code")
+                        Log.d("TAG","error: " + code.value)
+                    }
+                }
+            }
+        })
+    }
 }

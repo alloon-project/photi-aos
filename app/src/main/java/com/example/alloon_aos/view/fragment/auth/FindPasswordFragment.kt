@@ -40,6 +40,7 @@ class FindPasswordFragment : Fragment() {
         mActivity.setAppBar("비밀번호 찾기")
 
         setListener()
+        setObserver()
 
         return binding.root
     }
@@ -55,8 +56,9 @@ class FindPasswordFragment : Fragment() {
             else    binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
         }
 
-        binding.resendTextView.setOnClickListener {
-            println("resend")
+        binding.newPasswordEditText.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus) binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_focus)
+            else    binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
         }
 
         setKeyboardVisibilityListener(object : OnKeyboardVisibilityListener {
@@ -73,6 +75,11 @@ class FindPasswordFragment : Fragment() {
                 when(it){
                     "PASSWORD_SENT" -> {
                         CustomToast.createToast(getActivity(),"인증 메일이 재전송되었어요.")?.show()
+                        binding.userEmailTextView.setText(authViewModel.email)
+                        binding.sendCodeLayout.visibility = View.GONE
+                        binding.enterCodeLayout.visibility = View.VISIBLE
+                        binding.nextButton.visibility = View.GONE
+                        binding.movefragmentButton.visibility = View.VISIBLE
                     }
                     "EMAIL_FIELD_REQUIRED" -> {
                         CustomToast.createToast(getActivity(),"이메일은 필수 입력입니다.")?.show()
@@ -96,14 +103,7 @@ class FindPasswordFragment : Fragment() {
     }
 
     fun moveToChangePassWordFragment(){
-        //임시비밀번호
-        binding.userEmailTextView.setText(authViewModel.email)
-        binding.sendCodeLayout.visibility = View.GONE
-        binding.enterCodeLayout.visibility = View.VISIBLE
-        binding.nextButton.isEnabled = false
-
-        // 비밀번호 변경
-        //view?.findNavController()?.navigate(R.id.action_findPasswordFragment_to_changePasswordFragment)
+        view?.findNavController()?.navigate(R.id.action_findPasswordFragment_to_changePasswordFragment)
     }
 
     fun checkEmailValidation(){
