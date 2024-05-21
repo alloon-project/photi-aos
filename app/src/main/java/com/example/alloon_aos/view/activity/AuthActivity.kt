@@ -2,18 +2,18 @@ package com.example.alloon_aos.view.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.ActivityHomeBinding
+import com.example.alloon_aos.databinding.ActivityAuthBinding
 
 class AuthActivity : AppCompatActivity() {
-    private val binding by lazy {ActivityHomeBinding.inflate(layoutInflater)}
-
+   lateinit var binding : ActivityAuthBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_auth)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav) as NavHostFragment

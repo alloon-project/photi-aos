@@ -1,12 +1,14 @@
 package com.example.alloon_aos.view.fragment.auth
 
+import android.graphics.Rect
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Log
 import android.util.Patterns
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,6 +20,10 @@ import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.fragment.CustomDialog
 import com.example.alloon_aos.view.fragment.CustomDialogInterface
 import com.example.alloon_aos.viewmodel.AuthViewModel
+
+interface OnKeyboardVisibilityListener {
+    fun onVisibilityChanged(visible : Boolean)
+}
 
 class FindIdFragment : Fragment(), CustomDialogInterface {
     private lateinit var binding : FragmentFindIdBinding
@@ -36,34 +42,21 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("아이디 찾기")
 
-        setObserve()
         setListener()
+        setObserve()
 
         return binding.root
     }
 
-    fun setListener(){
-
-        binding.emailEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                var email =binding.emailEditText.text.toString().trim()
-                val pattern = Patterns.EMAIL_ADDRESS
-
-                if (pattern.matcher(email).matches()) {
+    fun setListener() {
+        setKeyboardVisibilityListener(object : OnKeyboardVisibilityListener {
+            override fun onVisibilityChanged(visible: Boolean) {
+                if (visible) {
                     binding.errorTextView.visibility = View.INVISIBLE
-                    binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
-                    binding.nextButton.isEnabled = true
-
+                    binding.emailEditText.background =
+                        resources.getDrawable(R.drawable.input_line_focus)
                 } else {
-                    binding.errorTextView.text = resources.getString(R.string.emailerror1)
-                    binding.errorTextView.visibility = View.VISIBLE
-                    binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
-                    binding.nextButton.isEnabled = false
-
+                    checkEmailValidation()
                 }
             }
         })
@@ -85,6 +78,7 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
                         binding.errorTextView.visibility = View.VISIBLE
                         binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
                         binding.errorTextView.text = resources.getString(R.string.emailerror2)
+
                     }
                     "EMAIL_SEND_ERROR" -> {
                         CustomToast.createToast(getActivity(),"이메일 전송 중 서버 에러가 발생했습니다.")?.show()
@@ -95,8 +89,56 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
     }
 
 
+    fun checkEmailValidation(){
+        var email =binding.emailEditText.text.toString().trim()
+        val pattern = Patterns.EMAIL_ADDRESS
+
+        if (pattern.matcher(email).matches()) {
+            binding.errorTextView.visibility = View.INVISIBLE
+            binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
+            binding.nextButton.isEnabled = true
+
+        } else {
+            binding.errorTextView.text = resources.getString(R.string.emailerror1)
+            binding.errorTextView.visibility = View.VISIBLE
+            binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
+            binding.nextButton.isEnabled = false
+
+        }
+    }
+
+    private fun setKeyboardVisibilityListener(onKeyboardVisibilityListener: OnKeyboardVisibilityListener) {
+        val parentView = (binding.root as ViewGroup).getChildAt(0)
+        parentView.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            private var alreadyOpen = false
+            private val defaultKeyboardHeightDP = 100
+            private val EstimatedKeyboardDP =
+                defaultKeyboardHeightDP + 48
+            private val rect = Rect()
+            override fun onGlobalLayout() {
+                val estimatedKeyboardHeight = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    EstimatedKeyboardDP.toFloat(),
+                    parentView.resources.displayMetrics
+                ).toInt()
+                parentView.getWindowVisibleDisplayFrame(rect)
+                val heightDiff = parentView.rootView.height - (rect.bottom - rect.top)
+                val isShown = heightDiff >= estimatedKeyboardHeight
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...")
+                    return
+                }
+                alreadyOpen = isShown
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown)
+            }
+        })
+    }
+
     override fun onClickYesButton() {
         view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment)
     }
+
+
 
 }
