@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignUpBinding
+import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
@@ -43,15 +44,16 @@ class SignUpFragment : Fragment() {
 
     fun setObserver(){
         authViewModel.code.observe(viewLifecycleOwner){
-            if(it.isNotEmpty()) {
-                authViewModel.toast_message.observe(viewLifecycleOwner){
-                    if(it.isNotEmpty())
-                        Toast.makeText(getActivity(), it, Toast.LENGTH_SHORT).show()
-                }
-
                 authViewModel.code.observe(viewLifecycleOwner){
                     if(it.isNotEmpty()){
                         when(it){
+                            //!! IO_Exception 모든 네트워크 통신에 무조건 추가 !!
+                            "IO_Exception" ->{
+                                CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                            }
+                            //!!
+
+
                             "EMAIL_VERIFICATION_CODE_SENT" -> { //이메일 인증코드를 보냈습니다.
                                 Toast.makeText(getActivity(), "EMAIL_VERIFICATION_CODE_SENT", Toast.LENGTH_SHORT).show()
                             }

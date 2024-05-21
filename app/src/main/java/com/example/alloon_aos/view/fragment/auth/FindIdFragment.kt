@@ -63,10 +63,6 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
     }
 
     fun setObserve(){
-        authViewModel.toast_message.observe(viewLifecycleOwner){
-            if(it.isNotEmpty())
-                CustomToast.createToast(getActivity(),it)?.show()
-        }
         authViewModel.code.observe(viewLifecycleOwner){
             if(it.isNotEmpty()) {
                 when(it){
@@ -82,6 +78,9 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
                     }
                     "EMAIL_SEND_ERROR" -> {
                         CustomToast.createToast(getActivity(),"이메일 전송 중 서버 에러가 발생했습니다.")?.show()
+                    }
+                    "IO_Exception" ->{
+                        CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
                 }
             }

@@ -107,11 +107,6 @@ class LoginFragment : Fragment() {
     }
 
     fun setObserve(){
-        authViewModel.toast_message.observe(viewLifecycleOwner){
-            if(it.isNotEmpty())
-                CustomToast.createToast(getActivity(),it)?.show()
-        }
-
         authViewModel.code.observe(viewLifecycleOwner){
             if(it.isNotEmpty()) {
                 when(it) {
@@ -124,7 +119,9 @@ class LoginFragment : Fragment() {
                         binding.errorId.isVisible = true
                         binding.errorPw.isVisible = true
                     }
-
+                    "IO_Exception" ->{
+                        CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                    }
                 }
             }
         }
