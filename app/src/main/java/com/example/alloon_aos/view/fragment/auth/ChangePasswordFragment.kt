@@ -12,11 +12,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentChangePasswordBinding
-import com.example.alloon_aos.databinding.FragmentFindPasswordBinding
-import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
-import com.example.alloon_aos.view.fragment.CustomDialog
-import com.example.alloon_aos.view.fragment.CustomDialogInterface
+import com.example.alloon_aos.view.CustomDialog
+import com.example.alloon_aos.view.CustomDialogInterface
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class ChangePasswordFragment : Fragment(), CustomDialogInterface {

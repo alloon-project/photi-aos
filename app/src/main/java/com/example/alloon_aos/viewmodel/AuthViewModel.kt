@@ -45,7 +45,7 @@ class AuthViewModel : ViewModel() {
             override fun onFailure(error: Throwable) {
                 when(error){
                     is IOException -> {
-                        toast_message.value = "인터넷이나 서버 연결을 확인해주세요"
+                        code.value = "IO_Exception"
                     }
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
@@ -71,7 +71,7 @@ class AuthViewModel : ViewModel() {
             override fun onFailure(error: Throwable) {
                 when(error){
                     is IOException -> {
-                        toast_message.value = "인터넷이나 서버을 연결 확인해주세요"
+                        code.value = "IO_Exception"
                     }
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
@@ -96,7 +96,7 @@ class AuthViewModel : ViewModel() {
             override fun onFailure(error: Throwable) {
                 when(error){
                     is IOException -> {
-                        toast_message.value = "인터넷이나 서버을 연결 확인해주세요"
+                        code.value = "IO_Exception"
                     }
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
@@ -127,7 +127,7 @@ class AuthViewModel : ViewModel() {
             override fun onFailure(error: Throwable) {
                 when(error){
                     is IOException -> {
-                        toast_message.value = "인터넷이나 서버을 연결 확인해주세요"
+                        code.value = "IO_Exception"
                     }
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
@@ -183,7 +183,7 @@ class AuthViewModel : ViewModel() {
                 Log.d("TAG","onFailure : ${error.toString()} " )
                 when(error){
                     is IOException -> {
-                        toast_message.value = "인터넷이나 서버을 연결 확인해주세요"
+                        code.value = "IO_Exception"
                     }
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
@@ -217,8 +217,7 @@ class AuthViewModel : ViewModel() {
             override fun onFailure(error: Throwable) {
                 when(error){
                     is IOException -> {
-                        toast_message.value = "인터넷이나 서버 연결을 확인해주세요"
-
+                        code.value = "IO_Exception"
                     }
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
