@@ -20,11 +20,9 @@ import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.CustomDialog
 import com.example.alloon_aos.view.CustomDialogInterface
+import com.example.alloon_aos.view.KeyboardListener
+import com.example.alloon_aos.view.OnKeyboardVisibilityListener
 import com.example.alloon_aos.viewmodel.AuthViewModel
-
-interface OnKeyboardVisibilityListener {
-    fun onVisibilityChanged(visible : Boolean)
-}
 
 class FindIdFragment : Fragment(), CustomDialogInterface {
     private lateinit var binding : FragmentFindIdBinding
@@ -52,7 +50,8 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
 
 
     fun setListener() {
-        setKeyboardVisibilityListener(object : OnKeyboardVisibilityListener {
+        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
+            OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {
                     binding.errorTextView.visibility = View.INVISIBLE
@@ -107,34 +106,6 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
             binding.nextButton.isEnabled = false
 
         }
-    }
-
-    private fun setKeyboardVisibilityListener(onKeyboardVisibilityListener: OnKeyboardVisibilityListener) {
-        val parentView = (binding.root as ViewGroup).getChildAt(0)
-        parentView.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            private var alreadyOpen = false
-            private val defaultKeyboardHeightDP = 100
-            private val EstimatedKeyboardDP =
-                defaultKeyboardHeightDP + 48
-            private val rect = Rect()
-            override fun onGlobalLayout() {
-                val estimatedKeyboardHeight = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    EstimatedKeyboardDP.toFloat(),
-                    parentView.resources.displayMetrics
-                ).toInt()
-                parentView.getWindowVisibleDisplayFrame(rect)
-                val heightDiff = parentView.rootView.height - (rect.bottom - rect.top)
-                val isShown = heightDiff >= estimatedKeyboardHeight
-                if (isShown == alreadyOpen) {
-                    Log.i("Keyboard state", "Ignoring global layout change...")
-                    return
-                }
-                alreadyOpen = isShown
-                onKeyboardVisibilityListener.onVisibilityChanged(isShown)
-            }
-        })
     }
 
     override fun onClickYesButton() {
