@@ -35,30 +35,30 @@ class ChangePasswordFragment : Fragment(), CustomDialogInterface {
 
         setListener()
 
-        binding.nextButton.isEnabled = true
+        binding.movefragmentButton.isEnabled = true
 
         return binding.root
     }
 
 
     fun setListener(){
-        binding.newPasswordEditText.setOnFocusChangeListener { v, hasFocus ->
-            if(hasFocus) binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_focus)
-            else    binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_default)
-        }
-
-        binding.newPasswordEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //checkEmailValidation()
-                //binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_focus)
-            }
-        })
+//        binding.newPassword1EditText.setOnFocusChangeListener { v, hasFocus ->
+//            if(hasFocus) binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_focus)
+//            else    binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_default)
+//        }
+//
+//        binding.newPasswordEditText.addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable?) {
+//
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                //checkEmailValidation()
+//                //binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_focus)
+//            }
+//        })
 
     }
 
