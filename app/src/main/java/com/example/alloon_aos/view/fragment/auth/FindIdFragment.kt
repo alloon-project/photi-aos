@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
@@ -27,7 +28,7 @@ interface OnKeyboardVisibilityListener {
 
 class FindIdFragment : Fragment(), CustomDialogInterface {
     private lateinit var binding : FragmentFindIdBinding
-    private val authViewModel by viewModels<AuthViewModel>()
+    private val authViewModel by activityViewModels<AuthViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +49,8 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
         return binding.root
     }
 
+
+
     fun setListener() {
         setKeyboardVisibilityListener(object : OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
@@ -55,7 +58,7 @@ class FindIdFragment : Fragment(), CustomDialogInterface {
                     binding.errorTextView.visibility = View.INVISIBLE
                     binding.emailEditText.background =
                         resources.getDrawable(R.drawable.input_line_focus)
-                } else {
+                } else if(binding.emailEditText.text.isNotEmpty()){
                     checkEmailValidation()
                 }
             }

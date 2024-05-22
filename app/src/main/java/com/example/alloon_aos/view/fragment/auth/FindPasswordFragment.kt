@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
@@ -25,7 +26,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class FindPasswordFragment : Fragment() {
     private lateinit var binding : FragmentFindPasswordBinding
-    private val authViewModel by viewModels<AuthViewModel>()
+    private val authViewModel by activityViewModels<AuthViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,7 +64,7 @@ class FindPasswordFragment : Fragment() {
 
         setKeyboardVisibilityListener(object : OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
-                if(!visible)
+                if(!visible && binding.emailEditText.text.isNotEmpty())
                     checkEmailValidation()
             }
         })
