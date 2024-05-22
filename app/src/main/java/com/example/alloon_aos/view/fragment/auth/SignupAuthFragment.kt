@@ -1,12 +1,15 @@
 package com.example.alloon_aos.view.fragment.auth
 
 import android.animation.ObjectAnimator
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -17,8 +20,11 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class SignupAuthFragment : Fragment() {
     private lateinit var binding : FragmentSignupAuthBinding
-    private val authViewModel by viewModels<AuthViewModel>()
-
+    private val authViewModel by activityViewModels<AuthViewModel>()
+    init {
+        authViewModel.resetCodeValue()
+    }
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,11 +37,6 @@ class SignupAuthFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
-        val args : SignupAuthFragmentArgs by navArgs()
-        val email = args.userdata.email
-
-        binding.emailText.text = email
-
         binding.nextBtn.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
         }
@@ -47,4 +48,7 @@ class SignupAuthFragment : Fragment() {
         return binding.root
     }
 
+    fun moveNext() {
+        view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
+    }
 }

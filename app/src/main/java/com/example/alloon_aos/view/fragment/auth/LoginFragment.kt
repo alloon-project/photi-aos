@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentLoginBinding
@@ -23,8 +23,10 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class LoginFragment : Fragment() {
     private lateinit var binding : FragmentLoginBinding
-    private val authViewModel by viewModels<AuthViewModel>()
-
+    private val authViewModel by activityViewModels<AuthViewModel>()
+    init {
+        authViewModel.resetAllValue()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

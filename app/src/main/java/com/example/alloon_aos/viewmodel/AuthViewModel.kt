@@ -17,15 +17,24 @@ class AuthViewModel : ViewModel() {
     private val apiService = RetrofitClient.apiService
     private val repository = MyRepository(apiService)
 
-    var toast_message = MutableLiveData("")
     var code =  MutableLiveData("") //observer가 필요한 경우만 Mutable
     var email = ""
     var email_code = ""
     var id = ""
     var password = ""
-    var hello = ""
 
 
+    // init Code
+    fun resetAllValue() {
+        code.value = ""
+        email = ""
+        email_code = ""
+        id = ""
+        password = ""
+    }
+    fun resetCodeValue() {
+        code.value = ""
+    }
 /*
 *
 *

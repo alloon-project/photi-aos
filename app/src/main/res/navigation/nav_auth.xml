@@ -75,9 +75,6 @@
         <action
             android:id="@+id/action_signupAuthFragment_to_signupIdFragment"
             app:destination="@id/signupIdFragment" />
-        <argument
-            android:name="userdata"
-            app:argType="com.example.alloon_aos.data.model.UserData" />
     </fragment>
     <fragment
         android:id="@+id/signupIdFragment"
