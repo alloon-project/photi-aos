@@ -24,9 +24,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 class LoginFragment : Fragment() {
     private lateinit var binding : FragmentLoginBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
-    init {
-        authViewModel.resetAllValue()
-    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +37,7 @@ class LoginFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("로그인")
 
+        authViewModel.resetAllValue()
         setObserve()
 
         binding.loginId.onFocusChangeListener =

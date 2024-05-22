@@ -21,9 +21,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 class SignupAuthFragment : Fragment() {
     private lateinit var binding : FragmentSignupAuthBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
-    init {
-        authViewModel.resetCodeValue()
-    }
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +34,8 @@ class SignupAuthFragment : Fragment() {
 
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
+
+        authViewModel.resetCodeValue()
 
         binding.nextBtn.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)

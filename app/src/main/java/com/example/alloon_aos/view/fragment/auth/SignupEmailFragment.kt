@@ -23,9 +23,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 class SignupEmailFragment : Fragment() {
     private lateinit var binding : FragmentSignupEmailBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
-    init {
-        authViewModel.resetAllValue()
-    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,6 +36,7 @@ class SignupEmailFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
+        authViewModel.resetAllValue()
         setObserve()
 
         ObjectAnimator.ofInt(binding.emailProgress, "progress", 0,20)
