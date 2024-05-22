@@ -1,8 +1,6 @@
 package com.example.alloon_aos.view.fragment.auth
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,21 +9,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.FragmentChangePasswordBinding
+import com.example.alloon_aos.databinding.FragmentPasswordChangeBinding
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.CustomDialog
 import com.example.alloon_aos.view.CustomDialogInterface
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
-class ChangePasswordFragment : Fragment(), CustomDialogInterface {
-    private lateinit var binding : FragmentChangePasswordBinding
+class PasswordChangeFragment : Fragment(), CustomDialogInterface {
+    private lateinit var binding : FragmentPasswordChangeBinding
     private val authViewModel by viewModels<AuthViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_change_password, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_password_change, container, false)
         binding.fragment = this
         binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner

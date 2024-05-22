@@ -1,24 +1,16 @@
 package com.example.alloon_aos.view.fragment.auth
 
-import android.graphics.Rect
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.util.Patterns
-import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.FragmentFindPasswordBinding
-import com.example.alloon_aos.view.CustomDialog
+import com.example.alloon_aos.databinding.FragmentPasswordSendBinding
 import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.KeyboardListener
 import com.example.alloon_aos.view.OnKeyboardVisibilityListener
@@ -26,8 +18,8 @@ import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 
-class FindPasswordFragment : Fragment() {
-    private lateinit var binding : FragmentFindPasswordBinding
+class PasswordSendFragment : Fragment() {
+    private lateinit var binding : FragmentPasswordSendBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
 
     private var email_flag : Boolean = true
@@ -36,7 +28,7 @@ class FindPasswordFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_find_password, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_password_send, container, false)
         binding.fragment = this
         binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -82,6 +74,8 @@ class FindPasswordFragment : Fragment() {
                 when(it){
                     "PASSWORD_SENT" -> {
                         CustomToast.createToast(getActivity(),"인증 메일이 재전송되었어요.")?.show()
+
+                        //기존 레이아웃 없애고 인증코드 입력 레이아웃 보여지게함
                         binding.userEmailTextView.setText(authViewModel.email)
                         binding.sendCodeLayout.visibility = View.GONE
                         binding.enterCodeLayout.visibility = View.VISIBLE

@@ -14,8 +14,8 @@
     <string name="id">아이디</string>
     <string name="enternewpwd">새 비밀번호를 입력해주세요</string>
     <string name="findpwd">이메일로 임시 비밀번호를 보내드렸습니다\n임시 비밀번호를 입력해주세요</string>
-    <string name ="newPw1">새 비밀번호</string>
-    <string name ="newPw2">새 비밀번호 확인</string>
+    <string name="newPw1">새 비밀번호</string>
+    <string name="newPw2">새 비밀번호 확인</string>
     <string name="temporarypassword">임시 비밀번호</string>
     <string name="requirePw1">영문 포함</string>
     <string name="requirePw2">숫자 포함</string>

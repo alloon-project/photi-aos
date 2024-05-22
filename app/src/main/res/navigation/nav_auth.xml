@@ -49,18 +49,18 @@
     </fragment>
     <fragment
         android:id="@+id/findPasswordFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.FindPasswordFragment"
+        android:name="com.example.alloon_aos.view.fragment.auth.PasswordSendFragment"
         android:label=" "
-        tools:layout="@layout/fragment_find_password">
+        tools:layout="@layout/fragment_password_send">
         <action
             android:id="@+id/action_findPasswordFragment_to_changePasswordFragment"
             app:destination="@id/changePasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.ChangePasswordFragment"
+        android:name="com.example.alloon_aos.view.fragment.auth.PasswordChangeFragment"
         android:label=" "
-        tools:layout="@layout/fragment_change_password">
+        tools:layout="@layout/fragment_password_change">
         <action
             android:id="@+id/action_changePasswordFragment_to_loginFragment"
             app:destination="@id/loginFragment"
