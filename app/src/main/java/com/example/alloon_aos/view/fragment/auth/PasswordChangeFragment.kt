@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentPasswordChangeBinding
@@ -17,7 +17,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class PasswordChangeFragment : Fragment(), CustomDialogInterface {
     private lateinit var binding : FragmentPasswordChangeBinding
-    private val authViewModel by viewModels<AuthViewModel>()
+    private val authViewModel by activityViewModels<AuthViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,11 +33,12 @@ class PasswordChangeFragment : Fragment(), CustomDialogInterface {
 
         setListener()
 
-        binding.movefragmentButton.isEnabled = true
-
         return binding.root
     }
 
+    fun go(){
+        view?.findNavController()?.navigate(R.id.action_passwordChangeFragment_to_loginFragment)
+    }
 
     fun setListener(){
 //        binding.newPassword1EditText.setOnFocusChangeListener { v, hasFocus ->
@@ -66,6 +67,6 @@ class PasswordChangeFragment : Fragment(), CustomDialogInterface {
     }
 
     override fun onClickYesButton() {
-        view?.findNavController()?.navigate(R.id.action_changePasswordFragment_to_loginFragment)
+        view?.findNavController()?.navigate(R.id.action_passwordChangeFragment_to_loginFragment)
     }
 }

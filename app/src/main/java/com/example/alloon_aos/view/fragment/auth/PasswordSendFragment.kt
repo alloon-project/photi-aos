@@ -54,11 +54,6 @@ class PasswordSendFragment : Fragment() {
             else    binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
         }
 
-        binding.newPasswordEditText.setOnFocusChangeListener { v, hasFocus ->
-            if(hasFocus) binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_focus)
-            else    binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
-        }
-
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
@@ -73,14 +68,7 @@ class PasswordSendFragment : Fragment() {
             if(it.isNotEmpty()) {
                 when(it){
                     "PASSWORD_SENT" -> {
-                        CustomToast.createToast(getActivity(),"인증 메일이 재전송되었어요.")?.show()
 
-                        //기존 레이아웃 없애고 인증코드 입력 레이아웃 보여지게함
-                        binding.userEmailTextView.setText(authViewModel.email)
-                        binding.sendCodeLayout.visibility = View.GONE
-                        binding.enterCodeLayout.visibility = View.VISIBLE
-                        binding.nextButton.visibility = View.GONE
-                        binding.movefragmentButton.visibility = View.VISIBLE
                     }
                     "EMAIL_FIELD_REQUIRED" -> {
                         CustomToast.createToast(getActivity(),"이메일은 필수 입력입니다.")?.show()
@@ -103,8 +91,8 @@ class PasswordSendFragment : Fragment() {
         }
     }
 
-    fun moveToChangePassWordFragment(){
-        view?.findNavController()?.navigate(R.id.action_findPasswordFragment_to_changePasswordFragment)
+    fun go(){
+        view?.findNavController()?.navigate(R.id.action_passwordSendFragment_to_passwordEnterFragment)
     }
 
     fun checkEmailValidation(){
