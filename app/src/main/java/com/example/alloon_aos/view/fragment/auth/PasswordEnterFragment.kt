@@ -12,6 +12,7 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentPasswordChangeBinding
 import com.example.alloon_aos.databinding.FragmentPasswordEnterBinding
 import com.example.alloon_aos.view.CustomDialog
+import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
@@ -33,32 +34,55 @@ class PasswordEnterFragment : Fragment() {
         mActivity.setAppBar("비밀번호 찾기")
 
         setListener()
-
+        setObserver()
         return binding.root
     }
 
-    fun go(){
-        view?.findNavController()?.navigate(R.id.action_passwordEnterFragment_to_passwordChangeFragment)
-    }
     fun setListener(){
-//        binding.newPassword1EditText.setOnFocusChangeListener { v, hasFocus ->
-//            if(hasFocus) binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_focus)
-//            else    binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_default)
-//        }
-//
-//        binding.newPasswordEditText.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                //checkEmailValidation()
-//                //binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_focus)
-//            }
-//        })
+        binding.newPasswordEditText.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus) {
+                binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_focus)
+                binding.errorTextView.visibility = View.GONE
+            }
+            else    binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_default)
+        }
+    }
 
+
+    fun setObserver(){
+        authViewModel.code.observe(viewLifecycleOwner){
+            if(it.isNotEmpty()) {
+                when(it){
+                    "PASSWORD_SENT" -> {
+                        CustomToast.createToast(getActivity(),"인증메일이 재전송되었어요")?.show()
+                    }
+                    "EMAIL_FIELD_REQUIRED" -> {
+                        CustomToast.createToast(getActivity(),"이메일은 필수 입력입니다")?.show()
+                    }
+                    "USERNAME_FIELD_REQUIRED" ->{
+                        CustomToast.createToast(getActivity(),"아이디는 필수 입력입니다")?.show()
+
+                    }
+                    "USER_NOT_FOUND" -> {
+                        CustomToast.createToast(getActivity(),"아이디 혹은 이메일이 일치하지 않아요")?.show()
+                    }
+                    "EMAIL_SEND_ERROR" ->{
+                        CustomToast.createToast(getActivity(),"이메일 전송 중 서버 에러가 발생했습니다")?.show()
+                    }
+                    "IO_Exception" ->{
+                        CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                    }
+                    "USER_LOGIN" -> {
+                        view?.findNavController()?.navigate(R.id.action_passwordEnterFragment_to_passwordChangeFragment)
+                    }
+                    "LOGIN_UNAUTHENTICATED","PASSWORD_FIELD_REQUIRED" -> {
+                        //비밀번호 불일치
+                        binding.newPasswordEditText.setBackgroundResource(R.drawable.input_line_error)
+                        binding.errorTextView.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
     }
 
 }

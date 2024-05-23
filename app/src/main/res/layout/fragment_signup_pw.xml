@@ -66,7 +66,7 @@
                 android:layout_marginLeft="24dp">
 
                 <TextView
-                    android:id="@+id/check_eng"
+                    android:id="@+id/checkEng_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_check"
@@ -77,7 +77,7 @@
                     android:textSize="12dp"/>
 
                 <TextView
-                    android:id="@+id/check_num"
+                    android:id="@+id/checkNum_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_check"
@@ -101,7 +101,7 @@
                     android:layout_marginLeft="14dp"/>
 
                 <TextView
-                    android:id="@+id/check_length"
+                    android:id="@+id/checkLengh_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_check"

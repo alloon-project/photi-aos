@@ -12,6 +12,7 @@
     <string name="enterEmail">가입 시 사용했던 이메일을 입력해주세요</string>
     <string name="email">이메일</string>
     <string name="id">아이디</string>
+    <string name="enterpwd">x&#160;&#160;&#160;임시 비밀번호가 일치하지 않아요</string>
     <string name="enternewpwd">새 비밀번호를 입력해주세요</string>
     <string name="findpwd">이메일로 임시 비밀번호를 보내드렸습니다\n임시 비밀번호를 입력해주세요</string>
     <string name="newPw1">새 비밀번호</string>

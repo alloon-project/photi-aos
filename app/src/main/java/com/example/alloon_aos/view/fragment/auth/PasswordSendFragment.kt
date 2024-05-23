@@ -68,20 +68,20 @@ class PasswordSendFragment : Fragment() {
             if(it.isNotEmpty()) {
                 when(it){
                     "PASSWORD_SENT" -> {
-
+                        view?.findNavController()?.navigate(R.id.action_passwordSendFragment_to_passwordEnterFragment)
                     }
                     "EMAIL_FIELD_REQUIRED" -> {
-                        CustomToast.createToast(getActivity(),"이메일은 필수 입력입니다.")?.show()
+                        CustomToast.createToast(getActivity(),"이메일은 필수 입력입니다")?.show()
                     }
                     "USERNAME_FIELD_REQUIRED" ->{
-                        CustomToast.createToast(getActivity(),"아이디는 필수 입력입니다.")?.show()
+                        CustomToast.createToast(getActivity(),"아이디는 필수 입력입니다")?.show()
 
                     }
                     "USER_NOT_FOUND" -> {
-                        CustomToast.createToast(getActivity(),"아이디 혹은 이메일이 일치하지 않아요.")?.show()
+                        CustomToast.createToast(getActivity(),"아이디 혹은 이메일이 일치하지 않아요")?.show()
                     }
                     "EMAIL_SEND_ERROR" ->{
-                        CustomToast.createToast(getActivity(),"이메일 전송 중 서버 에러가 발생했습니다.")?.show()
+                        CustomToast.createToast(getActivity(),"이메일 전송 중 서버 에러가 발생했습니다")?.show()
                     }
                     "IO_Exception" ->{
                         CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
@@ -89,10 +89,6 @@ class PasswordSendFragment : Fragment() {
                 }
             }
         }
-    }
-
-    fun go(){
-        view?.findNavController()?.navigate(R.id.action_passwordSendFragment_to_passwordEnterFragment)
     }
 
     fun checkEmailValidation(){
@@ -114,4 +110,5 @@ class PasswordSendFragment : Fragment() {
 
         }
     }
+
 }
