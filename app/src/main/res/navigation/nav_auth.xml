@@ -75,6 +75,7 @@
             android:id="@+id/action_passwordChangeFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"
             />
     </fragment>
     <fragment
