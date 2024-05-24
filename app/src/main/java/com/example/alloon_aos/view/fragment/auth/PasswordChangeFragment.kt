@@ -46,7 +46,6 @@ class PasswordChangeFragment : Fragment(), CustomDialogInterface {
         green  = resources.getColor(R.color.green200)
         grey = resources.getColor(R.color.gray400)
         authViewModel.resetCodeValue()
-        authViewModel.password = ""
         setListener()
         setObserve()
 

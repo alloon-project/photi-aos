@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentLoginBinding
 import com.example.alloon_aos.view.CustomToast
@@ -34,12 +35,16 @@ class LoginFragment : Fragment() {
         binding.fragment = this
         binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("로그인")
 
+        //token 초기화
+        MyApplication.mySharedPreferences.remove("access_token")
+        MyApplication.mySharedPreferences.remove("refresh_token")
+        
         authViewModel.resetAllValue()
         setObserve()
+
         binding.loginId.onFocusChangeListener =
             OnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {

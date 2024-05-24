@@ -37,6 +37,7 @@ class PasswordSendFragment : Fragment() {
         mActivity.setAppBar("비밀번호 찾기")
 
         authViewModel.resetAllValue()
+
         setListener()
         setObserver()
 

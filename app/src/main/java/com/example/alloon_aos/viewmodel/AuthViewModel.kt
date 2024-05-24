@@ -10,6 +10,7 @@ import com.example.alloon_aos.data.model.UserData
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.MyRepository
 import com.example.alloon_aos.data.repository.MainRepositoryCallback
+import com.example.alloon_aos.MyApplication.Companion.mySharedPreferences
 import okhttp3.Headers
 import okio.IOException
 import org.json.JSONObject
@@ -23,10 +24,7 @@ class AuthViewModel : ViewModel() {
     var email_code = ""
     var id = ""
     var password = ""
-    var access_token = ""
-    var refresh_token =""
     var newPassword = ""
-
 
     // init Code
     fun resetAllValue() {
@@ -35,6 +33,7 @@ class AuthViewModel : ViewModel() {
         email_code = ""
         id = ""
         password = ""
+        newPassword = ""
     }
     fun resetCodeValue() {
         code.value = ""
@@ -127,11 +126,9 @@ class AuthViewModel : ViewModel() {
                 val (_data,header) = data
                 val result = _data.code //ex."USERNAME_SENT"
                 val mes = _data.message
-                access_token = header.get("Authorization").toString()
-                refresh_token = header.get("Refresh-Token").toString()
+                mySharedPreferences.setString("access_token", header.get("Authorization").toString())
+                mySharedPreferences.setString("refresh_token", header.get("Refresh-Token").toString())
                 code.value = result
-                Log.d("TAG","a_token:  $access_token")
-                Log.d("TAG","r_token:  $refresh_token")
                 Log.d("TAG","signUp: $id $mes $result")
             }
 
@@ -159,13 +156,11 @@ class AuthViewModel : ViewModel() {
                 val (_data,header) = data
                 val result = _data.code //ex."USERNAME_SENT"
                 val mes = _data.message
-                access_token = header.get("Authorization").toString()
-                refresh_token = header.get("Refresh-Token").toString()
+                mySharedPreferences.setString("access_token", header.get("Authorization").toString())
+                mySharedPreferences.setString("refresh_token", header.get("Refresh-Token").toString())
                 code.value = result
                 //val imgUrl = _data.data.imageUrl
                 Log.d("TAG","login: $id $result")
-                Log.d("TAG","1~~  $access_token")
-                Log.d("TAG","2~~ $refresh_token")
             }
 
             override fun onFailure(error: Throwable) {
@@ -238,7 +233,8 @@ class AuthViewModel : ViewModel() {
 
     fun modifyPassword(){
         val newPwd = NewPwd(password,newPassword,newPassword)
-        repository.modifyPassword(access_token,newPwd,object :
+        val token =  mySharedPreferences.getString("access_token", "토큰이 없습니다.").toString()
+        repository.modifyPassword(token,newPwd,object :
             MainRepositoryCallback<AuthDTO> {
             override fun onSuccess(data: AuthDTO) {
                 val result = data.code
