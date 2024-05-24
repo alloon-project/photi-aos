@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.alloon_aos.data.model.AuthDTO
 import com.example.alloon_aos.data.model.EmailCode
+import com.example.alloon_aos.data.model.NewPwd
 import com.example.alloon_aos.data.model.UserData
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.MyRepository
@@ -22,6 +23,9 @@ class AuthViewModel : ViewModel() {
     var email_code = ""
     var id = ""
     var password = ""
+    var access_token = ""
+    var refresh_token =""
+    var newPassword = ""
 
 
     // init Code
@@ -67,14 +71,13 @@ class AuthViewModel : ViewModel() {
     }
 
     fun verifyEmailCode(){
-        email = "ejsong428@gmail.com"
         repository.verifyEmailCode(EmailCode(email,email_code),object :
             MainRepositoryCallback<AuthDTO> {
             override fun onSuccess(data: AuthDTO) {
                 val result = data.code
                 val mes = data.message
                 code.value = result
-                Log.d("TAG","sendEmailCode: $mes $result")
+                Log.d("TAG","verifyEmailCode: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
@@ -99,7 +102,7 @@ class AuthViewModel : ViewModel() {
                 val result = data.code
                 val mes = data.message
                 code.value = result
-                Log.d("TAG","sendEmailCode: $mes $result")
+                Log.d("TAG","verifyId: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
@@ -118,19 +121,18 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signUp(){
-        repository.signUp(UserData("ejsong428@gmail.com","ZweWQi","seulseul","password1!","password1!")
+        repository.signUp(UserData("ejsong428@gmail.com","GqJLnj","seulseul","password1!","password1!")
             ,object : MainRepositoryCallback<Pair<AuthDTO,Headers>> {
             override fun onSuccess(data: Pair<AuthDTO,Headers>) {
                 val (_data,header) = data
                 val result = _data.code //ex."USERNAME_SENT"
                 val mes = _data.message
-                val access_token = header.get("Authorization").toString()
-                val refresh_token = header.get("Refresh-Token").toString()
+                access_token = header.get("Authorization").toString()
+                refresh_token = header.get("Refresh-Token").toString()
                 code.value = result
-                Log.d("TAG","login: $id $result")
                 Log.d("TAG","a_token:  $access_token")
                 Log.d("TAG","r_token:  $refresh_token")
-                Log.d("TAG","signUp: $mes $result")
+                Log.d("TAG","signUp: $id $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
@@ -148,28 +150,6 @@ class AuthViewModel : ViewModel() {
         })
     }
 
-    fun doIt(){
-//
-
-
-
-
-//        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzE1ODg3ODE4LCJleHAiOjE3MTU4ODk2MTgsImlzcyI6Im5vZ2Ftc3VuZy5jb20iLCJyb2xlcyI6WyJVU0VSIl19.JDIzJw8zNSSIKbtPracux3XZapuQ520iblHzLQcWsr8"
-//        val newPwd = NewPwd("password2!","password3!","password3!")
-//        repository.modifyPwd(token,newPwd,object :
-//            MainRepositoryCallback<AuthDTO> {
-//            override fun onSuccess(data: AuthDTO) {
-//                val result = data.code
-//                val mes = data.message
-//                Log.d("TAG","modifyPwd: $mes $result")
-//            }
-//
-//            override fun onFailure(error: Throwable) {
-//                Log.d("TAG","modifyPwd"+ error.message.toString())
-//            }
-//        })
-    }
-
 //로그인
     fun login() {
         val user  = UserData(username = id, password = password)
@@ -179,8 +159,8 @@ class AuthViewModel : ViewModel() {
                 val (_data,header) = data
                 val result = _data.code //ex."USERNAME_SENT"
                 val mes = _data.message
-                val access_token = header.get("Authorization").toString()
-                val refresh_token = header.get("Refresh-Token").toString()
+                access_token = header.get("Authorization").toString()
+                refresh_token = header.get("Refresh-Token").toString()
                 code.value = result
                 //val imgUrl = _data.data.imageUrl
                 Log.d("TAG","login: $id $result")
@@ -239,6 +219,32 @@ class AuthViewModel : ViewModel() {
                 val mes = data.message
                 code.value = result
                 Log.d("TAG1","findId: ${mes} $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                when(error){
+                    is IOException -> {
+                        code.value = "IO_Exception"
+                    }
+                    else -> {
+                        val jObjError = JSONObject(error.message.toString())
+                        code.value = jObjError.getString("code")
+                        Log.d("TAG","error: " + code.value)
+                    }
+                }
+            }
+        })
+    }
+
+    fun modifyPassword(){
+        val newPwd = NewPwd(password,newPassword,newPassword)
+        repository.modifyPassword(access_token,newPwd,object :
+            MainRepositoryCallback<AuthDTO> {
+            override fun onSuccess(data: AuthDTO) {
+                val result = data.code
+                val mes = data.message
+                code.value = result
+                Log.d("TAG","modifyPwd: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {

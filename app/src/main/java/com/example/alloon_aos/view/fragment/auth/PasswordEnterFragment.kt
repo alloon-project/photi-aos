@@ -13,6 +13,8 @@ import com.example.alloon_aos.databinding.FragmentPasswordChangeBinding
 import com.example.alloon_aos.databinding.FragmentPasswordEnterBinding
 import com.example.alloon_aos.view.CustomDialog
 import com.example.alloon_aos.view.CustomToast
+import com.example.alloon_aos.view.KeyboardListener
+import com.example.alloon_aos.view.OnKeyboardVisibilityListener
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
@@ -33,21 +35,29 @@ class PasswordEnterFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("비밀번호 찾기")
 
+        authViewModel.resetCodeValue()
+        authViewModel.password = ""
         setListener()
         setObserver()
         return binding.root
     }
 
     fun setListener(){
-        binding.newPasswordEditText.setOnFocusChangeListener { v, hasFocus ->
-            if(hasFocus) {
-                binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_focus)
-                binding.errorTextView.visibility = View.GONE
+        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
+            OnKeyboardVisibilityListener {
+            override fun onVisibilityChanged(visible: Boolean) {
+                binding.errorTextView.visibility = View.INVISIBLE
+                if (visible) {
+                    binding.newPasswordEditText.background =
+                        resources.getDrawable(R.drawable.input_line_focus)
+                } else {
+                    binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_default)
+                    if(binding.newPasswordEditText.text.isNotEmpty()) binding.nextButton.isEnabled = true
+                    else binding.nextButton.isEnabled = false
+                }
             }
-            else    binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_default)
-        }
+        })
     }
-
 
     fun setObserver(){
         authViewModel.code.observe(viewLifecycleOwner){

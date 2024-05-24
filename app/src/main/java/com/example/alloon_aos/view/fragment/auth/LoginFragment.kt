@@ -73,6 +73,7 @@ class LoginFragment : Fragment() {
                     binding.hideBtn.setBackgroundResource(R.drawable.ic_eye_off)
                 }
             }
+
             binding.loginPw.setSelection(binding.loginPw.text!!.length)
         }
 

@@ -3,6 +3,7 @@ package com.example.alloon_aos.view.fragment.auth
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,15 +45,15 @@ class PasswordChangeFragment : Fragment(), CustomDialogInterface {
 
         green  = resources.getColor(R.color.green200)
         grey = resources.getColor(R.color.gray400)
-
+        authViewModel.resetCodeValue()
         setListener()
         setObserve()
+
 
         return binding.root
     }
 
     fun setListener(){
-
         binding.newPassword1EditText.setOnFocusChangeListener { v, hasFocus ->
             if(hasFocus) binding.newPassword1EditText.background = resources.getDrawable(R.drawable.input_line_focus)
             else    binding.newPassword1EditText.background = resources.getDrawable(R.drawable.input_line_default)
@@ -99,9 +100,11 @@ class PasswordChangeFragment : Fragment(), CustomDialogInterface {
                         CustomDialog(this,"비밀번호가 변경되었어요","새 비밀번호로 로그인 해주세요","확인")
                             .show(activity?.supportFragmentManager!!, "CustomDialog")
                     }
+                    "PASSWORD_MATCH_INVALID" -> {
+                        CustomToast.createToast(getActivity(),"비밀번호와 비밀번호 재입력이 동일하지 않습니다.")?.show()
+                    }
                     "TOKEN_UNAUTHENTICATED" ->{
-                        CustomToast.createToast(getActivity(),"승인되지 않은 요청입니다. 다시 로그인 해주세요..")?.show()
-
+                        CustomToast.createToast(getActivity(),"승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
                     }
                     "LOGIN_UNAUTHENTICATED" -> {
                         CustomToast.createToast(getActivity(),"아이디 또는 비밀번호가 틀렸습니다.")?.show()
@@ -154,12 +157,6 @@ class PasswordChangeFragment : Fragment(), CustomDialogInterface {
             editText.inputType = 0x00000091
         }
     }
-
-    fun alert(){
-        CustomDialog(this,"비밀번호가 변경되었어요","새 비밀번호로 로그인 해주세요","확인")
-            .show(activity?.supportFragmentManager!!, "CustomDialog")
-    }
-
 
     override fun onClickYesButton() {
         view?.findNavController()?.navigate(R.id.action_passwordChangeFragment_to_loginFragment)
