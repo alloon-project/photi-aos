@@ -25,6 +25,7 @@ class AuthViewModel : ViewModel() {
     var id = ""
     var password = ""
     var newPassword = ""
+    var checkPassword = ""
 
     // init Code
     fun resetAllValue() {

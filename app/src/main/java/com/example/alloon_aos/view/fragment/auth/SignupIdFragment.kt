@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupIdBinding
+import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
@@ -30,6 +31,9 @@ class SignupIdFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
+        authViewModel.resetCodeValue()
+        setObserve()
+
         binding.nextBtn.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_signupIdFragment_to_signupPwFragment)
         }
@@ -39,5 +43,16 @@ class SignupIdFragment : Fragment() {
             .start()
 
         return binding.root
+    }
+    fun setObserve(){
+        authViewModel.code.observe(viewLifecycleOwner){
+            if(it.isNotEmpty()) {
+                when(it) {
+                    "IO_Exception" ->{
+                        CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                    }
+                }
+            }
+        }
     }
 }

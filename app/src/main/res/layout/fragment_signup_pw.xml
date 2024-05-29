@@ -37,7 +37,7 @@
                 android:layout_marginLeft="24dp"/>
 
             <EditText
-                android:id="@+id/login_pw"
+                android:id="@+id/pw_edittext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="111dp"
@@ -45,6 +45,7 @@
                 android:layout_marginRight="24dp"
                 android:background="@drawable/input_line_default"
                 android:ems="10"
+                android:text="@={viewModel.password}"
                 android:inputType="textPassword"
                 android:hint="비밀번호"
                 android:textColorHint="@color/gray400"
@@ -89,7 +90,7 @@
                     android:layout_marginLeft="14dp"/>
 
                 <TextView
-                    android:id="@+id/check_char"
+                    android:id="@+id/checkChar_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_check"
@@ -123,7 +124,7 @@
                 android:layout_marginLeft="24dp"/>
 
             <EditText
-                android:id="@+id/login_pw2"
+                android:id="@+id/check_pw_edittext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="276dp"
@@ -131,6 +132,7 @@
                 android:layout_marginRight="24dp"
                 android:background="@drawable/input_line_default"
                 android:ems="10"
+                android:text="@={viewModel.checkPassword}"
                 android:inputType="textPassword"
                 android:hint="비밀번호 확인"
                 android:textColorHint="@color/gray400"
@@ -146,7 +148,7 @@
                 android:layout_marginLeft="302dp"/>
 
             <TextView
-                android:id="@+id/check_pw"
+                android:id="@+id/check_pw_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_check"

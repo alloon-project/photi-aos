@@ -50,7 +50,7 @@
                     android:textColor="@color/gray700"/>
 
                 <TextView
-                    android:id="@+id/email_text"
+                    android:id="@+id/email_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@={viewModel.email}"
@@ -71,7 +71,7 @@
             </RelativeLayout>
 
             <EditText
-                android:id="@+id/signup_auth"
+                android:id="@+id/auth_edittext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/input_line_default"
@@ -85,7 +85,7 @@
                 android:layout_marginLeft="24dp"/>
 
             <TextView
-                android:id="@+id/error_auth"
+                android:id="@+id/auth_error_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="28dp"

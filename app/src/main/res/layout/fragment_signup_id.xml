@@ -47,11 +47,12 @@
                 android:layout_marginLeft="24dp"/>
 
             <EditText
-                android:id="@+id/signup_id"
+                android:id="@+id/id_edittext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/input_line_default"
                 android:ems="10"
+                android:text="@={viewModel.id}"
                 android:inputType="text"
                 android:hint="아이디"
                 android:textColorHint="@color/gray400"
@@ -60,7 +61,7 @@
                 android:layout_marginLeft="24dp"/>
 
             <Button
-                android:id="@+id/text_btn"
+                android:id="@+id/check_btn"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
                 android:theme="@style/Theme.xsmall_round"
@@ -72,7 +73,7 @@
                 android:enabled="false"/>
 
             <TextView
-                android:id="@+id/error_id"
+                android:id="@+id/id_error_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_error"

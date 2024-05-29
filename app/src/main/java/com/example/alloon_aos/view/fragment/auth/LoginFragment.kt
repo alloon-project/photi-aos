@@ -45,41 +45,40 @@ class LoginFragment : Fragment() {
         authViewModel.resetAllValue()
         setObserve()
 
-        binding.loginId.onFocusChangeListener =
+        binding.idEdittext.onFocusChangeListener =
             OnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
-                    binding.loginId.setBackgroundResource(R.drawable.input_line_focus)
+                    binding.idEdittext.setBackgroundResource(R.drawable.input_line_focus)
                 } else {
-                    binding.loginId.setBackgroundResource(R.drawable.input_line_default)
+                    binding.idEdittext.setBackgroundResource(R.drawable.input_line_default)
                 }
-                binding.errorId.isVisible = false
+                binding.idErrorTextview.isVisible = false
             }
 
-        binding.loginPw.onFocusChangeListener =
+        binding.pwEdittext.onFocusChangeListener =
             OnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
-                    binding.loginPw.setBackgroundResource(R.drawable.input_line_focus)
+                    binding.pwEdittext.setBackgroundResource(R.drawable.input_line_focus)
                 } else {
-                    binding.loginPw.setBackgroundResource(R.drawable.input_line_default)
+                    binding.pwEdittext.setBackgroundResource(R.drawable.input_line_default)
                 }
-                binding.errorPw.isVisible = false
+                binding.pwErrorTextview.isVisible = false
             }
 
         binding.hideBtn.setOnClickListener {
             when(it.tag) {
                 "0" -> {
                     binding.hideBtn.setTag("1")
-                    binding.loginPw.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                    binding.pwEdittext.transformationMethod = HideReturnsTransformationMethod.getInstance()
                     binding.hideBtn.setBackgroundResource(R.drawable.ic_eye_on)
                 }
                 "1" -> {
                     binding.hideBtn.setTag("0")
-                    binding.loginPw.transformationMethod = PasswordTransformationMethod.getInstance()
+                    binding.pwEdittext.transformationMethod = PasswordTransformationMethod.getInstance()
                     binding.hideBtn.setBackgroundResource(R.drawable.ic_eye_off)
                 }
             }
-
-            binding.loginPw.setSelection(binding.loginPw.text!!.length)
+            binding.pwEdittext.setSelection(binding.pwEdittext.text!!.length)
         }
 
         binding.root.setOnClickListener {
@@ -124,10 +123,10 @@ class LoginFragment : Fragment() {
                         Log.d("TAG","홈 화면으로 이동~")
                     }
                     "LOGIN_UNAUTHENTICATED" -> {
-                        binding.loginId.setBackgroundResource(R.drawable.input_line_error)
-                        binding.loginPw.setBackgroundResource(R.drawable.input_line_error)
-                        binding.errorId.isVisible = true
-                        binding.errorPw.isVisible = true
+                        binding.idEdittext.setBackgroundResource(R.drawable.input_line_error)
+                        binding.pwEdittext.setBackgroundResource(R.drawable.input_line_error)
+                        binding.idErrorTextview.isVisible = true
+                        binding.pwErrorTextview.isVisible = true
                     }
                     "IO_Exception" ->{
                         CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()

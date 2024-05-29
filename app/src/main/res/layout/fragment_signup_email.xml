@@ -37,7 +37,7 @@
                 android:layout_marginLeft="24dp"/>
 
             <EditText
-                android:id="@+id/signup_email"
+                android:id="@+id/email_edittext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/input_line_default"
@@ -51,7 +51,7 @@
                 android:layout_marginLeft="24dp"/>
 
             <TextView
-                android:id="@+id/error_email"
+                android:id="@+id/email_error_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_error"

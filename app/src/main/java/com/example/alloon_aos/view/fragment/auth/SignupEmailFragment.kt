@@ -43,14 +43,14 @@ class SignupEmailFragment : Fragment() {
             .setDuration(500)
             .start()
 
-        binding.signupEmail.onFocusChangeListener =
+        binding.emailEdittext.onFocusChangeListener =
             OnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
-                    binding.signupEmail.setBackgroundResource(R.drawable.input_line_focus)
+                    binding.emailEdittext.setBackgroundResource(R.drawable.input_line_focus)
                 } else {
-                    binding.signupEmail.setBackgroundResource(R.drawable.input_line_default)
+                    binding.emailEdittext.setBackgroundResource(R.drawable.input_line_default)
                 }
-                binding.errorEmail.isVisible = false
+                binding.emailErrorTextview.isVisible = false
             }
 
         binding.root.setOnClickListener {
@@ -74,10 +74,10 @@ class SignupEmailFragment : Fragment() {
                         view?.findNavController()?.navigate(R.id.action_signupEmailFragment_to_signupAuthFragment)
                     }
                     "EXISTING_EMAIL" -> {
-                        binding.errorEmail.isVisible = true
-                        binding.signupEmail.background = resources.getDrawable(R.drawable.input_line_error)
+                        binding.emailErrorTextview.isVisible = true
+                        binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_error)
                         binding.nextBtn.isEnabled = false
-                        binding.errorEmail.text = "이미 가입된 이메일이에요"
+                        binding.emailErrorTextview.text = "이미 가입된 이메일이에요"
                     }
                     "IO_Exception" ->{
                         CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
@@ -88,21 +88,21 @@ class SignupEmailFragment : Fragment() {
     }
 
     fun checkEmailValidation(){
-        var email =binding.signupEmail.text.toString().trim()
+        var email =binding.emailEdittext.text.toString().trim()
         val pattern = Patterns.EMAIL_ADDRESS
 
         if (pattern.matcher(email).matches()) {
-            binding.errorEmail.isVisible = false
-            binding.signupEmail.background = resources.getDrawable(R.drawable.input_line_default)
+            binding.emailErrorTextview.isVisible = false
+            binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_default)
             binding.nextBtn.isEnabled = true
         } else {
-            binding.errorEmail.isVisible = true
-            binding.signupEmail.background = resources.getDrawable(R.drawable.input_line_error)
+            binding.emailErrorTextview.isVisible = true
+            binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_error)
             binding.nextBtn.isEnabled = false
             if (email.length > 100)
-                binding.errorEmail.text = "100자 이하의 이메일을 사용해주세요"
+                binding.emailErrorTextview.text = "100자 이하의 이메일을 사용해주세요"
             else
-                binding.errorEmail.text = "이메일 형태가 올바르지 않아요"
+                binding.emailErrorTextview.text = "이메일 형태가 올바르지 않아요"
 
         }
     }
