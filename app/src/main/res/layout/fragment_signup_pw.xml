@@ -90,7 +90,7 @@
                     android:layout_marginLeft="14dp"/>
 
                 <TextView
-                    android:id="@+id/checkChar_TextView"
+                    android:id="@+id/checkSpec_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_check"
@@ -114,51 +114,60 @@
                     android:layout_marginLeft="14dp"/>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="312dp"
-                android:layout_height="wrap_content"
-                android:text="@string/signuppw2"
-                android:textSize="18dp"
-                android:textColor="@color/gray900"
-                android:layout_marginTop="227dp"
-                android:layout_marginLeft="24dp"/>
-
-            <EditText
-                android:id="@+id/check_pw_edittext"
+            <LinearLayout
+                android:id="@+id/check_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="276dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:background="@drawable/input_line_default"
-                android:ems="10"
-                android:text="@={viewModel.checkPassword}"
-                android:inputType="textPassword"
-                android:hint="비밀번호 확인"
-                android:textColorHint="@color/gray400"
-                android:textSize="14dp" />
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <ImageButton
-                android:id="@+id/hide_btn2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_eye_off"
-                android:tag="0"
-                android:layout_marginTop="290dp"
-                android:layout_marginLeft="302dp"/>
+                <TextView
+                    android:layout_width="312dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/signuppw2"
+                    android:textSize="18dp"
+                    android:textColor="@color/gray900"
+                    android:layout_marginTop="227dp"
+                    android:layout_marginLeft="24dp"/>
 
-            <TextView
-                android:id="@+id/check_pw_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_check"
-                android:drawablePadding="6dp"
-                android:drawableTint="@color/gray400"
-                android:text="비밀번호 일치"
-                android:textColor="@color/gray400"
-                android:textSize="12dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="333.5dp"/>
+                <EditText
+                    android:id="@+id/check_pw_edittext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="276dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:background="@drawable/input_line_default"
+                    android:ems="10"
+                    android:text="@={viewModel.checkPassword}"
+                    android:inputType="textPassword"
+                    android:hint="비밀번호 확인"
+                    android:textColorHint="@color/gray400"
+                    android:textSize="14dp" />
+
+                <ImageButton
+                    android:id="@+id/hide_btn2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_eye_off"
+                    android:tag="0"
+                    android:layout_marginTop="290dp"
+                    android:layout_marginLeft="302dp"/>
+
+                <TextView
+                    android:id="@+id/check_pw_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_check"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="@color/gray400"
+                    android:text="비밀번호 일치"
+                    android:textColor="@color/gray400"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="333.5dp"/>
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/next_btn"

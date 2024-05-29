@@ -1,7 +1,10 @@
 package com.example.alloon_aos.view.fragment.auth
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
@@ -16,10 +19,15 @@ import com.example.alloon_aos.databinding.FragmentSignupPwBinding
 import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
+import java.util.regex.Pattern
 
 class SignupPwFragment : Fragment() {
     private lateinit var binding : FragmentSignupPwBinding
     private val authViewModel by viewModels<AuthViewModel>()
+
+    private val num_pattern = Pattern.compile("[0-9]")
+    private val eng_pattern = Pattern.compile("[a-zA-Z]")
+    private val spe_regex = "[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|@\\-\\_\\.\\;\\·ㆍᆞᆢ•‥a·﹕]*".toRegex()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +84,39 @@ class SignupPwFragment : Fragment() {
             binding.checkPwEdittext.setSelection(binding.checkPwEdittext.text!!.length)
         }
 
+        binding.pwEdittext.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus) binding.pwEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
+            else    binding.pwEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+        }
+
+        binding.checkPwEdittext.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus) binding.checkPwEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
+            else    binding.checkPwEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+        }
+
+        binding.pwEdittext.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                checkRequirements()
+            }
+        })
+
+        binding.checkPwEdittext.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.toString().equals(binding.pwEdittext.text.toString()) ){
+//                    binding.checkPwTextview.setTextColor() = R.color.green200
+                    binding.nextBtn.isEnabled = true
+                }
+            }
+        })
+
         return binding.root
     }
 
@@ -88,6 +129,32 @@ class SignupPwFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    fun checkRequirements(){
+        binding.apply{
+            var password = pwEdittext.text.toString().trim()
+            val len = pwEdittext.text.toString().length
+            val isProperLength  = if(len in 8..30)  true else false
+            //false : 특수문자 o true 특수문자 x
+            val notContainsSpecial = password.matches(spe_regex)
+            val containsEng = eng_pattern.matcher(password).find()
+            val containsNum = num_pattern.matcher(password).find()
+
+            if(isProperLength)  checkLenghTextView.setTextColor(R.color.green200) else checkLenghTextView.setTextColor(R.color.gray400)
+
+            if(containsEng) checkEngTextView.setTextColor(R.color.green200) else checkEngTextView.setTextColor(R.color.gray400)
+
+            if(!notContainsSpecial) checkSpecTextView.setTextColor(R.color.green200) else checkSpecTextView.setTextColor(R.color.gray400)
+
+            if(containsNum) checkNumTextView.setTextColor(R.color.green200) else checkNumTextView.setTextColor(R.color.gray400)
+
+            if(isProperLength && containsEng && !notContainsSpecial && containsNum)
+                checkLayout.visibility = View.VISIBLE
+            else
+                checkLayout.visibility = View.GONE
         }
     }
 }
