@@ -12,9 +12,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.button3.setOnClickListener {
+        binding.authButton.setOnClickListener {
             finish()
             startActivity(Intent(this,AuthActivity::class.java))
+        }
+
+        binding.settingButton.setOnClickListener{
+            finish()
+            startActivity(Intent(this,SettingActivity::class.java))
         }
     }
 }

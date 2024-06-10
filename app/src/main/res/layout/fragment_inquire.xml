@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.alloon_aos.view.fragment.setting.InquireFragment" />
+    </data>
+    <LinearLayout
+        style="@style/Theme.Alloonaos"
+        android:orientation="vertical"
+        android:background="@color/white">
+        <LinearLayout
+            android:id="@+id/enterCode_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="문의 내용이 무엇인가요?"
+                android:layout_marginTop="24dp"
+                android:layout_marginLeft="24dp"
+                android:textSize="18sp"
+                android:textColor="@color/gray900"
+                android:letterSpacing="-0.03" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/check_service"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_checkmark_circle_grey"
+                    android:drawablePadding="6dp"
+                    android:text="서비스 이용 문의"
+                    android:textColor="@color/gray600"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:id="@+id/check_improve"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableStart="@drawable/ic_checkmark_circle_grey"
+                    android:drawablePadding="6dp"
+                    android:text="개선 / 제안 요청"
+                    android:textColor="@color/gray600"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:id="@+id/check_bug"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableStart="@drawable/ic_checkmark_circle_grey"
+                    android:drawablePadding="6dp"
+                    android:text="버그 문의"
+                    android:textColor="@color/gray600"
+                    android:textSize="14sp"/>
+                <TextView
+                    android:id="@+id/check_etc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:drawableStart="@drawable/ic_checkmark_circle_grey"
+                    android:drawablePadding="6dp"
+                    android:text="기타 문의"
+                    android:textColor="@color/gray600"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="자세한 내용을 적어주세요"
+                android:layout_marginTop="32dp"
+                android:layout_marginLeft="24dp"
+                android:textSize="18sp"
+                android:textColor="@color/gray900"
+                android:letterSpacing="-0.03" />
+                />
+
+            <EditText
+                android:id="@+id/contents_editText"
+                android:text=""
+                android:hint="문의 내용을 상세히 알려주세요"
+                android:textColorHint="@color/gray400"
+                android:layout_width="312dp"
+                android:layout_height="109dp"
+                android:background="@drawable/input_line_default"
+                android:maxLength="120"
+                android:layout_marginTop="24dp"
+                android:layout_marginLeft="24dp"
+                android:padding="18dp"
+                android:textSize="14sp"
+                android:gravity="top"/>
+            <TextView
+                android:id="@+id/count_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0/120"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="24dp"
+                android:layout_gravity="right"
+                android:textSize="12sp"
+                android:textColor="@color/gray400"
+                android:letterSpacing="-0.03" />
+            />
+
+        </LinearLayout>
+        <Button
+            android:id="@+id/next_button"
+            android:onClick="@{() -> fragment.Click()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/btn_color_green"
+            android:text="제출하기"
+            android:theme="@style/Theme.xlarge_round"
+            android:enabled="false" />
+    </LinearLayout>
+
+</layout>

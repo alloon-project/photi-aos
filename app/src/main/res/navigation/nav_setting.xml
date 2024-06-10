@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_setting"
+    app:startDestination="@id/myInfoFragment">
+
+    <fragment
+        android:id="@+id/myInfoFragment"
+        android:name="com.example.alloon_aos.view.fragment.setting.MyInfoFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_my_info" >
+
+        <action
+            android:id="@+id/action_myInfoFragment_to_inquireFragment"
+            app:destination="@id/inquireFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/inquireFragment"
+        android:name="com.example.alloon_aos.view.fragment.setting.InquireFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_inquire" >
+        <action
+            android:id="@+id/action_inquireFragment_to_myInfoFragment"
+            app:destination="@id/myInfoFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+</navigation>
