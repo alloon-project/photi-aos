@@ -25,6 +25,4 @@ object CustomToast {
         }
     }
 
-    private fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
-    private fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 }

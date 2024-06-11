@@ -16,69 +16,61 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:layout_marginLeft="24dp"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="문의 내용이 무엇인가요?"
                 android:layout_marginTop="24dp"
-                android:layout_marginLeft="24dp"
                 android:textSize="18sp"
                 android:textColor="@color/gray900"
                 android:letterSpacing="-0.03" />
-            <LinearLayout
+            <RadioGroup
+                android:id="@+id/select_radiogroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:id="@+id/check_service"
+                android:layout_marginTop="20dp">
+                <RadioButton
+                    android:id="@+id/service_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_checkmark_circle_grey"
-                    android:drawablePadding="6dp"
-                    android:text="서비스 이용 문의"
-                    android:textColor="@color/gray600"
-                    android:textSize="14sp"/>
-                <TextView
-                    android:id="@+id/check_improve"
+                    android:button="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_text"
+                    android:text="\u0020\u0020\u0020서비스 이용 문의" />
+                <RadioButton
+                    android:id="@+id/improve_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:drawableStart="@drawable/ic_checkmark_circle_grey"
-                    android:drawablePadding="6dp"
-                    android:text="개선 / 제안 요청"
-                    android:textColor="@color/gray600"
-                    android:textSize="14sp"/>
-                <TextView
-                    android:id="@+id/check_bug"
+                    android:button="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_text"
+                    android:text="\u0020\u0020\u0020개선 / 제안 요청" />
+
+                <RadioButton
+                    android:id="@+id/bug_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:drawableStart="@drawable/ic_checkmark_circle_grey"
-                    android:drawablePadding="6dp"
-                    android:text="버그 문의"
-                    android:textColor="@color/gray600"
-                    android:textSize="14sp"/>
-                <TextView
-                    android:id="@+id/check_etc"
+                    android:button="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_text"
+                    android:text="\u0020\u0020\u0020버그 문의" />
+                <RadioButton
+                    android:id="@+id/etc_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:drawableStart="@drawable/ic_checkmark_circle_grey"
-                    android:drawablePadding="6dp"
-                    android:text="기타 문의"
-                    android:textColor="@color/gray600"
-                    android:textSize="14sp"/>
-            </LinearLayout>
+                    android:button="@drawable/selector_radio_button"
+                    android:textColor="@drawable/selector_radio_text"
+                    android:text="\u0020\u0020\u0020기타 문의" />
+            </RadioGroup>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="자세한 내용을 적어주세요"
                 android:layout_marginTop="32dp"
-                android:layout_marginLeft="24dp"
                 android:textSize="18sp"
                 android:textColor="@color/gray900"
                 android:letterSpacing="-0.03" />
@@ -94,7 +86,6 @@
                 android:background="@drawable/input_line_default"
                 android:maxLength="120"
                 android:layout_marginTop="24dp"
-                android:layout_marginLeft="24dp"
                 android:padding="18dp"
                 android:textSize="14sp"
                 android:gravity="top"/>
