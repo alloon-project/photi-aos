@@ -63,6 +63,10 @@ class SignupEmailFragment : Fragment() {
             }
         }
 
+        binding.nextBtn.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_signupEmailFragment_to_signupAuthFragment)
+        }
+
         return binding.root
     }
 

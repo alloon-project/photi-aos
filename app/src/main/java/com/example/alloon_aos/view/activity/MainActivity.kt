@@ -21,5 +21,10 @@ class MainActivity : AppCompatActivity() {
             finish()
             startActivity(Intent(this,SettingActivity::class.java))
         }
+
+        binding.reportButton.setOnClickListener {
+            finish()
+            startActivity(Intent(this,ReportActivity::class.java))
+        }
     }
 }

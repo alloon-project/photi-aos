@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_report"
+    app:startDestination="@id/reportFeedFragment">
+
+    <fragment
+        android:id="@+id/reportFeedFragment"
+        android:name="com.example.alloon_aos.view.fragment.report.ReportFeedFragment"
+        android:label=""
+        tools:layout="@layout/fragment_report_feed"/>
+    <fragment
+        android:id="@+id/reportMemberFragment"
+        android:name="com.example.alloon_aos.view.fragment.report.ReportMemberFragment"
+        android:label=""
+        tools:layout="@layout/fragment_report_member"/>
+    <fragment
+        android:id="@+id/reportMissionFragment"
+        android:name="com.example.alloon_aos.view.fragment.report.ReportMissionFragment"
+        android:label=""
+        tools:layout="@layout/fragment_report_mission"/>
+    <fragment
+        android:id="@+id/reportPageFragment"
+        android:name="com.example.alloon_aos.view.fragment.report.ReportPageFragment"
+        android:label=""
+        tools:layout="@layout/fragment_report_page" >
+        <action
+            android:id="@+id/action_reportPageFragment_to_reportFeedFragment"
+            app:destination="@id/reportFeedFragment" />
+        <action
+            android:id="@+id/action_reportPageFragment_to_reportMissionFragment"
+            app:destination="@id/reportMissionFragment" />
+        <action
+            android:id="@+id/action_reportPageFragment_to_reportMemberFragment"
+            app:destination="@id/reportMemberFragment" />
+    </fragment>
+</navigation>

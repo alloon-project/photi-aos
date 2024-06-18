@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Alloonaos"
         tools:targetApi="31">
         <activity
+            android:name=".view.activity.ReportActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activity.SettingActivity"
             android:exported="false" />
         <activity
@@ -29,7 +32,7 @@
         </activity>
         <activity
             android:name=".view.activity.AuthActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>
