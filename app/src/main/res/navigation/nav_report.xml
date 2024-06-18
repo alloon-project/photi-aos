@@ -9,17 +9,35 @@
         android:id="@+id/reportFeedFragment"
         android:name="com.example.alloon_aos.view.fragment.report.ReportFeedFragment"
         android:label=""
-        tools:layout="@layout/fragment_report_feed"/>
+        tools:layout="@layout/fragment_report_feed">
+        <action
+            android:id="@+id/action_reportFeedFragment_to_reportPageFragment"
+            app:destination="@id/reportPageFragment"
+            app:popUpTo="@id/reportPageFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/reportMemberFragment"
         android:name="com.example.alloon_aos.view.fragment.report.ReportMemberFragment"
         android:label=""
-        tools:layout="@layout/fragment_report_member"/>
+        tools:layout="@layout/fragment_report_member">
+        <action
+            android:id="@+id/action_reportMemberFragment_to_reportPageFragment"
+            app:destination="@id/reportPageFragment"
+            app:popUpTo="@id/reportPageFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/reportMissionFragment"
         android:name="com.example.alloon_aos.view.fragment.report.ReportMissionFragment"
         android:label=""
-        tools:layout="@layout/fragment_report_mission"/>
+        tools:layout="@layout/fragment_report_mission">
+        <action
+            android:id="@+id/action_reportMissionFragment_to_reportPageFragment"
+            app:destination="@id/reportPageFragment"
+            app:popUpTo="@id/reportPageFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/reportPageFragment"
         android:name="com.example.alloon_aos.view.fragment.report.ReportPageFragment"
