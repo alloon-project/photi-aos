@@ -15,6 +15,9 @@
             android:id="@+id/action_myInfoFragment_to_inquireFragment"
             app:destination="@id/inquireFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_myInfoFragment_to_unSubscribeFragment"
+            app:destination="@id/unSubscribeFragment" />
     </fragment>
 
     <fragment
@@ -28,4 +31,14 @@
             app:popUpToInclusive="false" />
     </fragment>
 
+    <fragment
+        android:id="@+id/unSubscribeFragment"
+        android:name="com.example.alloon_aos.view.fragment.setting.UnSubscribeFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_un_subscribe" >
+        <action
+            android:id="@+id/action_unSubscribeFragment_to_myInfoFragment"
+            app:destination="@id/myInfoFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>

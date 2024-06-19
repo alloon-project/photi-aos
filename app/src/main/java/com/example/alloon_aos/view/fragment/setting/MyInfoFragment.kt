@@ -27,8 +27,13 @@ class MyInfoFragment : Fragment() {
         return binding.root
     }
 
-    fun moveFrag(){
-        view?.findNavController()?.navigate(R.id.action_myInfoFragment_to_inquireFragment)
+    fun moveFrag(i : Int){
+        if(i == 1){
+            view?.findNavController()?.navigate(R.id.action_myInfoFragment_to_inquireFragment)
+        }
+        else if(i == 2){
+            view?.findNavController()?.navigate(R.id.action_myInfoFragment_to_unSubscribeFragment)
+        }
     }
 
 }

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.alloon_aos.view.fragment.setting.UnSubscribeFragment" />
+    </data>
+
+    <LinearLayout
+        style="@style/Theme.Alloonaos"
+        android:orientation="vertical"
+        android:background="@color/white">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="24dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="탈퇴 후 계정 복구는 불가해요\n
+정말 탈퇴하시겠어요?"
+                android:layout_marginTop="60dp"
+                android:fontFamily="@font/suit_bold"
+                android:textSize="22sp"
+                android:textColor="@color/gray900"
+                android:gravity="center" />
+            <LinearLayout
+                android:id="@+id/enterPassword_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="기존 비밀번호를 입력해주세요"
+                    android:fontFamily="@font/suit_bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/gray900" />
+                <FrameLayout
+                    android:layout_width="312dp"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="24dp">
+                    <EditText
+                        android:id="@+id/password_editText"
+                        android:layout_width="312dp"
+                        android:layout_height="46dp"
+                        android:hint="기존 비밀번호"
+                        android:textColorHint="@color/gray400"
+                        android:inputType="textPassword"
+                        android:background="@drawable/input_line_default"
+                        android:ems="10"
+                        android:textSize="14sp"
+                        android:letterSpacing="-0.03" />
+                    <ImageButton
+                        android:id="@+id/hide_btn"
+                        android:onClick="@{() -> fragment.changeInputType(1)}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_eye_off"
+                        android:layout_gravity="right|center_vertical"
+                        android:scaleType="centerInside"
+                        android:layout_marginRight="9dp"/>
+                </FrameLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <Button
+            android:id="@+id/keep_button"
+            android:onClick="@{() -> fragment.showInputForm()}"
+            android:background="@drawable/btn_effect_click"
+            android:textColor="@drawable/btn_effect_text"
+            android:text="탈퇴 계속하기"
+            android:fontFamily="@font/suit_bold"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:layout_marginBottom="16dp"
+            android:enabled="true" />
+        <Button
+            android:id="@+id/cancle_button"
+            android:onClick="@{() -> fragment.goBack()}"
+            android:background="@drawable/btn_effect_click"
+            android:textColor="@drawable/btn_effect_text"
+            android:text="취소하기"
+            android:fontFamily="@font/suit_bold"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginBottom="16dp"
+            android:enabled="true" />
+        <Button
+            android:id="@+id/nextButton"
+            android:onClick="@{() -> fragment.checkPassword()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:backgroundTint="@color/btn_color_green"
+            android:enabled="false"
+            android:text="탈퇴하기"
+            android:fontFamily="@font/suit_bold"
+            android:textSize="16sp"
+            android:theme="@style/Theme.xlarge_round"
+            android:visibility="gone"/>
+    </LinearLayout>
+</layout>

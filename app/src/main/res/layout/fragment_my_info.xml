@@ -13,10 +13,16 @@
         android:background="@color/white">
         <Button
             android:id="@+id/button"
-            android:onClick="@{() ->fragment.moveFrag()}"
+            android:onClick="@{() ->fragment.moveFrag(1)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="문의하기" />
+        <Button
+            android:id="@+id/unsubscribe"
+            android:onClick="@{() ->fragment.moveFrag(2)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="탈퇴하기" />
     </LinearLayout>
 
 </layout>
