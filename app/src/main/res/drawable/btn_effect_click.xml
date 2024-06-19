@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!--    normal -->
-    <item android:drawable="@drawable/btn_xlarge_pink_line" android:state_focused="false" android:state_pressed="false" />
+    <item android:drawable="@drawable/btn_xlarge_gray_line" android:state_focused="false" android:state_pressed="false" />
     <!--    pressed -->
     <item android:drawable="@drawable/btn_xlarge_green_line" android:state_focused="false" android:state_pressed="true" />
 </selector>
