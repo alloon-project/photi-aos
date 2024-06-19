@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_report"
-    app:startDestination="@id/reportFeedFragment">
+    app:startDestination="@id/reportPageFragment">
 
     <fragment
         android:id="@+id/reportFeedFragment"

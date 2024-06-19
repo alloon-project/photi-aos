@@ -97,8 +97,8 @@
             </RadioGroup>
 
             <LinearLayout
-                android:id="@+id/content_layout"
-                android:layout_width="wrap_content"
+                android:id="@+id/contents_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone">
@@ -124,14 +124,14 @@
                     android:hint="신고 내용을 상세히 알려주세요"
                     android:textColorHint="@color/gray400"
                     android:textSize="14dp"
-                    android:layout_marginTop="410dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginLeft="24dp" />
 
                 <TextView
                     android:id="@+id/num_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="529dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="24dp"
                     android:layout_gravity="right"
                     android:text="0/120"
@@ -149,6 +149,7 @@
                 android:layout_marginTop="564dp"
                 android:layout_marginLeft="24dp"
                 android:onClick="@{() ->fragment.click()}"/>
+
         </FrameLayout>
     </LinearLayout>
 </layout>

@@ -46,23 +46,33 @@ class ReportMemberFragment : Fragment() {
             }
         })
 
-        radioTag = binding.reportRadiogroup.getCheckedRadioButton()?.text.toString()
-
-        if (radioTag == null) {
-            binding.contentLayout.visibility = View.GONE
-        } else {
-            binding.contentLayout.visibility = View.VISIBLE
+        binding.reportRadiogroup.setOnCheckedChangeListener { radioGroup, i ->
+            when(i) {
+                null -> binding.contentsLayout.visibility = View.INVISIBLE
+                binding.writeRadio.id -> {
+                    binding.contentsLayout.visibility = View.VISIBLE
+                    if(binding.reportEdittext.text.isNotEmpty())
+                        binding.nextBtn.isEnabled = true
+                    else
+                        binding.nextBtn.isEnabled = false
+                }
+                else -> {
+                    binding.contentsLayout.visibility = View.VISIBLE
+                    binding.nextBtn.isEnabled = true
+                }
+            }
         }
 
         binding.reportEdittext.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
+            override fun afterTextChanged(s: Editable?) {}
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.numTextview.setText("${s!!.length}/120")
+                radioTag = binding.reportRadiogroup.getCheckedRadioButton()?.text.toString()
 
-                if (radioTag.equals(binding.writeRadio) && s.isEmpty()) binding.nextBtn.isEnabled = false
+                if (radioTag.equals(binding.writeRadio.text) && s.isEmpty()) binding.nextBtn.isEnabled = false
                 else binding.nextBtn.isEnabled = true
             }
         })

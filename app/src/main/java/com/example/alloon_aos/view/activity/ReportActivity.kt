@@ -7,10 +7,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.ActivitySettingBinding
+import com.example.alloon_aos.databinding.ActivityReportBinding
 
 class ReportActivity : AppCompatActivity() {
-    lateinit var binding : ActivitySettingBinding
+    lateinit var binding : ActivityReportBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
