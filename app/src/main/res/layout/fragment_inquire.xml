@@ -83,10 +83,9 @@
                 android:textColorHint="@color/gray400"
                 android:layout_width="312dp"
                 android:layout_height="109dp"
-                android:background="@drawable/input_line_default"
+                android:background="@drawable/textarea_line_default"
                 android:maxLength="120"
                 android:layout_marginTop="24dp"
-                android:padding="18dp"
                 android:textSize="14sp"
                 android:gravity="top"/>
             <TextView

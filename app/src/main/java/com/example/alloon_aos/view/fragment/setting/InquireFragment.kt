@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.view.children
-import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -47,10 +46,8 @@ class InquireFragment : Fragment() {
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
-                if (visible)    binding.contentsEditText.background = resources.getDrawable(R.drawable.input_line_focus)
-                else    binding.contentsEditText.background = resources.getDrawable(R.drawable.input_line_default)
-
-                binding.contentsEditText.updatePadding(convertDPtoPX(18),convertDPtoPX(18),convertDPtoPX(18),convertDPtoPX(18))
+                if (visible)    binding.contentsEditText.background = resources.getDrawable(R.drawable.textarea_line_focus)
+                else    binding.contentsEditText.background = resources.getDrawable(R.drawable.textarea_line_default)
             }
         })
 
@@ -65,8 +62,7 @@ class InquireFragment : Fragment() {
                         binding.nextButton.isEnabled = false
                     else{
                          radioTag = binding.selectRadiogroup.getCheckedRadioButton()?.text.toString()
-                            //tag ?: "태그"
-                        if(tag != null) binding.nextButton.isEnabled = true
+                        if(radioTag != null.toString()) binding.nextButton.isEnabled = true
                     }
 
             }
@@ -91,8 +87,4 @@ class InquireFragment : Fragment() {
         return checkedRadioButton
     }
 
-    fun convertDPtoPX(dp: Int): Int {
-        val density = context?.resources?.displayMetrics?.density
-        return Math.round(dp.toFloat() * density!!)
-    }
 }
