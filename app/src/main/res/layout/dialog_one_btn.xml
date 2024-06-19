@@ -35,7 +35,8 @@
                 android:text="타이틀"
                 android:textAlignment="center"
                 android:textColor="@color/gray900"
-                android:textSize="17dp" />
+                android:textSize="18sp"
+                android:fontFamily="@font/suit_medium"/>
 
             <TextView
                 android:id="@+id/message_textView"
@@ -47,7 +48,8 @@
                 android:text="내용"
                 android:textAlignment="center"
                 android:textColor="@color/gray600"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:fontFamily="@font/suit_medium"/>
 
             <Button
                 android:id="@+id/dialog_btn"
@@ -59,6 +61,7 @@
                 android:letterSpacing="-0.03"
                 android:text="버튼"
                 android:textSize="16sp"
+                android:fontFamily="@font/suit_medium"
                 android:theme="@style/Theme.large_round" />
         </LinearLayout>
 
