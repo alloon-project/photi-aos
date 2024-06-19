@@ -50,7 +50,7 @@ class SignupEmailFragment : Fragment() {
     }
 
     fun setListener() {
-        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
+        KeyboardListener.setKeyboardVisibilityListener(this,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {

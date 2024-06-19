@@ -55,7 +55,7 @@ class SignupAuthFragment : Fragment() {
             view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
         }
 
-        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
+        KeyboardListener.setKeyboardVisibilityListener(this,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {
