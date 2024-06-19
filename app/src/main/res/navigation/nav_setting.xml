@@ -17,7 +17,8 @@
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_myInfoFragment_to_unSubscribeFragment"
-            app:destination="@id/unSubscribeFragment" />
+            app:destination="@id/unSubscribeFragment"
+            app:popUpToInclusive="false"/>
     </fragment>
 
     <fragment
@@ -39,6 +40,7 @@
         <action
             android:id="@+id/action_unSubscribeFragment_to_myInfoFragment"
             app:destination="@id/myInfoFragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/myInfoFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

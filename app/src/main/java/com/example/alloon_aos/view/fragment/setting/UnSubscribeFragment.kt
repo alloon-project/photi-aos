@@ -77,13 +77,13 @@ class UnSubscribeFragment : Fragment(),CustomDialogInterface {
     }
 
     fun goBack(){
-        view?.findNavController()?.popBackStack(R.id.myInfoFragment, false)
+        view?.findNavController()?.navigate(R.id.action_unSubscribeFragment_to_myInfoFragment)
     }
 
     fun checkPassword(){
         val str = "123"
         if(password.equals(str)){
-            view?.findNavController()?.navigate(R.id.action_unSubscribeFragment_to_myInfoFragment)
+            goBack()
             CustomToast.createToast(getActivity(),"탈퇴가 완료됐어요. 다음에 또 만나요!")?.show()
         }
         else
