@@ -17,6 +17,8 @@ import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupEmailBinding
 import com.example.alloon_aos.view.CustomToast
+import com.example.alloon_aos.view.KeyboardListener
+import com.example.alloon_aos.view.OnKeyboardVisibilityListener
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
@@ -37,11 +39,27 @@ class SignupEmailFragment : Fragment() {
         mActivity.setAppBar("")
 
         authViewModel.resetAllValue()
-        setObserve()
+        //setObserve()
+        setListener()
 
         ObjectAnimator.ofInt(binding.emailProgress, "progress", 0,20)
             .setDuration(500)
             .start()
+
+        return binding.root
+    }
+
+    fun setListener() {
+        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
+            OnKeyboardVisibilityListener {
+            override fun onVisibilityChanged(visible: Boolean) {
+                if (visible) {
+                    binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
+                    binding.emailErrorTextview.isVisible = false
+                }
+                else    binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+            }
+        })
 
         binding.emailEdittext.onFocusChangeListener =
             OnFocusChangeListener { view, hasFocus ->
@@ -66,11 +84,9 @@ class SignupEmailFragment : Fragment() {
         binding.nextBtn.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_signupEmailFragment_to_signupAuthFragment)
         }
-
-        return binding.root
     }
 
-    fun setObserve(){
+    fun setObserve() {
         authViewModel.code.observe(viewLifecycleOwner){
             if(it.isNotEmpty()) {
                 when(it) {

@@ -10,6 +10,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,6 +18,8 @@ import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupPwBinding
 import com.example.alloon_aos.view.CustomToast
+import com.example.alloon_aos.view.KeyboardListener
+import com.example.alloon_aos.view.OnKeyboardVisibilityListener
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 import java.util.regex.Pattern
@@ -28,6 +31,9 @@ class SignupPwFragment : Fragment() {
     private val num_pattern = Pattern.compile("[0-9]")
     private val eng_pattern = Pattern.compile("[a-zA-Z]")
     private val spe_regex = "[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|@\\-\\_\\.\\;\\·ㆍᆞᆢ•‥a·﹕]*".toRegex()
+
+    private var green  = 0
+    private var gray = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,16 +47,32 @@ class SignupPwFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
-        authViewModel.resetCodeValue()
-        setObserve()
+        green  = resources.getColor(R.color.green200)
+        gray = resources.getColor(R.color.gray400)
 
-        binding.nextBtn.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_signupPwFragment_to_loginFragment)
-        }
+        authViewModel.resetCodeValue()
+        //setObserve()
+        setListener()
 
         ObjectAnimator.ofInt(binding.pwProgress, "progress", 60,80)
             .setDuration(500)
             .start()
+
+        return binding.root
+    }
+
+    fun setListener() {
+        binding.nextBtn.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_signupPwFragment_to_loginFragment)
+        }
+
+        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
+            OnKeyboardVisibilityListener {
+            override fun onVisibilityChanged(visible: Boolean) {
+                if (visible)    binding.pwEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
+                else    binding.pwEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+            }
+        })
 
         binding.hideBtn.setOnClickListener {
             when(it.tag) {
@@ -116,11 +138,9 @@ class SignupPwFragment : Fragment() {
                 }
             }
         })
-
-        return binding.root
     }
 
-    fun setObserve(){
+    fun setObserve() {
         authViewModel.code.observe(viewLifecycleOwner){
             if(it.isNotEmpty()) {
                 when(it) {
@@ -133,7 +153,7 @@ class SignupPwFragment : Fragment() {
     }
 
     @SuppressLint("ResourceAsColor")
-    fun checkRequirements(){
+    fun checkRequirements() {
         binding.apply{
             var password = pwEdittext.text.toString().trim()
             val len = pwEdittext.text.toString().length
@@ -143,13 +163,13 @@ class SignupPwFragment : Fragment() {
             val containsEng = eng_pattern.matcher(password).find()
             val containsNum = num_pattern.matcher(password).find()
 
-            if(isProperLength)  checkLenghTextView.setTextColor(R.color.green200) else checkLenghTextView.setTextColor(R.color.gray400)
+            if(isProperLength)  checkLenghTextView.setTextColor(green) else checkLenghTextView.setTextColor(gray)
 
-            if(containsEng) checkEngTextView.setTextColor(R.color.green200) else checkEngTextView.setTextColor(R.color.gray400)
+            if(containsEng) checkEngTextView.setTextColor(green) else checkEngTextView.setTextColor(gray)
 
-            if(!notContainsSpecial) checkSpecTextView.setTextColor(R.color.green200) else checkSpecTextView.setTextColor(R.color.gray400)
+            if(!notContainsSpecial) checkSpecTextView.setTextColor(green) else checkSpecTextView.setTextColor(gray)
 
-            if(containsNum) checkNumTextView.setTextColor(R.color.green200) else checkNumTextView.setTextColor(R.color.gray400)
+            if(containsNum) checkNumTextView.setTextColor(green) else checkNumTextView.setTextColor(gray)
 
             if(isProperLength && containsEng && !notContainsSpecial && containsNum)
                 checkLayout.visibility = View.VISIBLE

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,8 @@ import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupIdBinding
 import com.example.alloon_aos.view.CustomToast
+import com.example.alloon_aos.view.KeyboardListener
+import com.example.alloon_aos.view.OnKeyboardVisibilityListener
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
@@ -32,11 +35,8 @@ class SignupIdFragment : Fragment() {
         mActivity.setAppBar("")
 
         authViewModel.resetCodeValue()
-        setObserve()
-
-        binding.nextBtn.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_signupIdFragment_to_signupPwFragment)
-        }
+        //setObserve()
+        setListener()
 
         ObjectAnimator.ofInt(binding.idProgress, "progress", 40,60)
             .setDuration(500)
@@ -44,7 +44,30 @@ class SignupIdFragment : Fragment() {
 
         return binding.root
     }
-    fun setObserve(){
+
+    fun setListener() {
+        binding.nextBtn.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_signupIdFragment_to_signupPwFragment)
+        }
+
+        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
+            OnKeyboardVisibilityListener {
+            override fun onVisibilityChanged(visible: Boolean) {
+                if (visible) {
+                    binding.idEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
+                    binding.idErrorTextview.isVisible = false
+                    binding.checkBtn.isEnabled = true
+                }
+                else    binding.idEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+            }
+        })
+
+        binding.checkBtn.setOnClickListener {
+            it.isEnabled = false
+        }
+    }
+
+    fun setObserve() {
         authViewModel.code.observe(viewLifecycleOwner){
             if(it.isNotEmpty()) {
                 when(it) {

@@ -17,6 +17,8 @@ import androidx.navigation.fragment.navArgs
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupAuthBinding
 import com.example.alloon_aos.view.CustomToast
+import com.example.alloon_aos.view.KeyboardListener
+import com.example.alloon_aos.view.OnKeyboardVisibilityListener
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
@@ -38,11 +40,8 @@ class SignupAuthFragment : Fragment() {
         mActivity.setAppBar("")
 
         authViewModel.resetCodeValue()
-        setObserve()
-
-        binding.nextBtn.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
-        }
+        //setObserve()
+        setListener()
 
         ObjectAnimator.ofInt(binding.authProgress, "progress", 20,40)
             .setDuration(500)
@@ -51,7 +50,24 @@ class SignupAuthFragment : Fragment() {
         return binding.root
     }
 
-    fun setObserve(){
+    fun setListener() {
+        binding.nextBtn.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
+        }
+
+        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
+            OnKeyboardVisibilityListener {
+            override fun onVisibilityChanged(visible: Boolean) {
+                if (visible) {
+                    binding.authEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
+                    binding.authErrorTextview.isVisible = false
+                }
+                else    binding.authEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+            }
+        })
+    }
+
+    fun setObserve() {
         authViewModel.code.observe(viewLifecycleOwner){
             if(it.isNotEmpty()) {
                 when(it) {
