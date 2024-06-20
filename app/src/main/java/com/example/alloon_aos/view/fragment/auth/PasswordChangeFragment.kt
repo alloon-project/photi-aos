@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.auth
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -84,9 +86,14 @@ class PasswordChangeFragment : Fragment(), CustomDialogInterface {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(s.toString().equals(binding.newPassword1EditText.text.toString()) ){
+                if(s.toString().equals(binding.newPassword1EditText.text.toString()) ) {
                     binding.checkPw.setTextColor(green)
+                    binding.checkPw.getCompoundDrawables()[0].setTint(green)
                     binding.nextButton.isEnabled = true
+                } else {
+                    binding.checkPw.setTextColor(grey)
+                    binding.checkPw.getCompoundDrawables()[0].setTint(grey)
+                    binding.nextButton.isEnabled = false
                 }
             }
         })
@@ -130,13 +137,37 @@ class PasswordChangeFragment : Fragment(), CustomDialogInterface {
             val containsEng = eng_pattern.matcher(password).find()
             val containsNum = num_pattern.matcher(password).find()
 
-            if(isProperLength)  checkLenghTextView.setTextColor(green) else checkLenghTextView.setTextColor(grey)
+            if(isProperLength)  {
+                checkLenghTextView.setTextColor(green)
+                checkLenghTextView.getCompoundDrawables()[0].setTint(green)
+            } else {
+                checkLenghTextView.setTextColor(grey)
+                checkLenghTextView.getCompoundDrawables()[0].setTint(grey)
+            }
 
-            if(containsEng) checkEngTextView.setTextColor(green) else checkEngTextView.setTextColor(grey)
+            if(containsEng) {
+                checkEngTextView.setTextColor(green)
+                checkEngTextView.getCompoundDrawables()[0].setTint(green)
+            } else {
+                checkEngTextView.setTextColor(grey)
+                checkEngTextView.getCompoundDrawables()[0].setTint(grey)
+            }
 
-            if(!notContainsSpecial) checkSpecTextView.setTextColor(green) else checkSpecTextView.setTextColor(grey)
+            if(!notContainsSpecial) {
+                checkSpecTextView.setTextColor(green)
+                checkSpecTextView.getCompoundDrawables()[0].setTint(green)
+            } else {
+                checkSpecTextView.setTextColor(grey)
+                checkSpecTextView.getCompoundDrawables()[0].setTint(grey)
+            }
 
-            if(containsNum) checkNumTextView.setTextColor(green) else checkNumTextView.setTextColor(grey)
+            if(containsNum) {
+                checkNumTextView.setTextColor(green)
+                checkNumTextView.getCompoundDrawables()[0].setTint(green)
+            } else {
+                checkNumTextView.setTextColor(grey)
+                checkNumTextView.getCompoundDrawables()[0].setTint(grey)
+            }
 
             if(isProperLength && containsEng && !notContainsSpecial && containsNum)
                 checkLayout.visibility = View.VISIBLE

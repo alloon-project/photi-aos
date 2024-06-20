@@ -57,7 +57,10 @@ class SignupEmailFragment : Fragment() {
                     binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
                     binding.emailErrorTextview.isVisible = false
                 }
-                else    binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+                else {
+                    binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+                    checkEmailValidation()
+                }
             }
         })
 
@@ -73,11 +76,8 @@ class SignupEmailFragment : Fragment() {
 
         binding.root.setOnClickListener {
             if (activity != null && requireActivity().currentFocus != null) {
-                binding.root.isFocusable = true
                 val inputManager: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-                //binding.signupEmail.setBackgroundResource(R.drawable.input_line_default)
-                checkEmailValidation()
             }
         }
 

@@ -1,11 +1,13 @@
 package com.example.alloon_aos.view.fragment.auth
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -51,6 +53,13 @@ class SignupAuthFragment : Fragment() {
     }
 
     fun setListener() {
+        binding.root.setOnClickListener {
+            if (activity != null && requireActivity().currentFocus != null) {
+                val inputManager: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+
         binding.nextBtn.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
         }

@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.report
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.view.children
@@ -38,6 +40,13 @@ class ReportMemberFragment : Fragment() {
         return binding.root
     }
     fun setListener(){
+        binding.root.setOnClickListener {
+            if (activity != null && requireActivity().currentFocus != null) {
+                val inputManager: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {

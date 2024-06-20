@@ -130,29 +130,34 @@
                     android:layout_marginTop="227dp"
                     android:layout_marginLeft="24dp"/>
 
-                <EditText
-                    android:id="@+id/check_pw_edittext"
+                <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="276dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
-                    android:background="@drawable/input_line_default"
-                    android:ems="10"
-                    android:text="@={viewModel.checkPassword}"
-                    android:inputType="textPassword"
-                    android:hint="비밀번호 확인"
-                    android:textColorHint="@color/gray400"
-                    android:textSize="14dp" />
+                    android:layout_height="wrap_content" >
 
-                <ImageButton
-                    android:id="@+id/hide_btn2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_eye_off"
-                    android:tag="0"
-                    android:layout_marginTop="290dp"
-                    android:layout_marginLeft="302dp"/>
+                    <EditText
+                        android:id="@+id/check_pw_edittext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:background="@drawable/input_line_default"
+                        android:ems="10"
+                        android:text="@={viewModel.checkPassword}"
+                        android:inputType="textPassword"
+                        android:hint="비밀번호 확인"
+                        android:textColorHint="@color/gray400"
+                        android:textSize="14dp" />
+
+                    <ImageButton
+                        android:id="@+id/hide_btn2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_eye_off"
+                        android:tag="0"
+                        android:layout_marginTop="38dp"
+                        android:layout_marginLeft="302dp"/>
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/check_pw_textview"
@@ -165,7 +170,7 @@
                     android:textColor="@color/gray400"
                     android:textSize="12dp"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginTop="333.5dp"/>
+                    android:layout_marginTop="11.5dp"/>
 
             </LinearLayout>
 
