@@ -61,7 +61,7 @@ class PasswordSendFragment : Fragment() {
             }
         }
 
-        KeyboardListener.setKeyboardVisibilityListener(this,object :
+        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if(visible){

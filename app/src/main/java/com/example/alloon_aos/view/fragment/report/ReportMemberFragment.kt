@@ -38,7 +38,7 @@ class ReportMemberFragment : Fragment() {
         return binding.root
     }
     fun setListener(){
-        KeyboardListener.setKeyboardVisibilityListener(this,object :
+        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible)    binding.reportEdittext.background = resources.getDrawable(R.drawable.textarea_line_focus)
