@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.alloon_aos.view.fragment.photi.HomeFragment" />
+    </data>
+    <LinearLayout
+        style="@style/Theme.Alloonaos"
+        android:background="@color/white">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:layout_marginTop="100dp"
+                android:textSize="30dp"/>
+        </FrameLayout>
+    </LinearLayout>
+</layout>

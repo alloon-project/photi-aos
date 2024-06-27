@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="fragment"
+            type="com.example.alloon_aos.view.activity.PhotiActivity" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home"
+        tools:context=".view.activity.PhotiActivity"
+        style="@style/Theme.Alloonaos.Activity"
+        android:background="@color/white">
+
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/navigationView"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@drawable/bottom_nav"
+                app:itemIconTint="@drawable/menu_click_color"
+                app:itemTextColor="@drawable/menu_click_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:menu="@menu/home_menu"
+                tools:ignore="MissingConstraints"
+                android:paddingTop="12dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

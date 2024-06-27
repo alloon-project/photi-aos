@@ -10,11 +10,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/home"
+        android:id="@+id/auth"
         tools:context=".view.activity.AuthActivity"
         style="@style/Theme.Alloonaos.Activity"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"

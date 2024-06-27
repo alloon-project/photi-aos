@@ -6,15 +6,14 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.activity.AuthActivity" />
+            type="com.example.alloon_aos.view.activity.SettingActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/home"
-        tools:context=".view.activity.AuthActivity"
+        android:id="@+id/setting"
+        tools:context=".view.activity.SettingActivity"
         style="@style/Theme.Alloonaos.Activity"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
