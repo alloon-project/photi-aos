@@ -82,53 +82,51 @@
                         android:layout_marginRight="2dp"
                         android:layout_marginLeft="2dp"/>
 
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/chip_recyclerview"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <Button
-                            android:layout_width="49dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/chip_gray"
-                            android:textSize="14dp"
-                            android:text="러닝"
-                            android:textColor="@color/gray800"
-                            android:layout_marginRight="8dp"
-                            android:stateListAnimator="@null"/>
-                        <Button
-                            android:layout_width="49dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/chip_gray"
-                            android:textSize="14dp"
-                            android:text="취뽀"
-                            android:textColor="@color/gray800"
-                            android:layout_marginRight="8dp"
-                            android:stateListAnimator="@null"/>
-                        <Button
-                            android:layout_width="49dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/chip_gray"
-                            android:textSize="14dp"
-                            android:text="독서"
-                            android:textColor="@color/gray800"
-                            android:layout_marginRight="8dp"
-                            android:stateListAnimator="@null"/>
-                    </LinearLayout>
+                        android:layout_height="wrap_content"
+                    />
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content">-->
+<!--                        <Button-->
+<!--                            android:layout_width="49dp"-->
+<!--                            android:layout_height="30dp"-->
+<!--                            android:background="@drawable/chip_gray"-->
+<!--                            android:textSize="14dp"-->
+<!--                            android:text="러닝"-->
+<!--                            android:textColor="@color/gray800"-->
+<!--                            android:layout_marginRight="8dp"-->
+<!--                            android:stateListAnimator="@null"/>-->
+<!--                        <Button-->
+<!--                            android:layout_width="49dp"-->
+<!--                            android:layout_height="30dp"-->
+<!--                            android:background="@drawable/chip_gray"-->
+<!--                            android:textSize="14dp"-->
+<!--                            android:text="취뽀"-->
+<!--                            android:textColor="@color/gray800"-->
+<!--                            android:layout_marginRight="8dp"-->
+<!--                            android:stateListAnimator="@null"/>-->
+<!--                        <Button-->
+<!--                            android:layout_width="49dp"-->
+<!--                            android:layout_height="30dp"-->
+<!--                            android:background="@drawable/chip_gray"-->
+<!--                            android:textSize="14dp"-->
+<!--                            android:text="독서"-->
+<!--                            android:textColor="@color/gray800"-->
+<!--                            android:layout_marginRight="8dp"-->
+<!--                            android:stateListAnimator="@null"/>-->
+<!--                    </LinearLayout>-->
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/hashtag_recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="640dp"
                     android:layout_marginTop="436dp"
                     android:layout_marginLeft="24dp"
                     android:background="@color/white"/>
-
-                <TextView
-                    android:id="@+id/you_can_delete_This"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="hello scroll"
-                    android:layout_marginTop="800dp" />
             </FrameLayout>
         </ScrollView>
     </LinearLayout>

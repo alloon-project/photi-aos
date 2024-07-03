@@ -13,7 +13,9 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentChallengeCommendBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.adapter.HashCardAdapter
+import com.example.alloon_aos.view.adapter.HashTagAdapter
 import com.example.alloon_aos.view.adapter.HotCardAdapter
+import com.example.alloon_aos.viewmodel.Chip
 import com.example.alloon_aos.viewmodel.Item
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
@@ -21,6 +23,8 @@ class ChallengeCommendFragment : Fragment() {
     private lateinit var binding : FragmentChallengeCommendBinding
     private lateinit var hotCardAdapter: HotCardAdapter
     private lateinit var hashCardAdapter: HashCardAdapter
+    private lateinit var hashTagAdapter: HashTagAdapter
+
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +44,10 @@ class ChallengeCommendFragment : Fragment() {
         binding.hashtagRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.hashtagRecyclerView.setHasFixedSize(true)
 
+        hashTagAdapter = HashTagAdapter(photiViewModel)
+        binding.chipRecyclerview.adapter = hashTagAdapter
+        binding.chipRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
+        binding.chipRecyclerview.setHasFixedSize(true)
         //setObserver()
 
         photiViewModel.addHotItem(Item("헬스 미션","~ 2024. 8. 22"))
@@ -49,6 +57,13 @@ class ChallengeCommendFragment : Fragment() {
 
         photiViewModel.addHashItem(Item("영화 미션","~ 2024. 12. 1"))
         photiViewModel.addHashItem(Item("소설 필사하기","~ 2024. 9. 1"))
+
+        photiViewModel.addHashChip(Chip("러닝"))
+        photiViewModel.addHashChip(Chip("취뽀"))
+        photiViewModel.addHashChip(Chip("독서"))
+        photiViewModel.addHashChip(Chip("맛집"))
+        photiViewModel.addHashChip(Chip("안드로이드"))
+
         return binding.root
     }
 

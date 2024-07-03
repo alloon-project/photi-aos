@@ -7,7 +7,4 @@
         android:color="@color/white"/>
     <corners
         android:radius="99dp"/>
-    <size
-        android:width="49dp"
-        android:height="30dp" />
 </shape>
