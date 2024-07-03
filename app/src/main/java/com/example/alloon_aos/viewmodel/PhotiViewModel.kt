@@ -3,17 +3,17 @@ package com.example.alloon_aos.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-data class Item(val title:String, val date: String, val url: String? = null)
+data class Item(val title:String, val date: String, val url: String? = null, var hashtag: MutableList<String> = mutableListOf()  )
 data class Chip(val id:String)
 
 class PhotiViewModel: ViewModel() {
 
     //인기있는 챌린지
     val hotItemsListData = MutableLiveData<ArrayList<Item>>()
-    val hotItems = arrayListOf<Item>(Item("헬스 미션","~ 2024. 8. 22","https://ifh.cc/g/V4Bb5Q.jpg"),
-        Item("요리 미션","~ 2024. 12. 1","https://ifh.cc/g/09y6Mo.jpg"),
-        Item("면접 연습하기","~ 2024. 8. 22","https://ifh.cc/g/PJpN7X.jpg"),
-        Item("멋진 개발자가 되어서 초코칩 만들기","~ 2024. 12. 1","https://ifh.cc/g/Okx9DW.jpg"))
+    val hotItems = arrayListOf<Item>(Item("헬스 미션","~ 2024. 8. 22","https://ifh.cc/g/V4Bb5Q.jpg", mutableListOf("요가","헬스")),
+        Item("요리 미션","~ 2024. 12. 1","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리")),
+        Item("면접 연습하기","~ 2024. 8. 22","https://ifh.cc/g/PJpN7X.jpg",mutableListOf("취뽀","스피치")),
+        Item("멋진 개발자가 되어서 초코칩 만들기","~ 2024. 12. 1","https://ifh.cc/g/Okx9DW.jpg",mutableListOf("코딩","안드로이드")))
 
     fun addHotItem(item: Item) {
         hotItems.add(item)

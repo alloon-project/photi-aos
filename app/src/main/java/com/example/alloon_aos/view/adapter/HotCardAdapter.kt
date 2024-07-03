@@ -4,7 +4,9 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.opengl.Visibility
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -25,7 +27,13 @@ class HotCardAdapter(private val photiViewModel: PhotiViewModel) :
             with (photiViewModel.hotItems[pos]) {
                 binding.titleTextView.text = title
                 binding.dateTextView.text = date
-
+                binding.chip1Btn.text = hashtag[0]
+                binding.chip1Btn.visibility = View.VISIBLE
+                if(hashtag.size == 2){
+                    binding.chip2Btn.text = hashtag[1]
+                    binding.chip2Btn.visibility = View.VISIBLE
+                }
+                
                 val multiOption = MultiTransformation(
                 CenterCrop(),
                 RoundedCorners(32),

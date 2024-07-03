@@ -44,6 +44,13 @@ class ChallengeLatestFragment : Fragment() {
             with (photiViewModel.latestItems[pos]) {
                 binding.titleTextView.text = title
                 binding.dateTextView.text = date
+
+                binding.chip1Btn.text = hashtag[0]
+                binding.chip1Btn.visibility = View.VISIBLE
+                if(hashtag.size == 2){
+                    binding.chip2Btn.text = hashtag[1]
+                    binding.chip2Btn.visibility = View.VISIBLE
+                }
             }
         }
     }

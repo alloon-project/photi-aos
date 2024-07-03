@@ -50,15 +50,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="16dp">
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:minWidth="37dp"
-                android:background="@drawable/chip_white"
-                android:textSize="12sp"
-                android:text="전체"
-                android:textColor="@color/white"
-                android:stateListAnimator="@null"/>
-            <Button
+                android:id="@+id/chip1_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:minWidth="37dp"
@@ -67,7 +59,19 @@
                 android:text="전체"
                 android:textColor="@color/white"
                 android:stateListAnimator="@null"
-                android:layout_marginLeft="8dp"/>
+                android:visibility="invisible"/>
+            <Button
+                android:id="@+id/chip2_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:minWidth="37dp"
+                android:background="@drawable/chip_white"
+                android:textSize="12sp"
+                android:text="전체"
+                android:textColor="@color/white"
+                android:stateListAnimator="@null"
+                android:layout_marginLeft="8dp"
+                android:visibility="invisible"/>
         </LinearLayout>
     </LinearLayout>
 

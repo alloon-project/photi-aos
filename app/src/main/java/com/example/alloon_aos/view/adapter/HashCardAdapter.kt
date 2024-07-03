@@ -1,6 +1,7 @@
 package com.example.alloon_aos.view.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.databinding.ItemCardMissionLargeRecyclerviewBinding
@@ -14,6 +15,13 @@ class HashCardAdapter(private val photiViewModel: PhotiViewModel) :
             with (photiViewModel.hashItems[pos]) {
                 binding.titleTextView.text = title
                 binding.dateTextView.text = date
+
+                binding.chip1Btn.text = hashtag[0]
+                binding.chip1Btn.visibility = View.VISIBLE
+                if(hashtag.size == 2){
+                    binding.chip2Btn.text = hashtag[1]
+                    binding.chip2Btn.visibility = View.VISIBLE
+                }
             }
 //            binding.root.setOnClickListener { // itemClickEvent는 MutableLiveData
 //                viewModel.itemClickEvent.value = pos // itemClickEvent 옵저버에게 항목 번호와 클릭되었음을 알림
