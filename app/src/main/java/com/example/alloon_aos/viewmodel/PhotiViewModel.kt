@@ -10,8 +10,7 @@ class PhotiViewModel: ViewModel() {
 
     //인기있는 챌린지
     val hotItemsListData = MutableLiveData<ArrayList<Item>>()
-    val hotItems = ArrayList<Item>()
-
+    val hotItems = arrayListOf<Item>(Item("헬스 미션","~ 2024. 8. 22"),Item("요리 미션","~ 2024. 12. 1"),Item("면접 연습하기","~ 2024. 8. 22"),Item("멋진 개발자가 되어서 초코칩 만들기","~ 2024. 12. 1"))
 
     fun addHotItem(item: Item) {
         hotItems.add(item)
@@ -29,15 +28,13 @@ class PhotiViewModel: ViewModel() {
     }
 
 
-    //해시태그별 모아보기
-    val hashItemsListData = MutableLiveData<ArrayList<Item>>()
-    val hashItems = ArrayList<Item>()
+    //해시태그별 챌린지
+    val hashItems = arrayListOf<Item>(Item("영화 미션","~ 2024. 12. 1"),Item("소설 필사하기","~ 2024. 9. 1"),Item("멋진 개발자가 되어서 초코칩 만들기","~2024. 10. 12"))
 
 
-    fun addHashItem(item: Item) {
-        hashItems.add(item)
-        hashItemsListData.value = hotItems // let the observer know the livedata changed
-    }
+    //최신순 챌린지
+    val latestItems = arrayListOf<Item>(Item("러닝 미션","~ 2024. 12. 1"),Item("영화 미션","~ 2024. 12. 1"),Item("면접 연습하기","~ 2024. 8. 22")
+        ,Item("헬스 미션","~ 2024. 12. 1"),Item("요리 미션","~ 2024. 12. 1"),Item("스터디 미션","~ 2024. 12. 1"))
 
 
     //해시태그 칩 목록
@@ -60,5 +57,6 @@ class PhotiViewModel: ViewModel() {
 //            }
 //        }
 //    }
+
 
 }

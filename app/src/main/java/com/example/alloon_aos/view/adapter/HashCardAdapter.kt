@@ -3,15 +3,15 @@ package com.example.alloon_aos.view.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.alloon_aos.databinding.ItemHashtagCardRecyclerviewBinding
+import com.example.alloon_aos.databinding.ItemCardMissionLargeRecyclerviewBinding
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class HashCardAdapter(private val photiViewModel: PhotiViewModel) :
     RecyclerView.Adapter<HashCardAdapter.ViewHolder>() {
-    inner class ViewHolder(private val binding: ItemHashtagCardRecyclerviewBinding) :
+    inner class ViewHolder(private val binding: ItemCardMissionLargeRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setContents(pos: Int) {
-            with (photiViewModel.hotItems[pos]) {
+            with (photiViewModel.hashItems[pos]) {
                 binding.titleTextView.text = title
                 binding.dateTextView.text = date
             }
@@ -27,7 +27,7 @@ class HashCardAdapter(private val photiViewModel: PhotiViewModel) :
 
     // ViewHolder 생성, ViewHolder 는 View 를담는상자
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HashCardAdapter.ViewHolder {
-        val binding = ItemHashtagCardRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemCardMissionLargeRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -37,6 +37,6 @@ class HashCardAdapter(private val photiViewModel: PhotiViewModel) :
 
     }
 
-    override fun getItemCount() = photiViewModel.hotItems.size
+    override fun getItemCount() = photiViewModel.hashItems.size
 
 }

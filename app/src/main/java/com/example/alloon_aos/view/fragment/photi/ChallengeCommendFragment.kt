@@ -48,21 +48,15 @@ class ChallengeCommendFragment : Fragment() {
         binding.chipRecyclerview.adapter = hashTagAdapter
         binding.chipRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.chipRecyclerview.setHasFixedSize(true)
-        //setObserver()
 
-        photiViewModel.addHotItem(Item("헬스 미션","~ 2024. 8. 22"))
-        photiViewModel.addHotItem(Item("요리 미션","~ 2024. 12. 1"))
-        photiViewModel.addHotItem(Item("헬스 미션","~ 2024. 8. 22"))
-        photiViewModel.addHotItem(Item("요리 미션","~ 2024. 12. 1"))
-
-        photiViewModel.addHashItem(Item("영화 미션","~ 2024. 12. 1"))
-        photiViewModel.addHashItem(Item("소설 필사하기","~ 2024. 9. 1"))
 
         photiViewModel.addHashChip(Chip("러닝"))
         photiViewModel.addHashChip(Chip("취뽀"))
         photiViewModel.addHashChip(Chip("독서"))
         photiViewModel.addHashChip(Chip("맛집"))
         photiViewModel.addHashChip(Chip("안드로이드"))
+
+        //setObserver()
 
         return binding.root
     }

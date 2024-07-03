@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.ItemHotCardRecyclerviewBinding
+import com.example.alloon_aos.databinding.ItemCardMissionSmallRecyclerviewBinding
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class HotCardAdapter(private val photiViewModel: PhotiViewModel) :
     RecyclerView.Adapter<HotCardAdapter.ViewHolder>() {
-    inner class ViewHolder(private val binding: ItemHotCardRecyclerviewBinding) :
+    inner class ViewHolder(private val binding: ItemCardMissionSmallRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setContents(pos: Int) {
             with (photiViewModel.hotItems[pos]) {
@@ -20,8 +20,8 @@ class HotCardAdapter(private val photiViewModel: PhotiViewModel) :
                 binding.dateTextView.text = date
                 //binding.hotcardLayout.setBackgroundResource(R.color.black)
 
-                val bgShape = binding.hotcardLayout.background as GradientDrawable
-                bgShape.setColor(Color.parseColor("#22aadd"))
+//                val bgShape = binding.hotcardLayout.background as GradientDrawable
+//                bgShape.setColor(Color.parseColor("#22aadd"))
             }
 //            binding.root.setOnClickListener { // itemClickEvent는 MutableLiveData
 //                viewModel.itemClickEvent.value = pos // itemClickEvent 옵저버에게 항목 번호와 클릭되었음을 알림
@@ -35,7 +35,7 @@ class HotCardAdapter(private val photiViewModel: PhotiViewModel) :
 
     // ViewHolder 생성, ViewHolder 는 View 를담는상자
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HotCardAdapter.ViewHolder {
-        val binding = ItemHotCardRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemCardMissionSmallRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

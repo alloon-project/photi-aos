@@ -6,13 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentChallengeLatestBinding
+import com.example.alloon_aos.databinding.ItemCardMissionSmallRecyclerviewBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
+import com.example.alloon_aos.view.adapter.HotCardAdapter
+import com.example.alloon_aos.viewmodel.Item
+import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class ChallengeLatestFragment : Fragment() {
     private lateinit var binding : FragmentChallengeLatestBinding
 
+    private val photiViewModel by activityViewModels<PhotiViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -21,6 +31,38 @@ class ChallengeLatestFragment : Fragment() {
         binding.fragment = this
         val mActivity = activity as PhotiActivity
 
+        binding.latestRecyclerView.adapter = LatestCardAdapter()
+        binding.latestRecyclerView.layoutManager = GridLayoutManager(context, 2)
+        binding.latestRecyclerView.setHasFixedSize(true)
+
         return binding.root
+    }
+
+
+    inner class ViewHolder(var binding : ItemCardMissionSmallRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root){
+        fun setContents(pos: Int) {
+            with (photiViewModel.latestItems[pos]) {
+                binding.titleTextView.text = title
+                binding.dateTextView.text = date
+            }
+        }
+    }
+
+    inner class LatestCardAdapter() : RecyclerView.Adapter<ViewHolder>(){
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            var view = ItemCardMissionSmallRecyclerviewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+            return ViewHolder(view)
+        }
+
+
+        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+            viewHolder.setContents(position)
+//            Glide.with(holder.itemView.context).load(contentModel.imageUrl)
+//                .into(holder.binding.commentImageview)
+        }
+
+        override fun getItemCount() = photiViewModel.latestItems.size
+
     }
 }

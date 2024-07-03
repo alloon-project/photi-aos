@@ -30,13 +30,13 @@
                     android:layout_marginTop="32dp"
                     />
 
-                <FrameLayout
-                    android:id="@+id/here_seul"
-                    android:layout_width="match_parent"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/latest_recyclerView"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="76dp">
-
-                </FrameLayout>
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginTop="76dp"
+                    android:background="@color/white" />
 
                 <TextView
                     android:id="@+id/you_can_delete_This"
