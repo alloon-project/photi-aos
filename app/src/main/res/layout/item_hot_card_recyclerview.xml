@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/hotcard_layout"
+    android:layout_width="150dp"
+    android:layout_height="200dp"
+    android:layout_marginRight="12dp"
+    android:orientation="vertical"
+    android:background="@drawable/card_shape">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="14dp">
+        <TextView
+            android:id="@+id/title_textView"
+            android:layout_marginTop="111dp"
+            android:layout_width="122dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:letterSpacing="-0.03"
+            android:fontFamily="@font/suit_medium"
+            android:text="타이틀"/>
+        <TextView
+            android:id="@+id/date_textView"
+            android:layout_width="122dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="12sp"
+            android:textColor="#99FFFFFF"
+            android:letterSpacing="-0.03"
+            android:fontFamily="@font/suit_medium"
+            android:text="종료일"/>
+    </LinearLayout>
+
+</LinearLayout>
