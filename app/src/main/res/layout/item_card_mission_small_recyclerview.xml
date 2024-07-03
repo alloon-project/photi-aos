@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/hotcard_layout"
+    android:id="@+id/smallcard_layout"
     android:layout_width="150dp"
     android:layout_height="200dp"
     android:layout_marginRight="12dp"
     android:layout_marginBottom="12dp"
+    android:background="@drawable/card_shape">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/card_shape">
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
-        android:layout_marginTop="14dp">
+        android:layout_marginTop="14dp"
+        android:layout_weight="1">
         <Button
-            android:layout_width="37dp"
+            android:layout_width="wrap_content"
             android:layout_height="25dp"
+            android:minWidth="37dp"
             android:background="@drawable/chip_white"
             android:textSize="12sp"
             android:text="전체"
             android:textColor="@color/white"
             android:stateListAnimator="@null"/>
         <Button
-            android:layout_width="37dp"
+            android:layout_width="wrap_content"
             android:layout_height="25dp"
+            android:minWidth="37dp"
             android:background="@drawable/chip_white"
             android:textSize="12sp"
             android:text="전체"
             android:textColor="@color/white"
-            android:layout_marginLeft="8dp"
-            android:stateListAnimator="@null"/>
+            android:stateListAnimator="@null"
+            android:layout_marginLeft="8dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -46,7 +52,8 @@
             android:letterSpacing="-0.03"
             android:breakStrategy="simple"
             android:fontFamily="@font/suit_medium"
-            android:text="타이틀"/>
+            android:text="타이틀"
+            android:layout_marginBottom="12dp"/>
         <TextView
             android:id="@+id/date_textView"
             android:layout_width="122dp"
@@ -57,5 +64,7 @@
             android:fontFamily="@font/suit_medium"
             android:text="종료일"/>
     </LinearLayout>
+</LinearLayout>
+
 
 </LinearLayout>

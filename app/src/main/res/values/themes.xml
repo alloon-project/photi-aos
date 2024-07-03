@@ -184,5 +184,11 @@
         <item name="android:textSize">12dp</item>
     </style>
 
-
+    <!-- ////////////////////// Card ////////////////////////// -->
+    <style name="Theme.round_card" parent="Theme.Alloonaos">
+        <item name="android:bottomRightRadius">8dp</item>
+        <item name="android:bottomLeftRadius">8dp</item>
+        <item name="android:topRightRadius">8dp</item>
+        <item name="android:topLeftRadius">8dp</item>
+    </style>
 </resources>
