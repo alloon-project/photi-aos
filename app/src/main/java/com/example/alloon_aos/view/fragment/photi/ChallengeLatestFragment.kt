@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.photi
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,10 +12,17 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentChallengeLatestBinding
 import com.example.alloon_aos.databinding.ItemCardMissionSmallRecyclerviewBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
+import com.example.alloon_aos.view.adapter.HashCardAdapter
 import com.example.alloon_aos.view.adapter.HotCardAdapter
 import com.example.alloon_aos.viewmodel.Item
 import com.example.alloon_aos.viewmodel.PhotiViewModel
@@ -40,7 +48,7 @@ class ChallengeLatestFragment : Fragment() {
 
 
     inner class ViewHolder(var binding : ItemCardMissionSmallRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root){
-        fun setContents(pos: Int) {
+        fun setContents(holder: ViewHolder ,pos: Int) {
             with (photiViewModel.latestItems[pos]) {
                 binding.titleTextView.text = title
                 binding.dateTextView.text = date
@@ -51,6 +59,25 @@ class ChallengeLatestFragment : Fragment() {
                     binding.chip2Btn.text = hashtag[1]
                     binding.chip2Btn.visibility = View.VISIBLE
                 }
+
+
+                val multiOption = MultiTransformation(
+                    CenterCrop(),
+                    RoundedCorners(32),
+                )
+
+                Glide
+                    .with(holder.itemView.context)
+                    .load(url)
+                    .apply(RequestOptions.bitmapTransform(multiOption))
+                    .into(object : CustomTarget<Drawable>() {
+                        override fun onResourceReady(a_resource: Drawable, a_transition: Transition<in Drawable>?) {
+                            binding.cardLayout.background = a_resource
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+                        }
+                    })
             }
         }
     }
@@ -64,9 +91,7 @@ class ChallengeLatestFragment : Fragment() {
 
 
         override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-            viewHolder.setContents(position)
-//            Glide.with(holder.itemView.context).load(contentModel.imageUrl)
-//                .into(holder.binding.commentImageview)
+            viewHolder.setContents(viewHolder,position)
         }
 
         override fun getItemCount() = photiViewModel.latestItems.size

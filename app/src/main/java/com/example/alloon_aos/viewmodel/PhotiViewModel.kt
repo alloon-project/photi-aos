@@ -11,7 +11,7 @@ class PhotiViewModel: ViewModel() {
     //인기있는 챌린지
     val hotItemsListData = MutableLiveData<ArrayList<Item>>()
     val hotItems = arrayListOf<Item>(Item("헬스 미션","~ 2024. 8. 22","https://ifh.cc/g/V4Bb5Q.jpg", mutableListOf("요가","헬스")),
-        Item("요리 미션","~ 2024. 12. 1","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리")),
+        Item("요리 챌린지","~ 2024. 12. 1","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리")),
         Item("면접 연습하기","~ 2024. 8. 22","https://ifh.cc/g/PJpN7X.jpg",mutableListOf("취뽀","스피치")),
         Item("멋진 개발자가 되어서 초코칩 만들기","~ 2024. 12. 1","https://ifh.cc/g/Okx9DW.jpg",mutableListOf("코딩","안드로이드")))
 
@@ -32,12 +32,25 @@ class PhotiViewModel: ViewModel() {
 
 
     //해시태그별 챌린지
-    val hashItems = arrayListOf<Item>(Item("영화 미션","~ 2024. 12. 1"),Item("소설 필사하기","~ 2024. 9. 1"),Item("멋진 개발자가 되어서 초코칩 만들기","~2024. 10. 12"))
+    val hashItems = arrayListOf<Item>(Item("영화 미션","~ 2024. 12. 1","https://ifh.cc/g/6HRkxa.jpg", mutableListOf("영화관람")),
+        Item("소설 필사하기","~ 2024. 9. 1","https://ifh.cc/g/yxgmBH.webp", mutableListOf("고능해지자","독서")),
+        Item("멋진 개발자가 되어서 초코칩 만들기","~2024. 10. 12","https://ifh.cc/g/Okx9DW.jpg", mutableListOf("코딩","ios")),
+        Item("바빌론 감상평쓰기","~2024. 12. 1","https://ifh.cc/g/Vwdj5C.jpg", mutableListOf("감상평","글쓰기"))
+        )
 
 
     //최신순 챌린지
-    val latestItems = arrayListOf<Item>(Item("러닝 미션","~ 2024. 12. 1"),Item("영화 미션","~ 2024. 12. 1"),Item("면접 연습하기","~ 2024. 8. 22")
-        ,Item("헬스 미션","~ 2024. 12. 1"),Item("요리 미션","~ 2024. 12. 1"),Item("스터디 미션","~ 2024. 12. 1"))
+    val latestItems = arrayListOf<Item>(Item("코딩 챌린지","~ 2024. 12. 1","https://ifh.cc/g/rKbcYM.jpg",
+        mutableListOf("ios","android")
+    ),
+        Item("영화 챌린지","~ 2024. 12. 1","https://ifh.cc/g/6HRkxa.jpg", mutableListOf("영화관람")),
+        Item("면접 연습하기","~ 2024. 8. 22","https://ifh.cc/g/PJpN7X.jpg",mutableListOf("취뽀","스피치")),
+        Item("헬스 챌린지","~ 2024. 12. 1","https://ifh.cc/g/AA0NMd.jpg", mutableListOf("헬스","요가")),
+        Item("요리 챌린지","~ 2024. 12. 1","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리")),
+        Item("스터디 챌린지","~ 2024. 12. 1","https://ifh.cc/g/KB2Vh1.jpg", mutableListOf("어학","자격증")),
+        Item("헬스 미션","~ 2024. 8. 22","https://ifh.cc/g/V4Bb5Q.jpg", mutableListOf("요가","헬스")),
+        Item("소설 필사하기","~ 2024. 9. 1","https://ifh.cc/g/yxgmBH.webp", mutableListOf("고능해지자","독서"))
+    )
 
 
     //해시태그 칩 목록

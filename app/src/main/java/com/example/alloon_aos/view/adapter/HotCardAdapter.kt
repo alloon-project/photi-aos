@@ -33,7 +33,7 @@ class HotCardAdapter(private val photiViewModel: PhotiViewModel) :
                     binding.chip2Btn.text = hashtag[1]
                     binding.chip2Btn.visibility = View.VISIBLE
                 }
-                
+
                 val multiOption = MultiTransformation(
                 CenterCrop(),
                 RoundedCorners(32),
@@ -45,7 +45,7 @@ class HotCardAdapter(private val photiViewModel: PhotiViewModel) :
                     .apply(RequestOptions.bitmapTransform(multiOption))
                     .into(object : CustomTarget<Drawable>() {
                         override fun onResourceReady(a_resource: Drawable, a_transition: Transition<in Drawable>?) {
-                            binding.smallcardLayout.background = a_resource
+                            binding.cardLayout.background = a_resource
                         }
 
                         override fun onLoadCleared(placeholder: Drawable?) {
