@@ -5,7 +5,6 @@ import com.example.alloon_aos.data.model.AuthDTO
 import com.example.alloon_aos.data.model.UserData
 import com.example.alloon_aos.data.model.NewPwd
 import com.example.alloon_aos.data.remote.ApiService
-import okhttp3.Headers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -73,13 +72,12 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun signUp(userData: UserData,callback: MainRepositoryCallback<Pair<AuthDTO, Headers>>) {
+    fun signUp(userData: UserData,callback: MainRepositoryCallback<AuthDTO>) {
         //val data = UserData("byeolstar12@naver.com","NwEkGX","hb_hb_hb","password1!","password1!")
         apiService.post_signUp(userData).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
-                    val pair = Pair(response.body()!!, response.headers())
-                    callback.onSuccess(pair)
+                    callback.onSuccess(response.body()!!)
                 } else {
                     var error = response.errorBody()?.string()!!
                     callback.onFailure(Throwable(error))
@@ -131,12 +129,11 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun login(user: UserData,callback: MainRepositoryCallback<Pair<AuthDTO, Headers>>) {
+    fun login(user: UserData,callback: MainRepositoryCallback<AuthDTO>) {
         apiService.post_login(user).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
-                    val pair = Pair(response.body()!!, response.headers())
-                    callback.onSuccess(pair)
+                    callback.onSuccess(response.body()!!)
                 } else {
                     var error = response.errorBody()?.string()!!
                     callback.onFailure(Throwable(error))
