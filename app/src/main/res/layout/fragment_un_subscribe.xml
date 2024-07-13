@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="기존 비밀번호를 입력해주세요"
-                    android:fontFamily="@font/suit_bold"
+                    android:fontFamily="@font/suit_semibold"
                     android:textSize="18sp"
                     android:textColor="@color/gray900" />
                 <FrameLayout
@@ -57,6 +57,7 @@
                         android:background="@drawable/input_line_default"
                         android:ems="10"
                         android:textSize="14sp"
+                        android:fontFamily="@font/suit_medium"
                         android:letterSpacing="-0.03" />
                     <ImageButton
                         android:id="@+id/hide_btn"

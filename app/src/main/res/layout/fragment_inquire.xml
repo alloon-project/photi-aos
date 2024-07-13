@@ -26,7 +26,7 @@
                 android:layout_marginTop="24dp"
                 android:textSize="18sp"
                 android:textColor="@color/gray900"
-                android:letterSpacing="-0.03" />
+                android:fontFamily="@font/suit_semibold" />
             <RadioGroup
                 android:id="@+id/select_radiogroup"
                 android:layout_width="wrap_content"
@@ -38,6 +38,8 @@
                     android:layout_height="wrap_content"
                     android:button="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
+                    android:fontFamily="@font/suit_semibold"
+                    android:textSize="14sp"
                     android:text="\u0020\u0020\u0020서비스 이용 문의" />
                 <RadioButton
                     android:id="@+id/improve_radio"
@@ -46,6 +48,8 @@
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
+                    android:fontFamily="@font/suit_semibold"
+                    android:textSize="14sp"
                     android:text="\u0020\u0020\u0020개선 / 제안 요청" />
 
                 <RadioButton
@@ -55,6 +59,8 @@
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
+                    android:fontFamily="@font/suit_semibold"
+                    android:textSize="14sp"
                     android:text="\u0020\u0020\u0020버그 문의" />
                 <RadioButton
                     android:id="@+id/etc_radio"
@@ -63,6 +69,8 @@
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
                     android:textColor="@drawable/selector_radio_text"
+                    android:fontFamily="@font/suit_semibold"
+                    android:textSize="14sp"
                     android:text="\u0020\u0020\u0020기타 문의" />
             </RadioGroup>
 
@@ -72,6 +80,7 @@
                 android:text="자세한 내용을 적어주세요"
                 android:layout_marginTop="32dp"
                 android:textSize="18sp"
+                android:fontFamily="@font/suit_semibold"
                 android:textColor="@color/gray900"
                 android:letterSpacing="-0.03" />
                 />
@@ -87,6 +96,7 @@
                 android:maxLength="120"
                 android:layout_marginTop="24dp"
                 android:textSize="14sp"
+                android:fontFamily="@font/suit_medium"
                 android:gravity="top"/>
             <TextView
                 android:id="@+id/count_textView"
@@ -98,6 +108,7 @@
                 android:layout_gravity="right"
                 android:textSize="12sp"
                 android:textColor="@color/gray400"
+                android:fontFamily="@font/suit_medium"
                 android:letterSpacing="-0.03" />
             />
 

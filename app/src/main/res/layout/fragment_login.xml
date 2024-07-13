@@ -30,6 +30,7 @@
                 android:textColorHint="@color/gray400"
                 android:textSize="14dp"
                 android:textColor="@color/black"
+                android:fontFamily="@font/suit_medium"
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginTop="40dp"/>
@@ -43,7 +44,8 @@
                 android:text="@string/loginerror"
                 android:visibility="invisible"
                 android:textColor="@color/red400"
-                android:textSize="9dp"
+                android:textSize="12dp"
+                android:fontFamily="@font/suit_medium"
                 android:layout_marginLeft="28dp"
                 android:layout_marginTop="97.5dp"/>
 
@@ -60,7 +62,8 @@
                 android:inputType="textPassword"
                 android:hint="비밀번호를 입력해주세요"
                 android:textColorHint="@color/gray400"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:fontFamily="@font/suit_medium"/>
 
             <ImageButton
                 android:id="@+id/hide_btn"
@@ -79,7 +82,8 @@
                 android:drawablePadding="6dp"
                 android:text="@string/loginerror"
                 android:textColor="@color/red400"
-                android:textSize="9dp"
+                android:textSize="12dp"
+                android:fontFamily="@font/suit_medium"
                 android:visibility="invisible"
                 android:layout_marginLeft="28dp"
                 android:layout_marginTop="181.5dp"/>
@@ -88,13 +92,13 @@
                 android:id="@+id/login_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorPrimary"
-                android:text="로그인"
-                android:theme="@style/Theme.xlarge_round"
-                android:layout_marginTop="232dp"
                 android:layout_marginLeft="24dp"
+                android:layout_marginTop="232dp"
                 android:layout_marginRight="24dp"
-                android:onClick="@{() ->viewModel.login()}"/>
+                android:backgroundTint="?attr/colorPrimary"
+                android:onClick="@{() ->viewModel.login()}"
+                android:text="로그인"
+                android:theme="@style/Theme.xlarge_round" />
 
             <Button
                 android:id="@+id/find_id_btn"
@@ -107,7 +111,8 @@
                 android:layout_marginRight="193dp"
                 android:background="#00ff0000"
                 android:onClick="@{() ->fragment.moveFrag(2)}"
-                android:text="@string/findid" />
+                android:text="@string/findid"
+                android:fontFamily="@font/suit_medium"/>
 
             <Button
                 android:layout_width="1dp"
@@ -128,6 +133,8 @@
                 android:layout_marginRight="97dp"
                 android:background="#00ff0000"
                 android:text="@string/findpw"
+                android:textSize="12sp"
+                android:fontFamily="@font/suit_medium"
                 android:onClick="@{() ->fragment.moveFrag(3)}"/>
 
             <Button

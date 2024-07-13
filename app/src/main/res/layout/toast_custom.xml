@@ -41,7 +41,7 @@
                 app:layout_constraintStart_toEndOf="@id/icon"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginRight="24px"
-                android:fontFamily="@font/suit_regular"
+                android:fontFamily="@font/suit_bold"
                 />
 
 

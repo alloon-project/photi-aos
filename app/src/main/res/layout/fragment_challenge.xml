@@ -25,7 +25,8 @@
                     android:background="@drawable/search_default"
                     android:hint="챌린지, 해시태그를 검색해보세요"
                     android:textColorHint="@color/gray500"
-                    android:textSize="14dp"/>
+                    android:textSize="14sp"
+                    android:fontFamily="@font/suit_medium"/>
                 <ImageButton
                     android:id="@+id/search_btn"
                     android:layout_width="wrap_content"
@@ -47,12 +48,16 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="추천순" />
+                    android:text="추천순"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/suit_bold"/>
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="최신순" />
+                    android:text="최신순"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/suit_bold"/>
 
             </com.google.android.material.tabs.TabLayout>
 

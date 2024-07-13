@@ -34,9 +34,9 @@
                     android:text="@string/login"
                     android:gravity="center"
                     android:layout_gravity="center"
-                    android:textSize="18dp"
+                    android:textSize="16sp"
                     android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:fontFamily="@font/suit_bold"/>
 
             </androidx.appcompat.widget.Toolbar>
 

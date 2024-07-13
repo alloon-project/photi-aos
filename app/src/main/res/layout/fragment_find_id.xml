@@ -28,7 +28,7 @@
             android:text="가입 시 사용했던 \n이메일을 입력해주세요"
             android:textSize="18sp"
             android:textColor="@color/gray900"
-            android:fontFamily="@font/suit_bold"
+            android:fontFamily="@font/suit_semibold"
             android:letterSpacing="-0.03"/>
 
         <EditText
@@ -44,7 +44,8 @@
             android:layout_marginTop="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="24dp"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:fontFamily="@font/suit_medium"/>
         <TextView
             android:id="@+id/error_textView"
             android:layout_width="wrap_content"
@@ -54,6 +55,7 @@
             android:layout_marginRight="24dp"
             android:layout_marginLeft="24dp"
             android:textSize="12sp"
+            android:fontFamily="@font/suit_medium"
             android:textColor="@color/red400"
             android:visibility="invisible"/>
 

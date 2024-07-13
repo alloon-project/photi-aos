@@ -20,28 +20,30 @@
         <Button
             android:id="@+id/chip1_btn"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:minWidth="37dp"
+            android:layout_height="27dp"
+            android:minWidth="41dp"
             android:background="@drawable/chip_white"
             android:textSize="12sp"
+            android:fontFamily="@font/suit_medium"
             android:text="전체"
             android:textColor="@color/white"
             android:stateListAnimator="@null"
-            android:textAllCaps = "false"
             android:visibility="invisible"/>
         <Button
             android:id="@+id/chip2_btn"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:minWidth="37dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="8dp"
+            android:minWidth="41dp"
             android:background="@drawable/chip_white"
             android:textSize="12sp"
+            android:fontFamily="@font/suit_medium"
             android:text="전체"
             android:textColor="@color/white"
             android:stateListAnimator="@null"
-            android:layout_marginLeft="8dp"
             android:textAllCaps = "false"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -57,7 +59,7 @@
             android:textColor="@color/white"
             android:letterSpacing="-0.03"
             android:breakStrategy="simple"
-            android:fontFamily="@font/suit_medium"
+            android:fontFamily="@font/suit_semibold"
             android:text="타이틀"
             android:layout_marginBottom="12dp"/>
         <TextView
@@ -67,7 +69,7 @@
             android:textSize="12sp"
             android:textColor="#99FFFFFF"
             android:letterSpacing="-0.03"
-            android:fontFamily="@font/suit_medium"
+            android:fontFamily="@font/suit_semibold"
             android:text="종료일"/>
     </LinearLayout>
 </LinearLayout>

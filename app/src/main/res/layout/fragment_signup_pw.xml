@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/signuppw"
                 android:textSize="18dp"
+                android:fontFamily="@font/suit_semibold"
                 android:textColor="@color/gray900"
                 android:layout_marginTop="62dp"
                 android:layout_marginLeft="24dp"/>
@@ -46,6 +47,7 @@
                 android:background="@drawable/input_line_default"
                 android:ems="10"
                 android:text="@={viewModel.password}"
+                android:fontFamily="@font/suit_medium"
                 android:inputType="textPassword"
                 android:hint="비밀번호"
                 android:textColorHint="@color/gray400"
@@ -74,6 +76,7 @@
                     android:drawablePadding="6dp"
                     android:drawableTint="@color/gray400"
                     android:text="영문 포함"
+                    android:fontFamily="@font/suit_medium"
                     android:textColor="@color/gray400"
                     android:textSize="12dp"/>
 
@@ -87,6 +90,7 @@
                     android:text="숫자 포함"
                     android:textColor="@color/gray400"
                     android:textSize="12dp"
+                    android:fontFamily="@font/suit_medium"
                     android:layout_marginLeft="14dp"/>
 
                 <TextView
@@ -99,6 +103,7 @@
                     android:text="특수문자 포함"
                     android:textColor="@color/gray400"
                     android:textSize="12dp"
+                    android:fontFamily="@font/suit_medium"
                     android:layout_marginLeft="14dp"/>
 
                 <TextView
@@ -111,6 +116,7 @@
                     android:text="8~30자"
                     android:textColor="@color/gray400"
                     android:textSize="12dp"
+                    android:fontFamily="@font/suit_medium"
                     android:layout_marginLeft="14dp"/>
             </LinearLayout>
 
@@ -125,6 +131,7 @@
                     android:layout_width="312dp"
                     android:layout_height="wrap_content"
                     android:text="@string/signuppw2"
+                    android:fontFamily="@font/suit_semibold"
                     android:textSize="18dp"
                     android:textColor="@color/gray900"
                     android:layout_marginTop="227dp"
@@ -146,6 +153,7 @@
                         android:text="@={viewModel.checkPassword}"
                         android:inputType="textPassword"
                         android:hint="비밀번호 확인"
+                        android:fontFamily="@font/suit_medium"
                         android:textColorHint="@color/gray400"
                         android:textSize="14dp" />
 
@@ -167,6 +175,7 @@
                     android:drawablePadding="6dp"
                     android:drawableTint="@color/gray400"
                     android:text="비밀번호 일치"
+                    android:fontFamily="@font/suit_medium"
                     android:textColor="@color/gray400"
                     android:textSize="12dp"
                     android:layout_marginLeft="24dp"

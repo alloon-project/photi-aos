@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/signupauth"
                 android:textSize="18dp"
+                android:fontFamily="@font/suit_semibold"
                 android:textColor="@color/gray900"
                 android:layout_marginTop="62dp"
                 android:layout_marginLeft="24dp"/>
@@ -46,6 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="이메일 :"
+                    android:fontFamily="@font/suit_semibold"
                     android:textSize="12dp"
                     android:textColor="@color/gray700"/>
 
@@ -55,6 +57,7 @@
                     android:layout_height="wrap_content"
                     android:text="@={viewModel.email}"
                     android:textSize="12dp"
+                    android:fontFamily="@font/suit_semibold"
                     android:textColor="@color/gray700"
                     android:layout_marginLeft="45dp"
                     android:layout_marginTop="1dp"/>
@@ -67,6 +70,7 @@
                     style="@style/Theme.text_xsmall"
                     android:background="#00ff0000"
                     android:text="@string/resend"
+                    android:fontFamily="@font/suit_medium"
                     android:layout_marginLeft="160dp"/>
             </RelativeLayout>
 
@@ -74,15 +78,16 @@
                 android:id="@+id/auth_edittext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="161dp"
                 android:background="@drawable/input_line_default"
                 android:ems="10"
-                android:inputType="text"
                 android:hint="숫자 4자리"
+                android:inputType="text"
+                android:text="@={viewModel.email_code}"
                 android:textColorHint="@color/gray400"
                 android:textSize="14dp"
-                android:text="@={viewModel.email_code}"
-                android:layout_marginTop="161dp"
-                android:layout_marginLeft="24dp"/>
+                android:fontFamily="@font/suit_medium"/>
 
             <TextView
                 android:id="@+id/auth_error_textview"
@@ -95,7 +100,8 @@
                 android:text="@string/autherror"
                 android:visibility="invisible"
                 android:textColor="@color/red400"
-                android:textSize="9dp" />
+                android:textSize="12dp"
+                android:fontFamily="@font/suit_medium"/>
 
             <Button
                 android:id="@+id/next_btn"
