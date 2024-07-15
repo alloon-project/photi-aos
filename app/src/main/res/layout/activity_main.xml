@@ -11,6 +11,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/main"
     tools:context=".view.activity.MainActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     style="@style/Theme.Alloonaos"
     android:background="@color/white"
     >
@@ -37,59 +39,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Report" />
-
-        <LinearLayout
+        <Button
+            android:id="@+id/mainButton"
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:paddingLeft="24dp"
-            android:paddingTop="17dp">
-            <Button
-                android:layout_width="49dp"
-                android:layout_height="30dp"
-                android:background="@drawable/chip_pink"
-                android:textSize="14dp"
-                android:text="전체"
-                android:textColor="@color/pink400"
-                android:stateListAnimator="@null"/>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_divider_chip"
-                android:layout_marginTop="3dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginLeft="2dp"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <Button
-                    android:layout_width="49dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/chip_gray"
-                    android:textSize="14dp"
-                    android:text="전체"
-                    android:textColor="@color/gray800"
-                    android:layout_marginRight="8dp"
-                    android:stateListAnimator="@null"/>
-                <Button
-                    android:layout_width="49dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/chip_gray"
-                    android:textSize="14dp"
-                    android:text="전체"
-                    android:textColor="@color/gray800"
-                    android:layout_marginRight="8dp"
-                    android:stateListAnimator="@null"/>
-                <Button
-                    android:layout_width="49dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/chip_gray"
-                    android:textSize="14dp"
-                    android:text="전체"
-                    android:textColor="@color/gray800"
-                    android:layout_marginRight="8dp"
-                    android:stateListAnimator="@null"/>
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="Main" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

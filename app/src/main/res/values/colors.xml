@@ -14,16 +14,18 @@
     <color name="green800">#1F6748</color>
     <color name="green900">#195239</color>
 
-    <color name="pink0">#FFF6FE</color>
-    <color name="pink100">#FEEAFD</color>
-    <color name="pink200">#FCBCF9</color>
-    <color name="pink300">#FA96F6</color>
-    <color name="pink400">#F86EF3</color>
-    <color name="pink500">#DB61D6</color>
-    <color name="pink600">#BD54B9</color>
-    <color name="pink700">#974394</color>
-    <color name="pink800">#773574</color>
-    <color name="pink900">#4A2148</color>
+    <color name="orange0">#E3F9EF</color>
+    <color name="orange100">#CAF4E2</color>
+    <color name="orange200">#FFC3AD</color>
+    <color name="orange300">#75E2B4</color>
+    <color name="orange400">#FF652C</color>
+    <color name="orange500">#F9561A</color>
+    <color name="orange600">#E74F18</color>
+    <color name="orange700">#28835C</color>
+    <color name="orange800">#1F6748</color>
+    <color name="orange900">#195239</color>
+
+    <color name="yellow400">#FDFFAB</color>
 
     <color name="blue0">#F6F6FF</color>
     <color name="blue100">#E8EAFF</color>
@@ -47,8 +49,6 @@
     <color name="red800">#42070E</color>
     <color name="red900">#2E050A</color>
 
-    <color name="yellow400">#FDFFAB</color>
-    <color name="orange400">#FF652C</color>
 
     <color name="gray0">#F8F9F9</color>
     <color name="gray100">#F3F5F6</color>

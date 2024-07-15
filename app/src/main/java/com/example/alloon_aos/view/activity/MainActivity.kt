@@ -26,5 +26,10 @@ class MainActivity : AppCompatActivity() {
             finish()
             startActivity(Intent(this,ReportActivity::class.java))
         }
+
+        binding.mainButton.setOnClickListener {
+            finish()
+            startActivity(Intent(this,PhotiActivity::class.java))
+        }
     }
 }

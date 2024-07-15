@@ -16,26 +16,26 @@
         android:theme="@style/Theme.Alloonaos"
         tools:targetApi="31">
         <activity
-            android:name=".view.activity.ReportActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.activity.SettingActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.activity.MainActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".view.activity.AuthActivity"
-            android:exported="true" />
-        <activity
-            android:name=".view.activity.PhotiActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.activity.ReportActivity"
+            android:exported="true" />
+        <activity
+            android:name=".view.activity.SettingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".view.activity.AuthActivity"
+            android:exported="true" />
+        <activity
+            android:name=".view.activity.PhotiActivity"
+            android:exported="true">
         </activity>
     </application>
 

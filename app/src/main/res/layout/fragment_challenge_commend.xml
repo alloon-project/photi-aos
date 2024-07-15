@@ -71,10 +71,10 @@
                     <Button
                         android:layout_width="49dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/chip_pink"
+                        android:background="@drawable/chip_blue"
                         android:textSize="14sp"
                         android:text="전체"
-                        android:textColor="@color/pink400"
+                        android:textColor="@color/orange400"
                         android:stateListAnimator="@null"
                         android:fontFamily="@font/suit_medium"/>
                     <ImageView

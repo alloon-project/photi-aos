@@ -3,7 +3,7 @@
     android:id="@+id/chip_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/chip_pink"
+    android:background="@drawable/chip_blue"
     android:stateListAnimator="@null"
     android:layout_marginRight="8dp"
     >
@@ -14,9 +14,9 @@
         android:textSize="14dp"
         android:fontFamily="@font/suit_medium"
         android:text="아이디"
-        android:textColor="@color/pink400"
+        android:textColor="@color/blue500"
         android:layout_marginLeft="12dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="12dp"
         android:layout_marginBottom="5dp"/>
 </LinearLayout>

@@ -13,7 +13,6 @@ import com.example.alloon_aos.viewmodel.PhotiViewModel
 class HashTagAdapter(private val photiViewModel: PhotiViewModel) :
     RecyclerView.Adapter<HashTagAdapter.ViewHolder>() {
     private var gray  = R.color.gray800
-    private var pink  = R.color.pink400
 
     inner class ViewHolder(private val binding: ItemHashtagChipRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
