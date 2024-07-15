@@ -3,68 +3,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#331E2326"
+    android:backgroundDimAmount="0.5"
+    android:backgroundDimEnabled="true">
 
     <LinearLayout
-        android:layout_width="400dp"
-        android:layout_height="780dp"
-        android:background="#331E2326"
-        android:backgroundDimAmount="0.5"
-        android:backgroundDimEnabled="true"
+        android:layout_width="296dp"
+        android:layout_height="175dp"
+        android:background="@drawable/dialog_radius"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="296dp"
-            android:layout_height="175dp"
-            android:layout_marginTop="300dp"
-            android:background="@drawable/dialog_radius"
-            android:orientation="vertical"
-            android:layout_marginLeft="32dp"
-            android:layout_marginBottom="218dp">
+        <TextView
+            android:id="@+id/title_textView"
+            android:layout_width="264dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/suit_semibold"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="타이틀"
+            android:textAlignment="center"
+            android:textColor="@color/gray900"
+            android:textSize="18dp" />
 
-            <TextView
-                android:id="@+id/title_textView"
-                android:layout_width="264dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="40dp"
-                android:gravity="center"
-                android:lineSpacingExtra="3sp"
-                android:text="타이틀"
-                android:textAlignment="center"
-                android:textColor="@color/gray900"
-                android:textSize="18sp"
-                android:fontFamily="@font/suit_semibold"/>
+        <TextView
+            android:id="@+id/message_textView"
+            android:layout_width="264dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/suit_semibold"
+            android:gravity="center"
+            android:text="내용"
+            android:textAlignment="center"
+            android:textColor="@color/gray600"
+            android:textSize="14dp" />
 
-            <TextView
-                android:id="@+id/message_textView"
-                android:layout_width="264dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:text="내용"
-                android:textAlignment="center"
-                android:textColor="@color/gray600"
-                android:textSize="14sp"
-                android:fontFamily="@font/suit_semibold"/>
-
-            <Button
-                android:id="@+id/dialog_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="15dp"
-                android:backgroundTint="@color/btn_color_green"
-                android:letterSpacing="-0.03"
-                android:text="버튼"
-                android:textSize="16sp"
-                android:fontFamily="@font/suit_bold"
-                android:theme="@style/Theme.large_round" />
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/dialog_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/btn_color_green"
+            android:fontFamily="@font/suit_bold"
+            android:letterSpacing="-0.03"
+            android:text="버튼"
+            android:textSize="16dp"
+            android:theme="@style/Theme.large_round" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
