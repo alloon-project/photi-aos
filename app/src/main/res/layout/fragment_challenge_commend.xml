@@ -9,7 +9,8 @@
     </data>
     <LinearLayout
         style="@style/Theme.Alloonaos"
-        android:layout_height="520dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/white">
 
         <ScrollView
@@ -74,7 +75,7 @@
                         android:background="@drawable/chip_blue"
                         android:textSize="14sp"
                         android:text="전체"
-                        android:textColor="@color/orange400"
+                        android:textColor="@color/blue500"
                         android:stateListAnimator="@null"
                         android:fontFamily="@font/suit_medium"/>
                     <ImageView

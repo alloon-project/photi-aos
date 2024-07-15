@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="fragment"
             type="com.example.alloon_aos.view.fragment.report.ReportFeedFragment" />
     </data>
 
-    <LinearLayout
-        style="@style/Theme.Alloonaos"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/white">
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:id="@+id/frameLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:text="피드를 신고하는 이유가 무엇인가요?"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 android:fontFamily="@font/suit_medium"
-                android:letterSpacing = "-0.03"
-                android:layout_marginTop="24dp"
-                android:layout_marginLeft="24dp"/>
+                android:letterSpacing = "-0.03"/>
 
             <RadioGroup
                 android:id="@+id/report_radiogroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="68dp"
-                android:layout_marginLeft="24dp">
+                android:layout_marginTop="68dp">
                 <RadioButton
                     android:layout_width="316dp"
                     android:layout_height="32dp"
@@ -103,13 +108,17 @@
                     android:textColor="@drawable/selector_radio_text"
                     android:text="직접 작성" />
             </RadioGroup>
-
+        </FrameLayout>
             <LinearLayout
                 android:id="@+id/contents_layout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_marginTop="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -118,9 +127,7 @@
                     android:textColor="@color/black"
                     android:textSize="18dp"
                     android:fontFamily="@font/suit_medium"
-                    android:letterSpacing = "-0.03"
-                    android:layout_marginTop="373dp"
-                    android:layout_marginLeft="24dp"/>
+                    android:letterSpacing = "-0.03"/>
 
                 <EditText
                     android:id="@+id/report_edittext"
@@ -134,15 +141,13 @@
                     android:textColorHint="@color/gray400"
                     android:textSize="14dp"
                     android:fontFamily="@font/suit_medium"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginLeft="24dp" />
+                    android:layout_marginTop="24dp" />
 
                 <TextView
                     android:id="@+id/num_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="24dp"
                     android:layout_gravity="right"
                     android:text="0/120"
                     android:textSize="12dp"
@@ -157,10 +162,11 @@
                 android:backgroundTint="?attr/colorPrimary"
                 android:theme="@style/Theme.xlarge_round"
                 android:text="신고하기"
-                android:layout_marginTop="564dp"
-                android:layout_marginLeft="24dp"
-                android:onClick="@{() ->fragment.click()}"/>
+                android:onClick="@{() ->fragment.click()}"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        </FrameLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -62,7 +62,7 @@
         android:id="@+id/nextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/btn_color_green"
+        android:backgroundTint="?attr/colorPrimary"
         android:enabled="false"
         android:onClick="@{() ->viewModel.checkSignedUp()}"
         android:text="다음"

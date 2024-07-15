@@ -1,153 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="fragment"
             type="com.example.alloon_aos.view.fragment.report.ReportMemberFragment" />
     </data>
 
-    <LinearLayout
-        style="@style/Theme.Alloonaos"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/white">
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:id="@+id/frameLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/suit_medium"
+                android:letterSpacing="-0.03"
                 android:text="멤버를 신고하는 이유가 무엇인가요?"
                 android:textColor="@color/black"
-                android:textSize="18dp"
-                android:fontFamily="@font/suit_medium"
-                android:letterSpacing = "-0.03"
-                android:layout_marginTop="24dp"
-                android:layout_marginLeft="24dp"/>
+                android:textSize="18dp" />
 
             <RadioGroup
                 android:id="@+id/report_radiogroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="68dp"
-                android:layout_marginLeft="24dp">
+                android:layout_marginTop="68dp">
+
                 <RadioButton
                     android:layout_width="316dp"
                     android:layout_height="32dp"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:paddingLeft="7dp"
                     android:button="@drawable/selector_radio_button"
+                    android:fontFamily="@font/suit_medium"
+                    android:paddingLeft="7dp"
+                    android:text="중복 / 도배를 해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:text="중복 / 도배를 해요" />
+                    android:textSize="14dp" />
+
                 <RadioButton
                     android:layout_width="316dp"
                     android:layout_height="32dp"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:fontFamily="@font/suit_medium"
+                    android:paddingLeft="7dp"
+                    android:text="음란성 / 선정적인 이야기를 해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:text="음란성 / 선정적인 이야기를 해요" />
+                    android:textSize="14dp" />
+
                 <RadioButton
                     android:layout_width="316dp"
                     android:layout_height="32dp"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:fontFamily="@font/suit_medium"
+                    android:paddingLeft="7dp"
+                    android:text="욕설 / 혐오적인 이야기를 해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:text="욕설 / 혐오적인 이야기를 해요" />
+                    android:textSize="14dp" />
+
                 <RadioButton
                     android:layout_width="316dp"
                     android:layout_height="32dp"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:fontFamily="@font/suit_medium"
+                    android:paddingLeft="7dp"
+                    android:text="폭력적 / 위험적인 이야기를 해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:text="폭력적 / 위험적인 이야기를 해요" />
+                    android:textSize="14dp" />
+
                 <RadioButton
                     android:layout_width="316dp"
                     android:layout_height="32dp"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:fontFamily="@font/suit_medium"
+                    android:paddingLeft="7dp"
+                    android:text="상업적 홍보 / 광고를 해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:text="상업적 홍보 / 광고를 해요" />
+                    android:textSize="14dp" />
+
                 <RadioButton
                     android:layout_width="316dp"
                     android:layout_height="32dp"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:fontFamily="@font/suit_medium"
+                    android:paddingLeft="7dp"
+                    android:text="타인을 비방해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:text="타인을 비방해요" />
+                    android:textSize="14dp" />
+
                 <RadioButton
                     android:id="@+id/write_radio"
                     android:layout_width="316dp"
                     android:layout_height="32dp"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:fontFamily="@font/suit_medium"
+                    android:paddingLeft="7dp"
+                    android:text="직접 작성"
                     android:textColor="@drawable/selector_radio_text"
-                    android:text="직접 작성" />
+                    android:textSize="14dp" />
             </RadioGroup>
-
+        </FrameLayout>
             <LinearLayout
                 android:id="@+id/contents_layout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_marginTop="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_medium"
+                    android:letterSpacing="-0.03"
                     android:text="자세한 내용을 적어주시면 신고에 도움이 돼요"
                     android:textColor="@color/black"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:letterSpacing = "-0.03"
-                    android:layout_marginTop="373dp"
-                    android:layout_marginLeft="24dp"/>
+                    android:textSize="18dp" />
 
                 <EditText
                     android:id="@+id/report_edittext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/textarea_line_default"
-                    android:gravity="top"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:hint="신고 내용을 상세히 알려주세요"
-                    android:textColorHint="@color/gray400"
-                    android:textSize="14dp"
-                    android:fontFamily="@font/suit_medium"
                     android:layout_marginTop="24dp"
-                    android:layout_marginLeft="24dp" />
+                    android:background="@drawable/textarea_line_default"
+                    android:ems="10"
+                    android:fontFamily="@font/suit_medium"
+                    android:gravity="top"
+                    android:hint="신고 내용을 상세히 알려주세요"
+                    android:inputType="text"
+                    android:textColorHint="@color/gray400"
+                    android:textSize="14dp" />
 
                 <TextView
                     android:id="@+id/num_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="24dp"
                     android:layout_gravity="right"
-                    android:text="0/120"
-                    android:textSize="12dp"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/suit_medium"
-                    android:textColor="@color/gray400" />
+                    android:text="0/120"
+                    android:textColor="@color/gray400"
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <Button
@@ -155,12 +166,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorPrimary"
-                android:theme="@style/Theme.xlarge_round"
+                android:onClick="@{() ->fragment.click()}"
                 android:text="신고하기"
-                android:layout_marginTop="564dp"
-                android:layout_marginLeft="24dp"
-                android:onClick="@{() ->fragment.click()}"/>
+                android:theme="@style/Theme.xlarge_round"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        </FrameLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

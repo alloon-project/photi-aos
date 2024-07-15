@@ -171,10 +171,12 @@
 
     <!-- ////////////////////// Text Button 여기부터 글꼴 사이즈 적용 안함 ////////////////////////// -->
     <style name="Theme.text_btn" parent="Theme.Alloonaos">
+        <item name="android:backgroundTint">@color/white</item>
 <!--        <item name="android:textColor">@color/btn_text</item>-->
     </style>
     <style name="Theme.text_xsmall" parent="Theme.text_btn">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
     </style>
 
     <!-- ////////////////////// Card ////////////////////////// -->

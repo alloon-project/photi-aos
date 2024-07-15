@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tool="http://schemas.android.com/tools">
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="fragment"
@@ -9,13 +10,10 @@
             name="viewModel"
             type="com.example.alloon_aos.viewmodel.AuthViewModel" />
     </data>
-    <LinearLayout
-        style="@style/Theme.Alloonaos"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/white">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <ProgressBar
                 android:id="@+id/email_progress"
@@ -25,56 +23,72 @@
                 android:progressDrawable="@drawable/signup_progress"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_marginTop="8dp"
-                android:layout_marginLeft="24dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
             
             <TextView
+                android:id="@+id/email_textview"
                 android:layout_width="312dp"
                 android:layout_height="wrap_content"
                 android:text="@string/signupemail"
                 android:textSize="18dp"
                 android:fontFamily="@font/suit_medium"
                 android:textColor="@color/gray900"
-                android:layout_marginTop="62dp"
-                android:layout_marginLeft="24dp"/>
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/email_progress"/>
 
-            <EditText
-                android:id="@+id/email_edittext"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/input_line_default"
-                android:ems="10"
-                android:text="@={viewModel.email}"
-                android:inputType="text"
-                android:hint="이메일"
-                android:textColorHint="@color/gray400"
-                android:textSize="14dp"
-                android:fontFamily="@font/suit_medium"
-                android:layout_marginTop="136dp"
-                android:layout_marginLeft="24dp"/>
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/email_textview">
 
-            <TextView
-                android:id="@+id/email_error_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_error"
-                android:drawablePadding="6dp"
-                android:visibility="invisible"
-                android:text="@string/emailerror"
-                android:textColor="@color/red400"
-                android:textSize="16dp"
-                android:fontFamily="@font/suit_medium"
-                android:layout_marginLeft="28dp"
-                android:layout_marginTop="193.5dp"/>
+                <EditText
+                    android:id="@+id/email_edittext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_line_default"
+                    android:ems="10"
+                    android:fontFamily="@font/suit_medium"
+                    android:hint="이메일"
+                    android:inputType="text"
+                    android:text="@={viewModel.email}"
+                    android:textColorHint="@color/gray400"
+                    android:textSize="14dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/email_error_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_error"
+                    android:drawablePadding="6dp"
+                    android:fontFamily="@font/suit_medium"
+                    android:text="@string/emailerror"
+                    android:textColor="@color/red400"
+                    android:textSize="16dp"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="@+id/email_edittext"
+                    app:layout_constraintTop_toBottomOf="@id/email_edittext" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
                 android:id="@+id/next_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorPrimary"
-                android:theme="@style/Theme.xlarge_round"
                 android:text="다음"
-                android:layout_marginTop="564dp"
-                android:layout_marginLeft="24dp" />
-        </FrameLayout>
-    </LinearLayout>
+                android:theme="@style/Theme.xlarge_round"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
