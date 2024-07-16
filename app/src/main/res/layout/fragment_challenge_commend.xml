@@ -44,14 +44,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/commend_textview" />
 
-                <View
+                <ImageView
                     android:id="@+id/divider"
-                    android:layout_width="327dp"
-                    android:layout_height="1dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
+                    android:layout_width="312dp"
+                    android:layout_height="1.5dp"
+                    android:src="@drawable/dash_line"
+                    android:layerType="software"
                     android:layout_marginTop="32dp"
-                    android:background="@drawable/ic_divider_large"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/hot_recyclerView" />
