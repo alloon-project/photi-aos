@@ -75,6 +75,16 @@
                 app:layout_constraintBottom_toBottomOf="parent">
 
             </FrameLayout>
+            <ImageButton
+                android:layout_width="53dp"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="24dp"
+                android:layout_marginBottom="24dp"
+                android:theme="@style/Theme.icon_xlarge_blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
