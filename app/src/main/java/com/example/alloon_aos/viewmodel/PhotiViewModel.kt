@@ -55,7 +55,10 @@ class PhotiViewModel: ViewModel() {
 
     //해시태그 칩 목록
     val hashChipsListData = MutableLiveData<ArrayList<Chip>>()
-    val hashChips = ArrayList<Chip>()
+    val hashChips = arrayListOf<Chip>(
+        Chip("러닝"), Chip("취뽀"), Chip("독서"), Chip("맛집"), Chip("안드로이드")
+    )
+
     val itemClickEvent = MutableLiveData<Int>()
     var itemLongClick = -1
 

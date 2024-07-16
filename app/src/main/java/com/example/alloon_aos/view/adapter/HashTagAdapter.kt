@@ -1,8 +1,6 @@
 package com.example.alloon_aos.view.adapter
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

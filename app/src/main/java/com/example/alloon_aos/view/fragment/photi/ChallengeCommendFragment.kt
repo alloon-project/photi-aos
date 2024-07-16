@@ -49,13 +49,6 @@ class ChallengeCommendFragment : Fragment() {
         binding.chipRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.chipRecyclerview.setHasFixedSize(true)
 
-
-        photiViewModel.addHashChip(Chip("러닝"))
-        photiViewModel.addHashChip(Chip("취뽀"))
-        photiViewModel.addHashChip(Chip("독서"))
-        photiViewModel.addHashChip(Chip("맛집"))
-        photiViewModel.addHashChip(Chip("안드로이드"))
-
         //setObserver()
 
         return binding.root
