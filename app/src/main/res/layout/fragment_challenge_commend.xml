@@ -48,7 +48,7 @@
                     android:id="@+id/divider"
                     android:layout_width="312dp"
                     android:layout_height="1.5dp"
-                    android:src="@drawable/dash_line"
+                    android:src="@drawable/divider_dash_line"
                     android:layerType="software"
                     android:layout_marginTop="32dp"
                     app:layout_constraintEnd_toEndOf="parent"
