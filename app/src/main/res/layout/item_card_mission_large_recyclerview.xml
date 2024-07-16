@@ -54,6 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
                 android:minWidth="41dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:background="@drawable/chip_white"
                 android:textSize="12sp"
                 android:fontFamily="@font/suit_medium"
@@ -68,6 +70,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
                 android:minWidth="41dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:background="@drawable/chip_white"
                 android:textSize="12sp"
                 android:fontFamily="@font/suit_medium"
@@ -75,6 +79,7 @@
                 android:textColor="@color/white"
                 android:stateListAnimator="@null"
                 android:textAllCaps = "false"
+                android:layout_marginLeft="8dp"
                 android:visibility="invisible"
                 />
         </LinearLayout>
