@@ -8,7 +8,7 @@
     </data>
 
     <LinearLayout
-        style="@style/Theme.Alloonaos"
+        style="@style/Theme.Photi"
         android:orientation="vertical"
         android:background="@color/white">
         <Button
