@@ -5,9 +5,11 @@
     <corners
         android:radius="99dp"/>
     <size
-        android:width="327dp"
+        android:width="312dp"
         android:height="44dp" />
     <padding
         android:top="6dp"
-        android:bottom="6dp"/>
+        android:bottom="6dp"
+        android:left="16dp"
+        android:right="12dp"/>
 </shape>

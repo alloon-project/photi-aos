@@ -15,15 +15,15 @@
     <color name="green900">#195239</color>
 
     <color name="orange0">#E3F9EF</color>
-    <color name="orange100">#CAF4E2</color>
+    <color name="orange100">#FFE9E2</color>
     <color name="orange200">#FFC3AD</color>
-    <color name="orange300">#75E2B4</color>
+    <color name="orange300">#FF8A5F</color>
     <color name="orange400">#FF652C</color>
     <color name="orange500">#F9561A</color>
     <color name="orange600">#E74F18</color>
-    <color name="orange700">#28835C</color>
-    <color name="orange800">#1F6748</color>
-    <color name="orange900">#195239</color>
+    <color name="orange700">#CF4715</color>
+    <color name="orange800">#B43D12</color>
+    <color name="orange900">#90310E</color>
 
     <color name="yellow400">#FDFFAB</color>
 
