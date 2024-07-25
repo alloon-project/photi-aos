@@ -7,7 +7,7 @@
             type="com.example.alloon_aos.view.fragment.photi.ProfileFragment" />
     </data>
     <LinearLayout
-        style="@style/Theme.Photi"
+        android:theme="@style/Theme.Photi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">

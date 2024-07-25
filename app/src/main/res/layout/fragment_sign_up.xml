@@ -11,6 +11,7 @@
     <LinearLayout
         style="@style/Theme.Photi"
         android:background="@color/white"
+        android:theme="@style/Theme.Photi"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
