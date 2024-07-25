@@ -20,14 +20,15 @@
                     android:id="@+id/commend_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginLeft="26dp"
                     android:drawableStart="@drawable/ic_flame"
                     android:drawablePadding="6dp"
                     android:fontFamily="@font/suit_bold"
                     android:text="지금 인기있는 챌린지"
                     android:textColor="@color/gray900"
                     android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="@+id/hot_recyclerView"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -46,11 +47,13 @@
 
                 <ImageView
                     android:id="@+id/divider"
-                    android:layout_width="312dp"
+                    android:layout_width="match_parent"
                     android:layout_height="1.5dp"
                     android:src="@drawable/divider_dash_line"
                     android:layerType="software"
                     android:layout_marginTop="32dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/hot_recyclerView" />
@@ -60,18 +63,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
+                    android:layout_marginLeft="26dp"
                     android:drawableStart="@drawable/ic_pricetag"
                     android:drawablePadding="6dp"
                     android:fontFamily="@font/suit_semibold"
                     android:text="해시태그별 모아보기"
                     android:textColor="@color/gray900"
                     android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="@+id/hot_recyclerView"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/divider" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="64dp"
                     android:paddingLeft="24dp"
                     android:paddingTop="17dp"
@@ -107,11 +111,13 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/hashtag_recyclerView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:background="@color/white"
                     android:clipToPadding="false"
                     android:paddingBottom="28dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginLeft="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />

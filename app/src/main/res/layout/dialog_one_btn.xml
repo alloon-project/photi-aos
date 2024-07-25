@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.Photi"
     android:background="#331E2326"
     android:backgroundDimAmount="0.5"
     android:backgroundDimEnabled="true">
@@ -51,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="15dp"
-            android:backgroundTint="@color/btn_color_green"
+            android:backgroundTint="?attr/colorPrimary"
             android:fontFamily="@font/suit_bold"
             android:letterSpacing="-0.03"
             android:text="버튼"

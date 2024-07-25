@@ -17,7 +17,7 @@
         android:background="@color/white">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,9 +38,11 @@
 
             <LinearLayout
                 android:id="@+id/enterPassword_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -53,12 +55,12 @@
                     android:textSize="18dp" />
 
                 <FrameLayout
-                    android:layout_width="312dp"
+                    android:layout_width="match_parent"
                     android:layout_height="46dp"
                     android:layout_marginTop="24dp">
                     <EditText
                         android:id="@+id/password_editText"
-                        android:layout_width="312dp"
+                        android:layout_width="match_parent"
                         android:layout_height="46dp"
                         android:background="@drawable/input_line_default"
                         android:ems="10"
@@ -84,7 +86,7 @@
 
         <Button
             android:id="@+id/keep_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_effect_click"
             android:enabled="true"
@@ -94,13 +96,15 @@
             android:textColor="@drawable/btn_effect_text"
             android:textSize="16dp"
             android:layout_marginBottom="16dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
             app:layout_constraintBottom_toTopOf="@+id/cancle_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/cancle_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_effect_click"
             android:enabled="true"
@@ -110,13 +114,15 @@
             android:textColor="@drawable/btn_effect_text"
             android:textSize="16dp"
             android:layout_marginBottom="20dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/colorPrimary"
             android:enabled="false"
@@ -126,6 +132,8 @@
             android:textSize="16dp"
             android:theme="@style/Theme.xlarge_round"
             android:layout_marginBottom="20dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

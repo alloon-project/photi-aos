@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.adapter
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -8,6 +9,7 @@ import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -25,6 +27,7 @@ class HotCardAdapter(private val photiViewModel: PhotiViewModel) :
         RecyclerView.ViewHolder(binding.root) {
         fun setContents(holder: HotCardAdapter.ViewHolder ,pos: Int) {
             with (photiViewModel.hotItems[pos]) {
+                binding.cardLayout.layoutParams.width = convertDpToPixel(150, itemView.context)
                 binding.titleTextView.text = title
                 binding.dateTextView.text = date
                 binding.chip1Btn.text = hashtag[0]
@@ -75,5 +78,11 @@ class HotCardAdapter(private val photiViewModel: PhotiViewModel) :
     }
 
     override fun getItemCount() = photiViewModel.hotItems.size
+
+    // dp를 pixel 단위로 변환하는 함수
+    private fun convertDpToPixel(dp: Int, context: Context): Int {
+        val scale = context.resources.displayMetrics.density
+        return (dp * scale + 0.5f).toInt()
+    }
 
 }

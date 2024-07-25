@@ -20,27 +20,28 @@
             <ProgressBar
                 android:id="@+id/id_progress"
                 android:max="100"
-                android:layout_width="312dp"
+                android:layout_width="match_parent"
                 android:layout_height="6dp"
                 android:progressDrawable="@drawable/signup_progress"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_marginTop="8dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="24dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TextView
-                android:id="@+id/id_textview"
-                android:layout_width="312dp"
-                android:layout_height="wrap_content"
-                android:text="@string/signupid"
-                android:textSize="18dp"
-                android:fontFamily="@font/suit_medium"
-                android:textColor="@color/gray900"
-                android:layout_marginTop="48dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/id_progress"
-                app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:id="@+id/id_textview"
+            android:layout_width="312dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:fontFamily="@font/suit_medium"
+            android:text="@string/signupid"
+            android:textColor="@color/gray900"
+            android:textSize="18dp"
+            app:layout_constraintStart_toStartOf="@+id/id_progress"
+            app:layout_constraintTop_toBottomOf="@+id/id_progress" />
 
         <TextView
             android:id="@+id/textView4"
@@ -51,21 +52,22 @@
             android:text="@string/signupid2"
             android:textColor="@color/gray700"
             android:textSize="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/id_textview"
             app:layout_constraintTop_toBottomOf="@+id/id_textview" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4">
 
             <FrameLayout
                 android:id="@id/frameLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +75,7 @@
 
                 <EditText
                     android:id="@+id/id_edittext"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/input_line_default"
                     android:ems="10"
@@ -88,8 +90,8 @@
                     android:id="@+id/check_btn"
                     android:layout_width="70dp"
                     android:layout_height="40dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginLeft="236dp"
+                    android:layout_gravity="end|center"
+                    android:layout_marginRight="6dp"
                     android:backgroundTint="?attr/colorPrimary"
                     android:enabled="false"
                     android:text="중복검사"
@@ -106,19 +108,22 @@
                 android:text="@string/signupid2"
                 android:textColor="@color/red400"
                 android:textSize="12dp"
-                android:visibility="invisible"
+                android:visibility="gone"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="@+id/frameLayout"
                 app:layout_constraintTop_toBottomOf="@id/frameLayout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/next_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/colorPrimary"
             android:text="다음"
             android:theme="@style/Theme.xlarge_round"
             android:layout_marginBottom="20dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
             tools:layout_constraintBottom_toBottomOf="parent"
             tools:layout_constraintEnd_toEndOf="parent"
             tools:layout_constraintStart_toStartOf="parent" />

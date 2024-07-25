@@ -22,11 +22,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:layout_marginLeft="24dp"
                 android:fontFamily="@font/suit_semibold"
                 android:text="문의 내용이 무엇인가요?"
                 android:textColor="@color/gray900"
                 android:textSize="18dp"
-                app:layout_constraintStart_toStartOf="@+id/select_radiogroup"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <RadioGroup
@@ -34,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="@+id/contents_editText"
+                app:layout_constraintStart_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/textView7">
 
                 <RadioButton
@@ -91,12 +92,12 @@
                 android:text="자세한 내용을 적어주세요"
                 android:textColor="@color/gray900"
                 android:textSize="18dp"
-                app:layout_constraintStart_toStartOf="@+id/contents_editText"
+                app:layout_constraintStart_toStartOf="@+id/select_radiogroup"
                 app:layout_constraintTop_toBottomOf="@+id/select_radiogroup" />
 
             <EditText
                 android:id="@+id/contents_editText"
-                android:layout_width="312dp"
+                android:layout_width="match_parent"
                 android:layout_height="109dp"
                 android:background="@drawable/textarea_line_default"
                 android:fontFamily="@font/suit_medium"
@@ -107,6 +108,8 @@
                 android:textColorHint="@color/gray400"
                 android:textSize="14dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.494"
                 app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +131,7 @@
 
             <Button
                 android:id="@+id/next_button"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorPrimary"
                 android:enabled="false"
@@ -136,6 +139,8 @@
                 android:text="제출하기"
                 android:theme="@style/Theme.xlarge_round"
                 android:layout_marginBottom="20dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

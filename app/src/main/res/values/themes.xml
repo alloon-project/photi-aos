@@ -17,7 +17,6 @@
         <item name ="android:fontFamily">@font/suit_bold</item>
     </style>
     <style name="Theme.xlarge_round" parent="Theme.round_btn">
-        <item name="android:width">312dp</item>
         <item name="android:height">56dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:bottomLeftRadius">16dp</item>
@@ -172,6 +171,7 @@
     <!-- ////////////////////// Text Button 여기부터 글꼴 사이즈 적용 안함 ////////////////////////// -->
     <style name="Theme.text_btn" parent="Theme.Photi">
         <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/gray400</item>
 <!--        <item name="android:textColor">@color/btn_text</item>-->
     </style>
     <style name="Theme.text_xsmall" parent="Theme.text_btn">

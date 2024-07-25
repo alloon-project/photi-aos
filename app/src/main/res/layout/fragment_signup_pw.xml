@@ -18,47 +18,50 @@
             <ProgressBar
                 android:id="@+id/pw_progress"
                 android:max="100"
-                android:layout_width="312dp"
+                android:layout_width="match_parent"
                 android:layout_height="6dp"
                 android:progressDrawable="@drawable/signup_progress"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_marginTop="8dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="24dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TextView
-                android:id="@+id/pw_textview"
-                android:layout_width="312dp"
-                android:layout_height="wrap_content"
-                android:text="@string/signuppw"
-                android:textSize="18dp"
-                android:fontFamily="@font/suit_semibold"
-                android:textColor="@color/gray900"
-                android:layout_marginTop="40dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pw_progress"
-                app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:id="@+id/pw_textview"
+            android:layout_width="312dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/suit_semibold"
+            android:text="@string/signuppw"
+            android:textColor="@color/gray900"
+            android:textSize="18dp"
+            app:layout_constraintStart_toStartOf="@+id/pw_progress"
+            app:layout_constraintTop_toBottomOf="@+id/pw_progress" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout3"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pw_textview">
 
             <FrameLayout
                 android:id="@+id/frameLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <EditText
                     android:id="@+id/pw_edittext"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/input_line_default"
                     android:ems="10"
@@ -73,8 +76,8 @@
                     android:id="@+id/hide_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="278dp"
-                    android:layout_marginTop="14dp"
+                    android:layout_gravity="end|center"
+                    android:layout_marginRight="16dp"
                     android:background="@drawable/ic_eye_off"
                     android:tag="0" />
             </FrameLayout>
@@ -141,11 +144,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/check_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone"
             android:layout_marginTop="48dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
@@ -163,7 +168,7 @@
 
             <FrameLayout
                 android:id="@+id/frameLayout2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -171,7 +176,7 @@
 
                 <EditText
                     android:id="@+id/check_pw_edittext"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/input_line_default"
                     android:ems="10"
@@ -186,8 +191,8 @@
                     android:id="@+id/hide_btn2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="278dp"
-                    android:layout_marginTop="14dp"
+                    android:layout_gravity="end|center"
+                    android:layout_marginRight="16dp"
                     android:background="@drawable/ic_eye_off"
                     android:tag="0" />
             </FrameLayout>
@@ -211,12 +216,14 @@
 
             <Button
                 android:id="@+id/next_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorPrimary"
                 android:theme="@style/Theme.xlarge_round"
                 android:text="다음"
                 android:layout_marginBottom="20dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

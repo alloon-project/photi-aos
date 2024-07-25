@@ -17,8 +17,10 @@
 
         <FrameLayout
             android:id="@+id/frameLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -112,11 +114,13 @@
         </FrameLayout>
             <LinearLayout
                 android:id="@+id/contents_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
                 android:layout_marginTop="32dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/frameLayout">
@@ -132,7 +136,7 @@
 
                 <EditText
                     android:id="@+id/report_edittext"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/textarea_line_default"
                     android:gravity="top"
@@ -158,13 +162,15 @@
 
             <Button
                 android:id="@+id/next_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorPrimary"
                 android:theme="@style/Theme.xlarge_round"
                 android:text="신고하기"
                 android:onClick="@{() ->fragment.click()}"
                 android:layout_marginBottom="20dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

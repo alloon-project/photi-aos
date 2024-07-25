@@ -28,7 +28,7 @@
 
             <EditText
                 android:id="@+id/id_edittext"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/input_line_default"
                 android:ems="10"
@@ -39,6 +39,8 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray400"
                 android:textSize="14dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -53,7 +55,7 @@
                 android:text="@string/loginerror"
                 android:textColor="@color/red400"
                 android:textSize="12dp"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/id_edittext"
                 app:layout_constraintTop_toBottomOf="@+id/id_edittext" />
@@ -69,15 +71,17 @@
 
             <FrameLayout
                 android:id="@+id/frameLayout3"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <EditText
                     android:id="@+id/pw_edittext"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/input_line_default"
                     android:ems="10"
@@ -92,8 +96,9 @@
                     android:id="@+id/hide_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:layout_marginTop="15dp"
-                    android:layout_marginLeft="271dp"
+                    android:layout_marginRight="16dp"
                     android:background="@drawable/ic_eye_off"
                     android:tag="0" />
             </FrameLayout>
@@ -108,20 +113,22 @@
                 android:text="@string/loginerror"
                 android:textColor="@color/red400"
                 android:textSize="12dp"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/frameLayout3"
                 app:layout_constraintTop_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/login_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/colorPrimary"
             android:onClick="@{() ->viewModel.login()}"
             android:text="로그인"
             android:theme="@style/Theme.xlarge_round"
             android:layout_marginTop="56dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
@@ -166,7 +173,7 @@
 
         <Button
             android:id="@+id/signup_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_xlarge_blue_line"
             android:onClick="@{() ->fragment.moveFrag(1)}"
@@ -174,6 +181,8 @@
             android:text="회원가입"
             android:theme="@style/Theme.blue_text"
             android:layout_marginBottom="20dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
