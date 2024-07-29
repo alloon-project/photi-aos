@@ -13,14 +13,12 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupAuthBinding
-import com.example.alloon_aos.view.CustomToast
-import com.example.alloon_aos.view.KeyboardListener
-import com.example.alloon_aos.view.OnKeyboardVisibilityListener
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
+import com.example.alloon_aos.view.ui.util.KeyboardListener
+import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 

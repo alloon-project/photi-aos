@@ -12,16 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupPwBinding
-import com.example.alloon_aos.view.CustomToast
-import com.example.alloon_aos.view.KeyboardListener
-import com.example.alloon_aos.view.OnKeyboardVisibilityListener
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 import java.util.regex.Pattern
@@ -55,6 +52,7 @@ class SignupPwFragment : Fragment() {
         authViewModel.resetCodeValue()
         //setObserve()
         setListener()
+
 
         ObjectAnimator.ofInt(binding.pwProgress, "progress", 60,80)
             .setDuration(500)

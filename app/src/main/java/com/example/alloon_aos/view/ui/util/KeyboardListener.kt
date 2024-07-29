@@ -1,4 +1,4 @@
-package com.example.alloon_aos.view
+package com.example.alloon_aos.view.ui.util
 
 import android.graphics.Rect
 import android.util.Log

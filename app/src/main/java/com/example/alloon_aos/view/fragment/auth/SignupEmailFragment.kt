@@ -16,10 +16,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupEmailBinding
-import com.example.alloon_aos.view.CustomToast
-import com.example.alloon_aos.view.KeyboardListener
-import com.example.alloon_aos.view.OnKeyboardVisibilityListener
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
+import com.example.alloon_aos.view.ui.util.KeyboardListener
+import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
 import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheet
+import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheetInterface
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class SignupEmailFragment : Fragment() {
@@ -37,6 +39,7 @@ class SignupEmailFragment : Fragment() {
 
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
+        println("h")
 
         authViewModel.resetAllValue()
         //setObserve()
@@ -126,5 +129,5 @@ class SignupEmailFragment : Fragment() {
 
         }
     }
-
+    
 }

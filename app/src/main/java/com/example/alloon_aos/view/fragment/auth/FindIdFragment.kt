@@ -11,12 +11,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFindIdBinding
-import com.example.alloon_aos.view.CustomToast
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
-import com.example.alloon_aos.view.CustomDialog
-import com.example.alloon_aos.view.CustomOneButtonDialogInterface
-import com.example.alloon_aos.view.KeyboardListener
-import com.example.alloon_aos.view.OnKeyboardVisibilityListener
+import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialog
+import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialogInterface
+import com.example.alloon_aos.view.ui.util.KeyboardListener
+import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
@@ -31,7 +31,6 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
         binding.fragment = this
         binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
 
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("아이디 찾기")
@@ -64,7 +63,7 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
             if(it.isNotEmpty()) {
                 when(it){
                     "USERNAME_SENT" -> {
-                        CustomDialog(this,"이메일로 회원정보를 보내드렸어요","다시 로그인해주세요","확인")
+                        CustomOneButtonDialog(this,"이메일로 회원정보를 보내드렸어요","다시 로그인해주세요","확인")
                             .show(activity?.supportFragmentManager!!, "CustomDialog")
                     }
                     "USER_NOT_FOUND" ->{

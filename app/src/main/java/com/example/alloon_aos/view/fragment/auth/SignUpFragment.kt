@@ -11,8 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignUpBinding
-import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class SignUpFragment : Fragment() {

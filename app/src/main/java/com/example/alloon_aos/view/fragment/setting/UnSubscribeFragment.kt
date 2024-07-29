@@ -11,12 +11,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentUnSubscribeBinding
-import com.example.alloon_aos.view.CustomDialog
-import com.example.alloon_aos.view.CustomOneButtonDialogInterface
-import com.example.alloon_aos.view.CustomToast
+import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialog
+import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialogInterface
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.SettingActivity
 
-class UnSubscribeFragment : Fragment(),CustomOneButtonDialogInterface {
+class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentUnSubscribeBinding
     // private val authViewModel by activityViewModels<AuthViewModel>()
     private lateinit var password: String
@@ -86,7 +86,7 @@ class UnSubscribeFragment : Fragment(),CustomOneButtonDialogInterface {
             CustomToast.createToast(getActivity(),"탈퇴가 완료됐어요. 다음에 또 만나요!")?.show()
         }
         else
-            CustomDialog(this,"비밀번호가 일치하지 않아요.","다시 입력해 주세요.","알겠어요")
+            CustomOneButtonDialog(this,"비밀번호가 일치하지 않아요.","다시 입력해 주세요.","알겠어요")
                 .show(activity?.supportFragmentManager!!, "CustomDialog")
 
     }

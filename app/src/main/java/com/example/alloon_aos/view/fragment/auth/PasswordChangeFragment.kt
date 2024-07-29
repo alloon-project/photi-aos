@@ -12,9 +12,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentPasswordChangeBinding
-import com.example.alloon_aos.view.CustomDialog
-import com.example.alloon_aos.view.CustomOneButtonDialogInterface
-import com.example.alloon_aos.view.CustomToast
+import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialog
+import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialogInterface
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 import java.util.regex.Pattern
@@ -101,7 +101,7 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
             if(it.isNotEmpty()) {
                 when(it){
                     "PASSWORD_CHANGED" -> {
-                        CustomDialog(this,"비밀번호가 변경되었어요","새 비밀번호로 로그인 해주세요","확인")
+                        CustomOneButtonDialog(this,"비밀번호가 변경되었어요","새 비밀번호로 로그인 해주세요","확인")
                             .show(activity?.supportFragmentManager!!, "CustomDialog")
                     }
                     "PASSWORD_MATCH_INVALID" -> {

@@ -1,8 +1,5 @@
-package com.example.alloon_aos.view
+package com.example.alloon_aos.view.ui.component.toast
 
-import android.content.Context
-import android.content.res.Resources
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
