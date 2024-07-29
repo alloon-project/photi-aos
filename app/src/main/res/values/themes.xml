@@ -17,49 +17,30 @@
         <item name ="android:fontFamily">@font/suit_bold</item>
     </style>
     <style name="Theme.xlarge_round" parent="Theme.round_btn">
-        <item name="android:height">56dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:bottomLeftRadius">16dp</item>
-        <item name="android:bottomRightRadius">16dp</item>
-        <item name="android:topLeftRadius">16dp</item>
-        <item name="android:topRightRadius">16dp</item>
-    </style>
-    <style name="Theme.large_round" parent="Theme.round_btn" >
         <item name="android:width">264dp</item>
         <item name="android:height">56dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:bottomLeftRadius">16dp</item>
-        <item name="android:bottomRightRadius">16dp</item>
-        <item name="android:topLeftRadius">16dp</item>
-        <item name="android:topRightRadius">16dp</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+    <style name="Theme.large_round" parent="Theme.round_btn" >
+        <item name="android:width">219dp</item>
+        <item name="android:height">56dp</item>
+        <item name="android:textSize">16dp</item>
     </style>
     <style name="Theme.medium_round" parent="Theme.round_btn" >
-        <item name="android:width">141dp</item>
+        <item name="android:width">110dp</item>
         <item name="android:height">52dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:bottomLeftRadius">14dp</item>
-        <item name="android:bottomRightRadius">14dp</item>
-        <item name="android:topLeftRadius">14dp</item>
-        <item name="android:topRightRadius">14dp</item>
+        <item name="android:textSize">16dp</item>
     </style>
     <style name="Theme.small_round" parent="Theme.round_btn" >
-        <item name="android:width">120dp</item>
+        <item name="android:width">98dp</item>
         <item name="android:height">46dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:bottomLeftRadius">12dp</item>
-        <item name="android:bottomRightRadius">12dp</item>
-        <item name="android:topLeftRadius">12dp</item>
-        <item name="android:topRightRadius">12dp</item>
+        <item name="android:textSize">14dp</item>
     </style>
     <style name="Theme.xsmall_round" parent="Theme.round_btn" >
-
-        <item name="android:height">40dp</item>
+        <item name="android:width">51dp</item>
+        <item name="android:height">34dp</item>
         <item name="android:padding">8dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:bottomLeftRadius">10dp</item>
-        <item name="android:bottomRightRadius">10dp</item>
-        <item name="android:topLeftRadius">10dp</item>
-        <item name="android:topRightRadius">10dp</item>
+        <item name="android:textSize">14dp</item>
     </style>
 
     <!-- icon+text button -->
