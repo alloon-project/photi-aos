@@ -10,11 +10,11 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import com.example.alloon_aos.databinding.DialogOneBtnBinding
 
-interface CustomDialogInterface {
+interface CustomOneButtonDialogInterface {
     fun onClickYesButton()
 }
 
-class CustomDialog(val customDialogInterface: CustomDialogInterface, val title: String, val message: String, val buttonText: String) : DialogFragment() {
+class CustomDialog(val customDialogInterface: CustomOneButtonDialogInterface, val title: String, val message: String, val buttonText: String) : DialogFragment() {
     private var _binding: DialogOneBtnBinding? = null
     private val binding get() = _binding!!
 
@@ -26,12 +26,9 @@ class CustomDialog(val customDialogInterface: CustomDialogInterface, val title: 
         binding.messageTextView.text = message
         binding.dialogBtn.text = buttonText
 
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.setCanceledOnTouchOutside(false)
-
-        // 레이아웃 배경을 투명하게 해줌
-        //dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         binding.dialogBtn.setOnClickListener {
            customDialogInterface.onClickYesButton()

@@ -1,14 +1,11 @@
 package com.example.alloon_aos.view.fragment.auth
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -16,14 +13,14 @@ import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentPasswordChangeBinding
 import com.example.alloon_aos.view.CustomDialog
-import com.example.alloon_aos.view.CustomDialogInterface
+import com.example.alloon_aos.view.CustomOneButtonDialogInterface
 import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 import java.util.regex.Pattern
 
 
-class PasswordChangeFragment : Fragment(), CustomDialogInterface {
+class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentPasswordChangeBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
 

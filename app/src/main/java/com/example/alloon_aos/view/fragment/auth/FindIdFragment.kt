@@ -1,30 +1,25 @@
 package com.example.alloon_aos.view.fragment.auth
 
-import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFindIdBinding
 import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.CustomDialog
-import com.example.alloon_aos.view.CustomDialogInterface
+import com.example.alloon_aos.view.CustomOneButtonDialogInterface
 import com.example.alloon_aos.view.KeyboardListener
 import com.example.alloon_aos.view.OnKeyboardVisibilityListener
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
-class FindIdFragment : Fragment(), CustomDialogInterface {
+class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentFindIdBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
 

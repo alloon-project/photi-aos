@@ -1,6 +1,5 @@
 package com.example.alloon_aos.view.fragment.setting
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,11 +12,11 @@ import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentUnSubscribeBinding
 import com.example.alloon_aos.view.CustomDialog
-import com.example.alloon_aos.view.CustomDialogInterface
+import com.example.alloon_aos.view.CustomOneButtonDialogInterface
 import com.example.alloon_aos.view.CustomToast
 import com.example.alloon_aos.view.activity.SettingActivity
 
-class UnSubscribeFragment : Fragment(),CustomDialogInterface {
+class UnSubscribeFragment : Fragment(),CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentUnSubscribeBinding
     // private val authViewModel by activityViewModels<AuthViewModel>()
     private lateinit var password: String

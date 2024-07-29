@@ -45,20 +45,34 @@
             android:textAlignment="center"
             android:textColor="@color/gray600"
             android:textSize="14dp" />
-
-        <Button
-            android:id="@+id/dialog_btn"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/btn_round_primary"
-            android:theme="@style/Theme.large_round"
-            android:fontFamily="@font/suit_bold"
-            android:letterSpacing="-0.03"
-            android:text="버튼"
-            android:textSize="16dp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp"
+            android:layout_marginLeft="16dp">
+            <Button
+                android:id="@+id/dialog_btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_round_quaternary"
+                android:theme="@style/Theme.small_round"
+                android:fontFamily="@font/suit_bold"
+                android:letterSpacing="-0.03"
+                android:text="버튼"
+                android:textColor="@color/gray600"/>
+            <Button
+                android:id="@+id/dialog_btn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/btn_round_primary"
+                android:theme="@style/Theme.small_round"
+                android:fontFamily="@font/suit_bold"
+                android:letterSpacing="-0.03"
+                android:text="버튼" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
