@@ -14,18 +14,21 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupPwBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheet
+import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheetInterface
 import com.example.alloon_aos.viewmodel.AuthViewModel
 import java.util.regex.Pattern
 
-class SignupPwFragment : Fragment() {
+class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     private lateinit var binding : FragmentSignupPwBinding
-    private val authViewModel by viewModels<AuthViewModel>()
+    private val authViewModel by activityViewModels<AuthViewModel>()
 
     private val num_pattern = Pattern.compile("[0-9]")
     private val eng_pattern = Pattern.compile("[a-zA-Z]")
@@ -151,6 +154,11 @@ class SignupPwFragment : Fragment() {
                     "IO_Exception" ->{
                         CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
+                    "USER_REGISTERED" -> {
+                        ListBottomSheet(this,"포티 서비스 이용을 위한\n" +
+                                "필수 약관에 동의해주세요","개인정보 수집 및 이용 동의","서비스 이용약관 동의","동의 후 계속")
+                            .show(activity?.supportFragmentManager!!, "CustomDialog")
+                    }
                 }
             }
         }
@@ -204,5 +212,17 @@ class SignupPwFragment : Fragment() {
             else
                 checkLayout.visibility = View.GONE
         }
+    }
+
+    override fun onClickImgButton1() {
+        CustomToast.createToast(getActivity(),"첫번째 약관 클릭")?.show()
+    }
+
+    override fun onClickImgButton2() {
+        CustomToast.createToast(getActivity(),"두번째 약관 클릭")?.show()
+    }
+
+    override fun onClickButton() {
+        CustomToast.createToast(getActivity(),"홈으로 이동~")?.show()
     }
 }

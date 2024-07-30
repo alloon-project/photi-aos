@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
@@ -22,7 +23,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class SignupIdFragment : Fragment() {
     private lateinit var binding : FragmentSignupIdBinding
-    private val authViewModel by viewModels<AuthViewModel>()
+    private val authViewModel by activityViewModels<AuthViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,7 +84,7 @@ class SignupIdFragment : Fragment() {
                     "IO_Exception" ->{
                         CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
-
+                    //아래 두개 해주세요
                     "USERNAME_LENGTH_INVALID" ->{
                         //"아이디는 5~20자만 가능합니다."
                     }
@@ -91,6 +92,7 @@ class SignupIdFragment : Fragment() {
                         //"아이디는 소문자 영어, 숫자, 특수문자(_)의 조합으로 입력해 주세요."
                     }
                     "USERNAME_AVAILABLE" -> {
+                        //사용할 수 있는 아이디입니다메시지띄우는부분
                         binding.nextBtn.isEnabled = true
                     }
                 }

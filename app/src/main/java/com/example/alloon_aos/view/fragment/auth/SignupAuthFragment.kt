@@ -87,7 +87,7 @@ class SignupAuthFragment : Fragment() {
                     }
 
                     "EMAIL_VERIFICATION_CODE_INVALID" ->{
-                        //인증코드 틀림 ㅅㄱ
+                        //인증코드 틀림 , 이 부분 해주세욤
                     }
                     "EMAIL_VERIFICATION_CODE_VERIFIED" -> {
                         view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)

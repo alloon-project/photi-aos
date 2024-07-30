@@ -120,7 +120,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signUp(){
-        repository.signUp(UserData(email,email_code,id,password)
+        repository.signUp(UserData(email,email_code, id,password,checkPassword)
             ,object : MainRepositoryCallback<AuthDTO> {
             override fun onSuccess(data: AuthDTO) {
                 val result = data.code //ex."USERNAME_SENT"
