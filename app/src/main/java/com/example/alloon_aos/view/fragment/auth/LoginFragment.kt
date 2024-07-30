@@ -119,7 +119,8 @@ class LoginFragment : Fragment() {
                         CustomToast.createToast(getActivity(), "아이디와 비밀번호 모두 입력해주세요")?.show()
                     }
                     "USER_LOGIN" -> {
-                        Log.d("TAG","홈 화면으로 이동~")
+                        val token = MyApplication.mySharedPreferences.getString("Authorization","no")
+                        Log.d("TAG","token : $token")
                     }
                     "LOGIN_UNAUTHENTICATED" -> {
                         binding.idEdittext.setBackgroundResource(R.drawable.input_line_error)

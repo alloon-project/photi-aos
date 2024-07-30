@@ -40,7 +40,7 @@ class SignupAuthFragment : Fragment() {
         mActivity.setAppBar("")
 
         authViewModel.resetCodeValue()
-        //setObserve()
+        setObserve()
         setListener()
 
         ObjectAnimator.ofInt(binding.authProgress, "progress", 20,40)
@@ -81,12 +81,20 @@ class SignupAuthFragment : Fragment() {
                     "IO_Exception" ->{
                         CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
+
+                    "EMAIL_VERIFICATION_CODE_SENT" -> {
+                        CustomToast.createToast(getActivity(),"인증메일이 재전송되었어요")?.show()
+                    }
+
+                    "EMAIL_VERIFICATION_CODE_INVALID" ->{
+                        //인증코드 틀림 ㅅㄱ
+                    }
+                    "EMAIL_VERIFICATION_CODE_VERIFIED" -> {
+                        view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
+                    }
                 }
             }
         }
     }
 
-    fun moveNext() {
-        view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
-    }
 }

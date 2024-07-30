@@ -87,9 +87,10 @@
 
             <Button
                 android:id="@+id/next_btn"
+                android:onClick="@{() ->viewModel.sendEmailCode()}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorPrimary"
+                android:background="@drawable/btn_round_primary"
                 android:text="다음"
                 android:theme="@style/Theme.xlarge_round"
                 android:layout_marginBottom="20dp"
@@ -97,6 +98,7 @@
                 android:layout_marginLeft="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                android:enabled="false"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

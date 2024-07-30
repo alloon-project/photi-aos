@@ -37,7 +37,7 @@ class SignupIdFragment : Fragment() {
         mActivity.setAppBar("")
 
         authViewModel.resetCodeValue()
-        //setObserve()
+        setObserve()
         setListener()
 
         ObjectAnimator.ofInt(binding.idProgress, "progress", 40,60)
@@ -82,6 +82,16 @@ class SignupIdFragment : Fragment() {
                 when(it) {
                     "IO_Exception" ->{
                         CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                    }
+
+                    "USERNAME_LENGTH_INVALID" ->{
+                        //"아이디는 5~20자만 가능합니다."
+                    }
+                    "USERNAME_FORMAT_INVALID"->{
+                        //"아이디는 소문자 영어, 숫자, 특수문자(_)의 조합으로 입력해 주세요."
+                    }
+                    "USERNAME_AVAILABLE" -> {
+                        binding.nextBtn.isEnabled = true
                     }
                 }
             }

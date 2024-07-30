@@ -72,14 +72,15 @@
 
                 <Button
                     android:id="@+id/resend_btn"
+                    android:onClick="@{() ->viewModel.sendEmailCode()}"
+                    style="@style/Theme.text_xsmall"
                     android:layout_width="35dp"
                     android:layout_height="20dp"
-                    android:textColor="@color/blue400"
-                    style="@style/Theme.text_xsmall"
+                    android:layout_marginLeft="168dp"
                     android:background="#00ff0000"
-                    android:text="@string/resend"
                     android:fontFamily="@font/suit_medium"
-                    android:layout_marginLeft="160dp"/>
+                    android:text="@string/resend"
+                    android:textColor="@color/blue400" />
             </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -126,9 +127,10 @@
 
         <Button
             android:id="@+id/next_btn"
+            android:onClick="@{() ->viewModel.verifyEmailCode()}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimary"
+            android:background="@drawable/btn_round_primary"
             android:text="다음"
             android:theme="@style/Theme.xlarge_round"
             android:layout_marginBottom="20dp"
@@ -136,6 +138,7 @@
             android:layout_marginLeft="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:enabled="true"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

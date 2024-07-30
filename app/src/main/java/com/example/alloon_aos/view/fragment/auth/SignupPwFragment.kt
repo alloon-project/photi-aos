@@ -50,7 +50,7 @@ class SignupPwFragment : Fragment() {
         gray = resources.getColor(R.color.gray400)
 
         authViewModel.resetCodeValue()
-        //setObserve()
+        setObserve()
         setListener()
 
 

@@ -88,11 +88,12 @@
 
                 <Button
                     android:id="@+id/check_btn"
+                    android:onClick="@{() ->viewModel.verifyId()}"
                     android:layout_width="70dp"
                     android:layout_height="40dp"
                     android:layout_gravity="end|center"
                     android:layout_marginRight="6dp"
-                    android:backgroundTint="?attr/colorPrimary"
+                    android:background="@drawable/btn_round_primary"
                     android:enabled="false"
                     android:text="중복검사"
                     android:theme="@style/Theme.xsmall_round" />
@@ -118,7 +119,7 @@
             android:id="@+id/next_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimary"
+            android:background="@drawable/btn_round_primary"
             android:text="다음"
             android:theme="@style/Theme.xlarge_round"
             android:layout_marginBottom="20dp"
@@ -126,6 +127,7 @@
             android:layout_marginLeft="24dp"
             tools:layout_constraintBottom_toBottomOf="parent"
             tools:layout_constraintEnd_toEndOf="parent"
-            tools:layout_constraintStart_toStartOf="parent" />
+            tools:layout_constraintStart_toStartOf="parent"
+            android:enabled="false"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

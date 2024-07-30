@@ -39,10 +39,9 @@ class SignupEmailFragment : Fragment() {
 
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
-        println("h")
 
         authViewModel.resetAllValue()
-        //setObserve()
+        setObserve()
         setListener()
 
         ObjectAnimator.ofInt(binding.emailProgress, "progress", 0,20)

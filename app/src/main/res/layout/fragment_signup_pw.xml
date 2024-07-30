@@ -216,9 +216,10 @@
 
             <Button
                 android:id="@+id/next_btn"
+                android:onClick="@{() ->viewModel.signUp()}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorPrimary"
+                android:background="@drawable/btn_round_primary"
                 android:theme="@style/Theme.xlarge_round"
                 android:text="다음"
                 android:layout_marginBottom="20dp"
