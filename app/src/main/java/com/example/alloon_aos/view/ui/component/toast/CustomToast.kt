@@ -8,13 +8,18 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ToastCustomBinding
 
 object CustomToast {
-    fun createToast(context: FragmentActivity?, message: String = "~~"): Toast? {
+    fun createToast(context: FragmentActivity?, message: String = "~~",icon : String = "bulb"): Toast? {
         val inflater = LayoutInflater.from(context)
         val binding: ToastCustomBinding =
             DataBindingUtil.inflate(inflater, R.layout.toast_custom ,null, false)
 
         binding.message.text = message
 
+        when(icon){
+            "check" -> {
+                binding.icon.setImageResource(R.drawable.ic_check_grey)
+            }
+        }
         return Toast(context).apply {
             //setGravity(Gravity.TOP or Gravity.LEFT, 100, 0)
             duration = Toast.LENGTH_SHORT
