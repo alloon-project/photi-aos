@@ -27,7 +27,7 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
     private val num_pattern = Pattern.compile("[0-9]")
     private val eng_pattern = Pattern.compile("[a-zA-Z]")
     private val spe_regex = "[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|@\\-\\_\\.\\;\\·ㆍᆞᆢ•‥a·﹕]*".toRegex()
-    private var green  = 0
+    private var blue  = 0
     private var grey = 0
 
     override fun onCreateView(
@@ -42,7 +42,7 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("비밀번호 재설정")
 
-        green  = resources.getColor(R.color.green200)
+        blue  = resources.getColor(R.color.blue400)
         grey = resources.getColor(R.color.gray400)
         authViewModel.resetCodeValue()
         setListener()
@@ -84,8 +84,8 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(s.toString().equals(binding.newPassword1EditText.text.toString()) ) {
-                    binding.checkPw.setTextColor(green)
-                    binding.checkPw.getCompoundDrawables()[0].setTint(green)
+                    binding.checkPw.setTextColor(blue)
+                    binding.checkPw.getCompoundDrawables()[0].setTint(blue)
                     binding.nextButton.isEnabled = true
                 } else {
                     binding.checkPw.setTextColor(grey)
@@ -135,32 +135,32 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
             val containsNum = num_pattern.matcher(password).find()
 
             if(isProperLength)  {
-                checkLenghTextView.setTextColor(green)
-                checkLenghTextView.getCompoundDrawables()[0].setTint(green)
+                checkLenghTextView.setTextColor(blue)
+                checkLenghTextView.getCompoundDrawables()[0].setTint(blue)
             } else {
                 checkLenghTextView.setTextColor(grey)
                 checkLenghTextView.getCompoundDrawables()[0].setTint(grey)
             }
 
             if(containsEng) {
-                checkEngTextView.setTextColor(green)
-                checkEngTextView.getCompoundDrawables()[0].setTint(green)
+                checkEngTextView.setTextColor(blue)
+                checkEngTextView.getCompoundDrawables()[0].setTint(blue)
             } else {
                 checkEngTextView.setTextColor(grey)
                 checkEngTextView.getCompoundDrawables()[0].setTint(grey)
             }
 
             if(!notContainsSpecial) {
-                checkSpecTextView.setTextColor(green)
-                checkSpecTextView.getCompoundDrawables()[0].setTint(green)
+                checkSpecTextView.setTextColor(blue)
+                checkSpecTextView.getCompoundDrawables()[0].setTint(blue)
             } else {
                 checkSpecTextView.setTextColor(grey)
                 checkSpecTextView.getCompoundDrawables()[0].setTint(grey)
             }
 
             if(containsNum) {
-                checkNumTextView.setTextColor(green)
-                checkNumTextView.getCompoundDrawables()[0].setTint(green)
+                checkNumTextView.setTextColor(blue)
+                checkNumTextView.getCompoundDrawables()[0].setTint(blue)
             } else {
                 checkNumTextView.setTextColor(grey)
                 checkNumTextView.getCompoundDrawables()[0].setTint(grey)

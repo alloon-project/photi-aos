@@ -100,6 +100,7 @@ class LoginFragment : Fragment() {
         val ft = view?.findNavController()
         when(fragNum){
             1 -> {
+                authViewModel.resetAllValue()
                 ft?.navigate(R.id.action_loginFragment_to_signupEmailFragment)
             }
             2 -> {

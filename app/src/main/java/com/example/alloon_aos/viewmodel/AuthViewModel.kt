@@ -38,6 +38,19 @@ class AuthViewModel : ViewModel() {
     fun resetCodeValue() {
         code.value = ""
     }
+
+    fun resetAuthCodeValue() {
+        email_code = ""
+    }
+
+    fun resetIdValue() {
+        id = ""
+    }
+
+    fun resetPwValue() {
+        password = ""
+        newPassword = ""
+    }
 /*
 *
 *

@@ -40,7 +40,7 @@ class SignupEmailFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
-        authViewModel.resetAllValue()
+        authViewModel.resetCodeValue()
         setObserve()
         setListener()
 

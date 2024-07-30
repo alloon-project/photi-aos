@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupPwBinding
@@ -34,7 +33,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     private val eng_pattern = Pattern.compile("[a-zA-Z]")
     private val spe_regex = "[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|@\\-\\_\\.\\;\\·ㆍᆞᆢ•‥a·﹕]*".toRegex()
 
-    private var green  = 0
+    private var blue  = 0
     private var gray = 0
 
     override fun onCreateView(
@@ -49,7 +48,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
-        green  = resources.getColor(R.color.green200)
+        blue  = resources.getColor(R.color.blue400)
         gray = resources.getColor(R.color.gray400)
 
         authViewModel.resetCodeValue()
@@ -135,8 +134,8 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(s.toString().equals(binding.pwEdittext.text.toString()) ){
-                    binding.checkPwTextview.setTextColor(green)
-                    binding.checkPwTextview.getCompoundDrawables()[0].setTint(green)
+                    binding.checkPwTextview.setTextColor(blue)
+                    binding.checkPwTextview.getCompoundDrawables()[0].setTint(blue)
                     binding.nextBtn.isEnabled = true
                 } else {
                     binding.checkPwTextview.setTextColor(gray)
@@ -176,32 +175,32 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
             val containsNum = num_pattern.matcher(password).find()
 
             if(isProperLength) {
-                checkLenghTextView.setTextColor(green)
-                checkLenghTextView.getCompoundDrawables()[0].setTint(green)
+                checkLenghTextView.setTextColor(blue)
+                checkLenghTextView.getCompoundDrawables()[0].setTint(blue)
             } else {
                 checkLenghTextView.setTextColor(gray)
                 checkLenghTextView.getCompoundDrawables()[0].setTint(gray)
             }
 
             if(containsEng) {
-                checkEngTextView.setTextColor(green)
-                checkEngTextView.getCompoundDrawables()[0].setTint(green)
+                checkEngTextView.setTextColor(blue)
+                checkEngTextView.getCompoundDrawables()[0].setTint(blue)
             } else {
                 checkEngTextView.setTextColor(gray)
                 checkEngTextView.getCompoundDrawables()[0].setTint(gray)
             }
 
             if(!notContainsSpecial) {
-                checkSpecTextView.setTextColor(green)
-                checkSpecTextView.getCompoundDrawables()[0].setTint(green)
+                checkSpecTextView.setTextColor(blue)
+                checkSpecTextView.getCompoundDrawables()[0].setTint(blue)
             } else {
                 checkSpecTextView.setTextColor(gray)
                 checkSpecTextView.getCompoundDrawables()[0].setTint(gray)
             }
 
             if(containsNum) {
-                checkNumTextView.setTextColor(green)
-                checkNumTextView.getCompoundDrawables()[0].setTint(green)
+                checkNumTextView.setTextColor(blue)
+                checkNumTextView.getCompoundDrawables()[0].setTint(blue)
             } else {
                 checkNumTextView.setTextColor(gray)
                 checkNumTextView.getCompoundDrawables()[0].setTint(gray)

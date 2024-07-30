@@ -40,6 +40,7 @@ class SignupAuthFragment : Fragment() {
         mActivity.setAppBar("")
 
         authViewModel.resetCodeValue()
+        authViewModel.resetAuthCodeValue()
         setObserve()
         setListener()
 
@@ -59,6 +60,7 @@ class SignupAuthFragment : Fragment() {
         }
 
         binding.nextBtn.setOnClickListener {
+            authViewModel.resetIdValue()
             view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
         }
 
@@ -87,8 +89,12 @@ class SignupAuthFragment : Fragment() {
                     }
 
                     "EMAIL_VERIFICATION_CODE_INVALID" ->{
-                        //인증코드 틀림 , 이 부분 해주세욤
+                        binding.authErrorTextview.isVisible = true
+                        binding.authEdittext.background = resources.getDrawable(R.drawable.input_line_error)
+                        binding.nextBtn.isEnabled = false
+                        binding.authErrorTextview.text = "인증코드가 일치하지 않아요"
                     }
+
                     "EMAIL_VERIFICATION_CODE_VERIFIED" -> {
                         view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
                     }
