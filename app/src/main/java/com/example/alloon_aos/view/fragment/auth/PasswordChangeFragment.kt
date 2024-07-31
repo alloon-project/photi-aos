@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.auth
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,6 +24,7 @@ import java.util.regex.Pattern
 class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentPasswordChangeBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
+    private lateinit var mContext : Context
 
     private val num_pattern = Pattern.compile("[0-9]")
     private val eng_pattern = Pattern.compile("[a-zA-Z]")
@@ -42,8 +44,8 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("비밀번호 재설정")
 
-        blue  = resources.getColor(R.color.blue400)
-        grey = resources.getColor(R.color.gray400)
+        blue  = mContext.getColor(R.color.blue400)
+        grey = mContext.getColor(R.color.gray400)
         authViewModel.resetCodeValue()
         setListener()
         setObserve()
@@ -52,15 +54,20 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
     fun setListener(){
         binding.newPassword1EditText.setOnFocusChangeListener { v, hasFocus ->
-            if(hasFocus) binding.newPassword1EditText.background = resources.getDrawable(R.drawable.input_line_focus)
-            else    binding.newPassword1EditText.background = resources.getDrawable(R.drawable.input_line_default)
+            if(hasFocus) binding.newPassword1EditText.background = mContext.getDrawable(R.drawable.input_line_focus)
+            else    binding.newPassword1EditText.background = mContext.getDrawable(R.drawable.input_line_default)
         }
 
         binding.newPassword2EditText.setOnFocusChangeListener { v, hasFocus ->
-            if(hasFocus) binding.newPassword2EditText.background = resources.getDrawable(R.drawable.input_line_focus)
-            else    binding.newPassword2EditText.background = resources.getDrawable(R.drawable.input_line_default)
+            if(hasFocus) binding.newPassword2EditText.background = mContext.getDrawable(R.drawable.input_line_focus)
+            else    binding.newPassword2EditText.background = mContext.getDrawable(R.drawable.input_line_default)
         }
 
         binding.newPassword1EditText.addTextChangedListener(object : TextWatcher {
@@ -178,10 +185,10 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
         val editText = if (n == 1) binding.newPassword1EditText else binding.newPassword2EditText
 
         if (editText.inputType == 0x00000091) {
-            imageButton.background = resources.getDrawable(R.drawable.ic_eye_off)
+            imageButton.background = mContext.getDrawable(R.drawable.ic_eye_off)
             editText.inputType = 0x00000081
         } else if (editText.inputType == 0x00000081) {
-            imageButton.background = resources.getDrawable(R.drawable.ic_eye_on)
+            imageButton.background = mContext.getDrawable(R.drawable.ic_eye_on)
             editText.inputType = 0x00000091
         }
     }

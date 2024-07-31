@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.setting
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +19,7 @@ import com.example.alloon_aos.view.activity.SettingActivity
 
 class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentUnSubscribeBinding
+    private lateinit var mContext: Context
     // private val authViewModel by activityViewModels<AuthViewModel>()
     private lateinit var password: String
 
@@ -36,6 +38,10 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
 
     fun setListener(){
         binding.passwordEditText.addTextChangedListener(object : TextWatcher {
@@ -67,10 +73,10 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
         val editText = binding.passwordEditText
 
         if (editText.inputType == 0x00000091) {
-            imageButton.background = resources.getDrawable(R.drawable.ic_eye_off)
+            imageButton.background = mContext.getDrawable(R.drawable.ic_eye_off)
             editText.inputType = 0x00000081
         } else if (editText.inputType == 0x00000081) {
-            imageButton.background = resources.getDrawable(R.drawable.ic_eye_on)
+            imageButton.background = mContext.getDrawable(R.drawable.ic_eye_on)
             editText.inputType = 0x00000091
         }
     }

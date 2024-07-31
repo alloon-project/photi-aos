@@ -22,6 +22,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class SignupIdFragment : Fragment() {
     private lateinit var binding : FragmentSignupIdBinding
+    private lateinit var mContext : Context
     private val authViewModel by activityViewModels<AuthViewModel>()
 
     private var blue  = 0
@@ -39,8 +40,8 @@ class SignupIdFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
-        blue  = resources.getColor(R.color.blue400)
-        red = resources.getColor(R.color.red400)
+        blue  = mContext.getColor(R.color.blue400)
+        red = mContext.getColor(R.color.red400)
 
         authViewModel.resetCodeValue()
         setObserve()
@@ -51,6 +52,11 @@ class SignupIdFragment : Fragment() {
             .start()
 
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
     }
 
     fun setListener() {
@@ -70,11 +76,11 @@ class SignupIdFragment : Fragment() {
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {
-                    binding.idEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
+                    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
                     binding.idErrorTextview.isVisible = false
                     binding.checkBtn.isEnabled = true
                 }
-                else    binding.idEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+                else    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
             }
         })
 
@@ -94,7 +100,7 @@ class SignupIdFragment : Fragment() {
 
                     "USERNAME_LENGTH_INVALID" ->{
                         binding.idErrorTextview.isVisible = true
-                        binding.idEdittext.background = resources.getDrawable(R.drawable.input_line_error)
+                        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                         binding.nextBtn.isEnabled = false
                         binding.idErrorTextview.setTextColor(red)
                         binding.idErrorTextview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_error, 0, 0, 0)
@@ -103,7 +109,7 @@ class SignupIdFragment : Fragment() {
 
                     "USERNAME_FORMAT_INVALID"->{
                         binding.idErrorTextview.isVisible = true
-                        binding.idEdittext.background = resources.getDrawable(R.drawable.input_line_error)
+                        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                         binding.nextBtn.isEnabled = false
                         binding.idErrorTextview.setTextColor(red)
                         binding.idErrorTextview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_error, 0, 0, 0)
@@ -115,7 +121,7 @@ class SignupIdFragment : Fragment() {
                     "USERNAME_AVAILABLE" -> {
                         //사용할 수 있는 아이디입니다메시지띄우는부분
                         binding.idErrorTextview.isVisible = true
-                        binding.idEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
+                        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
                         binding.idErrorTextview.text = "사용할 수 있는 아이디예요"
                         binding.idErrorTextview.setTextColor(blue)
                         binding.idErrorTextview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_blue, 0, 0, 0)

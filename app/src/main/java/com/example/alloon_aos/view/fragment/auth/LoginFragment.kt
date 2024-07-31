@@ -90,6 +90,7 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
+
     fun moveFrag(fragNum : Int){
         /*
         * 1 : login to signUp

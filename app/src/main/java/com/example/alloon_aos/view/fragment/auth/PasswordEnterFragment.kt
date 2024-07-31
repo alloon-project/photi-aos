@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.auth
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 class PasswordEnterFragment : Fragment() {
     private lateinit var binding : FragmentPasswordEnterBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
+    private lateinit var mContext : Context
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +42,12 @@ class PasswordEnterFragment : Fragment() {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
+
     fun setListener(){
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
@@ -47,9 +55,9 @@ class PasswordEnterFragment : Fragment() {
                 binding.errorTextView.visibility = View.INVISIBLE
                 if (visible) {
                     binding.newPasswordEditText.background =
-                        resources.getDrawable(R.drawable.input_line_focus)
+                        mContext.getDrawable(R.drawable.input_line_focus)
                 } else {
-                    binding.newPasswordEditText.background = resources.getDrawable(R.drawable.input_line_default)
+                    binding.newPasswordEditText.background = mContext.getDrawable(R.drawable.input_line_default)
                     if(binding.newPasswordEditText.text.isNotEmpty()) binding.nextButton.isEnabled = true
                     else binding.nextButton.isEnabled = false
                 }

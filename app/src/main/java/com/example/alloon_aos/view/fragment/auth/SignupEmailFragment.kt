@@ -26,6 +26,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class SignupEmailFragment : Fragment() {
     private lateinit var binding : FragmentSignupEmailBinding
+    private lateinit var mContext: Context
     private val authViewModel by activityViewModels<AuthViewModel>()
 
     override fun onCreateView(
@@ -51,16 +52,21 @@ class SignupEmailFragment : Fragment() {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
     fun setListener() {
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {
-                    binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
+                    binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
                     binding.emailErrorTextview.isVisible = false
                 }
                 else {
-                    binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+                    binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
                     checkEmailValidation()
                 }
             }
@@ -97,7 +103,7 @@ class SignupEmailFragment : Fragment() {
                     }
                     "EXISTING_EMAIL" -> {
                         binding.emailErrorTextview.isVisible = true
-                        binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_error)
+                        binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                         binding.nextBtn.isEnabled = false
                         binding.emailErrorTextview.text = "이미 가입된 이메일이에요"
                     }
@@ -115,11 +121,11 @@ class SignupEmailFragment : Fragment() {
 
         if (pattern.matcher(email).matches()) {
             binding.emailErrorTextview.isVisible = false
-            binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+            binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
             binding.nextBtn.isEnabled = true
         } else {
             binding.emailErrorTextview.isVisible = true
-            binding.emailEdittext.background = resources.getDrawable(R.drawable.input_line_error)
+            binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
             binding.nextBtn.isEnabled = false
             if (email.length > 100)
                 binding.emailErrorTextview.text = "100자 이하의 이메일을 사용해주세요"

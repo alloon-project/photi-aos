@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.setting
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,6 +24,7 @@ import com.example.alloon_aos.view.activity.SettingActivity
 class InquireFragment : Fragment() {
 
     private lateinit var binding : FragmentInquireBinding
+    private lateinit var mContext: Context
    // private val authViewModel by activityViewModels<AuthViewModel>()
     private lateinit var radioTag: String
 
@@ -41,13 +43,17 @@ class InquireFragment : Fragment() {
         return binding.root
     }
 
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+    
     fun setListener(){
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
-                if (visible)    binding.contentsEditText.background = resources.getDrawable(R.drawable.textarea_line_focus)
-                else    binding.contentsEditText.background = resources.getDrawable(R.drawable.textarea_line_default)
+                if (visible)    binding.contentsEditText.background = mContext.getDrawable(R.drawable.textarea_line_focus)
+                else    binding.contentsEditText.background = mContext.getDrawable(R.drawable.textarea_line_default)
             }
         })
 

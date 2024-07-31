@@ -24,6 +24,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class SignupAuthFragment : Fragment() {
     private lateinit var binding : FragmentSignupAuthBinding
+    private lateinit var mContext: Context
     private val authViewModel by activityViewModels<AuthViewModel>()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -51,6 +52,11 @@ class SignupAuthFragment : Fragment() {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
     fun setListener() {
         binding.root.setOnClickListener {
             if (activity != null && requireActivity().currentFocus != null) {
@@ -68,10 +74,10 @@ class SignupAuthFragment : Fragment() {
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {
-                    binding.authEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
+                    binding.authEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
                     binding.authErrorTextview.isVisible = false
                 }
-                else    binding.authEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+                else    binding.authEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
             }
         })
     }
@@ -90,7 +96,7 @@ class SignupAuthFragment : Fragment() {
 
                     "EMAIL_VERIFICATION_CODE_INVALID" ->{
                         binding.authErrorTextview.isVisible = true
-                        binding.authEdittext.background = resources.getDrawable(R.drawable.input_line_error)
+                        binding.authEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                         binding.nextBtn.isEnabled = false
                         binding.authErrorTextview.text = "인증코드가 일치하지 않아요"
                     }

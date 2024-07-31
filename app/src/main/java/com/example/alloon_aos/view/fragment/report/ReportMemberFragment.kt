@@ -24,6 +24,7 @@ import com.example.alloon_aos.view.activity.ReportActivity
 class ReportMemberFragment : Fragment() {
 
     private lateinit var binding : FragmentReportMemberBinding
+    private lateinit var mContext : Context
     private lateinit var radioTag: String
 
     override fun onCreateView(
@@ -39,6 +40,12 @@ class ReportMemberFragment : Fragment() {
         setListener()
         return binding.root
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+    
     fun setListener(){
         binding.root.setOnClickListener {
             if (activity != null && requireActivity().currentFocus != null) {
@@ -50,8 +57,8 @@ class ReportMemberFragment : Fragment() {
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
-                if (visible)    binding.reportEdittext.background = resources.getDrawable(R.drawable.textarea_line_focus)
-                else    binding.reportEdittext.background = resources.getDrawable(R.drawable.textarea_line_default)
+                if (visible)    binding.reportEdittext.background = mContext.getDrawable(R.drawable.textarea_line_focus)
+                else    binding.reportEdittext.background = mContext.getDrawable(R.drawable.textarea_line_default)
             }
         })
 

@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.auth
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Patterns
 import androidx.fragment.app.Fragment
@@ -21,6 +22,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 class PasswordSendFragment : Fragment() {
     private lateinit var binding : FragmentPasswordSendBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
+    private lateinit var mContext : Context
 
     private var email_flag : Boolean = false
 
@@ -44,19 +46,24 @@ class PasswordSendFragment : Fragment() {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
     fun setListener(){
         binding.idEditText.setOnFocusChangeListener { v, hasFocus ->
-            if(hasFocus) binding.idEditText.background = resources.getDrawable(R.drawable.input_line_focus)
-            else    binding.idEditText.background = resources.getDrawable(R.drawable.input_line_default)
+            if(hasFocus) binding.idEditText.background = mContext.getDrawable(R.drawable.input_line_focus)
+            else    binding.idEditText.background = mContext.getDrawable(R.drawable.input_line_default)
         }
 
         binding.emailEditText.setOnFocusChangeListener { v, hasFocus ->
             if(hasFocus) {
-                binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_focus)
+                binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_focus)
                 email_flag = true
             }
             else    {
-                binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
+                binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_default)
                 email_flag = false
             }
         }
@@ -67,7 +74,7 @@ class PasswordSendFragment : Fragment() {
                 if(visible){
                     binding.errorTextView.visibility = View.INVISIBLE
                     binding.emailEditText.background
-                    if(email_flag)  binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_focus)
+                    if(email_flag)  binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_focus)
                 }
                 else if(!visible && binding.emailEditText.text.isNotEmpty())
                     checkEmailValidation()
@@ -109,13 +116,13 @@ class PasswordSendFragment : Fragment() {
 
         if (pattern.matcher(email).matches()) {
             binding.errorTextView.visibility = View.GONE
-            binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
+            binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_default)
             binding.nextButton.isEnabled = true
 
         } else {
-            binding.errorTextView.text = resources.getString(R.string.emailerror1)
+            binding.errorTextView.text = mContext.getString(R.string.emailerror1)
             binding.errorTextView.visibility = View.VISIBLE
-            binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
+            binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_error)
             binding.nextButton.isEnabled = false
         }
     }

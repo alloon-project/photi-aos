@@ -27,6 +27,7 @@ import java.util.regex.Pattern
 
 class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     private lateinit var binding : FragmentSignupPwBinding
+    private lateinit var mContext: Context
     private val authViewModel by activityViewModels<AuthViewModel>()
 
     private val num_pattern = Pattern.compile("[0-9]")
@@ -48,8 +49,8 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
-        blue  = resources.getColor(R.color.blue400)
-        gray = resources.getColor(R.color.gray400)
+        blue  = mContext.getColor(R.color.blue400)
+        gray = mContext.getColor(R.color.gray400)
 
         authViewModel.resetCodeValue()
         setObserve()
@@ -108,13 +109,13 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         }
 
         binding.pwEdittext.setOnFocusChangeListener { v, hasFocus ->
-            if(hasFocus) binding.pwEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
-            else    binding.pwEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+            if(hasFocus) binding.pwEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
+            else    binding.pwEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
         }
 
         binding.checkPwEdittext.setOnFocusChangeListener { v, hasFocus ->
-            if(hasFocus) binding.checkPwEdittext.background = resources.getDrawable(R.drawable.input_line_focus)
-            else    binding.checkPwEdittext.background = resources.getDrawable(R.drawable.input_line_default)
+            if(hasFocus) binding.checkPwEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
+            else    binding.checkPwEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
         }
 
         binding.pwEdittext.addTextChangedListener(object : TextWatcher {

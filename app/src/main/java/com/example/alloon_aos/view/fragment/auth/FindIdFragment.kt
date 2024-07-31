@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.auth
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentFindIdBinding
+    private lateinit var mContext: Context
     private val authViewModel by activityViewModels<AuthViewModel>()
 
     override fun onCreateView(
@@ -41,7 +43,10 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
         return binding.root
     }
 
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
 
     fun setListener() {
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
@@ -50,7 +55,7 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
                 if (visible) {
                     binding.errorTextView.visibility = View.INVISIBLE
                     binding.emailEditText.background =
-                        resources.getDrawable(R.drawable.input_line_focus)
+                        mContext.getDrawable(R.drawable.input_line_focus)
                 } else if(binding.emailEditText.text.isNotEmpty()){
                     checkEmailValidation()
                 }
@@ -68,8 +73,8 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
                     }
                     "USER_NOT_FOUND" ->{
                         binding.errorTextView.visibility = View.VISIBLE
-                        binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
-                        binding.errorTextView.text = resources.getString(R.string.emailerror2)
+                        binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_error)
+                        binding.errorTextView.text = mContext.getString(R.string.emailerror2)
 
                     }
                     "EMAIL_SEND_ERROR" -> {
@@ -90,13 +95,13 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
 
         if (pattern.matcher(email).matches()) {
             binding.errorTextView.visibility = View.INVISIBLE
-            binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_default)
+            binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_default)
             binding.nextButton.isEnabled = true
 
         } else {
-            binding.errorTextView.text = resources.getString(R.string.emailerror1)
+            binding.errorTextView.text = mContext.getString(R.string.emailerror1)
             binding.errorTextView.visibility = View.VISIBLE
-            binding.emailEditText.background = resources.getDrawable(R.drawable.input_line_error)
+            binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_error)
             binding.nextButton.isEnabled = false
 
         }
