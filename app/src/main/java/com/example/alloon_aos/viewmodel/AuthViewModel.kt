@@ -64,7 +64,7 @@ class AuthViewModel : ViewModel() {
                 val result = data.code
                 val mes = data.message
                 code.value = result
-                Log.d("AUTH","sendEmailCode: $mes $result")
+                Log.d(Companion.TAG,"sendEmailCode: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
@@ -75,7 +75,7 @@ class AuthViewModel : ViewModel() {
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
                         code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
-                        Log.d("AUTH","login id : $id pwd: $password response: " +code.value )
+                        Log.d(Companion.TAG,"login id : $id pwd: $password response: " +code.value )
                     }
                 }
             }
@@ -89,7 +89,7 @@ class AuthViewModel : ViewModel() {
                 val result = data.code
                 val mes = data.message
                 code.value = result
-                Log.d("AUTH","verifyEmailCode: $mes $result")
+                Log.d(Companion.TAG,"verifyEmailCode: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
@@ -100,7 +100,7 @@ class AuthViewModel : ViewModel() {
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
                         code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
-                        Log.d("AUTH","login id : $id pwd: $password response: " +code.value )
+                        Log.d(Companion.TAG,"login id : $id pwd: $password response: " +code.value )
                     }
                 }
             }
@@ -114,7 +114,7 @@ class AuthViewModel : ViewModel() {
                 val result = data.code
                 val mes = data.message
                 code.value = result
-                Log.d("AUTH","verifyId: $mes $result")
+                Log.d(Companion.TAG,"verifyId: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
@@ -125,7 +125,7 @@ class AuthViewModel : ViewModel() {
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
                         code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
-                        Log.d("AUTH","login id : $id pwd: $password response: " +code.value )
+                        Log.d(Companion.TAG,"login id : $id pwd: $password response: " +code.value )
                     }
                 }
             }
@@ -139,7 +139,7 @@ class AuthViewModel : ViewModel() {
                 val result = data.code //ex."USERNAME_SENT"
                 val mes = data.message
                 code.value = result
-                Log.d("AUTH","signUp: $id $mes $result")
+                Log.d(Companion.TAG,"signUp: $id $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
@@ -150,7 +150,7 @@ class AuthViewModel : ViewModel() {
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
                         code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
-                        Log.d("AUTH","login id : $id pwd: $password response: " +code.value )
+                        Log.d(Companion.TAG,"login id : $id pwd: $password response: " +code.value )
                     }
                 }
             }
@@ -167,11 +167,11 @@ class AuthViewModel : ViewModel() {
                 val mes = data.message
                 code.value = result
                 //val imgUrl = _data.data.imageUrl
-                Log.d("AUTH","login: $id $result")
+                Log.d(Companion.TAG,"login: $id $result")
             }
 
             override fun onFailure(error: Throwable) {
-                Log.d("AUTH","onFailure : ${error.toString()} " )
+                Log.d(Companion.TAG,"onFailure : ${error.toString()} " )
                 when(error){
                     is IOException -> {
                         code.value = "IO_Exception"
@@ -180,7 +180,7 @@ class AuthViewModel : ViewModel() {
                         val jObjError = JSONObject(error.message.toString())
                         val errorCode = jObjError.getString("code")
                         code.value = jObjError.getString("code") //ex."USER_NOT_FOUND"
-                        Log.d("AUTH","login id : $id pwd: $password response: " +code.value )
+                        Log.d(Companion.TAG,"login id : $id pwd: $password response: " +code.value )
                     }
                 }
             }
@@ -206,7 +206,7 @@ class AuthViewModel : ViewModel() {
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
                         code.value = jObjError.getString("code")
-                        Log.d("AUTH","error: " + code.value)
+                        Log.d(Companion.TAG,"error: " + code.value)
                     }
                 }
             }
@@ -220,7 +220,7 @@ class AuthViewModel : ViewModel() {
                 val result = data.code
                 val mes = data.message
                 code.value = result
-                Log.d("AUTH","findId: ${mes} $result")
+                Log.d(Companion.TAG,"findId: ${mes} $result")
             }
 
             override fun onFailure(error: Throwable) {
@@ -231,7 +231,7 @@ class AuthViewModel : ViewModel() {
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
                         code.value = jObjError.getString("code")
-                        Log.d("AUTH","error: " + code.value)
+                        Log.d(Companion.TAG,"error: " + code.value)
                     }
                 }
             }
@@ -246,7 +246,7 @@ class AuthViewModel : ViewModel() {
                 val result = data.code
                 val mes = data.message
                 code.value = result
-                Log.d("AUTH","modifyPwd: $mes $result")
+                Log.d(Companion.TAG,"modifyPwd: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
@@ -257,11 +257,15 @@ class AuthViewModel : ViewModel() {
                     else -> {
                         val jObjError = JSONObject(error.message.toString())
                         code.value = jObjError.getString("code")
-                        Log.d("AUTH","error: " + code.value)
+                        Log.d(Companion.TAG,"error: " + code.value)
                     }
                 }
             }
         })
+    }
+
+    companion object {
+        private const val TAG = "AUTH"
     }
 
 
