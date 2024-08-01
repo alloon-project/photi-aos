@@ -240,8 +240,7 @@ class AuthViewModel : ViewModel() {
 
     fun modifyPassword(){
         val newPwd = NewPwd(password,newPassword,newPassword)
-        val token =  mySharedPreferences.getString("access_token", "토큰이 없습니다.").toString()
-        repository.modifyPassword(token,newPwd,object :
+        repository.modifyPassword(newPwd,object :
             MainRepositoryCallback<AuthDTO> {
             override fun onSuccess(data: AuthDTO) {
                 val result = data.code

@@ -1,5 +1,7 @@
 package com.example.alloon_aos.data.repository
 
+import android.util.Log
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.data.model.EmailCode
 import com.example.alloon_aos.data.model.AuthDTO
 import com.example.alloon_aos.data.model.UserData
@@ -15,6 +17,7 @@ interface MainRepositoryCallback<T> {
 }
 
 class MyRepository(private val apiService: ApiService) {
+    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     //private val email : Map<String, String> = mapOf("email" to "ejsong428@gmail.com")
 
     fun sendEmailCode(email: Map<String, String>,callback: MainRepositoryCallback<AuthDTO>) {
@@ -77,6 +80,15 @@ class MyRepository(private val apiService: ApiService) {
         apiService.post_signUp(userData).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
+                    val accessToken = response.headers()["authorization"]?.replace("Bearer ", "")
+                    val refreshToken = response.headers()["refresh-Token"]
+                    // 액세스 토큰과 리프레시 토큰 저장
+                    if (accessToken != null) {
+                        tokenManager.saveAccessToken(accessToken)
+                    }
+                    if (refreshToken != null) {
+                        tokenManager.saveRefreshToken(refreshToken)
+                    }
                     callback.onSuccess(response.body()!!)
                 } else {
                     var error = response.errorBody()?.string()!!
@@ -133,6 +145,15 @@ class MyRepository(private val apiService: ApiService) {
         apiService.post_login(user).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
+                    val accessToken = response.headers()["authorization"]?.replace("Bearer ", "")
+                    val refreshToken = response.headers()["refresh-Token"]
+                    // 액세스 토큰과 리프레시 토큰 저장
+                    if (accessToken != null) {
+                        tokenManager.saveAccessToken(accessToken)
+                    }
+                    if (refreshToken != null) {
+                        tokenManager.saveRefreshToken(refreshToken)
+                    }
                     callback.onSuccess(response.body()!!)
                 } else {
                     var error = response.errorBody()?.string()!!
@@ -147,8 +168,8 @@ class MyRepository(private val apiService: ApiService) {
         })
     }
 
-    fun modifyPassword(token : String,newPwd : NewPwd, callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.patch_modifyPwd("Bearer $token",newPwd).enqueue(object : Callback<AuthDTO> {
+    fun modifyPassword(newPwd : NewPwd, callback: MainRepositoryCallback<AuthDTO>) {
+        apiService.patch_modifyPwd(newPwd).enqueue(object : Callback<AuthDTO> {
             override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)

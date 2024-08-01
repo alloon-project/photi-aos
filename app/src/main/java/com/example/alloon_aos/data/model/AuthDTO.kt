@@ -43,3 +43,11 @@ data class EmailCode(
     var verificationCode : String ?= null
 )
 
+data class RefreshTokenRequest(
+    val refreshToken: String
+)
+
+data class RefreshTokenResponse(
+    val accessToken: String
+)
+

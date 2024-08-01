@@ -65,11 +65,6 @@ class SignupAuthFragment : Fragment() {
             }
         }
 
-        binding.nextBtn.setOnClickListener {
-            authViewModel.resetIdValue()
-            view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
-        }
-
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
@@ -102,6 +97,7 @@ class SignupAuthFragment : Fragment() {
                     }
 
                     "EMAIL_VERIFICATION_CODE_VERIFIED" -> {
+                        authViewModel.resetIdValue()
                         view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
                     }
                 }

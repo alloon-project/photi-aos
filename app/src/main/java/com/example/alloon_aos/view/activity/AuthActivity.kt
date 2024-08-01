@@ -26,7 +26,6 @@ class AuthActivity : AppCompatActivity() {
             fallbackOnNavigateUpListener = ::onSupportNavigateUp
         )
 
-
         binding.actionBar.setupWithNavController(navController, appBarConfiguration)
     }
 

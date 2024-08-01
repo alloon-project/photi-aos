@@ -1,5 +1,6 @@
 package com.example.alloon_aos.data.repository
 
+import android.util.Log
 import androidx.datastore.preferences.core.stringPreferencesKey
 import javax.inject.Inject
 
@@ -16,7 +17,8 @@ class TokenManager @Inject constructor(
     }
 
     fun saveAccessToken(token: String){
-        sharedPreferences.setString("access_token", ACCESS_TOKEN_KEY.toString())
+        sharedPreferences.setString("access_token", token)
+        Log.d("test","get access : "+getAccessToken())
     }
 
     fun deleteAccessToken(){
@@ -28,7 +30,8 @@ class TokenManager @Inject constructor(
     }
 
     fun saveRefreshToken(token: String){
-        sharedPreferences.setString("refresh_token", REFRESH_TOKEN_KEY.toString())
+        sharedPreferences.setString("refresh_token", token)
+        Log.d("test","get refresh : "+getRefreshToken())
     }
 
     fun deleteRefreshToken(){

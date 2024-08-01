@@ -3,11 +3,13 @@ package com.example.alloon_aos.view.fragment.auth
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +18,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupPwBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheet
 import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheetInterface
 import com.example.alloon_aos.viewmodel.AuthViewModel
@@ -56,7 +60,6 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         setObserve()
         setListener()
 
-
         ObjectAnimator.ofInt(binding.pwProgress, "progress", 60,80)
             .setDuration(500)
             .start()
@@ -70,10 +73,6 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
                 val inputManager: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
             }
-        }
-
-        binding.nextBtn.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_signupPwFragment_to_loginFragment)
         }
 
         binding.hideBtn.setOnClickListener {
@@ -154,7 +153,11 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
                     "IO_Exception" ->{
                         CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
+
                     "USER_REGISTERED" -> {
+                        ObjectAnimator.ofInt(binding.pwProgress, "progress", 80,100)
+                            .setDuration(500)
+                            .start()
                         ListBottomSheet(this,"포티 서비스 이용을 위한\n" +
                                 "필수 약관에 동의해주세요","개인정보 수집 및 이용 동의","서비스 이용약관 동의","동의 후 계속")
                             .show(activity?.supportFragmentManager!!, "CustomDialog")
@@ -223,6 +226,10 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     }
 
     override fun onClickButton() {
-        CustomToast.createToast(getActivity(),"홈으로 이동~")?.show()
+        val token = MyApplication.mySharedPreferences.getString("Authorization","no")
+        Log.d("TAG","token : $token")
+        val intent = Intent(requireContext(), PhotiActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
     }
 }

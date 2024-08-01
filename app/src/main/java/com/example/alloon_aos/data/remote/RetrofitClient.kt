@@ -1,19 +1,36 @@
 package com.example.alloon_aos.data.remote
 
+import com.example.alloon_aos.MyApplication
+import com.example.alloon_aos.data.repository.TokenAuthenticator
+import com.example.alloon_aos.data.repository.TokenInterceptor
+import com.example.alloon_aos.data.repository.TokenManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 
 
 object RetrofitClient {
-    private const val BASE_URL = "http://172.30.1.81:8080"
+    //private const val BASE_URL = "http://172.30.1.81:8080" //스라
+    //private const val BASE_URL = "http://192.168.35.235:8080" //별1
+    private const val BASE_URL = "http://172.20.10.4:8080" //별2
 
-    private val okHttpClient : OkHttpClient by lazy {
+
+    private val tokenManager: TokenManager by lazy {
+        TokenManager(MyApplication.mySharedPreferences)
+    }
+
+    private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
+            .addInterceptor(TokenInterceptor(tokenManager))
+            .authenticator(TokenAuthenticator(tokenManager))
             .build()
     }
 

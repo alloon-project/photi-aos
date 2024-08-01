@@ -1,6 +1,7 @@
 package com.example.alloon_aos.view.fragment.auth
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -20,6 +21,7 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentLoginBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class LoginFragment : Fragment() {
@@ -38,12 +40,40 @@ class LoginFragment : Fragment() {
         mActivity.setAppBar("로그인")
 
         //token 초기화
-        MyApplication.mySharedPreferences.remove("access_token")
-        MyApplication.mySharedPreferences.remove("refresh_token")
+//        MyApplication.mySharedPreferences.remove("access_token")
+//        MyApplication.mySharedPreferences.remove("refresh_token")
         
         authViewModel.resetAllValue()
         setObserve()
+        setListener()
 
+        return binding.root
+    }
+
+
+    fun moveFrag(fragNum : Int){
+        /*
+        * 1 : login to signUp
+        * 2 : login to findId
+        * 3 : login to findPassword
+        * */
+
+        val ft = view?.findNavController()
+        when(fragNum){
+            1 -> {
+                authViewModel.resetAllValue()
+                ft?.navigate(R.id.action_loginFragment_to_signupEmailFragment)
+            }
+            2 -> {
+                ft?.navigate(R.id.action_loginFragment_to_findIdFragment)
+            }
+            3 ->{
+                ft?.navigate(R.id.action_loginFragment_to_findPasswordFragment)
+            }
+        }
+    }
+
+    fun setListener(){
         binding.idEdittext.onFocusChangeListener =
             OnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
@@ -86,32 +116,8 @@ class LoginFragment : Fragment() {
                 inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
             }
         }
-
-        return binding.root
     }
 
-
-    fun moveFrag(fragNum : Int){
-        /*
-        * 1 : login to signUp
-        * 2 : login to findId
-        * 3 : login to findPassword
-        * */
-
-        val ft = view?.findNavController()
-        when(fragNum){
-            1 -> {
-                authViewModel.resetAllValue()
-                ft?.navigate(R.id.action_loginFragment_to_signupEmailFragment)
-            }
-            2 -> {
-                ft?.navigate(R.id.action_loginFragment_to_findIdFragment)
-            }
-            3 ->{
-                ft?.navigate(R.id.action_loginFragment_to_findPasswordFragment)
-            }
-        }
-    }
 
     fun setObserve(){
         authViewModel.code.observe(viewLifecycleOwner){
@@ -123,6 +129,9 @@ class LoginFragment : Fragment() {
                     "USER_LOGIN" -> {
                         val token = MyApplication.mySharedPreferences.getString("Authorization","no")
                         Log.d("TAG","token : $token")
+                        val intent = Intent(requireContext(), PhotiActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
                     }
                     "LOGIN_UNAUTHENTICATED" -> {
                         binding.idEdittext.setBackgroundResource(R.drawable.input_line_error)

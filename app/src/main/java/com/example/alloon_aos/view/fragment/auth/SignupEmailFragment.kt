@@ -88,10 +88,6 @@ class SignupEmailFragment : Fragment() {
                 inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
             }
         }
-
-        binding.nextBtn.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_signupEmailFragment_to_signupAuthFragment)
-        }
     }
 
     fun setObserve() {
