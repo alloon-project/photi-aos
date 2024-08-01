@@ -1,99 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_layout"
     android:theme="@style/Theme.Photi"
     android:layout_width="match_parent"
     android:layout_height="160dp"
-    android:background="@drawable/card_shape"
     android:layout_marginBottom="12dp"
     android:orientation="vertical">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/card_shape">
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <TextView
                 android:id="@+id/title_textView"
                 android:layout_width="194dp"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:letterSpacing="-0.03"
-                android:fontFamily="@font/suit_bold"
-                android:text="타이틀"
                 android:layout_gravity="left"
-                android:breakStrategy="simple"/>
+                android:breakStrategy="simple"
+                android:fontFamily="@font/suit_bold"
+                android:letterSpacing="-0.03"
+                android:text="타이틀"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
+
             <TextView
                 android:id="@+id/date_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textColor="#99FFFFFF"
-                android:letterSpacing="-0.03"
+                android:layout_gravity="right"
                 android:fontFamily="@font/suit_medium"
+                android:letterSpacing="-0.03"
                 android:text="종료일"
-                android:layout_gravity="right"/>
+                android:textColor="#99FFFFFF"
+                android:textSize="12sp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
             <Button
                 android:id="@+id/chip1_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
+                android:background="@drawable/chip_white"
+                android:fontFamily="@font/suit_medium"
                 android:minWidth="41dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:background="@drawable/chip_white"
-                android:textSize="12sp"
-                android:fontFamily="@font/suit_medium"
-                android:text="전체"
-                android:textColor="@color/white"
                 android:stateListAnimator="@null"
-                android:textAllCaps = "false"
-                android:visibility="invisible"
-                />
+                android:text="전체"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="invisible" />
+
             <Button
                 android:id="@+id/chip2_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/chip_white"
+                android:fontFamily="@font/suit_medium"
                 android:minWidth="41dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:background="@drawable/chip_white"
-                android:textSize="12sp"
-                android:fontFamily="@font/suit_medium"
-                android:text="전체"
-                android:textColor="@color/white"
                 android:stateListAnimator="@null"
-                android:textAllCaps = "false"
-                android:layout_marginLeft="8dp"
-                android:visibility="invisible"
-                />
+                android:text="전체"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="invisible" />
+
             <Button
                 android:id="@+id/chip3_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="27dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/chip_white"
+                android:fontFamily="@font/suit_medium"
                 android:minWidth="41dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:background="@drawable/chip_white"
-                android:textSize="12sp"
-                android:fontFamily="@font/suit_medium"
-                android:text="전체"
-                android:textColor="@color/white"
                 android:stateListAnimator="@null"
-                android:textAllCaps = "false"
-                android:layout_marginLeft="8dp"
-                android:visibility="invisible"
-                />
+                android:text="전체"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="invisible" />
         </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </LinearLayout>

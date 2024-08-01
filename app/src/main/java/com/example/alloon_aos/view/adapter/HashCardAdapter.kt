@@ -33,7 +33,7 @@ class HashCardAdapter(private val photiViewModel: PhotiViewModel) :
 
                 val multiOption = MultiTransformation(
                     CenterCrop(),
-                    RoundedCorners(32),
+                    RoundedCorners(16),
                 )
 
                 Glide
