@@ -63,7 +63,7 @@ class ChallengeLatestFragment : Fragment() {
 
                 val multiOption = MultiTransformation(
                     CenterCrop(),
-                    RoundedCorners(16),
+                    RoundedCorners(32),
                 )
 
                 Glide

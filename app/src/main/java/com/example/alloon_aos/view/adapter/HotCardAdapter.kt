@@ -39,7 +39,7 @@ class HotCardAdapter(private val photiViewModel: PhotiViewModel) :
 
                 val multiOption = MultiTransformation(
                 CenterCrop(),
-                RoundedCorners(16),
+                RoundedCorners(32),
                 )
 
                 Glide
