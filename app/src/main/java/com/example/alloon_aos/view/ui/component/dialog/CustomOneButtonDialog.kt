@@ -40,9 +40,23 @@ class CustomOneButtonDialog(val customDialogInterface: CustomOneButtonDialogInte
     override fun onStart() {
         super.onStart()
         dialog?.window?.let { window ->
+            val displayMetrics = resources.displayMetrics
+            val density = displayMetrics.density
+
+            // 전체 화면의 너비
+            val fullWidth = displayMetrics.widthPixels
+
+            // 양옆 32dp를 제외한 너비
+            val marginHorizontal = (32 * density).toInt()
+            val width = fullWidth - 2 * marginHorizontal
+
+            // 다이얼로그의 레이아웃 속성 설정
             val params = window.attributes
-            params.dimAmount = 0.4f // 배경의 투명도를 설정 (0.0f부터 1.0f까지)
+            params.dimAmount = 0.4f // 배경의 투명도 설정 (0.0f부터 1.0f까지)
             window.attributes = params
+
+            // 다이얼로그의 크기 설정
+            window.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
     }
 
