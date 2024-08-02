@@ -7,24 +7,44 @@
             name="fragment"
             type="com.example.alloon_aos.view.fragment.userprofile.ProfileFragment" />
     </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:theme="@style/Theme.Photi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout4"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="345dp"
             android:background="@color/blue500"
-            app:layout_constraintBottom_toTopOf="@+id/calendarview"
+            app:layout_constraintBottom_toTopOf="@+id/myId"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/myId"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            app:layout_constraintBottom_toTopOf="@+id/topBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/myId"
+            app:layout_constraintBottom_toTopOf="@id/calendarview">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/calendarview"
             android:layout_width="match_parent"
@@ -32,6 +52,7 @@
             android:layout_marginBottom="40dp"
             android:layout_marginHorizontal="22dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:theme="@style/CalenderViewCustom"
@@ -42,6 +63,7 @@
             app:mcv_rightArrow="@drawable/ic_right"
             app:mcv_selectionColor="@color/gray100"
             app:mcv_selectionMode="single"
-            app:mcv_showOtherDates="other_months" />
+            app:mcv_showOtherDates="other_months"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

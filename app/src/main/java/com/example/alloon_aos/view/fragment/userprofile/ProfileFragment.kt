@@ -26,7 +26,7 @@ class ProfileFragment : Fragment() {
         val mActivity = activity as PhotiActivity
 
         materialCalendarView = binding.calendarview
-        //materialCalendarView.setTopbarVisible(false)
+        materialCalendarView.setTopbarVisible(false)
 
         materialCalendarView.state().edit()
             .setMinimumDate(CalendarDay.from(2024, 7, 3))
