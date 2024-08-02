@@ -9,7 +9,7 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityPhotiBinding
 import com.example.alloon_aos.view.fragment.photi.ChallengeFragment
 import com.example.alloon_aos.view.fragment.photi.HomeFragment
-import com.example.alloon_aos.view.fragment.photi.ProfileFragment
+import com.example.alloon_aos.view.fragment.userprofile.ProfileFragment
 
 private const val TAG_CHALLENGE = "challenge_fragment"
 private const val TAG_HOME = "home_fragment"
