@@ -41,6 +41,10 @@ android {
 }
 
 dependencies {
+    //zigzag
+    implementation ("ir.beigirad:ZigzagView:1.2.1")
+
+    //calendar
     implementation ("com.github.prolificinteractive:material-calendarview:2.0.1")
     implementation ("com.jakewharton.threetenabp:threetenabp:1.1.1")
     //glide

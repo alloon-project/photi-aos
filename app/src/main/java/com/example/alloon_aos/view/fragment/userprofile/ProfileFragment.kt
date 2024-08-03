@@ -35,6 +35,7 @@ class ProfileFragment : Fragment() {
 
         val calendar = CalendarDay.from(2024,9,1)
         val calendar1 = CalendarDay.from(2024,9,11)
+        val calendar2 = CalendarDay.from(2024,9,12)
         //해당 날짜 여러개 선택되어 있게 해줌
 //        materialCalendarView.setDateSelected(calendar,true)
 //        materialCalendarView.setDateSelected(calendar1,true)
@@ -46,6 +47,7 @@ class ProfileFragment : Fragment() {
         val calendarList = ArrayList<CalendarDay>()
         calendarList.add(calendar)
         calendarList.add(calendar1)
+        calendarList.add(calendar2)
 
 
         val eventDecorator : EventDecorator = EventDecorator(

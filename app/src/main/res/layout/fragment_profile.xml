@@ -15,24 +15,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout4"
+            android:id="@+id/userInfo_layout"
             android:layout_width="match_parent"
             android:layout_height="345dp"
             android:background="@color/blue500"
-            app:layout_constraintBottom_toTopOf="@+id/myId"
+            app:layout_constraintBottom_toTopOf="@+id/divider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:src="@drawable/divider_zigzag_line"
+            android:layerType="software"
+            android:scaleType = "centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/myFeed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userInfo_layout"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/myId"
+            android:id="@+id/myFeed"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             app:layout_constraintBottom_toTopOf="@+id/topBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+            app:layout_constraintTop_toBottomOf="@+id/divider">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +56,7 @@
             android:layout_height="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/myId"
+            app:layout_constraintTop_toBottomOf="@id/myFeed"
             app:layout_constraintBottom_toTopOf="@id/calendarview">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
