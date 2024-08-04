@@ -1,4 +1,4 @@
-package com.example.alloon_aos.view.fragment.setting
+package com.example.alloon_aos.view.fragment.settings
 
 import android.content.Context
 import android.os.Bundle
@@ -15,7 +15,7 @@ import com.example.alloon_aos.databinding.FragmentUnSubscribeBinding
 import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
-import com.example.alloon_aos.view.activity.SettingActivity
+import com.example.alloon_aos.view.activity.SettingsActivity
 
 class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentUnSubscribeBinding
@@ -31,7 +31,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
         binding.fragment = this
         // binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        val mActivity = activity as SettingActivity
+        val mActivity = activity as SettingsActivity
         mActivity.setAppBar(" ")
 
         setListener()
@@ -82,7 +82,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     }
 
     fun goBack(){
-        view?.findNavController()?.navigate(R.id.action_unSubscribeFragment_to_myInfoFragment)
+        view?.findNavController()?.navigate(R.id.action_unSubscribeFragment_to_mainSettingsFragment)
     }
 
     fun checkPassword(){

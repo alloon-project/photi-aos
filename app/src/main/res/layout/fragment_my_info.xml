@@ -4,7 +4,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.setting.MyInfoFragment" />
+            type="com.example.alloon_aos.view.fragment.settings.MainSettingsFragment" />
     </data>
 
     <LinearLayout

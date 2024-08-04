@@ -9,7 +9,7 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityPhotiBinding
 import com.example.alloon_aos.view.fragment.photi.ChallengeFragment
 import com.example.alloon_aos.view.fragment.photi.HomeFragment
-import com.example.alloon_aos.view.fragment.userprofile.ProfileFragment
+import com.example.alloon_aos.view.fragment.photi.UserProfileFragment
 
 private const val TAG_CHALLENGE = "challenge_fragment"
 private const val TAG_HOME = "home_fragment"
@@ -27,7 +27,7 @@ class PhotiActivity : AppCompatActivity(){
             when(item.itemId) {
                 R.id.homeFragment -> setFragment(TAG_HOME, HomeFragment())
                 R.id.challengeFragment -> setFragment(TAG_CHALLENGE, ChallengeFragment())
-                R.id.profileFragment-> setFragment(TAG_PROFILE, ProfileFragment())
+                R.id.profileFragment-> setFragment(TAG_PROFILE, UserProfileFragment())
             }
             true
         }

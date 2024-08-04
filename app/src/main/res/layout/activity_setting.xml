@@ -6,12 +6,12 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.activity.SettingActivity" />
+            type="com.example.alloon_aos.view.activity.SettingsActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/setting"
-        tools:context=".view.activity.SettingActivity"
+        tools:context=".view.activity.SettingsActivity"
         android:theme="@style/Theme.Photi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

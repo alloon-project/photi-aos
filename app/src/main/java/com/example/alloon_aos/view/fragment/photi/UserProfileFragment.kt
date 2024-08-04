@@ -1,4 +1,5 @@
-package com.example.alloon_aos.view.fragment.userprofile
+package com.example.alloon_aos.view.fragment.photi
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +10,15 @@ import androidx.fragment.app.Fragment
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentProfileBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
+import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.EventDecorator
 import com.example.alloon_aos.view.ui.util.TodayDecorator
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import java.util.TreeSet
 
 
-class ProfileFragment : Fragment() {
+class UserProfileFragment : Fragment() {
     private lateinit var binding : FragmentProfileBinding
     private lateinit var materialCalendarView: MaterialCalendarView
     private lateinit var eventDecorator: EventDecorator
@@ -81,7 +82,7 @@ class ProfileFragment : Fragment() {
     }
 
     fun moveToSettingsActivity(){
-        CustomToast.createToast(activity,"설정페이지로 갑니다.")?.show()
+        startActivity(Intent(activity, SettingsActivity::class.java))
     }
 
     companion object {

@@ -29,7 +29,7 @@
             android:name=".view.activity.ReportActivity"
             android:exported="true" />
         <activity
-            android:name=".view.activity.SettingActivity"
+            android:name=".view.activity.SettingsActivity"
             android:exported="true" />
         <activity
             android:name=".view.activity.AuthActivity"

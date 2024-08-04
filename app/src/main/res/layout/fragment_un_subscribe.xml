@@ -6,7 +6,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.setting.UnSubscribeFragment" />
+            type="com.example.alloon_aos.view.fragment.settings.UnSubscribeFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

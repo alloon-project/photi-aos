@@ -3,44 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_setting"
-    app:startDestination="@id/myInfoFragment">
+    app:startDestination="@id/mainSettingsFragment">
 
     <fragment
-        android:id="@+id/myInfoFragment"
-        android:name="com.example.alloon_aos.view.fragment.setting.MyInfoFragment"
+        android:id="@+id/mainSettingsFragment"
+        android:name="com.example.alloon_aos.view.fragment.settings.MainSettingsFragment"
         android:label=" "
         tools:layout="@layout/fragment_my_info" >
 
         <action
-            android:id="@+id/action_myInfoFragment_to_inquireFragment"
+            android:id="@+id/action_mainSettingsFragment_to_inquireFragment"
             app:destination="@id/inquireFragment"
             app:popUpToInclusive="false" />
         <action
-            android:id="@+id/action_myInfoFragment_to_unSubscribeFragment"
+            android:id="@+id/action_mainSettings_to_unSubscribeFragment"
             app:destination="@id/unSubscribeFragment"
             app:popUpToInclusive="false"/>
     </fragment>
 
     <fragment
         android:id="@+id/inquireFragment"
-        android:name="com.example.alloon_aos.view.fragment.setting.InquireFragment"
+        android:name="com.example.alloon_aos.view.fragment.settings.InquireFragment"
         android:label=" "
         tools:layout="@layout/fragment_inquire" >
         <action
-            android:id="@+id/action_inquireFragment_to_myInfoFragment"
-            app:destination="@id/myInfoFragment"
+            android:id="@+id/action_inquireFragment_to_mainSettingsFragment"
+            app:destination="@id/mainSettingsFragment"
             app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
         android:id="@+id/unSubscribeFragment"
-        android:name="com.example.alloon_aos.view.fragment.setting.UnSubscribeFragment"
+        android:name="com.example.alloon_aos.view.fragment.settings.UnSubscribeFragment"
         android:label=" "
         tools:layout="@layout/fragment_un_subscribe" >
         <action
-            android:id="@+id/action_unSubscribeFragment_to_myInfoFragment"
-            app:destination="@id/myInfoFragment"
-            app:popUpTo="@id/myInfoFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_unSubscribeFragment_to_mainSettingsFragment"
+            app:destination="@id/mainSettingsFragment"
+            />
     </fragment>
 </navigation>

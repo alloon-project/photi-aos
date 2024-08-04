@@ -1,4 +1,4 @@
-package com.example.alloon_aos.view.fragment.setting
+package com.example.alloon_aos.view.fragment.settings
 
 import android.content.Context
 import android.os.Bundle
@@ -18,7 +18,7 @@ import com.example.alloon_aos.databinding.FragmentInquireBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.KeyboardListener
 import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
-import com.example.alloon_aos.view.activity.SettingActivity
+import com.example.alloon_aos.view.activity.SettingsActivity
 
 
 class InquireFragment : Fragment() {
@@ -36,7 +36,7 @@ class InquireFragment : Fragment() {
         binding.fragment = this
        // binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        val mActivity = activity as SettingActivity
+        val mActivity = activity as SettingsActivity
         mActivity.setAppBar(" ")
 
         setListener()
@@ -77,7 +77,7 @@ class InquireFragment : Fragment() {
 
 
     fun Click(){
-        view?.findNavController()?.navigate(R.id.action_inquireFragment_to_myInfoFragment)
+        view?.findNavController()?.navigate(R.id.action_inquireFragment_to_mainSettingsFragment)
         println("$radioTag: " + binding.contentsEditText.text)
         CustomToast.createToast(activity,"접수가 완료됐어요. 꼼꼼히 확인하고,\n" +
                 "회원님의 이메일로 답변을 보내드릴게요.")?.show()

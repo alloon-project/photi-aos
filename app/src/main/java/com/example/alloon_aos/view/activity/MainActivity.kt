@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.settingButton.setOnClickListener{
             finish()
-            startActivity(Intent(this,SettingActivity::class.java))
+            startActivity(Intent(this,SettingsActivity::class.java))
         }
 
         binding.reportButton.setOnClickListener {

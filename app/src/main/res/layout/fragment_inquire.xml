@@ -6,7 +6,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.setting.InquireFragment" />
+            type="com.example.alloon_aos.view.fragment.settings.InquireFragment" />
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout
