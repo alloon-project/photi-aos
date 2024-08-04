@@ -26,7 +26,7 @@ class HomeFragment : Fragment() {
         val mActivity = activity as PhotiActivity
 
 
-        CustomToast.createToast(getActivity(),tokenManager.getAccessToken().toString())?.show()
+        CustomToast.createToast(activity,tokenManager.getAccessToken().toString())?.show()
         return binding.root
     }
 }

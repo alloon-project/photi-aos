@@ -104,7 +104,7 @@ class SignupEmailFragment : Fragment() {
                         binding.emailErrorTextview.text = "이미 가입된 이메일이에요"
                     }
                     "IO_Exception" ->{
-                        CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
                 }
             }

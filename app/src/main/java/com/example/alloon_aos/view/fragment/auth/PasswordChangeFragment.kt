@@ -112,19 +112,19 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
                             .show(activity?.supportFragmentManager!!, "CustomDialog")
                     }
                     "PASSWORD_MATCH_INVALID" -> {
-                        CustomToast.createToast(getActivity(),"비밀번호와 비밀번호 재입력이 동일하지 않습니다.")?.show()
+                        CustomToast.createToast(activity,"비밀번호와 비밀번호 재입력이 동일하지 않습니다.")?.show()
                     }
                     "TOKEN_UNAUTHENTICATED" ->{
-                        CustomToast.createToast(getActivity(),"승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                        CustomToast.createToast(activity,"승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
                     }
                     "LOGIN_UNAUTHENTICATED" -> {
-                        CustomToast.createToast(getActivity(),"아이디 또는 비밀번호가 틀렸습니다.")?.show()
+                        CustomToast.createToast(activity,"아이디 또는 비밀번호가 틀렸습니다.")?.show()
                     }
                     "TOKEN_UNAUTHORIZED"->{
-                        CustomToast.createToast(getActivity(),"권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                        CustomToast.createToast(activity,"권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
                     }
                     "IO_Exception" ->{
-                        CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
                 }
             }

@@ -124,7 +124,7 @@ class LoginFragment : Fragment() {
             if(it.isNotEmpty()) {
                 when(it) {
                     "USERNAME_FIELD_REQUIRED", "PASSWORD_FIELD_REQUIRED" -> {
-                        CustomToast.createToast(getActivity(), "아이디와 비밀번호 모두 입력해주세요")?.show()
+                        CustomToast.createToast(activity, "아이디와 비밀번호 모두 입력해주세요")?.show()
                     }
                     "USER_LOGIN" -> {
                         val token = MyApplication.mySharedPreferences.getString("Authorization","no")
@@ -140,7 +140,7 @@ class LoginFragment : Fragment() {
                         binding.pwErrorTextview.isVisible = true
                     }
                     "IO_Exception" ->{
-                        CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
                 }
             }

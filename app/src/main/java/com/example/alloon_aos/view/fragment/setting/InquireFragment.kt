@@ -79,7 +79,7 @@ class InquireFragment : Fragment() {
     fun Click(){
         view?.findNavController()?.navigate(R.id.action_inquireFragment_to_myInfoFragment)
         println("$radioTag: " + binding.contentsEditText.text)
-        CustomToast.createToast(getActivity(),"접수가 완료됐어요. 꼼꼼히 확인하고,\n" +
+        CustomToast.createToast(activity,"접수가 완료됐어요. 꼼꼼히 확인하고,\n" +
                 "회원님의 이메일로 답변을 보내드릴게요.")?.show()
     }
 

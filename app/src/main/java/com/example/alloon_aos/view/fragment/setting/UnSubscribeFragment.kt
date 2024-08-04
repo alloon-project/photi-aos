@@ -89,7 +89,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
         val str = "123"
         if(password.equals(str)){
             goBack()
-            CustomToast.createToast(getActivity(),"탈퇴가 완료됐어요. 다음에 또 만나요!")?.show()
+            CustomToast.createToast(activity,"탈퇴가 완료됐어요. 다음에 또 만나요!")?.show()
         }
         else
             CustomOneButtonDialog(this,"비밀번호가 일치하지 않아요.","다시 입력해 주세요.","알겠어요")

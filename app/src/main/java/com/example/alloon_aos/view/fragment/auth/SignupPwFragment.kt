@@ -151,7 +151,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
             if(it.isNotEmpty()) {
                 when(it) {
                     "IO_Exception" ->{
-                        CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
 
                     "USER_REGISTERED" -> {
@@ -218,11 +218,11 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     }
 
     override fun onClickImgButton1() {
-        CustomToast.createToast(getActivity(),"첫번째 약관 클릭")?.show()
+        CustomToast.createToast(activity,"첫번째 약관 클릭")?.show()
     }
 
     override fun onClickImgButton2() {
-        CustomToast.createToast(getActivity(),"두번째 약관 클릭")?.show()
+        CustomToast.createToast(activity,"두번째 약관 클릭")?.show()
     }
 
     override fun onClickButton() {

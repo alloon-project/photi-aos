@@ -90,7 +90,7 @@ class SignupIdFragment : Fragment() {
             if(it.isNotEmpty()) {
                 when(it) {
                     "IO_Exception" ->{
-                        CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
 
                     "USERNAME_LENGTH_INVALID" ->{

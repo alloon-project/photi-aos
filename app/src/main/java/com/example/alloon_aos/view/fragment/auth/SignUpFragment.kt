@@ -49,87 +49,87 @@ class SignUpFragment : Fragment() {
                         when(it){
                             //!! IO_Exception 모든 네트워크 통신에 무조건 추가 !!
                             "IO_Exception" ->{
-                                CustomToast.createToast(getActivity(),"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                                CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                             }
                             //!!
 
 
                             "EMAIL_VERIFICATION_CODE_SENT" -> { //이메일 인증코드를 보냈습니다.
-                                Toast.makeText(getActivity(), "EMAIL_VERIFICATION_CODE_SENT", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EMAIL_VERIFICATION_CODE_SENT", Toast.LENGTH_SHORT).show()
                             }
                             "EMAIL_FIELD_REQUIRED" -> {
-                                Toast.makeText(getActivity(), "EMAIL_FIELD_REQUIRED", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EMAIL_FIELD_REQUIRED", Toast.LENGTH_SHORT).show()
                             }
                             "EMAIL_LENGTH_INVALID" -> {
-                                Toast.makeText(getActivity(), "EMAIL_LENGTH_INVALID", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EMAIL_LENGTH_INVALID", Toast.LENGTH_SHORT).show()
                             }
                             "EMAIL_FORMAT_INVALID" -> {
-                                Toast.makeText(getActivity(), "EMAIL_FORMAT_INVALID", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EMAIL_FORMAT_INVALID", Toast.LENGTH_SHORT).show()
                             }
                             "EXISTING_EMAIL" -> {
-                                Toast.makeText(getActivity(), "EXISTING_EMAIL", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EXISTING_EMAIL", Toast.LENGTH_SHORT).show()
                             }
                             "EMAIL_SEND_ERROR" -> {
-                                Toast.makeText(getActivity(), "EMAIL_SEND_ERROR", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EMAIL_SEND_ERROR", Toast.LENGTH_SHORT).show()
                             }
 
 
 
                             "EMAIL_VERIFICATION_CODE_VERIFIED" -> {//이메일 인증코드 검증
-                                Toast.makeText(getActivity(), "EMAIL_VERIFICATION_CODE_VERIFIED", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EMAIL_VERIFICATION_CODE_VERIFIED", Toast.LENGTH_SHORT).show()
                             }
 
                             "VERIFICATION_CODE_FIELD_REQUIRED" -> {
-                                Toast.makeText(getActivity(), "VERIFICATION_CODE_FIELD_REQUIRED", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "VERIFICATION_CODE_FIELD_REQUIRED", Toast.LENGTH_SHORT).show()
                             }
                             "EMAIL_VERIFICATION_CODE_INVALID" -> {
-                                Toast.makeText(getActivity(), "EMAIL_VERIFICATION_CODE_INVALID", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EMAIL_VERIFICATION_CODE_INVALID", Toast.LENGTH_SHORT).show()
                             }
                             "EMAIL_NOT_FOUND" -> {
-                                Toast.makeText(getActivity(), "EMAIL_NOT_FOUND", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EMAIL_NOT_FOUND", Toast.LENGTH_SHORT).show()
                             }
 
 
                             "USERNAME_AVAILABLE" -> {//사용 가능 아이디
                                 println("11")
-                                Toast.makeText(getActivity(), "USERNAME_AVAILABLE", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "USERNAME_AVAILABLE", Toast.LENGTH_SHORT).show()
                             }
                             "USERNAME_FIELD_REQUIRED" -> {
-                                Toast.makeText(getActivity(), "USERNAME_FIELD_REQUIRED", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "USERNAME_FIELD_REQUIRED", Toast.LENGTH_SHORT).show()
                             }
                             "USERNAME_LENGTH_INVALID" -> {
-                                Toast.makeText(getActivity(), "USERNAME_LENGTH_INVALID", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "USERNAME_LENGTH_INVALID", Toast.LENGTH_SHORT).show()
                             }
                             "USERNAME_FORMAT_INVALID" -> {
-                                Toast.makeText(getActivity(), "USERNAME_FORMAT_INVALID", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "USERNAME_FORMAT_INVALID", Toast.LENGTH_SHORT).show()
                             }
                             "UNAVAILABLE_USERNAME" -> {
-                                Toast.makeText(getActivity(), "UNAVAILABLE_USERNAME", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "UNAVAILABLE_USERNAME", Toast.LENGTH_SHORT).show()
                             }
                             "EXISTING_USERNAME" -> {
-                                Toast.makeText(getActivity(), "EXISTING_USERNAME", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EXISTING_USERNAME", Toast.LENGTH_SHORT).show()
                             }
 
                             "USER_REGISTERED" -> {//회원가입 완료
-                                Toast.makeText(getActivity(), "USER_REGISTERED", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "USER_REGISTERED", Toast.LENGTH_SHORT).show()
                             }
                             "PASSWORD_FIELD_REQUIRED" -> {
-                                Toast.makeText(getActivity(), "PASSWORD_FIELD_REQUIRED", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "PASSWORD_FIELD_REQUIRED", Toast.LENGTH_SHORT).show()
                             }
                             "PASSWORD_FORMAT_INVALID" -> {
-                                Toast.makeText(getActivity(), "PASSWORD_FORMAT_INVALID", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "PASSWORD_FORMAT_INVALID", Toast.LENGTH_SHORT).show()
                             }
                             "PASSWORD_RE_ENTER_FIELD_REQUIRED" -> {
-                                Toast.makeText(getActivity(), "PASSWORD_RE_ENTER_FIELD_REQUIRED", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "PASSWORD_RE_ENTER_FIELD_REQUIRED", Toast.LENGTH_SHORT).show()
                             }
                             "EMAIL_VALIDATION_INVALID" -> {
-                                Toast.makeText(getActivity(), "EMAIL_VALIDATION_INVALID", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EMAIL_VALIDATION_INVALID", Toast.LENGTH_SHORT).show()
                             }
                             "PASSWORD_MATCH_INVALID" -> {
-                                Toast.makeText(getActivity(), "PASSWORD_MATCH_INVALID", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "PASSWORD_MATCH_INVALID", Toast.LENGTH_SHORT).show()
                             }
                             "EXISTING_USER" -> {
-                                Toast.makeText(getActivity(), "EXISTING_USER", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(activity, "EXISTING_USER", Toast.LENGTH_SHORT).show()
                             }
 
                         }

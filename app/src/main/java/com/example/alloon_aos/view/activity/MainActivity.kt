@@ -13,8 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.authButton.setOnClickListener {
-            finish()
-            startActivity(Intent(this,AuthActivity::class.java))
+
         }
 
         binding.settingButton.setOnClickListener{
