@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.FragmentProfileBinding
+import com.example.alloon_aos.databinding.FragmentMyPageBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
@@ -18,8 +18,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 
 
-class UserProfileFragment : Fragment() {
-    private lateinit var binding : FragmentProfileBinding
+class MyPageFragment : Fragment() {
+    private lateinit var binding : FragmentMyPageBinding
     private lateinit var materialCalendarView: MaterialCalendarView
     private lateinit var eventDecorator: EventDecorator
     private lateinit var todayDecorator: TodayDecorator
@@ -29,7 +29,7 @@ class UserProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_page, container, false)
         binding.fragment = this
         val mActivity = activity as PhotiActivity
 

@@ -36,5 +36,7 @@
     <string name="autherror">인증코드가 일치하지 않아요</string>
     <string name="iderror">이미 사용중인 아이디예요</string>
     <string name="idsuccess">사용할 수 있는 아이디예요</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

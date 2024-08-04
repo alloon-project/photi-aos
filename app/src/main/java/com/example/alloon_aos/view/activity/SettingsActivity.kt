@@ -7,13 +7,13 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.ActivitySettingBinding
+import com.example.alloon_aos.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
-    lateinit var binding : ActivitySettingBinding
+    lateinit var binding : ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_setting)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_settings)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav) as NavHostFragment
@@ -27,7 +27,12 @@ class SettingsActivity : AppCompatActivity() {
         binding.actionBar.setupWithNavController(navController, appBarConfiguration)
 
         binding.actionBar.setNavigationOnClickListener {
-            finish()  // 액티비티 종료
+            val currentFragment = navController.currentDestination?.id
+            if (currentFragment == R.id.mainSettingsFragment) {
+                finish()
+            } else {
+                navController.navigateUp()  // 이전 프래그먼트로 돌아가기
+            }
         }
     }
 

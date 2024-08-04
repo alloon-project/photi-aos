@@ -9,14 +9,17 @@
         android:id="@+id/mainSettingsFragment"
         android:name="com.example.alloon_aos.view.fragment.settings.MainSettingsFragment"
         android:label=" "
-        tools:layout="@layout/fragment_my_info" >
+        tools:layout="@layout/fragment_main_settings" >
 
+        <action
+            android:id="@+id/action_mainSettingsFragment_to_profileModifyFragment"
+            app:destination="@id/profileModifyFragment" />
         <action
             android:id="@+id/action_mainSettingsFragment_to_inquireFragment"
             app:destination="@id/inquireFragment"
             app:popUpToInclusive="false" />
         <action
-            android:id="@+id/action_mainSettings_to_unSubscribeFragment"
+            android:id="@+id/action_mainSettingsFragment_to_unSubscribeFragment"
             app:destination="@id/unSubscribeFragment"
             app:popUpToInclusive="false"/>
     </fragment>
@@ -40,6 +43,17 @@
         <action
             android:id="@+id/action_unSubscribeFragment_to_mainSettingsFragment"
             app:destination="@id/mainSettingsFragment"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/profileModifyFragment"
+        android:name="com.example.alloon_aos.view.fragment.settings.ProfileModify"
+        android:label=" "
+        tools:layout="@layout/fragment_profile_modify" >
+        <action
+            android:id="@+id/action_profileModifyFragment_to_mainSettingsFragment"
+            app:destination="@id/mainSettingsFragment"
+            app:popUpToInclusive="false"
             />
     </fragment>
 </navigation>
