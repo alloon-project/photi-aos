@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/ic_settings_gray700"
+                android:background="@drawable/ic_settings"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
             <ImageView
@@ -205,8 +205,7 @@
                     android:layout_marginLeft="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_back_gray400"
-                    />
+                    android:background="@drawable/ic_back_gray400" />
 
                 <TextView
                     android:id="@+id/month_textView"
@@ -229,7 +228,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"
-                    android:background="@drawable/ic_forward_gray700"
+                    android:background="@drawable/ic_forward"
+                    android:backgroundTint="@color/gray700"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/month_textView"
@@ -252,8 +252,6 @@
             app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText"
             app:mcv_weekDayTextAppearance="@style/CalenderViewWeekCustomText"
             app:mcv_headerTextAppearance="@font/suit_bold"
-            app:mcv_leftArrow="@drawable/ic_left"
-            app:mcv_rightArrow="@drawable/ic_right"
             app:mcv_selectionColor="@color/white"
             app:mcv_selectionMode="single"
             app:mcv_showOtherDates="other_months"/>

@@ -47,6 +47,7 @@
                     android:fontFamily="@font/suit_medium"
                     android:paddingLeft="7dp"
                     android:button="@drawable/selector_radio_button"
+                    android:buttonTint="@color/radiobutton_color"
                     android:textColor="@drawable/selector_radio_text"
                     android:text="중복 / 도배성 피드" />
                 <RadioButton
@@ -57,6 +58,7 @@
                     android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:buttonTint="@color/radiobutton_color"
                     android:textColor="@drawable/selector_radio_text"
                     android:text="음란성 / 선정적인 피드" />
                 <RadioButton
@@ -67,6 +69,7 @@
                     android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:buttonTint="@color/radiobutton_color"
                     android:textColor="@drawable/selector_radio_text"
                     android:text="욕설 / 혐오 발언 피드" />
                 <RadioButton
@@ -77,6 +80,7 @@
                     android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:buttonTint="@color/radiobutton_color"
                     android:textColor="@drawable/selector_radio_text"
                     android:text="폭력적 / 위험한 피드" />
                 <RadioButton
@@ -87,6 +91,7 @@
                     android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:buttonTint="@color/radiobutton_color"
                     android:textColor="@drawable/selector_radio_text"
                     android:text="상업적 홍보 / 광고 피드" />
                 <RadioButton
@@ -97,6 +102,7 @@
                     android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:buttonTint="@color/radiobutton_color"
                     android:textColor="@drawable/selector_radio_text"
                     android:text="타인을 비방하는 피드" />
                 <RadioButton
@@ -108,6 +114,7 @@
                     android:paddingLeft="7dp"
                     android:layout_marginTop="10dp"
                     android:button="@drawable/selector_radio_button"
+                    android:buttonTint="@color/radiobutton_color"
                     android:textColor="@drawable/selector_radio_text"
                     android:text="직접 작성" />
             </RadioGroup>
@@ -164,7 +171,7 @@
                 android:id="@+id/next_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorPrimary"
+                android:background="@drawable/btn_round_primary"
                 android:theme="@style/Theme.xlarge_round"
                 android:text="신고하기"
                 android:onClick="@{() ->fragment.click()}"
