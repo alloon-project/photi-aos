@@ -67,6 +67,11 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
     fun setListener() {
         binding.root.setOnClickListener {
             if (activity != null && requireActivity().currentFocus != null) {
