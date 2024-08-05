@@ -45,13 +45,11 @@ class MyPageFragment : Fragment() {
         materialCalendarView = binding.calendarview
         materialCalendarView.setTopbarVisible(false)
 
-        materialCalendarView.state().edit()
-            .setMinimumDate(CalendarDay.from(2024, 7, 3))
-            .setMaximumDate(CalendarDay.from(2024, 9, 30))
-            .commit()
 
-        //eventDecorator  = EventDecorator(requireContext(), materialCalendarView.currentDate.month, calendarList)
-        //todayDecorator = TodayDecorator(requireContext())
+        materialCalendarView.state().edit()
+//            .setMinimumDate(CalendarDay.from(2024, 7, 3))
+//            .setMaximumDate(CalendarDay.from(2024, 9, 30))
+            .commit()
     }
 
     private fun setLisetener(){
@@ -79,6 +77,20 @@ class MyPageFragment : Fragment() {
 
         materialCalendarView.addDecorators(todayDecorator,eventDecorator)
         calendarYearMonth.set("${year}년 ${month}월")
+    }
+
+    fun changeMonth(flag : Int){
+        //1 : 다음달
+        //2 : 이전달
+        var currentDate = materialCalendarView.currentDate.date
+
+        if(flag == 1)
+            currentDate = currentDate.minusMonths(1)
+
+        else
+           currentDate = currentDate.plusMonths(1)
+
+        materialCalendarView.setCurrentDate(currentDate)
     }
 
     fun moveToSettingsActivity(){

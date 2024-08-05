@@ -16,8 +16,6 @@ class EventDecorator(context: Context, val month : Int, dates: Collection<Calend
     private var dates: HashSet<CalendarDay> = HashSet(dates)
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
-        if(month == day?.month && dates.contains(day))
-            println("${day.month}  ${day.date}")
         return month == day?.month && dates.contains(day)
     }
 

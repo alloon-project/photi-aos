@@ -132,6 +132,7 @@
 
                 <TextView
                     android:id="@+id/challenge_ended_textView"
+                    android:onClick="@{() ->fragment.changeMonth(1)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/suit_bold"
@@ -200,6 +201,7 @@
 
                 <ImageButton
                     android:id="@+id/back_imgBtn"
+                    android:onClick="@{() ->fragment.changeMonth(1)}"
                     android:layout_marginLeft="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -223,6 +225,7 @@
 
                 <ImageButton
                     android:id="@+id/forward_imgBtn"
+                    android:onClick="@{() ->fragment.changeMonth(2)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="2dp"
