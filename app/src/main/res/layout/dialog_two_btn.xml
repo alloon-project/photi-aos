@@ -51,7 +51,7 @@
         android:letterSpacing="-0.03"
         android:stateListAnimator="@null"
         android:text="버튼"
-        android:textColor="@color/text_btn_round_quaternary"
+        android:textColor="@color/textcolor_btn_round_quaternary"
         android:theme="@style/Theme.small_round"
         app:layout_constraintBottom_toBottomOf="@+id/dialog_btn2"
         app:layout_constraintEnd_toStartOf="@+id/dialog_btn2"

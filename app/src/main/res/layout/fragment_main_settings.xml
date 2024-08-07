@@ -41,8 +41,8 @@
             <ImageButton
                 android:id="@+id/imageButton"
                 android:onClick="@{() ->fragment.moveFrag(1)}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/ic_forward"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -79,8 +79,8 @@
             <ImageButton
                 android:id="@+id/imageButton4"
                 android:onClick="@{() ->fragment.moveFrag(2)}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/ic_forward"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -116,8 +116,8 @@
 
             <ImageButton
                 android:id="@+id/imageButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/ic_forward"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -153,8 +153,8 @@
 
             <ImageButton
                 android:id="@+id/imageButton6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/ic_forward"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -229,8 +229,8 @@
 
             <ImageButton
                 android:id="@+id/imageButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:background="@drawable/ic_forward"
                 android:layout_margin="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"

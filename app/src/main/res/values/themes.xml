@@ -164,12 +164,28 @@
     <!-- ////////////////////// Text Button 여기부터 글꼴 사이즈 적용 안함 ////////////////////////// -->
     <style name="Theme.text_btn" parent="Theme.Photi">
         <item name="android:backgroundTint">@color/white</item>
-        <item name="android:textColor">@color/gray400</item>
+<!--        <item name="android:textColor">@color/gray400</item>-->
 <!--        <item name="android:textColor">@color/btn_text</item>-->
+    </style>
+    <style name="Theme.text_xlarge" parent="Theme.text_btn">
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">@font/suit_bold</item>
+    </style>
+    <style name="Theme.text_large" parent="Theme.text_btn">
+        <item name="android:textSize">18dp</item>
+        <item name="android:fontFamily">@font/suit_semibold</item>
+    </style>
+    <style name="Theme.text_medium" parent="Theme.text_btn">
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
+    </style>
+    <style name="Theme.text_small" parent="Theme.text_btn">
+        <item name="android:textSize">16dp</item>
+        <item name="android:fontFamily">@font/suit_bold</item>
     </style>
     <style name="Theme.text_xsmall" parent="Theme.text_btn">
         <item name="android:textSize">12dp</item>
-        <item name="android:fontFamily">@font/suit_medium</item>
+        <item name="android:fontFamily">@font/suit_bold</item>
     </style>
 
     <!-- ////////////////////// Card ////////////////////////// -->

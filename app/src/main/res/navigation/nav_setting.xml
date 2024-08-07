@@ -16,12 +16,10 @@
             app:destination="@id/profileModifyFragment" />
         <action
             android:id="@+id/action_mainSettingsFragment_to_inquireFragment"
-            app:destination="@id/inquireFragment"
-            app:popUpToInclusive="false" />
+            app:destination="@id/inquireFragment" />
         <action
             android:id="@+id/action_mainSettingsFragment_to_unSubscribeFragment"
-            app:destination="@id/unSubscribeFragment"
-            app:popUpToInclusive="false"/>
+            app:destination="@id/unSubscribeFragment" />
     </fragment>
 
     <fragment
@@ -31,8 +29,7 @@
         tools:layout="@layout/fragment_inquire" >
         <action
             android:id="@+id/action_inquireFragment_to_mainSettingsFragment"
-            app:destination="@id/mainSettingsFragment"
-            app:popUpToInclusive="false" />
+            app:destination="@id/mainSettingsFragment" />
     </fragment>
 
     <fragment
@@ -43,6 +40,7 @@
         <action
             android:id="@+id/action_unSubscribeFragment_to_mainSettingsFragment"
             app:destination="@id/mainSettingsFragment"
+            app:popUpTo="@id/mainSettingsFragment"
             />
     </fragment>
     <fragment
@@ -50,10 +48,10 @@
         android:name="com.example.alloon_aos.view.fragment.settings.ProfileModify"
         android:label=" "
         tools:layout="@layout/fragment_profile_modify" >
+
         <action
-            android:id="@+id/action_profileModifyFragment_to_mainSettingsFragment"
-            app:destination="@id/mainSettingsFragment"
-            app:popUpToInclusive="false"
+            android:id="@+id/action_profileModifyFragment_to_unSubscribeFragment"
+            app:destination="@id/unSubscribeFragment"
             />
     </fragment>
 </navigation>
