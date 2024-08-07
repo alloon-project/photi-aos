@@ -26,7 +26,7 @@ class CustomTwoButtonDialog(val customDialogInterface: CustomTwoButtonDialogInte
         binding.titleTextView.text = title
         binding.messageTextView.text = message
         binding.dialogBtn1.text = buttonText1
-        binding.dialogBtn1.text = buttonText2
+        binding.dialogBtn2.text = buttonText2
 
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

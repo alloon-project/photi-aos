@@ -12,7 +12,7 @@
         android:icon="@drawable/ic_challenge"/>
 
     <item
-        android:id="@+id/profileFragment"
+        android:id="@+id/myPageFragment"
         android:title="프로필"
         android:icon="@drawable/ic_profile"/>
 

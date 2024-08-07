@@ -14,7 +14,7 @@ interface CustomOneButtonDialogInterface {
     fun onClickYesButton()
 }
 
-class CustomOneButtonDialog(val customDialogInterface: CustomOneButtonDialogInterface, val title: String, val message: String, val buttonText: String) : DialogFragment() {
+class CustomOneButtonDialog(val customDialogInterface: CustomOneButtonDialogInterface, val title: String, val message: String , val buttonText: String) : DialogFragment() {
     private var _binding: DialogOneBtnBinding? = null
     private val binding get() = _binding!!
 

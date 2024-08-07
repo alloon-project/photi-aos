@@ -14,7 +14,7 @@ import com.google.android.material.tabs.TabLayout.TabGravity
 import okio.IOException
 import org.json.JSONObject
 
-class AuthViewModel : ViewModel() {
+class  AuthViewModel : ViewModel() {
 
     companion object {
         private const val TAG = "AUTH"

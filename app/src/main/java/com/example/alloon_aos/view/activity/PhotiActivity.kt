@@ -5,18 +5,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.ActivityPhotiBinding
 import com.example.alloon_aos.view.fragment.photi.ChallengeFragment
 import com.example.alloon_aos.view.fragment.photi.HomeFragment
 import com.example.alloon_aos.view.fragment.photi.MyPageFragment
+import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
+import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
 
 private const val TAG_CHALLENGE = "challenge_fragment"
 private const val TAG_HOME = "home_fragment"
 private const val TAG_PROFILE = "profile_fragment"
-class PhotiActivity : AppCompatActivity(){
-
+class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
+    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     lateinit var binding : ActivityPhotiBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_photi)
@@ -27,7 +32,13 @@ class PhotiActivity : AppCompatActivity(){
             when(item.itemId) {
                 R.id.homeFragment -> setFragment(TAG_HOME, HomeFragment())
                 R.id.challengeFragment -> setFragment(TAG_CHALLENGE, ChallengeFragment())
-                R.id.profileFragment-> setFragment(TAG_PROFILE, MyPageFragment())
+                R.id.myPageFragment-> {
+                    if(tokenManager.getAccessToken() == null)
+                        CustomTwoButtonDialog(this,"로그인하고 다양한 챌린지에\n 참여해보세요!","","나중에 하기","로그인하기")
+                            .show(supportFragmentManager, "CustomDialog")
+                    else
+                        setFragment(TAG_PROFILE, MyPageFragment())
+                }
             }
             true
         }
@@ -75,5 +86,13 @@ class PhotiActivity : AppCompatActivity(){
         }
 
         fragTransaction.commitAllowingStateLoss()
+    }
+
+
+    override fun onClickFisrtButton() {
+    }
+
+    override fun onClickSecondButton() {
+        println("로그인하기 페이지로 이동")
     }
 }
