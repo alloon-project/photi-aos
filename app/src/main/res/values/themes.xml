@@ -107,26 +107,54 @@
         <item name="android:topRightRadius">10dp</item>
     </style>
 
-    <!-- line button text color -->
-    <style name="Theme.green_text" parent="Theme.Photi">
-        <item name="android:textColor">@color/green500</item>
-        <item name="android:textSize">16sp</item>
+    <!-- line button-->
+
+
+    <style name="Theme.btn_round_line_xlarge" parent="Theme.Photi">
+        <item name="android:width">327dp</item>
+        <item name="android:height">56dp</item>
+        <item name="android:textSize">16dp</item>
         <item name ="android:fontFamily">@font/suit_bold</item>
     </style>
-    <style name="Theme.green_small_text" parent="Theme.Photi">
-        <item name="android:textColor">@color/green500</item>
-        <item name="android:textSize">16sp</item>
+
+    <style name = "Theme.btn_round_line_large" parent="Theme.Photi">
+        <item name="android:width">279dp</item>
+        <item name="android:height">56dp</item>
+        <item name="android:textSize">16dp</item>
         <item name ="android:fontFamily">@font/suit_bold</item>
     </style>
-    <style name="Theme.blue_text" parent="Theme.Photi">
-        <item name="android:textColor">@color/blue500</item>
-        <item name="android:textSize">14sp</item>
+
+    <style name = "Theme.btn_round_line_medium" parent="Theme.Photi">
+        <item name="android:width">136dp</item>
+        <item name="android:height">46dp</item>
+        <item name="android:textSize">16dp</item>
         <item name ="android:fontFamily">@font/suit_bold</item>
+        <item name="android:bottomLeftRadius">12dp</item>
+        <item name="android:bottomRightRadius">12dp</item>
+        <item name="android:topLeftRadius">12dp</item>
+        <item name="android:topRightRadius">12dp</item>
     </style>
-    <style name="Theme.blue_small_text" parent="Theme.Photi">
-        <item name="android:textColor">@color/blue500</item>
-        <item name="android:textSize">14sp</item>
+
+    <style name = "Theme.btn_round_line_small" parent="Theme.Photi">
+        <item name="android:width">136dp</item>
+        <item name="android:height">46dp</item>
+        <item name="android:textSize">14dp</item>
         <item name ="android:fontFamily">@font/suit_bold</item>
+        <item name="android:bottomLeftRadius">12dp</item>
+        <item name="android:bottomRightRadius">12dp</item>
+        <item name="android:topLeftRadius">12dp</item>
+        <item name="android:topRightRadius">12dp</item>
+    </style>
+
+    <style name = "Theme.btn_round_line_xsmall" parent="Theme.Photi">
+        <item name="android:width">70dp</item>
+        <item name="android:height">34dp</item>
+        <item name="android:textSize">14dp</item>
+        <item name ="android:fontFamily">@font/suit_bold</item>
+        <item name="android:bottomLeftRadius">12dp</item>
+        <item name="android:bottomRightRadius">12dp</item>
+        <item name="android:topLeftRadius">12dp</item>
+        <item name="android:topRightRadius">12dp</item>
     </style>
 
 
