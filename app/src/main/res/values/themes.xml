@@ -208,12 +208,12 @@
         <item name="android:fontFamily">@font/suit_medium</item>
     </style>
     <style name="Theme.text_small" parent="Theme.text_btn">
-        <item name="android:textSize">16dp</item>
-        <item name="android:fontFamily">@font/suit_bold</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
     </style>
     <style name="Theme.text_xsmall" parent="Theme.text_btn">
         <item name="android:textSize">12dp</item>
-        <item name="android:fontFamily">@font/suit_bold</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
     </style>
 
     <!-- ////////////////////// Card ////////////////////////// -->
