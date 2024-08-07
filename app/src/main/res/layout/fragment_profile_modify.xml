@@ -161,7 +161,7 @@
             android:layout_height="30dp"
             android:background="#00ff0000"
             android:text="@string/unsubscirbe"
-            android:textColor="@color/textcolor_textbtn_secondary"
+            android:textColor="@color/textcolor_textbtn_gray"
             android:theme="@style/Theme.text_xsmall"
             android:layout_marginTop="32dp"
             android:layout_marginRight="14dp"
