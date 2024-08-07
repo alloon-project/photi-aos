@@ -72,7 +72,7 @@ class PasswordSendFragment : Fragment() {
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if(visible){
-                    binding.errorTextView.visibility = View.INVISIBLE
+                    binding.checkPwLinearlayout.visibility = View.GONE
                     binding.emailEditText.background
                     if(email_flag)  binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_focus)
                 }
@@ -115,13 +115,12 @@ class PasswordSendFragment : Fragment() {
         val pattern = Patterns.EMAIL_ADDRESS
 
         if (pattern.matcher(email).matches()) {
-            binding.errorTextView.visibility = View.GONE
+            binding.checkPwLinearlayout.visibility = View.GONE
             binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_default)
             binding.nextButton.isEnabled = true
 
         } else {
-            binding.errorTextView.text = mContext.getString(R.string.emailerror1)
-            binding.errorTextView.visibility = View.VISIBLE
+            binding.checkPwLinearlayout.visibility = View.VISIBLE
             binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_error)
             binding.nextButton.isEnabled = false
         }

@@ -52,7 +52,7 @@ class PasswordEnterFragment : Fragment() {
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
-                binding.errorTextView.visibility = View.INVISIBLE
+                binding.emailLinearlayout.visibility = View.GONE
                 if (visible) {
                     binding.newPasswordEditText.background =
                         mContext.getDrawable(R.drawable.input_line_focus)
@@ -94,7 +94,7 @@ class PasswordEnterFragment : Fragment() {
                     "LOGIN_UNAUTHENTICATED","PASSWORD_FIELD_REQUIRED" -> {
                         //비밀번호 불일치
                         binding.newPasswordEditText.setBackgroundResource(R.drawable.input_line_error)
-                        binding.errorTextView.visibility = View.VISIBLE
+                        binding.emailLinearlayout.visibility = View.VISIBLE
                     }
                 }
             }

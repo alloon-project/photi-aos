@@ -99,20 +99,32 @@
                     android:theme="@style/Theme.xsmall_round" />
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/id_error_textview"
+            <LinearLayout
+                android:id="@+id/id_linearlayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_close_default"
-                android:drawablePadding="6dp"
-                android:fontFamily="@font/suit_medium"
-                android:text="@string/signupid2"
-                android:textColor="@color/red400"
-                android:textSize="12dp"
-                android:visibility="gone"
                 android:layout_marginTop="10dp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/frameLayout"
-                app:layout_constraintTop_toBottomOf="@id/frameLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+
+                <ImageView
+                    android:id="@+id/id_icon_view"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_close_default"/>
+
+                <TextView
+                    android:id="@+id/id_error_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_medium"
+                    android:text="@string/signupid2"
+                    android:textColor="@color/red400"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="6dp"/>
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button

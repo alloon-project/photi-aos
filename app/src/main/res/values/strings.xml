@@ -6,13 +6,13 @@
     <string name="findid">아이디 찾기</string>
     <string name="findpw">비밀번호 찾기</string>
     <string name="findid2">가입 시 사용했던 \n이메일을 입력해주세요</string>
-    <string name="emailerror1">x&#160;&#160;&#160;이메일 형태가 올바르지 않아요</string>
-    <string name="emailerror2">!&#160;&#160;&#160;가입되지 않은 이메일이에요</string>
+    <string name="emailerror1">이메일 형태가 올바르지 않아요</string>
+    <string name="emailerror2">가입되지 않은 이메일이에요</string>
     <string name="enterId">아이디를 입력해주세요</string>
     <string name="enterEmail">가입 시 사용했던 이메일을 입력해주세요</string>
     <string name="email">이메일</string>
     <string name="id">아이디</string>
-    <string name="enterpwd">x&#160;&#160;&#160;임시 비밀번호가 일치하지 않아요</string>
+    <string name="enterpwd">임시 비밀번호가 일치하지 않아요</string>
     <string name="enternewpwd">새 비밀번호를 입력해주세요</string>
     <string name="findpwd">이메일로 임시 비밀번호를 보내드렸습니다\n임시 비밀번호를 입력해주세요</string>
     <string name="newPw1">새 비밀번호</string>

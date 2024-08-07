@@ -68,21 +68,32 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/email_error_textview"
+                <LinearLayout
+                    android:id="@+id/email_linearlayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_close_default"
-                    android:drawablePadding="6dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:text="@string/emailerror"
-                    android:textColor="@color/red400"
-                    android:textSize="16dp"
-                    android:visibility="gone"
                     android:layout_marginTop="10dp"
+                    android:visibility="gone"
                     app:layout_constraintStart_toStartOf="@+id/email_edittext"
-                    app:layout_constraintTop_toBottomOf="@id/email_edittext" />
+                    app:layout_constraintTop_toBottomOf="@+id/email_edittext">
 
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_close_default"/>
+
+                    <TextView
+                        android:id="@+id/email_error_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suit_medium"
+                        android:text="@string/emailerror"
+                        android:textColor="@color/red400"
+                        android:textSize="12dp"
+                        android:layout_marginLeft="6dp" />
+
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button

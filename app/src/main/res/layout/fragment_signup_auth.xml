@@ -108,21 +108,32 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/auth_error_textview"
+
+            <LinearLayout
+                android:id="@+id/auth_linearlayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_close_default"
-                android:drawablePadding="6dp"
-                android:text="@string/autherror"
-                android:visibility="gone"
-                android:textColor="@color/red400"
-                android:textSize="12dp"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/suit_medium"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent"/>
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/auth_edittext"
+                app:layout_constraintTop_toBottomOf="@+id/auth_edittext">
 
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_close_default"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/autherror"
+                    android:fontFamily="@font/suit_medium"
+                    android:textColor="@color/red400"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="6dp"/>
+
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
@@ -139,6 +150,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:enabled="true"/>
+            android:enabled="false"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

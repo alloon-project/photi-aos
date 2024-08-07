@@ -77,7 +77,7 @@ class SignupIdFragment : Fragment() {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {
                     binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
-                    binding.idErrorTextview.isVisible = false
+                    binding.idLinearlayout.isVisible = false
                     binding.checkBtn.isEnabled = true
                 }
                 else    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
@@ -94,42 +94,42 @@ class SignupIdFragment : Fragment() {
                     }
 
                     "USERNAME_LENGTH_INVALID" ->{
-                        binding.idErrorTextview.isVisible = true
+                        binding.idLinearlayout.isVisible = true
                         binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                         binding.nextBtn.isEnabled = false
                         binding.checkBtn.isEnabled = false
                         binding.idErrorTextview.setTextColor(red)
-                        binding.idErrorTextview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_close_default, 0, 0, 0)
+                        binding.idIconView.setImageResource(R.drawable.ic_close_default)
                         binding.idErrorTextview.text = "아이디는 5~20자만 가능합니다"
                     }
 
                     "USERNAME_FORMAT_INVALID"->{
-                        binding.idErrorTextview.isVisible = true
+                        binding.idLinearlayout.isVisible = true
                         binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                         binding.nextBtn.isEnabled = false
                         binding.checkBtn.isEnabled = false
                         binding.idErrorTextview.setTextColor(red)
-                        binding.idErrorTextview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_close_default, 0, 0, 0)
+                        binding.idIconView.setImageResource(R.drawable.ic_close_default)
                         binding.idErrorTextview.text = "아이디는 소문자 영어, 숫자, 특수문자(_)의 조합으로 입력해 주세요"
                     }
 
                     //이미 사용중인 아이디 코드 확정 아님!!!!
                     "UNAVAILABLE_USERNAME" -> {
-                        binding.idErrorTextview.isVisible = true
+                        binding.idLinearlayout.isVisible = true
                         binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                         binding.nextBtn.isEnabled = false
                         binding.checkBtn.isEnabled = false
                         binding.idErrorTextview.setTextColor(red)
-                        binding.idErrorTextview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_close_default, 0, 0, 0)
+                        binding.idIconView.setImageResource(R.drawable.ic_close_default)
                         binding.idErrorTextview.text = "이미 사용중인 아이디예요"
                     }
 
                     "USERNAME_AVAILABLE" -> {
-                        binding.idErrorTextview.isVisible = true
+                        binding.idLinearlayout.isVisible = true
                         binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
                         binding.idErrorTextview.text = "사용할 수 있는 아이디예요"
                         binding.idErrorTextview.setTextColor(blue)
-                        binding.idErrorTextview.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_blue, 0, 0, 0)
+                        binding.idIconView.setImageResource(R.drawable.ic_check_blue)
                         binding.nextBtn.isEnabled = true
                     }
                 }

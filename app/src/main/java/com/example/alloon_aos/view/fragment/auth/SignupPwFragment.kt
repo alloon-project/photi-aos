@@ -140,11 +140,11 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(s.toString().equals(binding.pwEdittext.text.toString()) ){
                     binding.checkPwTextview.setTextColor(blue)
-                    binding.checkPwTextview.getCompoundDrawables()[0].setTint(blue)
+                    binding.checkPwIconview.setImageResource(R.drawable.ic_check_blue)
                     binding.nextBtn.isEnabled = true
                 } else {
                     binding.checkPwTextview.setTextColor(gray)
-                    binding.checkPwTextview.getCompoundDrawables()[0].setTint(gray)
+                    binding.checkPwIconview.setImageResource(R.drawable.ic_check_grey)
                     binding.nextBtn.isEnabled = false
                 }
             }
@@ -185,34 +185,34 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
 
             if(isProperLength) {
                 checkLenghTextView.setTextColor(blue)
-                checkLenghTextView.getCompoundDrawables()[0].setTint(blue)
+                checkLenghIconView.setImageResource(R.drawable.ic_check_blue)
             } else {
                 checkLenghTextView.setTextColor(gray)
-                checkLenghTextView.getCompoundDrawables()[0].setTint(gray)
+                checkLenghIconView.setImageResource(R.drawable.ic_check_grey)
             }
 
             if(containsEng) {
                 checkEngTextView.setTextColor(blue)
-                checkEngTextView.getCompoundDrawables()[0].setTint(blue)
+                checkEngIconView.setImageResource(R.drawable.ic_check_blue)
             } else {
                 checkEngTextView.setTextColor(gray)
-                checkEngTextView.getCompoundDrawables()[0].setTint(gray)
+                checkEngIconView.setImageResource(R.drawable.ic_check_grey)
             }
 
             if(!notContainsSpecial) {
                 checkSpecTextView.setTextColor(blue)
-                checkSpecTextView.getCompoundDrawables()[0].setTint(blue)
+                checkSpecIconView.setImageResource(R.drawable.ic_check_blue)
             } else {
                 checkSpecTextView.setTextColor(gray)
-                checkSpecTextView.getCompoundDrawables()[0].setTint(gray)
+                checkSpecIconView.setImageResource(R.drawable.ic_check_grey)
             }
 
             if(containsNum) {
                 checkNumTextView.setTextColor(blue)
-                checkNumTextView.getCompoundDrawables()[0].setTint(blue)
+                checkNumIconView.setImageResource(R.drawable.ic_check_blue)
             } else {
                 checkNumTextView.setTextColor(gray)
-                checkNumTextView.getCompoundDrawables()[0].setTint(gray)
+                checkNumIconView.setImageResource(R.drawable.ic_check_grey)
             }
 
             if(isProperLength && containsEng && !notContainsSpecial && containsNum)

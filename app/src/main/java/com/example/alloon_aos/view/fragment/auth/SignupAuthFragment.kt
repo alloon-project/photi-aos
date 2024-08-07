@@ -70,7 +70,8 @@ class SignupAuthFragment : Fragment() {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {
                     binding.authEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
-                    binding.authErrorTextview.isVisible = false
+                    binding.authLinearlayout.isVisible = false
+                    binding.nextBtn.isEnabled = true
                 }
                 else    binding.authEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
             }
@@ -90,10 +91,9 @@ class SignupAuthFragment : Fragment() {
                     }
 
                     "EMAIL_VERIFICATION_CODE_INVALID" ->{
-                        binding.authErrorTextview.isVisible = true
+                        binding.authLinearlayout.isVisible = true
                         binding.authEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                         binding.nextBtn.isEnabled = false
-                        binding.authErrorTextview.text = "인증코드가 일치하지 않아요"
                     }
 
                     "EMAIL_VERIFICATION_CODE_VERIFIED" -> {

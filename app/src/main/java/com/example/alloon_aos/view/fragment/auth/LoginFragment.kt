@@ -81,7 +81,7 @@ class LoginFragment : Fragment() {
                 } else {
                     binding.idEdittext.setBackgroundResource(R.drawable.input_line_default)
                 }
-                binding.idErrorTextview.isVisible = false
+                binding.idLinearlayout.isVisible = false
             }
 
         binding.pwEdittext.onFocusChangeListener =
@@ -91,7 +91,7 @@ class LoginFragment : Fragment() {
                 } else {
                     binding.pwEdittext.setBackgroundResource(R.drawable.input_line_default)
                 }
-                binding.pwErrorTextview.isVisible = false
+                binding.pwLinearlayout.isVisible = false
             }
 
         binding.hideBtn.setOnClickListener {
@@ -136,8 +136,8 @@ class LoginFragment : Fragment() {
                     "LOGIN_UNAUTHENTICATED" -> {
                         binding.idEdittext.setBackgroundResource(R.drawable.input_line_error)
                         binding.pwEdittext.setBackgroundResource(R.drawable.input_line_error)
-                        binding.idErrorTextview.isVisible = true
-                        binding.pwErrorTextview.isVisible = true
+                        binding.idLinearlayout.isVisible = true
+                        binding.pwLinearlayout.isVisible = true
                     }
                     "IO_Exception" ->{
                         CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()

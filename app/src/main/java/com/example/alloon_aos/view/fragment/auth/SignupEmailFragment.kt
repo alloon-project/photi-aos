@@ -63,7 +63,7 @@ class SignupEmailFragment : Fragment() {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {
                     binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
-                    binding.emailErrorTextview.isVisible = false
+                    binding.emailLinearlayout.isVisible = false
                 }
                 else {
                     binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
@@ -79,7 +79,7 @@ class SignupEmailFragment : Fragment() {
                 } else {
                     binding.emailEdittext.setBackgroundResource(R.drawable.input_line_default)
                 }
-                binding.emailErrorTextview.isVisible = false
+                binding.emailLinearlayout.isVisible = false
             }
 
         binding.root.setOnClickListener {
@@ -98,7 +98,7 @@ class SignupEmailFragment : Fragment() {
                         view?.findNavController()?.navigate(R.id.action_signupEmailFragment_to_signupAuthFragment)
                     }
                     "EXISTING_EMAIL" -> {
-                        binding.emailErrorTextview.isVisible = true
+                        binding.emailLinearlayout.isVisible = true
                         binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                         binding.nextBtn.isEnabled = false
                         binding.emailErrorTextview.text = "이미 가입된 이메일이에요"
@@ -116,11 +116,11 @@ class SignupEmailFragment : Fragment() {
         val pattern = Patterns.EMAIL_ADDRESS
 
         if (pattern.matcher(email).matches()) {
-            binding.emailErrorTextview.isVisible = false
+            binding.emailLinearlayout.isVisible = false
             binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
             binding.nextBtn.isEnabled = true
         } else {
-            binding.emailErrorTextview.isVisible = true
+            binding.emailLinearlayout.isVisible = true
             binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
             binding.nextBtn.isEnabled = false
             if (email.length > 100)

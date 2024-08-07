@@ -53,7 +53,7 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {
-                    binding.errorTextView.visibility = View.INVISIBLE
+                    binding.emailLinearlayout.visibility = View.GONE
                     binding.emailEditText.background =
                         mContext.getDrawable(R.drawable.input_line_focus)
                 } else if(binding.emailEditText.text.isNotEmpty()){
@@ -72,7 +72,7 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
                             .show(activity?.supportFragmentManager!!, "CustomDialog")
                     }
                     "USER_NOT_FOUND" ->{
-                        binding.errorTextView.visibility = View.VISIBLE
+                        binding.emailLinearlayout.visibility = View.VISIBLE
                         binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_error)
                         binding.errorTextView.text = mContext.getString(R.string.emailerror2)
 
@@ -94,13 +94,13 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
         val pattern = Patterns.EMAIL_ADDRESS
 
         if (pattern.matcher(email).matches()) {
-            binding.errorTextView.visibility = View.INVISIBLE
+            binding.emailLinearlayout.visibility = View.GONE
             binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_default)
             binding.nextButton.isEnabled = true
 
         } else {
             binding.errorTextView.text = mContext.getString(R.string.emailerror1)
-            binding.errorTextView.visibility = View.VISIBLE
+            binding.emailLinearlayout.visibility = View.VISIBLE
             binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_error)
             binding.nextButton.isEnabled = false
 

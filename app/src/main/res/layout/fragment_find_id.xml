@@ -49,18 +49,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <TextView
-        android:id="@+id/error_textView"
+    <LinearLayout
+        android:id="@+id/email_linearlayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/suit_medium"
-        android:text="@string/emailerror1"
-        android:textColor="@color/red400"
-        android:textSize="12sp"
-        android:visibility="gone"
         android:layout_marginTop="10dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/email_editText"
-        app:layout_constraintTop_toBottomOf="@+id/email_editText" />
+        app:layout_constraintTop_toBottomOf="@+id/email_editText">
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_close_default" />
+
+        <TextView
+            android:id="@+id/error_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/suit_medium"
+            android:text="@string/emailerror1"
+            android:textColor="@color/red400"
+            android:textSize="12sp"
+            android:layout_marginLeft="6dp"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/nextButton"

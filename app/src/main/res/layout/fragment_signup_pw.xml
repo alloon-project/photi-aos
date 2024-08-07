@@ -89,56 +89,78 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/frameLayout">
 
+                <ImageView
+                    android:id="@+id/checkEng_icon_view"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_check_grey"/>
+
                 <TextView
                     android:id="@+id/checkEng_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_check_blue"
-                    android:drawablePadding="6dp"
-                    android:drawableTint="@color/gray400"
+                    android:layout_marginLeft="6dp"
                     android:fontFamily="@font/suit_medium"
                     android:text="영문 포함"
                     android:textColor="@color/gray400"
                     android:textSize="12dp" />
 
+                <ImageView
+                    android:id="@+id/checkNum_icon_view"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/ic_check_grey"/>
+
                 <TextView
                     android:id="@+id/checkNum_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="14dp"
-                    android:drawableStart="@drawable/ic_check_blue"
-                    android:drawablePadding="6dp"
-                    android:drawableTint="@color/gray400"
+                    android:layout_marginLeft="6dp"
                     android:fontFamily="@font/suit_medium"
                     android:text="숫자 포함"
                     android:textColor="@color/gray400"
                     android:textSize="12dp" />
 
+                <ImageView
+                    android:id="@+id/checkSpec_icon_view"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/ic_check_grey"/>
+
                 <TextView
                     android:id="@+id/checkSpec_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="14dp"
-                    android:drawableStart="@drawable/ic_check_blue"
-                    android:drawablePadding="6dp"
-                    android:drawableTint="@color/gray400"
+                    android:layout_marginLeft="6dp"
                     android:fontFamily="@font/suit_medium"
                     android:text="특수문자 포함"
                     android:textColor="@color/gray400"
                     android:textSize="12dp" />
 
+                <ImageView
+                    android:id="@+id/checkLengh_icon_view"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/ic_check_grey"/>
+
                 <TextView
                     android:id="@+id/checkLengh_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="14dp"
-                    android:drawableStart="@drawable/ic_check_blue"
-                    android:drawablePadding="6dp"
+                    android:layout_marginLeft="6dp"
                     android:drawableTint="@color/gray400"
                     android:fontFamily="@font/suit_medium"
                     android:text="8~30자"
                     android:textColor="@color/gray400"
                     android:textSize="12dp" />
+
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -170,7 +192,7 @@
                 android:id="@+id/frameLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pw_textview2">
 
@@ -197,21 +219,31 @@
                     android:tag="0" />
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/check_pw_textview"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_check_blue"
-                android:drawablePadding="6dp"
-                android:drawableTint="@color/gray400"
-                android:fontFamily="@font/suit_medium"
-                android:text="비밀번호 일치"
-                android:textColor="@color/gray400"
-                android:textSize="12dp"
                 android:layout_marginTop="10dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/frameLayout2"/>
+                app:layout_constraintStart_toStartOf="@+id/frameLayout2"
+                app:layout_constraintTop_toBottomOf="@id/frameLayout2">
 
+                <ImageView
+                    android:id="@+id/checkPw_iconview"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_check_grey"/>
+
+                <TextView
+                    android:id="@+id/check_pw_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_medium"
+                    android:text="비밀번호 일치"
+                    android:textColor="@color/gray400"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="6dp"/>
+
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
@@ -222,6 +254,7 @@
                 android:background="@drawable/btn_round_primary"
                 android:theme="@style/Theme.xlarge_round"
                 android:text="다음"
+                android:enabled="false"
                 android:layout_marginBottom="20dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginLeft="24dp"
