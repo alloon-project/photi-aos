@@ -33,7 +33,7 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
                 R.id.homeFragment -> setFragment(TAG_HOME, HomeFragment())
                 R.id.challengeFragment -> setFragment(TAG_CHALLENGE, ChallengeFragment())
                 R.id.myPageFragment-> {
-                    if(tokenManager.getAccessToken() == null)
+                    if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
                         CustomTwoButtonDialog(this,"로그인하고 다양한 챌린지에\n 참여해보세요!","","나중에 하기","로그인하기")
                             .show(supportFragmentManager, "CustomDialog")
                     else

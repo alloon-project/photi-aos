@@ -229,6 +229,7 @@
 
             <ImageButton
                 android:id="@+id/imageButton2"
+                android:onClick="@{() ->fragment.moveFrag(6)}"
                 android:layout_width="13dp"
                 android:layout_height="13dp"
                 android:background="@drawable/ic_forward"

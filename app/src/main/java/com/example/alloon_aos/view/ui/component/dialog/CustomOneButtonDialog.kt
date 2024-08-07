@@ -22,7 +22,8 @@ class CustomOneButtonDialog(val customDialogInterface: CustomOneButtonDialogInte
         _binding = DialogOneBtnBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        binding.titleTextView.text = title
+        if(message.equals(""))  binding.messageTextView.visibility = View.GONE
+        else    binding.messageTextView.text = message
         binding.messageTextView.text = message
         binding.dialogBtn.text = buttonText
 

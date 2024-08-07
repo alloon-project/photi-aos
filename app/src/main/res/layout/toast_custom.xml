@@ -12,9 +12,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp">
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="20dp">
 
             <ImageView
                 android:id="@+id/icon"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="내용"
                 android:textColor="@android:color/white"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:letterSpacing="-0.03"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

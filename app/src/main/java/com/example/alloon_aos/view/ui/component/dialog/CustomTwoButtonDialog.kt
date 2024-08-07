@@ -24,7 +24,9 @@ class CustomTwoButtonDialog(val customDialogInterface: CustomTwoButtonDialogInte
         val view = binding.root
 
         binding.titleTextView.text = title
-        binding.messageTextView.text = message
+
+        if(message.equals(""))  binding.messageTextView.visibility = View.GONE
+        else    binding.messageTextView.text = message
         binding.dialogBtn1.text = buttonText1
         binding.dialogBtn2.text = buttonText2
 
