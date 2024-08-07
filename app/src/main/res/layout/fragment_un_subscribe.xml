@@ -124,7 +124,7 @@
             android:id="@+id/nextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimary"
+            android:background="@drawable/btn_round_primary"
             android:enabled="false"
             android:fontFamily="@font/suit_bold"
             android:onClick="@{() -> fragment.checkPassword()}"

@@ -38,9 +38,14 @@
         android:label=" "
         tools:layout="@layout/fragment_un_subscribe" >
         <action
-            android:id="@+id/action_unSubscribeFragment_to_mainSettingsFragment"
-            app:destination="@id/mainSettingsFragment"
-            app:popUpTo="@id/mainSettingsFragment"
+            android:id="@+id/action_unSubscribeFragment_to_profileModifyFragment"
+            app:destination="@id/profileModifyFragment"
+            />
+        <action
+            android:id="@+id/action_unSubscribeFragment_to_HomeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"
             />
     </fragment>
     <fragment
@@ -53,5 +58,13 @@
             android:id="@+id/action_profileModifyFragment_to_unSubscribeFragment"
             app:destination="@id/unSubscribeFragment"
             />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.alloon_aos.view.fragment.photi.HomeFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_home">
+
+
     </fragment>
 </navigation>
