@@ -63,13 +63,31 @@
             android:id="@+id/action_profileModifyFragment_to_unSubscribeFragment"
             app:destination="@id/unSubscribeFragment"
             />
+        <action
+            android:id="@+id/action_profileModifyFragment_to_profilePasswordFragment"
+            app:destination="@id/profilePasswordFragment"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/profilePasswordFragment"
+        android:name="com.example.alloon_aos.view.fragment.settings.ProfilePassword"
+        android:label=" "
+        tools:layout="@layout/fragment_profile_password">
+        <action
+            android:id="@+id/action_profilePasswordFragment_to_passwordSendFragment"
+            app:destination="@id/passwordSendFragment"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/passwordSendFragment"
+        android:name="com.example.alloon_aos.view.fragment.auth.PasswordSendFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_password_send">
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.alloon_aos.view.fragment.photi.HomeFragment"
         android:label=" "
         tools:layout="@layout/fragment_home">
-
-
     </fragment>
 </navigation>

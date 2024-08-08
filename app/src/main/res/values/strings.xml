@@ -39,6 +39,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="unsubscirbe"><u>회원탈퇴</u></string>
+    <string name="profilepassword"><u>비밀번호가 기억나지 않아요</u></string>
 
 </resources>

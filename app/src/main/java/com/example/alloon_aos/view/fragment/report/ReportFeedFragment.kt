@@ -95,7 +95,7 @@ class ReportFeedFragment : Fragment() {
 
     fun click(){
         view?.findNavController()?.navigate(R.id.action_reportFeedFragment_to_reportPageFragment)
-        CustomToast.createToast(activity,"신고가 완료됐어요. 꼼꼼히 확인하고,\n" +
+        CustomToast.createToast(activity,"신고가 완료됐어요. 꼼꼼히 확인하고, " +
                 "회원님의 이메일로 답변을 보내드릴게요.")?.show()
     }
 

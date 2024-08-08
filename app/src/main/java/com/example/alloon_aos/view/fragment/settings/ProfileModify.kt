@@ -31,7 +31,7 @@ class ProfileModify : Fragment() {
     fun moveFlag(i : Int){
         when(i){
             1 -> {
-                println("비밀번호 변경")
+                view?.findNavController()?.navigate(R.id.action_profileModifyFragment_to_profilePasswordFragment)
             }
             2 -> {
                 view?.findNavController()?.navigate(R.id.action_profileModifyFragment_to_unSubscribeFragment)

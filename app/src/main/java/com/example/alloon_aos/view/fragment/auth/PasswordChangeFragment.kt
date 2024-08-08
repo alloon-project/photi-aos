@@ -24,6 +24,7 @@ import java.util.regex.Pattern
 class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentPasswordChangeBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
+    private var isFromSettingsActivity = false
     private lateinit var mContext : Context
 
     private val num_pattern = Pattern.compile("[0-9]")
@@ -50,7 +51,9 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
         setListener()
         setObserve()
 
-
+        arguments?.let {
+            isFromSettingsActivity = it.getBoolean("IS_FROM_SETTINGS", false)
+        }
         return binding.root
     }
 
@@ -194,6 +197,8 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
     }
 
     override fun onClickYesButton() {
+        if(isFromSettingsActivity)
+            activity?.finish()
         view?.findNavController()?.navigate(R.id.action_passwordChangeFragment_to_loginFragment)
     }
 }
