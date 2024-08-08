@@ -14,6 +14,7 @@ import com.example.alloon_aos.view.fragment.photi.HomeFragment
 import com.example.alloon_aos.view.fragment.photi.MyPageFragment
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 
 private const val TAG_CHALLENGE = "challenge_fragment"
 private const val TAG_HOME = "home_fragment"
@@ -27,14 +28,27 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_photi)
 
         setFragment(TAG_HOME, HomeFragment())
+        setListener()
 
+        val isFrom = intent.getStringExtra("IS_FROM")
+        when(isFrom){
+            "LOGOUT" -> {
+                CustomToast.createToast(this, "로그아웃이 완료됐어요")?.show()
+            }
+            "UNSUBSCRIBE" -> {
+                CustomToast.createToast(this, "탈퇴가 완료됐어요. 다음에 또 만나요!")?.show()
+            }
+        }
+    }
+
+    private fun setListener(){
         binding.navigationView.setOnItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.homeFragment -> setFragment(TAG_HOME, HomeFragment())
                 R.id.challengeFragment -> setFragment(TAG_CHALLENGE, ChallengeFragment())
                 R.id.myPageFragment-> {
                     if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
-                        CustomTwoButtonDialog(this,"로그인하고 다양한 챌린지에\n 참여해보세요!","","나중에 하기","로그인하기")
+                        CustomTwoButtonDialog(this,"로그인하고 다양한 챌린지에 참여해보세요!","","나중에 하기","로그인하기")
                             .show(supportFragmentManager, "CustomDialog")
                     else
                         setFragment(TAG_PROFILE, MyPageFragment())
@@ -43,6 +57,7 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
             true
         }
     }
+
     private fun setFragment(tag: String, fragment: Fragment) {
         val manager: FragmentManager = supportFragmentManager
         val fragTransaction = manager.beginTransaction()

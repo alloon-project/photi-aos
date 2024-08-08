@@ -20,11 +20,6 @@
         <action
             android:id="@+id/action_mainSettingsFragment_to_unSubscribeFragment"
             app:destination="@id/unSubscribeFragment" />
-        <action
-            android:id="@+id/action_mainSettingsFragment_to_HomeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
@@ -46,12 +41,7 @@
             android:id="@+id/action_unSubscribeFragment_to_profileModifyFragment"
             app:destination="@id/profileModifyFragment"
             />
-        <action
-            android:id="@+id/action_unSubscribeFragment_to_HomeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true"
-            />
+
     </fragment>
     <fragment
         android:id="@+id/profileModifyFragment"
@@ -84,10 +74,5 @@
         android:label=" "
         tools:layout="@layout/fragment_password_send">
     </fragment>
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.alloon_aos.view.fragment.photi.HomeFragment"
-        android:label=" "
-        tools:layout="@layout/fragment_home">
-    </fragment>
+
 </navigation>

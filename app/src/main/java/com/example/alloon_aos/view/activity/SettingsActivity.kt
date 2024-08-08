@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -46,5 +47,21 @@ class SettingsActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         // 기본적으로 액티비티 종료가 처리되므로 필요 없음
         return super.onSupportNavigateUp()
+    }
+
+    fun logout(){
+        finish()
+        val intent = Intent(this, PhotiActivity::class.java).apply {
+            putExtra("IS_FROM","LOGOUT")
+        }
+        startActivity(intent)
+    }
+
+    fun unsubscribe(){
+        finish()
+        val intent = Intent(this, PhotiActivity::class.java).apply {
+            putExtra("IS_FROM","UNSUBSCRIBE")
+        }
+        startActivity(intent)
     }
 }

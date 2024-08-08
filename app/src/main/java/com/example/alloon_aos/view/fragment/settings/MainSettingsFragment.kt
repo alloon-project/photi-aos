@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,6 +14,8 @@ import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentMainSettingsBinding
+import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
@@ -66,10 +69,8 @@ class MainSettingsFragment : Fragment(),CustomTwoButtonDialogInterface{
     override fun onClickSecondButton() {
         tokenManager.deleteAccessToken()
         tokenManager.deleteRefreshToken()
-        CustomToast.createToast(activity, "로그아웃이 완료됐어요")?.show()
-        Handler(Looper.getMainLooper()).postDelayed({
-            view?.findNavController()?.navigate(R.id.action_mainSettingsFragment_to_HomeFragment)
-        }, 1000)
+        val mActivity = activity as SettingsActivity
+        mActivity.logout()
     }
 
 }
