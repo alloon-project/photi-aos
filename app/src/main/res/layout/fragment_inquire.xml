@@ -45,7 +45,8 @@
                     android:button="@drawable/selector_radio_button"
                     android:buttonTint="@color/radiobutton_color"
                     android:fontFamily="@font/suit_semibold"
-                    android:text="\u0020\u0020\u0020서비스 이용 문의"
+                    android:text="서비스 이용 문의"
+                    android:paddingStart="10dp"
                     android:textColor="@drawable/selector_radio_text"
                     android:textSize="14dp" />
 
@@ -57,7 +58,8 @@
                     android:button="@drawable/selector_radio_button"
                     android:buttonTint="@color/radiobutton_color"
                     android:fontFamily="@font/suit_semibold"
-                    android:text="\u0020\u0020\u0020개선 / 제안 요청"
+                    android:text="개선 / 제안 요청"
+                    android:paddingStart="10dp"
                     android:textColor="@drawable/selector_radio_text"
                     android:textSize="14dp" />
 
@@ -69,7 +71,8 @@
                     android:button="@drawable/selector_radio_button"
                     android:buttonTint="@color/radiobutton_color"
                     android:fontFamily="@font/suit_semibold"
-                    android:text="\u0020\u0020\u0020버그 문의"
+                    android:text="버그 문의"
+                    android:paddingStart="10dp"
                     android:textColor="@drawable/selector_radio_text"
                     android:textSize="14dp" />
 
@@ -81,7 +84,8 @@
                     android:button="@drawable/selector_radio_button"
                     android:buttonTint="@color/radiobutton_color"
                     android:fontFamily="@font/suit_semibold"
-                    android:text="\u0020\u0020\u0020기타 문의"
+                    android:text="기타 문의"
+                    android:paddingStart="10dp"
                     android:textColor="@drawable/selector_radio_text"
                     android:textSize="14dp" />
             </RadioGroup>

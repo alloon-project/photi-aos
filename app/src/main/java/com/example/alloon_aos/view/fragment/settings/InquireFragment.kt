@@ -26,7 +26,8 @@ class InquireFragment : Fragment() {
     private lateinit var binding : FragmentInquireBinding
     private lateinit var mContext: Context
    // private val authViewModel by activityViewModels<AuthViewModel>()
-    private lateinit var radioTag: String
+    private var selectedRadioButton: RadioButton ?= null
+    private var title = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,19 +68,23 @@ class InquireFragment : Fragment() {
                     if(s.isEmpty())
                         binding.nextButton.isEnabled = false
                     else{
-                         radioTag = binding.selectRadiogroup.getCheckedRadioButton()?.text.toString()
-                        if(radioTag != null.toString()) binding.nextButton.isEnabled = true
+                         selectedRadioButton = binding.selectRadiogroup.getCheckedRadioButton()
+                        if(selectedRadioButton != null) binding.nextButton.isEnabled = true
                     }
 
             }
         })
+
+        binding.selectRadiogroup.setOnCheckedChangeListener { radioGroup, checkId ->
+            if(binding.contentsEditText.text.isNotEmpty())  binding.nextButton.isEnabled = true
+        }
     }
 
 
     fun Click(){
         view?.findNavController()?.navigate(R.id.action_inquireFragment_to_mainSettingsFragment)
-        println("$radioTag: " + binding.contentsEditText.text)
-        CustomToast.createToast(activity,"접수가 완료됐어요. 꼼꼼히 확인하고,\n" +
+        println("$selectedRadioButton: " + binding.contentsEditText.text)
+        CustomToast.createToast(activity,"접수가 완료됐어요. 꼼꼼히 확인 후, " +
                 "회원님의 이메일로 답변을 보내드릴게요.")?.show()
     }
 
@@ -93,4 +98,9 @@ class InquireFragment : Fragment() {
         return checkedRadioButton
     }
 
+    fun sendSelectedData(){
+        val title = selectedRadioButton?.text
+        val message = binding.contentsEditText.text
+
+    }
 }
