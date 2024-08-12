@@ -1,6 +1,7 @@
 package com.example.alloon_aos.data.repository
 
 import android.util.Log
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.data.model.RefreshTokenRequest
 import com.example.alloon_aos.data.remote.RetrofitClient.apiService
 import kotlinx.coroutines.runBlocking
@@ -21,7 +22,7 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
         }
 
         if (refreshToken == null) {
-            // 로그인 화면으로 간다
+            MyApplication.instance.redirectToLogin()
             return null
         }
 
@@ -31,15 +32,13 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
                 if (response.isSuccessful) {
                     response.body()?.accessToken
                 } else {
-                    // 리프레쉬 토큰이 없다는 응답이 오면 로그인 화면으로 이동
                     if (response.code() == 401) {
-
+                        MyApplication.instance.redirectToLogin()
                     }
                     null
                 }
             } catch (e: Exception) {
-                // 예외가 발생하면 로그인 화면으로 이동
-
+                MyApplication.instance.redirectToLogin()
                 null
             }
         }
