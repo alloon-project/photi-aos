@@ -162,7 +162,7 @@
     <!-- Priamry Button -->
     <style name="Theme.icon_btn_blue" parent="Theme.Photi">
         <item name="backgroundTint">@color/btn_icon_blue</item>
-        <item name="srcCompat">@drawable/ic_add</item>
+        <item name="srcCompat">@drawable/ic_plus</item>
     </style>
     <style name="Theme.icon_xlarge_blue" parent="Theme.icon_btn_blue">
         <item name="android:width">53dp</item>
@@ -176,7 +176,7 @@
     <!-- Gray Button -->
     <style name="Theme.icon_btn_gray" parent="Theme.Photi">
         <item name="backgroundTint">@color/btn_icon_gray</item>
-        <item name="srcCompat">@drawable/ic_add</item>
+        <item name="srcCompat">@drawable/ic_plus</item>
         <item name="tint">@color/btn_icon_add_color</item>
     </style>
     <style name="Theme.icon_xlarge_gray" parent="Theme.icon_btn_gray">

@@ -9,11 +9,11 @@
     <item
         android:id="@+id/challengeFragment"
         android:title="챌린지"
-        android:icon="@drawable/ic_postit_gray400"/>
+        android:icon="@drawable/ic_postit"/>
 
     <item
         android:id="@+id/myPageFragment"
         android:title="마이"
-        android:icon="@drawable/ic_profile"/>
+        android:icon="@drawable/ic_user"/>
 
 </menu>
