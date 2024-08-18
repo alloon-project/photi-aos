@@ -24,6 +24,7 @@ class CustomOneButtonDialog(val customDialogInterface: CustomOneButtonDialogInte
 
         if(message.equals(""))  binding.messageTextView.visibility = View.GONE
         else    binding.messageTextView.text = message
+        binding.titleTextView.text = title
         binding.messageTextView.text = message
         binding.dialogBtn.text = buttonText
 

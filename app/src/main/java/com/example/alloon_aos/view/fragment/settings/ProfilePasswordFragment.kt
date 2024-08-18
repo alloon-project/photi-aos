@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.settings
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,17 +8,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.FragmentProfileModifyBinding
 import com.example.alloon_aos.databinding.FragmentProfilePasswordBinding
 import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.activity.SettingsActivity
 
-class ProfilePassword : Fragment() {
+class ProfilePasswordFragment : Fragment() {
     private lateinit var binding : FragmentProfilePasswordBinding
     private lateinit var mContext: Context
     // private val authViewModel by activityViewModels<AuthViewModel>()
+    private lateinit var startForResult: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,8 +30,23 @@ class ProfilePassword : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_password, container, false)
         binding.fragment = this
         binding.lifecycleOwner = viewLifecycleOwner
+        val mActivity = activity as SettingsActivity
+        mActivity.setAppBar(" ")
+
+        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data?.getBooleanExtra("isFromPasswordChangeFragment",false)
+                if(data == true)
+                    findNavController().popBackStack()
+            }
+        }
 
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
     }
 
     fun changeInputType(n : Int) {
@@ -44,10 +63,9 @@ class ProfilePassword : Fragment() {
     }
 
     fun moveToAuth(){
-        val intent = Intent(activity, AuthActivity::class.java).apply {
+        val intent = Intent(requireContext(), AuthActivity::class.java).apply {
             putExtra("IS_FROM_SETTINGS_ACTIVITY",true)
         }
-        startActivity(intent)
-        //view?.findNavController()?.navigate(R.id.action_profilePasswordFragment_to_passwordSendFragment)
+        startForResult.launch(intent)
     }
 }

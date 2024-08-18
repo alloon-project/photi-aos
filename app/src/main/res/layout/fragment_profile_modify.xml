@@ -2,11 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.fragment.settings.ProfileModify">
+    tools:context=".view.fragment.settings.ProfileModifyFragment">
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.settings.ProfileModify" />
+            type="com.example.alloon_aos.view.fragment.settings.ProfileModifyFragment" />
 <!--        <variable-->
 <!--            name="viewModel"-->
 <!--            type="com.example.alloon_aos.viewmodel.AuthViewModel" />-->

@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileModifyFragment"
-        android:name="com.example.alloon_aos.view.fragment.settings.ProfileModify"
+        android:name="com.example.alloon_aos.view.fragment.settings.ProfileModifyFragment"
         android:label=" "
         tools:layout="@layout/fragment_profile_modify" >
 
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/profilePasswordFragment"
-        android:name="com.example.alloon_aos.view.fragment.settings.ProfilePassword"
+        android:name="com.example.alloon_aos.view.fragment.settings.ProfilePasswordFragment"
         android:label=" "
         tools:layout="@layout/fragment_profile_password">
         <action

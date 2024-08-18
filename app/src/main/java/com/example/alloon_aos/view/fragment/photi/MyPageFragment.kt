@@ -94,7 +94,7 @@ class MyPageFragment : Fragment() {
     }
 
     fun moveToSettingsActivity(){
-        activity?.finish()
+        //activity?.finish()
         startActivity(Intent(activity, SettingsActivity::class.java))
     }
 

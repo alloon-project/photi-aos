@@ -3,19 +3,19 @@ package com.example.alloon_aos.view.fragment.auth
 import android.content.Context
 import android.os.Bundle
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentPasswordSendBinding
+import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.KeyboardListener
 import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
-import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 
@@ -50,6 +50,7 @@ class PasswordSendFragment : Fragment() {
         super.onAttach(context)
         mContext = context
     }
+
 
     fun setListener(){
         binding.idEditText.setOnFocusChangeListener { v, hasFocus ->

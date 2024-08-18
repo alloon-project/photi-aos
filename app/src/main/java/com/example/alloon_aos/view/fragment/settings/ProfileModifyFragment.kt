@@ -10,9 +10,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentProfileModifyBinding
-import com.example.alloon_aos.databinding.FragmentUnSubscribeBinding
+import com.example.alloon_aos.view.activity.SettingsActivity
 
-class ProfileModify : Fragment() {
+class ProfileModifyFragment : Fragment() {
     private lateinit var binding : FragmentProfileModifyBinding
     private lateinit var mContext: Context
     // private val authViewModel by activityViewModels<AuthViewModel>()
@@ -24,7 +24,8 @@ class ProfileModify : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_modify, container, false)
         binding.fragment = this
         binding.lifecycleOwner = viewLifecycleOwner
-
+        val mActivity = activity as SettingsActivity
+        mActivity.setAppBar("프로필 수정")
         return binding.root
     }
 

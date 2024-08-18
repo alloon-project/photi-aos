@@ -1,6 +1,7 @@
 package com.example.alloon_aos.view.fragment.auth
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,6 +18,7 @@ import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.fragment.settings.ProfilePasswordFragment
 import com.example.alloon_aos.viewmodel.AuthViewModel
 import java.util.regex.Pattern
 
@@ -26,6 +28,7 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
     private val authViewModel by activityViewModels<AuthViewModel>()
     private var isFromSettingsActivity = false
     private lateinit var mContext : Context
+    private lateinit var mActivity: AuthActivity
 
     private val num_pattern = Pattern.compile("[0-9]")
     private val eng_pattern = Pattern.compile("[a-zA-Z]")
@@ -42,8 +45,10 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
         binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as AuthActivity
+        mActivity = activity as AuthActivity
         mActivity.setAppBar("비밀번호 재설정")
+
+        isFromSettingsActivity = mActivity.isFromSettingsActivity
 
         blue  = mContext.getColor(R.color.blue400)
         grey = mContext.getColor(R.color.gray400)
@@ -51,9 +56,6 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
         setListener()
         setObserve()
 
-        arguments?.let {
-            isFromSettingsActivity = it.getBoolean("IS_FROM_SETTINGS", false)
-        }
         return binding.root
     }
 
@@ -197,8 +199,10 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
     }
 
     override fun onClickYesButton() {
-        if(isFromSettingsActivity)
-            activity?.finish()
+        if(isFromSettingsActivity){
+            mActivity.finishActivity()
+        }
+
         view?.findNavController()?.navigate(R.id.action_passwordChangeFragment_to_loginFragment)
     }
 }

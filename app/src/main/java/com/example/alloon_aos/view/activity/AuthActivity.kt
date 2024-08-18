@@ -1,9 +1,12 @@
 package com.example.alloon_aos.view.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -15,37 +18,60 @@ import com.example.alloon_aos.view.fragment.auth.PasswordSendFragment
 
 class AuthActivity : AppCompatActivity() {
    lateinit var binding : ActivityAuthBinding
+   lateinit var navHostFragment : NavHostFragment
+   lateinit var navController : NavController
    var isFromSettingsActivity = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_auth)
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav) as NavHostFragment
-        val navController = navHostFragment.navController
-
         val appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(),
             fallbackOnNavigateUpListener = ::onSupportNavigateUp
         )
+        isFromSettingsActivity = intent.getBooleanExtra("IS_FROM_SETTINGS_ACTIVITY",false)
+
+        navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav) as NavHostFragment
+        navController = navHostFragment.navController
+
+        setNavGraph(isFromSettingsActivity)
 
         binding.actionBar.setupWithNavController(navController, appBarConfiguration)
 
-
-        isFromSettingsActivity = intent.getBooleanExtra("IS_FROM_SETTINGS_ACTIVITY",false)
-        if(isFromSettingsActivity){
-            supportFragmentManager.beginTransaction().replace(R.id.nav, PasswordSendFragment()).commit()
-            PasswordChangeFragment().apply{
-                arguments = Bundle().apply {
-                    putBoolean("IS_FROM_SETTINGS_ACTIVITY",isFromSettingsActivity)
-                }
+        binding.actionBar.setNavigationOnClickListener {
+            val currentFragment = navController.currentDestination?.id
+            if (currentFragment == R.id.passwordSendFragment && isFromSettingsActivity) {
+                finish()
+            } else {
+                navController.navigateUp()  // 이전 프래그먼트로 돌아가기
             }
         }
 
     }
 
+    private fun setNavGraph(isAlreadyLogin: Boolean) {
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_auth)
+        if (isAlreadyLogin) navGraph.setStartDestination(R.id.passwordSendFragment)
+        else navGraph.setStartDestination(R.id.loginFragment)
+        navController.setGraph(navGraph, null) //navController에 graph 설정
+    }
+
     fun setAppBar(appTitle : String) {
         binding.actionBar.setNavigationIcon(R.drawable.ic_back)
         binding.title.setText(appTitle)
+    }
+
+
+    fun isFromSettings() : Boolean{
+        return isFromSettingsActivity
+    }
+
+    fun finishActivity() {
+        val resultIntent = Intent().apply {
+            putExtra("isFromPasswordChangeFragment", true)
+        }
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
     }
 }
