@@ -64,15 +64,11 @@
         android:label=" "
         tools:layout="@layout/fragment_profile_password">
         <action
-            android:id="@+id/action_profilePasswordFragment_to_passwordSendFragment"
-            app:destination="@id/passwordSendFragment"
+            android:id="@+id/action_profilePasswordFragment_to_profileModifyFragment"
+            app:destination="@id/profileModifyFragment"
+            app:popUpTo="@id/profileModifyFragment"
+            app:popUpToInclusive="true"
             />
-    </fragment>
-    <fragment
-        android:id="@+id/passwordSendFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.PasswordSendFragment"
-        android:label=" "
-        tools:layout="@layout/fragment_password_send">
-    </fragment>
+    </fragment>>
 
 </navigation>

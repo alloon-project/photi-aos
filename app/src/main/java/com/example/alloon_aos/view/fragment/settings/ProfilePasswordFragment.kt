@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
@@ -50,14 +52,29 @@ class ProfilePasswordFragment : Fragment() {
     }
 
     fun changeInputType(n : Int) {
-        val imageButton = if (n == 1) binding.hide1Btn else binding.hide2Btn
-        val editText = if (n == 1) binding.newPassword1EditText else binding.newPassword2EditText
+        var imageButton : ImageButton? = null
+        var editText : EditText? = null
 
-        if (editText.inputType == 0x00000091) {
-            imageButton.background = mContext.getDrawable(R.drawable.ic_eye_off)
-            editText.inputType = 0x00000081
-        } else if (editText.inputType == 0x00000081) {
-            imageButton.background = mContext.getDrawable(R.drawable.ic_eye_on)
+        when(n){
+            1 -> {
+                imageButton = binding.hideBtn1
+                editText = binding.passwordEditText
+            }
+            2 -> {
+                imageButton = binding.hideBtn2
+                editText = binding.newPasswordEditText
+            }
+            3 -> {
+                imageButton = binding.hideBtn3
+                editText = binding.newPasswordEditText2
+            }
+        }
+
+        if (editText?.inputType == 0x00000091) {
+            imageButton?.background = mContext.getDrawable(R.drawable.ic_eye_off)
+            editText?.inputType = 0x00000081
+        } else if (editText?.inputType == 0x00000081) {
+            imageButton?.background = mContext.getDrawable(R.drawable.ic_eye_on)
             editText.inputType = 0x00000091
         }
     }
