@@ -1,7 +1,9 @@
 package com.example.alloon_aos.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.alloon_aos.data.model.ChallengeItem
 
 data class Item(val title:String, val date: String, val url: String? = null, var hashtag: MutableList<String> = mutableListOf()  )
 data class Chip(val id:String)
@@ -78,4 +80,17 @@ class PhotiViewModel: ViewModel() {
 //    }
 
 
+    // 챌린지 없을 때
+    val _photoItem = MutableLiveData<ChallengeItem>() //현재 item
+    val photoItems = arrayListOf(
+        ChallengeItem("영화 챌린지","~ 2024. 12. 1","10시까지","영화를 봅시다","https://ifh.cc/g/6HRkxa.jpg", mutableListOf("영화관람"),"3명"),
+        ChallengeItem("면접 연습하기","~ 2024. 8. 22","8시까지","면접 연습을 해야해요","https://ifh.cc/g/PJpN7X.jpg",mutableListOf("취뽀","스피치"),"2명"),
+        ChallengeItem("헬스 챌린지","~ 2024. 12. 1","7시까지","헬스는 꾸쭌히!","https://ifh.cc/g/AA0NMd.jpg", mutableListOf("헬스","요가"),"네명"),
+        ChallengeItem("요리 챌린지","~ 2024. 12. 1","2시까찌","요리는 즐거워~~","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리"),"다슷명")
+    )//data 받을 list 얘는 페이지 새로 받아올때마다 초기화 하면된다
+
+    val photoItemList = MutableLiveData<ArrayList<ChallengeItem>>()
+    fun setCurrentPhoto(photoItem: ChallengeItem) {
+        _photoItem.value = photoItem
+    }
 }

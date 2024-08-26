@@ -15,8 +15,6 @@ import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.adapter.HashCardAdapter
 import com.example.alloon_aos.view.adapter.HashTagAdapter
 import com.example.alloon_aos.view.adapter.HotCardAdapter
-import com.example.alloon_aos.viewmodel.Chip
-import com.example.alloon_aos.viewmodel.Item
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class ChallengeCommendFragment : Fragment() {

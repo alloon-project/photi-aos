@@ -108,8 +108,6 @@
     </style>
 
     <!-- line button-->
-
-
     <style name="Theme.btn_round_line_xlarge" parent="Theme.Photi">
         <item name="android:width">327dp</item>
         <item name="android:height">56dp</item>
@@ -161,11 +159,10 @@
     <!-- ////////////////////// Icon Button ////////////////////////// -->
     <!-- Priamry Button -->
     <style name="Theme.icon_btn_blue" parent="Theme.Photi">
-        <item name="backgroundTint">@color/btn_icon_blue</item>
         <item name="srcCompat">@drawable/ic_plus</item>
     </style>
     <style name="Theme.icon_xlarge_blue" parent="Theme.icon_btn_blue">
-        <item name="android:width">53dp</item>
+        <item name="android:width">56dp</item>
         <item name="android:height">56dp</item>
         <item name="android:bottomLeftRadius">100dp</item>
         <item name="android:bottomRightRadius">100dp</item>
@@ -175,7 +172,6 @@
 
     <!-- Gray Button -->
     <style name="Theme.icon_btn_gray" parent="Theme.Photi">
-        <item name="backgroundTint">@color/btn_icon_gray</item>
         <item name="srcCompat">@drawable/ic_plus</item>
         <item name="tint">@color/btn_icon_add_color</item>
     </style>
@@ -189,7 +185,7 @@
     </style>
 
 
-    <!-- ////////////////////// Text Button 여기부터 글꼴 사이즈 적용 안함 ////////////////////////// -->
+    <!-- ////////////////////// Text Button ////////////////////////// -->
     <style name="Theme.text_btn" parent="Theme.Photi">
         <item name="android:backgroundTint">@color/white</item>
 <!--        <item name="android:textColor">@color/gray400</item>-->

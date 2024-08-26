@@ -18,7 +18,7 @@ class HashTagAdapter(private val photiViewModel: PhotiViewModel) :
         fun setContents(pos: Int) {
             with (photiViewModel.hashChips[pos]) {
                 binding.hashtagTextveiw.text = id
-                binding.chipLayout.setBackgroundResource(R.drawable.chip_gray)
+                binding.chipLayout.setBackgroundResource(R.drawable.chip_gray_line)
                 binding.hashtagTextveiw.setTextColor(gray)
 
             }

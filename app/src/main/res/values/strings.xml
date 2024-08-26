@@ -41,4 +41,12 @@
 
     <string name="profilepassword"><u>비밀번호가 기억나지 않아요</u></string>
 
+    <!-- HOME -->
+    <string name="guesthome">회원님을 기다리고 있는 \n챌린지들이에요</string>
+    <string name="memberhome">photi님의 \n열정을 보여주세요!</string>
+    <string name="memberhome2">요즘 인기 챌린지 보여드릴게요</string>
+    <string name="addphoto">더 많은 챌린지는 \n어디서 만날 수 있을까요?</string>
+    <string name="makechallenge">챌린지 만들기</string>
+    <string name="newchallenge">\'챌린지\' 탭으로 이동해 다양한 챌린지를 만나보세요.</string>
+    <string name="newchallenge2">새로운 열정을 만들어 보세요.</string>
 </resources>

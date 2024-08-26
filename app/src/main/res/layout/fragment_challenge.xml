@@ -31,6 +31,7 @@
                     android:hint="챌린지, 해시태그를 검색해보세요"
                     android:textColorHint="@color/gray500"
                     android:textSize="14dp"
+                    android:inputType="text"
                     android:ems="10"/>
 
                 <ImageButton
@@ -100,12 +101,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/line_view"/>
 
             <ImageButton
-                android:layout_width="53dp"
+                android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_gravity="bottom"
                 android:layout_marginRight="24dp"
                 android:layout_marginBottom="24dp"
+                android:stateListAnimator="@null"
                 android:theme="@style/Theme.icon_xlarge_blue"
+                android:background="@drawable/btn_round_primary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
