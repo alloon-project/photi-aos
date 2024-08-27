@@ -1,6 +1,7 @@
 package com.example.alloon_aos.view.fragment.photi
 
 import HomePageTransformer
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,9 @@ import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeBinding
+import com.example.alloon_aos.view.activity.FeedActivity
 import com.example.alloon_aos.view.activity.PhotiActivity
+import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.adapter.MemberHomeAdapter
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
@@ -96,4 +99,9 @@ class HomeFragment : Fragment() {
             }
         })
     }
+
+    fun moveToFeedActivity(){
+        startActivity(Intent(activity, FeedActivity::class.java))
+    }
+
 }
