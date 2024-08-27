@@ -140,7 +140,7 @@ class LoginFragment : Fragment() {
                         binding.pwLinearlayout.isVisible = true
                     }
                     "IO_Exception" ->{
-                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
+                        CustomToast.createToast(activity,"네트워크가 불안정해요. 다시 시도해주세요.","circle")?.show()
                     }
                 }
             }

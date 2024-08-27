@@ -19,6 +19,10 @@ object CustomToast {
             "check" -> {
                 binding.icon.setImageResource(R.drawable.ic_check_grey)
             }
+            "circle" -> {
+                binding.icon.setImageResource(R.drawable.ic_close_circle)
+                binding.icon.setColorFilter(R.color.red400)
+            }
         }
         return Toast(context).apply {
             //setGravity(Gravity.TOP or Gravity.LEFT, 100, 0)
