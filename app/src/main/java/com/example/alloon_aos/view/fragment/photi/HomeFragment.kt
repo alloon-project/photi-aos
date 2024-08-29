@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
@@ -16,7 +17,7 @@ import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeBinding
 import com.example.alloon_aos.view.activity.FeedActivity
 import com.example.alloon_aos.view.activity.PhotiActivity
-import com.example.alloon_aos.view.activity.SettingsActivity
+import com.example.alloon_aos.view.adapter.GuestHomeAdapter
 import com.example.alloon_aos.view.adapter.MemberHomeAdapter
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
@@ -24,7 +25,7 @@ import com.example.alloon_aos.viewmodel.PhotiViewModel
 class HomeFragment : Fragment() {
     private lateinit var binding : FragmentHomeBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
-    private lateinit var adapter: MemberHomeAdapter
+    private lateinit var memberHomeAdapter: MemberHomeAdapter
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
 
     override fun onCreateView(
@@ -38,10 +39,14 @@ class HomeFragment : Fragment() {
 
         val mActivity = activity as PhotiActivity
 
-        adapter = MemberHomeAdapter(photiViewModel, emptyList())
-        binding.viewPager.adapter = adapter
+        memberHomeAdapter = MemberHomeAdapter(photiViewModel, emptyList())
+        binding.viewPager.adapter = memberHomeAdapter
         binding.viewPager.offscreenPageLimit = 2
         binding.viewPager.setPageTransformer(HomePageTransformer())
+
+        binding.guestRecyclerview.adapter = GuestHomeAdapter(photiViewModel)
+        binding.guestRecyclerview.layoutManager = GridLayoutManager(context, 3)
+        binding.guestRecyclerview.setHasFixedSize(true)
 
         setObserver()
 
@@ -50,7 +55,7 @@ class HomeFragment : Fragment() {
     }
     private fun setObserver() {
         photiViewModel.photoItemList.observe(viewLifecycleOwner){
-            adapter.updatePhotoItems(it)
+            memberHomeAdapter.updatePhotoItems(it)
         }
 
         photiViewModel._photoItem.observe(viewLifecycleOwner){

@@ -86,7 +86,10 @@ class PhotiViewModel: ViewModel() {
         ChallengeItem("영화 챌린지","~ 2024. 12. 1","10시까지","영화를 봅시다","https://ifh.cc/g/6HRkxa.jpg", mutableListOf("영화관람"),"3명"),
         ChallengeItem("면접 연습하기","~ 2024. 8. 22","8시까지","면접 연습을 해야해요","https://ifh.cc/g/PJpN7X.jpg",mutableListOf("취뽀","스피치"),"2명"),
         ChallengeItem("헬스 챌린지","~ 2024. 12. 1","7시까지","헬스는 꾸쭌히!","https://ifh.cc/g/AA0NMd.jpg", mutableListOf("헬스","요가"),"네명"),
-        ChallengeItem("요리 챌린지","~ 2024. 12. 1","2시까찌","요리는 즐거워~~","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리"),"다슷명")
+        ChallengeItem("요리 챌린지","~ 2024. 12. 1","2시까찌","요리는 즐거워~~","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리"),"다슷명"),
+        ChallengeItem("스터디 챌린지","~ 2024. 12. 1","8시까지","공부해라","https://ifh.cc/g/KB2Vh1.jpg", mutableListOf("어학","자격증"),"두명"),
+        ChallengeItem("소설 필사하기","~ 2024. 9. 1","12시까지","당신의 최애 소설은?","https://ifh.cc/g/yxgmBH.webp", mutableListOf("고능해지자","독서"),"7명")
+
     )//data 받을 list 얘는 페이지 새로 받아올때마다 초기화 하면된다
 
     val photoItemList = MutableLiveData<ArrayList<ChallengeItem>>()
