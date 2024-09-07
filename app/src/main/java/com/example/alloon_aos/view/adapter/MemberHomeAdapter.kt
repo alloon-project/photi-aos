@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.alloon_aos.data.model.ChallengeItem
-import com.example.alloon_aos.databinding.ItemNochallengeGraphicViewpagerBinding
-import com.example.alloon_aos.databinding.ItemNochallengePhotoViewpagerBinding
+import com.example.alloon_aos.databinding.ItemGraphicViewpagerBinding
+import com.example.alloon_aos.databinding.ItemPhotoViewpagerBinding
+import com.example.alloon_aos.viewmodel.ChallengeItem
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class MemberHomeAdapter( private val photiViewModel: PhotiViewModel, private var challengeItems: List<ChallengeItem>) :
@@ -18,7 +18,7 @@ class MemberHomeAdapter( private val photiViewModel: PhotiViewModel, private var
         private const val VIEW_TYPE_GRAPHIC = 1
     }
 
-    inner class PhotoViewHolder(private val binding: ItemNochallengePhotoViewpagerBinding) :
+    inner class PhotoViewHolder(private val binding: ItemPhotoViewpagerBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun setContents(pos: Int) {
@@ -31,7 +31,7 @@ class MemberHomeAdapter( private val photiViewModel: PhotiViewModel, private var
         }
     }
 
-    inner class GraphicViewHolder(private val binding: ItemNochallengeGraphicViewpagerBinding) :
+    inner class GraphicViewHolder(private val binding: ItemGraphicViewpagerBinding) :
         RecyclerView.ViewHolder(binding.root) {
     }
 
@@ -42,11 +42,11 @@ class MemberHomeAdapter( private val photiViewModel: PhotiViewModel, private var
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_GRAPHIC -> {
-                val binding = ItemNochallengeGraphicViewpagerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ItemGraphicViewpagerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 GraphicViewHolder(binding)
             }
             else -> {
-                val binding = ItemNochallengePhotoViewpagerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ItemPhotoViewpagerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 PhotoViewHolder(binding)
             }
         }

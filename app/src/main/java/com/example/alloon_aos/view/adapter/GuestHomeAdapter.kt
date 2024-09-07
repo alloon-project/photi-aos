@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.alloon_aos.databinding.ItemGuestPhotoRecyclerviewBinding
+import com.example.alloon_aos.databinding.ItemHomePhotoRecyclerviewBinding
 import com.example.alloon_aos.view.ui.util.CustomRotationTransformation
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class GuestHomeAdapter(private val photiViewModel: PhotiViewModel):
     RecyclerView.Adapter<GuestHomeAdapter.ViewHolder>() {
 
-    inner class ViewHolder(private val binding: ItemGuestPhotoRecyclerviewBinding) :
+    inner class ViewHolder(private val binding: ItemHomePhotoRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setContents(pos: Int) {
                 with (photiViewModel.photoItems[pos]) {
@@ -45,7 +45,7 @@ class GuestHomeAdapter(private val photiViewModel: PhotiViewModel):
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemGuestPhotoRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemHomePhotoRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

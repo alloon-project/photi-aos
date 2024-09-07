@@ -26,7 +26,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/search_default"
+                    android:background="@drawable/search"
                     android:fontFamily="@font/suit_medium"
                     android:hint="챌린지, 해시태그를 검색해보세요"
                     android:textColorHint="@color/gray500"

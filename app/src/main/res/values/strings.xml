@@ -49,4 +49,7 @@
     <string name="makechallenge">챌린지 만들기</string>
     <string name="newchallenge">\'챌린지\' 탭으로 이동해 다양한 챌린지를 만나보세요.</string>
     <string name="newchallenge2">새로운 열정을 만들어 보세요.</string>
+    <string name="proofshothome">인증샷 찍으러 가볼까요?</string>
+    <string name="mychallenge">내 챌린지</string>
+    <string name="authphoto">무엇으로 인증할까요?</string>
 </resources>

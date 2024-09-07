@@ -1,12 +1,28 @@
 package com.example.alloon_aos.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.alloon_aos.data.model.ChallengeItem
 
 data class Item(val title:String, val date: String, val url: String? = null, var hashtag: MutableList<String> = mutableListOf()  )
 data class Chip(val id:String)
+data class ChallengeItem(
+    val title: String,
+    val data: String,
+    val time: String,
+    val content: String,
+    val url: String? = null,
+    var hashtag: MutableList<String>,
+    val member: String
+)
+
+data class ProofShotItem(
+    val title: String,
+    val date: String,
+    val time: String,
+    var url: String? = null,
+    var hashtag: MutableList<String>,
+    var proof: Boolean
+)
 
 class PhotiViewModel: ViewModel() {
 
@@ -96,4 +112,23 @@ class PhotiViewModel: ViewModel() {
     fun setCurrentPhoto(photoItem: ChallengeItem) {
         _photoItem.value = photoItem
     }
+
+
+    // 챌린지 있을 때
+    val _proofItem = MutableLiveData<ProofShotItem>() //현재 item
+    val proofItems = arrayListOf(
+        ProofShotItem("영화 챌린지","~ 2024. 12. 1","10시까지",null, mutableListOf("영화관람"),false),
+        ProofShotItem("면접 연습하기","~ 2024. 8. 22","8시까지",null, mutableListOf("취뽀","스피치"),false),
+        ProofShotItem("헬스 챌린지","~ 2024. 12. 1","7시까지",null, mutableListOf("헬스","요가"),false),
+        ProofShotItem("요리 챌린지","~ 2024. 12. 1","2시까찌","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리"),true),
+        ProofShotItem("스터디 챌린지","~ 2024. 12. 1","8시까지","https://ifh.cc/g/KB2Vh1.jpg", mutableListOf("어학","자격증"),true),
+        ProofShotItem("소설 필사하기","~ 2024. 9. 1","12시까지","https://ifh.cc/g/yxgmBH.webp", mutableListOf("고능해지자","독서"),true)
+
+    )//data 받을 list 얘는 페이지 새로 받아올때마다 초기화 하면된다
+
+    val proofItemList = MutableLiveData<ArrayList<ProofShotItem>>()
+    fun setCurrentChallenge(proofItem: ProofShotItem) {
+        _proofItem.value = proofItem
+    }
+
 }

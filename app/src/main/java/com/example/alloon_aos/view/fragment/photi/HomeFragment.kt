@@ -1,6 +1,7 @@
 package com.example.alloon_aos.view.fragment.photi
 
-import HomePageTransformer
+import MemberHomeTransformer
+import ProofShotHomeTransformer
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
@@ -17,7 +20,10 @@ import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeBinding
 import com.example.alloon_aos.view.activity.FeedActivity
 import com.example.alloon_aos.view.activity.PhotiActivity
+import com.example.alloon_aos.view.adapter.ChallengeCardAdapter
+import com.example.alloon_aos.view.adapter.ProofShotHomeAdapter
 import com.example.alloon_aos.view.adapter.GuestHomeAdapter
+import com.example.alloon_aos.view.adapter.HashCardAdapter
 import com.example.alloon_aos.view.adapter.MemberHomeAdapter
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
@@ -26,6 +32,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding : FragmentHomeBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var memberHomeAdapter: MemberHomeAdapter
+    private lateinit var proofShotHomeAdapter: ProofShotHomeAdapter
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
 
     override fun onCreateView(
@@ -42,11 +49,20 @@ class HomeFragment : Fragment() {
         memberHomeAdapter = MemberHomeAdapter(photiViewModel, emptyList())
         binding.viewPager.adapter = memberHomeAdapter
         binding.viewPager.offscreenPageLimit = 2
-        binding.viewPager.setPageTransformer(HomePageTransformer())
+        binding.viewPager.setPageTransformer(MemberHomeTransformer())
 
         binding.guestRecyclerview.adapter = GuestHomeAdapter(photiViewModel)
         binding.guestRecyclerview.layoutManager = GridLayoutManager(context, 3)
         binding.guestRecyclerview.setHasFixedSize(true)
+
+        proofShotHomeAdapter = ProofShotHomeAdapter(photiViewModel, emptyList())
+        binding.viewPager2.adapter = proofShotHomeAdapter
+        binding.viewPager2.offscreenPageLimit = 2
+        binding.viewPager2.setPageTransformer(ProofShotHomeTransformer())
+
+        binding.myChallengeRecyclerview.adapter = ChallengeCardAdapter(photiViewModel)
+        binding.myChallengeRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        binding.myChallengeRecyclerview.setHasFixedSize(true)
 
         setObserver()
 
@@ -56,6 +72,10 @@ class HomeFragment : Fragment() {
     private fun setObserver() {
         photiViewModel.photoItemList.observe(viewLifecycleOwner){
             memberHomeAdapter.updatePhotoItems(it)
+        }
+
+        photiViewModel.proofItemList.observe(viewLifecycleOwner){
+            proofShotHomeAdapter.updatePhotoItems(it)
         }
 
         photiViewModel._photoItem.observe(viewLifecycleOwner){

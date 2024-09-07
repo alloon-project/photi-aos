@@ -2,7 +2,7 @@ import android.content.res.Resources
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 
-class HomePageTransformer : ViewPager2.PageTransformer {
+class MemberHomeTransformer : ViewPager2.PageTransformer {
     private val scaleFactorMin = 0.8f
     private val pageMarginPx = 160.dpToPx()
 
