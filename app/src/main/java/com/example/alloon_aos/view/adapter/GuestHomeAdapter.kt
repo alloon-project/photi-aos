@@ -34,10 +34,12 @@ class GuestHomeAdapter(private val photiViewModel: PhotiViewModel):
                         .transform(CenterCrop(), RoundedCorners(8), CustomRotationTransformation(degree))
                         .into(binding.imageView)
 
+                    val layoutParams = binding.imageView.layoutParams as ConstraintLayout.LayoutParams
                     if (pos == 1 || pos == 4) {
-                        val layoutParams = binding.imageView.layoutParams as ConstraintLayout.LayoutParams
                         layoutParams.topMargin = 20
                         binding.imageView.layoutParams = layoutParams
+                    } else {
+                        layoutParams.bottomMargin = 20
                     }
 
             }

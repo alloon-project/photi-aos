@@ -118,7 +118,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="4dp"
                     android:visibility="gone"
-                    android:background="@drawable/proofshot_blue"/>
+                    android:src="@drawable/proofshot_shape"/>
 
                 <ImageView
                     android:id="@+id/proofshot_shape"

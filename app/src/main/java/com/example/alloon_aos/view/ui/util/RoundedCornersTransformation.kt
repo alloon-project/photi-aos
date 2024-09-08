@@ -21,7 +21,7 @@ class RoundedCornersTransformation(
         radiusArray[1] = radius // Top-left
         radiusArray[2] = radius // Top-right
         radiusArray[3] = radius // Top-right
-        radiusArray[4] = radius // Bottom-right
+        radiusArray[4] = bottomRightRadius // Bottom-right
         radiusArray[5] = bottomRightRadius // Bottom-right
         radiusArray[6] = radius // Bottom-left
         radiusArray[7] = radius // Bottom-left
@@ -33,16 +33,17 @@ class RoundedCornersTransformation(
     }
 
     override fun transform(pool: BitmapPool, toTransform: Bitmap, outWidth: Int, outHeight: Int): Bitmap {
-        val bitmap = Bitmap.createBitmap(toTransform.width, toTransform.height, Bitmap.Config.ARGB_8888)
+        val bitmap = pool.get(toTransform.width, toTransform.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint()
         paint.isAntiAlias = true
+        paint.style = Paint.Style.FILL
 
         val path = Path()
         val rect = RectF(0f, 0f, toTransform.width.toFloat(), toTransform.height.toFloat())
 
         path.addRoundRect(rect, radiusArray, Path.Direction.CW)
-        canvas.drawPath(path, paint)
+        canvas.clipPath(path)
 
         canvas.drawBitmap(toTransform, 0f, 0f, paint)
 

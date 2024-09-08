@@ -6,13 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ItemProofshotViewpagerBinding
 import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
 import com.example.alloon_aos.viewmodel.ProofShotItem
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
-class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel, private var proofItems: List<ProofShotItem>) :
+class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel,
+                           private var proofItems: List<ProofShotItem>,
+                           private val onItemClickListener: (Int) -> Unit) :
     RecyclerView.Adapter<ProofShotHomeAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemProofshotViewpagerBinding) :
@@ -34,12 +37,16 @@ class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel, private v
                     binding.bannerImageview.setImageResource(R.drawable.graphic_clover)
                     binding.proofshotFramelayout.setBackgroundResource(R.drawable.proofshot_green)
                     binding.proofshotShape.setImageResource(R.drawable.graphic_shape_green200)
+
                     Glide.with(binding.proofshotImageview.context)
                         .load(url)
-                        .transform(CenterCrop(), RoundedCornersTransformation(10f, 34f))
+                        .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))
                         .into(binding.proofshotImageview)
                 } else {
                     binding.timeTextview.setText(time)
+                    binding.proofshotButton.setOnClickListener {
+                        onItemClickListener(pos)
+                    }
                 }
             }
         }

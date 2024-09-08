@@ -14,6 +14,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.alloon_aos.databinding.ItemHomeChallengeRecyclerviewBinding
 import com.example.alloon_aos.view.ui.util.CustomRotationTransformation
+import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel) :
@@ -26,12 +27,6 @@ class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel) :
                 binding.dateTextView.text = date
                 binding.timeTextView.text = time
 
-//                binding.chip1Btn.text = hashtag[0]
-//                binding.chip1Btn.visibility = View.VISIBLE
-//                if(hashtag.size == 2){
-//                    binding.chip2Btn.text = hashtag[1]
-//                    binding.chip2Btn.visibility = View.VISIBLE
-//                }
                 binding.chip1Btn.visibility = View.GONE
                 binding.chip2Btn.visibility = View.GONE
                 binding.chip3Btn.visibility = View.GONE
