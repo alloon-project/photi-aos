@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<layout xmlns:tools2="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/apk/res-auto">
@@ -17,14 +17,122 @@
         android:theme="@style/Theme.Photi"
         android:background="@color/white">
 
-        <TextView
+        <ProgressBar
+            android:id="@+id/auth_progress"
+            android:max="100"
+            android:progress="55"
+            android:progressTint="@color/green400"
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:progressDrawable="@drawable/signup_progress"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_marginTop="22dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/sortingButton" />
+
+        <Button
+            android:id="@+id/sortingButton"
+            style="@style/text_xsmall"
+            android:layout_width="67dp"
+            android:layout_height="22dp"
+            android:background="#00ff0000"
+            android:text="최신순"
+            android:textColor="@color/textcolor_textbtn_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/auth_progress"
+            app:layout_constraintTop_toTopOf="parent"
+            android:drawableRight="@drawable/ic_down12"
+            android:drawableTint="@color/gray700"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="14dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="view_feed"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/tag_dafault"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/auth_progress">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="4dp"
+                android:src="@drawable/ic_people"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/textView6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/suit_bold"
+                android:text="오늘 5명 인증!"
+                android:textColor="@color/white"
+                android:textSize="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:fontFamily="@font/suit_bold"
+            android:text="오늘"
+            android:textColor="#454545"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginRight="4dp"
+            android:src="@drawable/ic_time"
+            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            app:layout_constraintEnd_toStartOf="@+id/textView10"
+            app:layout_constraintTop_toTopOf="@+id/textView10"
+            app:tint="@color/blue400" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginRight="24dp"
+            android:fontFamily="@font/suit_bold"
+            android:text="18:00까지"
+            android:textColor="@color/blue500"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/feedview_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            android:clipToPadding="false"
+            android:paddingBottom="28dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginBottom="28dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

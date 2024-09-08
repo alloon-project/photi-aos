@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="152dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/shape_feed_card"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="12dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/id_textView"
+            android:layout_width="194dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:breakStrategy="simple"
+            android:fontFamily="@font/suit_medium"
+            android:letterSpacing="-0.03"
+            android:text="photi"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/time_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:fontFamily="@font/suit_medium"
+            android:letterSpacing="-0.03"
+            android:text="방금"
+            android:textColor="@color/white"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/proofshot_shape"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:src="@drawable/graphic_shape_gray200"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/heartButton"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@drawable/ic_heart_empty"
+        app:layout_constraintStart_toStartOf="@id/proofshot_shape"
+        app:layout_constraintEnd_toEndOf="@+id/proofshot_shape"
+        app:layout_constraintTop_toTopOf="@id/proofshot_shape"
+        app:layout_constraintBottom_toBottomOf="@id/proofshot_shape"
+        app:tint="@color/gray400" />
+</androidx.constraintlayout.widget.ConstraintLayout>
