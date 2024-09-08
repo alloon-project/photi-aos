@@ -164,10 +164,10 @@
     <style name="Theme.icon_xlarge_blue" parent="Theme.icon_btn_blue">
         <item name="android:width">56dp</item>
         <item name="android:height">56dp</item>
-        <item name="android:bottomLeftRadius">100dp</item>
-        <item name="android:bottomRightRadius">100dp</item>
-        <item name="android:topLeftRadius">100dp</item>
-        <item name="android:topRightRadius">100dp</item>
+    </style>
+    <style name="Theme.icon_large_blue" parent="Theme.icon_btn_blue">
+        <item name="android:width">48dp</item>
+        <item name="android:height">48dp</item>
     </style>
 
     <!-- Gray Button -->

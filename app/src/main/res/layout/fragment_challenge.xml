@@ -108,7 +108,7 @@
                 android:layout_marginBottom="24dp"
                 android:stateListAnimator="@null"
                 android:theme="@style/Theme.icon_xlarge_blue"
-                android:background="@drawable/btn_round_primary"
+                android:background="@drawable/btn_icon_primary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
