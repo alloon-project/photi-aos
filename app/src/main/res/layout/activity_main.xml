@@ -35,10 +35,10 @@
             android:layout_height="wrap_content"
             android:text="Setting" />
         <Button
-            android:id="@+id/reportButton"
+            android:id="@+id/feedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Report" />
+            android:text="feed" />
         <Button
             android:id="@+id/mainButton"
             android:layout_width="wrap_content"

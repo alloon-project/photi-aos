@@ -18,6 +18,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityFeedBinding
 import com.example.alloon_aos.databinding.ActivitySettingsBinding
+import com.example.alloon_aos.view.fragment.feed.IntroduceFragment
+import com.example.alloon_aos.view.fragment.feed.PartyMemberFragment
 import com.example.alloon_aos.view.fragment.feed.ViewFeedFragment
 import com.example.alloon_aos.view.fragment.photi.ChallengeCommendFragment
 import com.google.android.material.tabs.TabLayout
@@ -50,26 +52,24 @@ class FeedActivity : AppCompatActivity() {
 //        }
 
         var viewFeedTab = ViewFeedFragment()
-       // val introduceTab = IntroduceFragment()
-       // val partyTab = PartyFragment()
+        val introduceTab = IntroduceFragment()
+        val partyTab = PartyMemberFragment()
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val fragmentManager = supportFragmentManager
                 val fragmentTransaction = fragmentManager.beginTransaction()
 
-                if(viewFeedTab.isAdded){
-                    fragmentTransaction.remove(viewFeedTab)
-                    viewFeedTab = ViewFeedFragment()
-                }
-
                 when(tab?.position){
                     0 ->{
-                        fragmentTransaction.add(R.id.frag_layout,viewFeedTab).commit()
+                        fragmentTransaction.replace(R.id.frag_layout,viewFeedTab).commit()
                     }
-//                    1 -> {
-//                        fragmentTransaction.add(R.id.frag_layout, introduceTab).commit()
-//                    }
+                    1 -> {
+                        fragmentTransaction.replace(R.id.frag_layout,introduceTab ).commit()
+                    }
+                    2 -> {
+                        fragmentTransaction.replace(R.id.frag_layout,partyTab).commit()
+                    }
                 }
             }
 

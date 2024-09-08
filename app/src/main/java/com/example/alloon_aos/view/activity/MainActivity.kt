@@ -22,9 +22,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this,SettingsActivity::class.java))
         }
 
-        binding.reportButton.setOnClickListener {
+        binding.feedButton.setOnClickListener {
             finish()
-            startActivity(Intent(this,ReportActivity::class.java))
+            startActivity(Intent(this,FeedActivity::class.java))
         }
 
         binding.mainButton.setOnClickListener {

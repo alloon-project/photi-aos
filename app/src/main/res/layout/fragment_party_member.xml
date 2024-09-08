@@ -6,10 +6,10 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.feed.ViewFeedFragment" />
-<!--        <variable-->
-<!--            name="viewModel"-->
-<!--            type="com.example.alloon_aos.viewmodel.AuthViewModel" />-->
+            type="com.example.alloon_aos.view.fragment.feed.PartyMemberFragment" />
+        <!--        <variable-->
+        <!--            name="viewModel"-->
+        <!--            type="com.example.alloon_aos.viewmodel.AuthViewModel" />-->
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="view_feed"
+            android:text="member"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
