@@ -31,5 +31,13 @@ class MainActivity : AppCompatActivity() {
             finish()
             startActivity(Intent(this,PhotiActivity::class.java))
         }
+        binding.reportButton.setOnClickListener {
+            finish()
+            startActivity(Intent(this,ReportActivity::class.java))
+        }
+        binding.inquiryButton.setOnClickListener {
+            finish()
+            startActivity(Intent(this,InquiryActivity::class.java))
+        }
     }
 }

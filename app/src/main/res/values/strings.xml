@@ -52,4 +52,8 @@
     <string name="proofshothome">인증샷 찍으러 가볼까요?</string>
     <string name="mychallenge">내 챌린지</string>
     <string name="authphoto">무엇으로 인증할까요?</string>
+
+    <!-- Inquiry -->
+    <string name="join">함께하기</string>
+    <string name="seeall">전체보기</string>
 </resources>

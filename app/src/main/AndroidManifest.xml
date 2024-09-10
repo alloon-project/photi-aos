@@ -42,7 +42,10 @@
             android:exported="true" />
         <activity
             android:name=".view.activity.PhotiActivity"
-            android:exported="true"></activity>
+            android:exported="true"/>
+        <activity
+            android:name=".view.activity.InquiryActivity"
+            android:exported="true"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.alloon_aos.fileprovider"

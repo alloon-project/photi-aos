@@ -23,7 +23,6 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-
         <Button
             android:id="@+id/authButton"
             android:layout_width="wrap_content"
@@ -35,15 +34,25 @@
             android:layout_height="wrap_content"
             android:text="Setting" />
         <Button
-            android:id="@+id/feedButton"
+            android:id="@+id/reportButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="feed" />
+            android:text="Report" />
         <Button
             android:id="@+id/mainButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Main" />
+        <Button
+            android:id="@+id/feedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="feed" />
+        <Button
+            android:id="@+id/inquiryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="inquiry" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
