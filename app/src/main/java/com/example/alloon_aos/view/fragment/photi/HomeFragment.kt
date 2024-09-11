@@ -1,8 +1,5 @@
 package com.example.alloon_aos.view.fragment.photi
 
-import MemberHomeTransformer
-import ProofShotHomeTransformer
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
@@ -46,11 +39,16 @@ class HomeFragment : Fragment() {
 
         val mActivity = activity as PhotiActivity
 
+        if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
+            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
+        else
+            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
+
         //childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
         //childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
-        childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
+        //childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
 
-        CustomToast.createToast(activity,tokenManager.getAccessToken().toString())?.show()
+        //CustomToast.createToast(activity,tokenManager.getAccessToken().toString())?.show()
         return binding.root
     }
 

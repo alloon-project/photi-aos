@@ -93,6 +93,68 @@
                     android:background="@drawable/card_shape3"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginRight="14dp">
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/image1"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:background="@drawable/line_user_photo"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_user" />
+
+                            <ImageView
+                                android:id="@+id/image2"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="18dp"
+                                android:background="@drawable/line_user_photo"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_user" />
+
+                            <ImageView
+                                android:id="@+id/image3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="36dp"
+                                android:background="@drawable/line_user_photo"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_user" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/membernum_textview"
+                            android:layout_width="28dp"
+                            android:layout_height="13dp"
+                            android:layout_marginLeft="6dp"
+                            android:fontFamily="@font/suit_medium"
+                            android:letterSpacing="-0.03"
+                            android:text="n명"
+                            android:textColor="@color/gray200"
+                            android:textSize="12dp"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="13dp"
+                            android:fontFamily="@font/suit_medium"
+                            android:letterSpacing="-0.03"
+                            android:text="합류"
+                            android:textColor="@color/gray200"
+                            android:textSize="12dp"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
@@ -152,7 +214,6 @@
                     android:background="@drawable/card_rule_default">
 
                     <TextView
-                        android:id="@+id/textView13"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/suit_bold"
@@ -160,12 +221,14 @@
                         android:text="인증 룰"
                         android:textColor="@color/green500"
                         android:textSize="12dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/rule_textview"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
                         android:fontFamily="@font/suit_semibold"
@@ -174,12 +237,43 @@
                         android:text="매일 한 페이지라도 찍어서 올리기"
                         android:textColor="@color/gray800"
                         android:textSize="14dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <ImageView
+                        android:id="@+id/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1.5dp"
+                        android:src="@drawable/divider_dash_line"
+                        android:layerType="software"
+                        android:layout_marginTop="16dp"
+                        app:tint="@color/green200"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/rule_textview" />
+
+                    <TextView
+                        android:id="@+id/rule2_textview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/suit_semibold"
+                        android:letterSpacing="-0.03"
+                        android:lineSpacingExtra="4sp"
+                        android:text="일주일에 1회 아니고 2회 아니고 3회 이상 인증하기"
+                        android:textColor="@color/gray800"
+                        android:textSize="14dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginLeft="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/all_button"
                         android:layout_width="75dp"
                         android:layout_height="40dp"
                         android:background="@drawable/btn_round_line_secondary"

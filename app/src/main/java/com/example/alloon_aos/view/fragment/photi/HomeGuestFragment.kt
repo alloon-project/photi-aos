@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.photi
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeGuestBinding
+import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.adapter.GuestHomeAdapter
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
@@ -39,6 +42,11 @@ class HomeGuestFragment : Fragment() {
     }
 
     private fun setObserver() {
+        binding.nextBtn.setOnClickListener {
+            val intent = Intent(requireContext(), AuthActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
 
     }
 

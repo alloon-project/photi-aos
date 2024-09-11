@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/Theme.Photi"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="8dp"
+    >
+    <Button
+        android:id="@+id/hash_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:background="@drawable/chip_gray"
+        android:fontFamily="@font/suit_medium"
+        android:stateListAnimator="@null"
+        android:text="해시태그"
+        android:textColor="@color/gray600"
+        android:minWidth="41dp"
+        android:textSize="12dp"/>
+</LinearLayout>
