@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottomsheet_group"
+    android:theme="@style/Theme.Photi">
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="312dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="62dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        
+
+      <Button
+          android:id="@+id/firstBtn"
+          android:layout_width="match_parent"
+          android:layout_height="60dp"
+          android:text="버튼"
+          android:textColor="@color/textcolor_btn_bottomsheet_align"
+          android:background="@drawable/btn_bottomlist_align"
+          android:fontFamily="@font/suit_bold"
+          android:textSize="14dp"
+          android:paddingVertical="16dp"/>
+
+        <Button
+            android:id="@+id/secondBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="버튼"
+            android:textColor="@color/textcolor_btn_bottomsheet_align"
+            android:background="@drawable/btn_bottomlist_align"
+            android:fontFamily="@font/suit_bold"
+            android:textSize="14dp"
+            android:paddingVertical="16dp"/>
+
+        <Button
+            android:id="@+id/thirdBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="버튼"
+            android:textColor="@color/textcolor_btn_bottomsheet_align"
+            android:background="@drawable/btn_bottomlist_align"
+            android:fontFamily="@font/suit_bold"
+            android:textSize="14dp"
+            android:paddingVertical="16dp"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,13 +25,16 @@ import com.example.alloon_aos.databinding.FragmentViewFeedBinding
 import com.example.alloon_aos.databinding.ItemCardMissionSmallRecyclerviewBinding
 import com.example.alloon_aos.databinding.ItemFeedDefaultRecylcerviewBinding
 import com.example.alloon_aos.view.activity.SettingsActivity
+import com.example.alloon_aos.view.ui.component.bottomsheet.AlignBottomSheet
+import com.example.alloon_aos.view.ui.component.bottomsheet.AlignBottomSheetInterface
+import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheet
 import com.example.alloon_aos.viewmodel.FeedViewModel
 
-class ViewFeedFragment : Fragment() {
+class ViewFeedFragment : Fragment(),AlignBottomSheetInterface {
     private lateinit var binding : FragmentViewFeedBinding
     private lateinit var mContext: Context
      private val feedViewModel by activityViewModels<FeedViewModel>()
-    private lateinit var password: String
+    private var sortedBy = "최신순"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +56,12 @@ class ViewFeedFragment : Fragment() {
         super.onAttach(context)
         mContext = context
     }
+
+    fun showBottomList(){
+        AlignBottomSheet(mContext,this,"최신순","인기순","작성순",sortedBy)
+            .show(activity?.supportFragmentManager!!, "bottomList")
+    }
+
 
 
     inner class ViewHolder(var binding : ItemFeedDefaultRecylcerviewBinding) : RecyclerView.ViewHolder(binding.root){
@@ -104,6 +113,18 @@ class ViewFeedFragment : Fragment() {
 
         override fun getItemCount() = feedViewModel.feedItems.size
 
+    }
+
+    override fun onClickFirstButton() {
+        println("first")
+    }
+
+    override fun onClickSecondButton() {
+        println("second")
+    }
+
+    override fun onClickThirdButton() {
+        println("third")
     }
 
 }

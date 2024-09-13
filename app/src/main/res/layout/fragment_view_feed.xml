@@ -7,9 +7,9 @@
         <variable
             name="fragment"
             type="com.example.alloon_aos.view.fragment.feed.ViewFeedFragment" />
-<!--        <variable-->
-<!--            name="viewModel"-->
-<!--            type="com.example.alloon_aos.viewmodel.AuthViewModel" />-->
+        <variable
+            name="viewModel"
+            type="com.example.alloon_aos.viewmodel.FeedViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -34,6 +34,7 @@
 
         <Button
             android:id="@+id/sortingButton"
+            android:onClick="@{() ->fragment.showBottomList()}"
             style="@style/text_xsmall"
             android:layout_width="67dp"
             android:layout_height="22dp"
