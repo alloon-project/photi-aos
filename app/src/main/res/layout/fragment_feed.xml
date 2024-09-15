@@ -6,11 +6,12 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.feed.ViewFeedFragment" />
+            type="com.example.alloon_aos.view.fragment.feed.FeedFragment" />
         <variable
             name="viewModel"
             type="com.example.alloon_aos.viewmodel.FeedViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -136,9 +137,11 @@
             app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
         <ImageButton
+            android:onClick="@{() ->fragment.doTodayCertify()}"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:src="@drawable/btn_shuttter"
+            android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -4,24 +4,15 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityFeedBinding
-import com.example.alloon_aos.databinding.ActivitySettingsBinding
 import com.example.alloon_aos.view.fragment.feed.IntroduceFragment
 import com.example.alloon_aos.view.fragment.feed.PartyMemberFragment
-import com.example.alloon_aos.view.fragment.feed.ViewFeedFragment
-import com.example.alloon_aos.view.fragment.photi.ChallengeCommendFragment
+import com.example.alloon_aos.view.fragment.feed.FeedFragment
 import com.google.android.material.tabs.TabLayout
 
 class FeedActivity : AppCompatActivity() {
@@ -33,7 +24,7 @@ class FeedActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             // 처음에 표시할 프래그먼트
-            val initialFragment = ViewFeedFragment()
+            val initialFragment = FeedFragment()
 
             // FragmentManager를 통해 프래그먼트 트랜잭션 시작
             supportFragmentManager.beginTransaction()
@@ -51,7 +42,7 @@ class FeedActivity : AppCompatActivity() {
 //            tabLayout.addTab(tab)
 //        }
 
-        var viewFeedTab = ViewFeedFragment()
+        var viewFeedTab = FeedFragment()
         val introduceTab = IntroduceFragment()
         val partyTab = PartyMemberFragment()
 
