@@ -12,29 +12,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.FragmentUnSubscribeBinding
 import com.example.alloon_aos.databinding.FragmentViewFeedBinding
-import com.example.alloon_aos.databinding.ItemCardMissionSmallRecyclerviewBinding
 import com.example.alloon_aos.databinding.ItemFeedDefaultRecylcerviewBinding
-import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.ui.component.bottomsheet.AlignBottomSheet
 import com.example.alloon_aos.view.ui.component.bottomsheet.AlignBottomSheetInterface
-import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheet
 import com.example.alloon_aos.viewmodel.FeedViewModel
 
 class ViewFeedFragment : Fragment(),AlignBottomSheetInterface {
     private lateinit var binding : FragmentViewFeedBinding
     private lateinit var mContext: Context
      private val feedViewModel by activityViewModels<FeedViewModel>()
-    private var sortedBy = "최신순"
+    private var selected_order = "first"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +52,7 @@ class ViewFeedFragment : Fragment(),AlignBottomSheetInterface {
     }
 
     fun showBottomList(){
-        AlignBottomSheet(mContext,this,"최신순","인기순","작성순",sortedBy)
+        AlignBottomSheet(mContext,this,"최신순","인기순","작성순",selected_order)
             .show(activity?.supportFragmentManager!!, "bottomList")
     }
 
@@ -76,25 +70,10 @@ class ViewFeedFragment : Fragment(),AlignBottomSheetInterface {
                 }
 
 
-                //배경 사진으로 해줘야함
-//
-//                val multiOption = MultiTransformation(
-//                    CenterCrop(),
-//                    RoundedCorners(32),
-//                )
-//
-//                com.bumptech.glide.Glide
-//                    .with(holder.itemView.context)
-//                    .load(url)
-//                    .apply(com.bumptech.glide.request.RequestOptions.bitmapTransform(multiOption))
-//                    .into(object : CustomTarget<Drawable>() {
-//                        override fun onResourceReady(a_resource: Drawable, a_transition: Transition<in Drawable>?) {
-//                            binding.cardLayout.background = a_resource
-//                        }
-//
-//                        override fun onLoadCleared(placeholder: Drawable?) {
-//                        }
-//                    })
+                com.bumptech.glide.Glide
+                    .with(holder.itemView.context)
+                    .load(url)
+                    .into(binding.imgView)
             }
         }
     }
@@ -116,15 +95,18 @@ class ViewFeedFragment : Fragment(),AlignBottomSheetInterface {
     }
 
     override fun onClickFirstButton() {
-        println("first")
+        selected_order = "first"
+        //최신순으로 정렬
     }
 
     override fun onClickSecondButton() {
-        println("second")
+        selected_order = "second"
+        //인기순으로 정렬
     }
 
     override fun onClickThirdButton() {
-        println("third")
+        selected_order = "third"
+        //작성순으로 정렬
     }
 
 }

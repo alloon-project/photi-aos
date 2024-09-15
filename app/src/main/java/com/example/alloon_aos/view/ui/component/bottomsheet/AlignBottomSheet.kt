@@ -17,7 +17,7 @@ interface AlignBottomSheetInterface {
     fun onClickThirdButton()
 }
 
-class AlignBottomSheet(val mContext: Context, val alignBottomSheetInterface: AlignBottomSheetInterface, val first_text: String, val second_text: String, val third_text: String, val selected_text : String ) : BottomSheetDialogFragment()  {
+class AlignBottomSheet(val mContext: Context, val alignBottomSheetInterface: AlignBottomSheetInterface, val first_text: String, val second_text: String, val third_text: String, val selected_order : String ) : BottomSheetDialogFragment()  {
     private var _binding: BottomsheetAlignBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -28,14 +28,14 @@ class AlignBottomSheet(val mContext: Context, val alignBottomSheetInterface: Ali
         binding.secondBtn.text = second_text
         binding.thirdBtn.text = third_text
 
-        when(selected_text){
-            first_text -> {
+        when(selected_order){
+            "first" -> {
                 binding.firstBtn.setTextColor(mContext.getColor(R.color.blue500))
             }
-            second_text -> {
+            "second" -> {
                 binding.secondBtn.setTextColor(mContext.getColor(R.color.blue500))
             }
-            third_text -> {
+            "third" -> {
                 binding.thirdBtn.setTextColor(mContext.getColor(R.color.blue500))
             }
         }
