@@ -92,16 +92,16 @@ class SignupIdFragment : Fragment() {
                     "IO_Exception" ->{
                         CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
                     }
-
-                    "USERNAME_LENGTH_INVALID" ->{
-                        binding.idLinearlayout.isVisible = true
-                        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
-                        binding.nextBtn.isEnabled = false
-                        binding.checkBtn.isEnabled = false
-                        binding.idErrorTextview.setTextColor(red)
-                        binding.idIconView.setImageResource(R.drawable.ic_close_default)
-                        binding.idErrorTextview.text = "아이디는 5~20자만 가능합니다"
-                    }
+//없어짐
+//                    "USERNAME_LENGTH_INVALID" ->{
+//                        binding.idLinearlayout.isVisible = true
+//                        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
+//                        binding.nextBtn.isEnabled = false
+//                        binding.checkBtn.isEnabled = false
+//                        binding.idErrorTextview.setTextColor(red)
+//                        binding.idIconView.setImageResource(R.drawable.ic_close_default)
+//                        binding.idErrorTextview.text = "아이디는 5~20자만 가능합니다"
+//                    }
 
                     "USERNAME_FORMAT_INVALID"->{
                         binding.idLinearlayout.isVisible = true
