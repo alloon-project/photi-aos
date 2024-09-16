@@ -129,7 +129,7 @@
             app:tabSelectedTextColor="@color/gray800"
             app:tabTextAppearance="@style/tab_text"
             app:tabTextColor="@color/white"
-            app:tabIndicator="@drawable/dotted_underline"
+            app:tabIndicator="@drawable/divider_dotted_line"
             app:tabIndicatorColor="@color/gray300">
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -159,6 +159,7 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
