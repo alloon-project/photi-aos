@@ -2,7 +2,12 @@ package com.example.alloon_aos.viewmodel
 
 import androidx.lifecycle.ViewModel
 
-data class FeedItem(
+data class FeedOutItem(
+    val daysAgo : Int,
+    val feedInItems : ArrayList<FeedInItem> = ArrayList()
+)
+
+data class FeedInItem(
     val id: String,
     val time: String,
     var url: String? = null,
@@ -19,13 +24,21 @@ data class PartyItem(
 
 class FeedViewModel : ViewModel(){
 
+
     //피드뷰
-    val feedItems = arrayListOf<FeedItem>(
-        FeedItem("photi","방금","https://ifh.cc/g/6HRkxa.jpg",true),
-        FeedItem("id","1분전","https://ifh.cc/g/AA0NMd.jpg",false),
-        FeedItem("id","18분전","https://ifh.cc/g/09y6Mo.jpg",false),
-        FeedItem("photi","30분전","https://ifh.cc/g/KB2Vh1.jpg",false),
-        FeedItem("photi","방금","https://ifh.cc/g/yxgmBH.webp",true),
+    val feedInItems = arrayListOf<FeedInItem>(
+        FeedInItem("photi","방금","https://ifh.cc/g/6HRkxa.jpg",true),
+        FeedInItem("id","1분전","https://ifh.cc/g/AA0NMd.jpg",false),
+        FeedInItem("id","18분전","https://ifh.cc/g/09y6Mo.jpg",false),
+        FeedInItem("photi","30분전","https://ifh.cc/g/KB2Vh1.jpg",false),
+        FeedInItem("photi","방금","https://ifh.cc/g/yxgmBH.webp",true),
+    )
+
+    val feedOutItems = arrayListOf<FeedOutItem>(
+        FeedOutItem(0,feedInItems),
+        FeedOutItem(1,feedInItems),
+        FeedOutItem(2,feedInItems),
+        FeedOutItem(3,feedInItems)
     )
 
     //파티원

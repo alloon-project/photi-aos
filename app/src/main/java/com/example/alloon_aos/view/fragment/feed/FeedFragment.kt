@@ -9,15 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFeedBinding
-import com.example.alloon_aos.databinding.ItemFeedDefaultRecylcerviewBinding
+import com.example.alloon_aos.view.adapter.FeedInAdapter
+import com.example.alloon_aos.view.adapter.FeedOutAdapter
 import com.example.alloon_aos.view.ui.component.bottomsheet.AlignBottomSheet
 import com.example.alloon_aos.view.ui.component.bottomsheet.AlignBottomSheetInterface
 import com.example.alloon_aos.view.ui.util.dpToPx
@@ -27,6 +26,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface {
     private lateinit var binding : FragmentFeedBinding
     private lateinit var mContext: Context
     private val feedViewModel by activityViewModels<FeedViewModel>()
+    private lateinit var feedInAdapter: FeedInAdapter
     private var selected_order = "first"
     private var isMissionClear = false
 
@@ -39,10 +39,9 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface {
         binding.viewModel = feedViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.feedviewRecyclerView.adapter = FeedCardAdapter()
-        binding.feedviewRecyclerView.layoutManager = GridLayoutManager(context, 2)
-        binding.feedviewRecyclerView.setHasFixedSize(true)
-
+        binding.feedOutRecyclerView.adapter = FeedOutAdapter(feedViewModel)
+        binding.feedOutRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.feedOutRecyclerView.setHasFixedSize(true)
 
         return binding.root
     }
@@ -84,69 +83,6 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface {
         toast.show()
     }
 
-    //view holder
-
-    inner class ViewHolder(var binding : ItemFeedDefaultRecylcerviewBinding) : RecyclerView.ViewHolder(binding.root){
-        fun setContents(holder: ViewHolder ,pos: Int) {
-            with (feedViewModel.feedItems[pos]) {
-                binding.idTextView.text = id
-                binding.timeTextView.text = time
-
-                if(isClick){
-                    binding.heartButton.setImageResource(R.drawable.ic_heart_filled)
-                    binding.heartButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gray700))
-                }
-
-               Glide
-                    .with(holder.itemView.context)
-                    .load(url)
-                    .into(binding.imgView)
-
-                binding.feed.setOnClickListener {
-                    //feeddetail로 이동
-//                    val feedDetailFragment = FeedDetailFragment()
-//
-//                    val bundle = Bundle()
-//                    bundle.putString("key", "전달할 문자열 데이터")
-//                    feedDetailFragment.arguments = bundle
-//
-//                    requireActivity().supportFragmentManager.beginTransaction()
-//                        .replace(R.id.fragment_container, feedDetailFragment)  // fragment_container는 교체될 프래그먼트를 담는 레이아웃의 ID입니다.
-//                        .addToBackStack(null)  // 뒤로 가기 버튼을 누르면 이전 프래그먼트로 돌아가게 설정
-//                        .commit()
-
-                }
-
-                binding.heartButton.setOnClickListener{
-                    isClick = !isClick
-                    if(isClick){
-                        binding.heartButton.setImageResource(R.drawable.ic_heart_filled)
-                        binding.heartButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gray700))
-                    }
-                    else{
-                        binding.heartButton.setImageResource(R.drawable.ic_heart_empty)
-                        binding.heartButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.gray400))
-                    }
-                }
-            }
-        }
-    }
-
-    inner class FeedCardAdapter() : RecyclerView.Adapter<ViewHolder>(){
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            var view = ItemFeedDefaultRecylcerviewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-            return ViewHolder(view)
-        }
-
-
-        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-            viewHolder.setContents(viewHolder,position)
-        }
-
-        override fun getItemCount() = feedViewModel.feedItems.size
-
-    }
 
 
     //피드들 정렬
