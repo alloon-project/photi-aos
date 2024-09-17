@@ -34,7 +34,7 @@ class FeedActivity : AppCompatActivity() {
 
         val tabLayout = binding.tabLayout
 
-        val tabTitles = listOf("피드", "소개", "파티원")
+       // val tabTitles = listOf("피드", "소개", "파티원")
 
 //        tabTitles.forEach { title ->
 //            val tab = tabLayout.newTab()

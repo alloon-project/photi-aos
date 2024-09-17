@@ -2,12 +2,17 @@ package com.example.alloon_aos.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.alloon_aos.R
+import com.example.alloon_aos.databinding.ItemFeedCommentBinding
 import com.example.alloon_aos.databinding.ItemFeedDefaultInBinding
+import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog
+import com.example.alloon_aos.viewmodel.Comment
 import com.example.alloon_aos.viewmodel.FeedInItem
 
-class FeedInAdapter(val feedInItems: ArrayList<FeedInItem>): RecyclerView.Adapter<FeedInAdapter.ViewHolder>() {
+class FeedInAdapter(private val fragmentManager: FragmentManager, val feedInItems: ArrayList<FeedInItem>): RecyclerView.Adapter<FeedInAdapter.ViewHolder>() {
     inner class ViewHolder(var binding: ItemFeedDefaultInBinding) : RecyclerView.ViewHolder(binding.root) {
         fun setContents(holder: ViewHolder, pos: Int) {
             with(feedInItems[pos]) {
@@ -22,13 +27,14 @@ class FeedInAdapter(val feedInItems: ArrayList<FeedInItem>): RecyclerView.Adapte
                     binding.heartButton.setColorFilter(R.color.gray700)
                 }
 
-                com.bumptech.glide.Glide
+                Glide
                     .with(holder.itemView.context)
                     .load(url)
                     .into(binding.imgView)
 
                 binding.feed.setOnClickListener {
-                    // feed detail 이동 로직
+                    FeedDetailDialog(pos)
+                        .show(fragmentManager,"tag")
                 }
 
                 binding.heartButton.setOnClickListener {

@@ -39,7 +39,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface {
         binding.viewModel = feedViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.feedOutRecyclerView.adapter = FeedOutAdapter(feedViewModel)
+        binding.feedOutRecyclerView.adapter = FeedOutAdapter(requireActivity().supportFragmentManager ,feedViewModel)
         binding.feedOutRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.feedOutRecyclerView.setHasFixedSize(true)
 
