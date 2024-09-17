@@ -42,7 +42,8 @@ class HomeFragment : Fragment() {
         if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
             childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
         else
-            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
+            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
+            //childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
 
         //childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
         //childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()

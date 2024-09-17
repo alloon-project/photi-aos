@@ -1,4 +1,4 @@
-package com.example.alloon_aos.view.fragment.inquiry
+package com.example.alloon_aos.view.fragment.join
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,15 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
-import com.example.alloon_aos.databinding.FragmentInquiryBinding
-import com.example.alloon_aos.view.activity.InquiryActivity
+import com.example.alloon_aos.databinding.FragmentJoinChallengeBinding
+import com.example.alloon_aos.view.activity.JoinActivity
 import com.example.alloon_aos.view.adapter.RuleHashAdapter
 import com.example.alloon_aos.view.ui.component.dialog.RuleCardDialog
-import com.example.alloon_aos.view.ui.component.dialog.UploadCardDialog
 import com.example.alloon_aos.viewmodel.InquiryViewModel
 
-class InquiryFragment : Fragment() {
-    private lateinit var binding : FragmentInquiryBinding
+class JoinChallengeFragment : Fragment() {
+    private lateinit var binding : FragmentJoinChallengeBinding
     private val inquiryViewModel by activityViewModels<InquiryViewModel>()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
 
@@ -28,12 +27,12 @@ class InquiryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_inquiry, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_join_challenge, container, false)
         binding.fragment = this
         binding.viewModel = inquiryViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as InquiryActivity
+        val mActivity = activity as JoinActivity
         mActivity.setAppBar(" ")
 
         binding.hashRecyclerview.adapter = RuleHashAdapter(inquiryViewModel)

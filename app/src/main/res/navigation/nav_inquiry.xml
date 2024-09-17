@@ -5,6 +5,14 @@
     app:startDestination="@id/inquiryFragment">
     <fragment
         android:id="@+id/inquiryFragment"
-        android:name="com.example.alloon_aos.view.fragment.inquiry.InquiryFragment"
-        android:label="" />
+        android:name="com.example.alloon_aos.view.fragment.join.JoinChallengeFragment"
+        android:label="" >
+        <action
+            android:id="@+id/action_inquiryFragment_to_personalGoalFragment"
+            app:destination="@id/personalGoalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/personalGoalFragment"
+        android:name="com.example.alloon_aos.view.fragment.join.PersonalGoalFragment"
+        android:label="PersonalGoalFragment" />
 </navigation>

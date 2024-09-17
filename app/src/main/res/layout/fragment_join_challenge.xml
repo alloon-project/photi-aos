@@ -6,7 +6,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.inquiry.InquiryFragment" />
+            type="com.example.alloon_aos.view.fragment.join.JoinChallengeFragment" />
         <variable
             name="viewModel"
             type="com.example.alloon_aos.viewmodel.InquiryViewModel" />

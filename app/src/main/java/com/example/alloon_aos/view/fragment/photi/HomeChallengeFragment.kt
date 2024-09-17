@@ -25,8 +25,6 @@ import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeChallengeBinding
 import com.example.alloon_aos.view.adapter.ChallengeCardAdapter
 import com.example.alloon_aos.view.adapter.ProofShotHomeAdapter
-import com.example.alloon_aos.view.ui.component.bottomsheet.ProofShotBottomSheet
-import com.example.alloon_aos.view.ui.component.bottomsheet.ProofShotBottomSheetInterface
 import com.example.alloon_aos.view.ui.component.dialog.UploadCardDialog
 import com.example.alloon_aos.view.ui.component.dialog.UploadCardDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
@@ -36,7 +34,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class HomeChallengeFragment : ProofShotBottomSheetInterface, UploadCardDialogInterface, Fragment() {
+class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
     private lateinit var binding : FragmentHomeChallengeBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var proofShotHomeAdapter: ProofShotHomeAdapter
@@ -58,8 +56,7 @@ class HomeChallengeFragment : ProofShotBottomSheetInterface, UploadCardDialogInt
 
         proofShotHomeAdapter = ProofShotHomeAdapter(photiViewModel, emptyList(),
             onItemClickListener = { position ->
-                ProofShotBottomSheet(this)
-                    .show(activity?.supportFragmentManager!!, "CustomDialog")
+                checkPermissions()
             })
 
         binding.viewPager2.adapter = proofShotHomeAdapter
@@ -79,15 +76,6 @@ class HomeChallengeFragment : ProofShotBottomSheetInterface, UploadCardDialogInt
         photiViewModel.proofItemList.observe(viewLifecycleOwner){
             proofShotHomeAdapter.updatePhotoItems(it)
         }
-    }
-
-    override fun onClickPhotoButton() {
-        checkPermissions()
-    }
-
-    override fun onClickGifButton() {
-        UploadCardDialog(this,"https://ifh.cc/g/6HRkxa.jpg")
-            .show(activity?.supportFragmentManager!!, "CustomDialog")
     }
 
     override fun onClickUploadButton() {

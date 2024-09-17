@@ -1,6 +1,5 @@
 package com.example.alloon_aos.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 data class Rule(val rule:String)

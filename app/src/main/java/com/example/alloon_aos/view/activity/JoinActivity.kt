@@ -7,13 +7,13 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.ActivityInquiryBinding
+import com.example.alloon_aos.databinding.ActivityJoinBinding
 
-class InquiryActivity : AppCompatActivity() {
-    lateinit var binding : ActivityInquiryBinding
+class JoinActivity : AppCompatActivity() {
+    lateinit var binding : ActivityJoinBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_inquiry)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_join)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav) as NavHostFragment

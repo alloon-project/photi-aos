@@ -25,7 +25,6 @@ class MemberHomeAdapter( private val photiViewModel: PhotiViewModel, private var
             with (photiViewModel.photoItems[pos]) {
                 Glide.with(binding.imageView.context)
                     .load(url)
-                    .transform(CenterCrop(), RoundedCorners(16))
                     .into(binding.imageView)
             }
         }

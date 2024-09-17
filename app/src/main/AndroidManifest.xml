@@ -44,7 +44,7 @@
             android:name=".view.activity.PhotiActivity"
             android:exported="true"/>
         <activity
-            android:name=".view.activity.InquiryActivity"
+            android:name=".view.activity.JoinActivity"
             android:exported="true"/>
         <provider
             android:name="androidx.core.content.FileProvider"

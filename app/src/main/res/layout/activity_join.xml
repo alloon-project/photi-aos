@@ -6,12 +6,12 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.activity.InquiryActivity" />
+            type="com.example.alloon_aos.view.activity.JoinActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/inquiry"
-        tools:context=".view.activity.InquiryActivity"
+        tools:context=".view.activity.JoinActivity"
         android:theme="@style/Theme.Photi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
