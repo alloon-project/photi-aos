@@ -13,15 +13,18 @@ import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentJoinChallengeBinding
+import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.activity.JoinActivity
+import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.adapter.RuleHashAdapter
 import com.example.alloon_aos.view.ui.component.dialog.RuleCardDialog
-import com.example.alloon_aos.viewmodel.InquiryViewModel
+import com.example.alloon_aos.viewmodel.JoinViewModel
 
 class JoinChallengeFragment : Fragment() {
     private lateinit var binding : FragmentJoinChallengeBinding
-    private val inquiryViewModel by activityViewModels<InquiryViewModel>()
+    private val joinViewModel by activityViewModels<JoinViewModel>()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
+    private lateinit var mActivity: JoinActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,13 +32,13 @@ class JoinChallengeFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_join_challenge, container, false)
         binding.fragment = this
-        binding.viewModel = inquiryViewModel
+        binding.viewModel = joinViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as JoinActivity
+        mActivity = activity as JoinActivity
         mActivity.setAppBar(" ")
 
-        binding.hashRecyclerview.adapter = RuleHashAdapter(inquiryViewModel)
+        binding.hashRecyclerview.adapter = RuleHashAdapter(joinViewModel)
         binding.hashRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.hashRecyclerview.setHasFixedSize(true)
 
@@ -46,8 +49,13 @@ class JoinChallengeFragment : Fragment() {
 
     private fun setObserver() {
         binding.allButton.setOnClickListener {
-            RuleCardDialog(inquiryViewModel)
+            RuleCardDialog(joinViewModel)
                 .show(activity?.supportFragmentManager!!, "CustomDialog")
+        }
+        binding.joinBtn.setOnClickListener {
+            mActivity.supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_Layout, CreateGoalFragment())
+                .commit()
         }
     }
 

@@ -14,25 +14,25 @@ import androidx.fragment.app.activityViewModels
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
-import com.example.alloon_aos.databinding.FragmentPersonalGoalBinding
+import com.example.alloon_aos.databinding.FragmentCreateGoalBinding
 import com.example.alloon_aos.view.activity.JoinActivity
 import com.example.alloon_aos.view.ui.util.KeyboardListener
 import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
-import com.example.alloon_aos.viewmodel.InquiryViewModel
+import com.example.alloon_aos.viewmodel.JoinViewModel
 
-class PersonalGoalFragment : Fragment() {
-    private lateinit var binding : FragmentPersonalGoalBinding
+class CreateGoalFragment : Fragment() {
+    private lateinit var binding : FragmentCreateGoalBinding
     private lateinit var mContext : Context
-    private val inquiryViewModel by activityViewModels<InquiryViewModel>()
+    private val joinViewModel by activityViewModels<JoinViewModel>()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_personal_goal, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_goal, container, false)
         binding.fragment = this
-        binding.viewModel = inquiryViewModel
+        binding.viewModel = joinViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         val mActivity = activity as JoinActivity

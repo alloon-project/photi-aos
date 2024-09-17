@@ -3,11 +3,9 @@ package com.example.alloon_aos.view.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityJoinBinding
+import com.example.alloon_aos.view.fragment.join.JoinChallengeFragment
 
 class JoinActivity : AppCompatActivity() {
     lateinit var binding : ActivityJoinBinding
@@ -15,21 +13,22 @@ class JoinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_join)
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        val appBarConfiguration = AppBarConfiguration(
-            topLevelDestinationIds = setOf(),
-            fallbackOnNavigateUpListener = ::onSupportNavigateUp
-        )
-
-        binding.actionBar.setupWithNavController(navController, appBarConfiguration)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_Layout, JoinChallengeFragment())
+            .commit()
     }
 
     fun setAppBar(appTitle : String) {
         binding.actionBar.setNavigationIcon(R.drawable.ic_back)
         binding.title.setText(appTitle)
+
+        binding.actionBar.setNavigationOnClickListener {
+            onBackPressed() // 뒤로가기 동작 수행
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed() // 기본 뒤로가기 동작 수행
     }
 
 }

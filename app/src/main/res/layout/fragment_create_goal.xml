@@ -6,10 +6,10 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.join.PersonalGoalFragment" />
+            type="com.example.alloon_aos.view.fragment.join.CreateGoalFragment" />
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.InquiryViewModel" />
+            type="com.example.alloon_aos.viewmodel.JoinViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

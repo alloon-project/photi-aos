@@ -9,7 +9,7 @@
             type="com.example.alloon_aos.view.fragment.join.JoinChallengeFragment" />
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.InquiryViewModel" />
+            type="com.example.alloon_aos.viewmodel.JoinViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
