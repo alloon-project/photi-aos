@@ -4,12 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.databinding.ItemFeedDefaultOutBinding
 import com.example.alloon_aos.viewmodel.FeedViewModel
 
-class FeedOutAdapter(val feedViewModel: FeedViewModel): RecyclerView.Adapter<FeedOutAdapter.ViewHolder>() {
+class FeedOutAdapter(private val fragmentManager: FragmentManager, val feedViewModel: FeedViewModel): RecyclerView.Adapter<FeedOutAdapter.ViewHolder>() {
     inner class ViewHolder(var binding : ItemFeedDefaultOutBinding) : RecyclerView.ViewHolder(binding.root){
         fun setContents(holder: ViewHolder ,pos: Int) {
             with (feedViewModel.feedOutItems[pos]) {
@@ -20,7 +21,7 @@ class FeedOutAdapter(val feedViewModel: FeedViewModel): RecyclerView.Adapter<Fee
                     binding.dateTextView.text = daysAgo.toString()+ "일 전"
                 }
 
-                binding.feedInRecyclerView.adapter = FeedInAdapter(feedInItems)
+                binding.feedInRecyclerView.adapter = FeedInAdapter(fragmentManager,feedInItems)
                 binding.feedInRecyclerView.layoutManager = GridLayoutManager(holder.itemView.context, 2)
                 binding.feedInRecyclerView.setHasFixedSize(true)
             }

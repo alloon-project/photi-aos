@@ -10,6 +10,10 @@
         <item name="colorTertiary">@color/btn_color_orange</item>
     </style>
 
+    <style name="Theme.Translucent" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
     <!-- ////////////////////// Round Button ////////////////////////// -->
     <!-- round button -->
     <style name="Theme.round_btn" parent="Theme.Photi">
