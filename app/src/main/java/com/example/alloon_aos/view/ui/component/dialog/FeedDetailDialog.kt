@@ -32,14 +32,13 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
         _binding = DialogFeedDetailBinding.inflate(inflater, container, false)
         val view = binding.root
         val feed = feedViewModel.feedInItems[index]
-
+        var isClick = feed.isClick
         with(binding) {
             idTextView.text = feed.id
             heartCntTextView.text = feed.heartCnt.toString()
 
-            if(feed.isClick)
-                heartBtn.setImageResource(R.drawable.ic_heart_filled)
-
+            if(isClick)
+                heartBtn.setImageResource(R.drawable.ic_heart_filled_14)
 
             Glide.with(root)
                 .load(feed.url)
@@ -55,6 +54,19 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
 
             ellipsisImgBtn.setOnClickListener {
                 // 공유하기, 삭제하기
+            }
+
+            heartBtn.setOnClickListener {
+                if(isClick) {
+                    heartBtn.setImageResource(R.drawable.ic_heart_empty_14)
+                    isClick = false
+                }
+                else
+                {
+                    heartBtn.setImageResource(R.drawable.ic_heart_filled_14)
+                    isClick = true
+                }
+
             }
 
             commentEditText.addTextChangedListener(object : TextWatcher {
