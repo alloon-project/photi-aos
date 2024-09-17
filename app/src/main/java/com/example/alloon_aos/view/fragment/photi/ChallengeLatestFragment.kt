@@ -60,24 +60,10 @@ class ChallengeLatestFragment : Fragment() {
                     binding.chip2Btn.visibility = View.VISIBLE
                 }
 
-
-                val multiOption = MultiTransformation(
-                    CenterCrop(),
-                    RoundedCorners(32),
-                )
-
                 Glide
                     .with(holder.itemView.context)
                     .load(url)
-                    .apply(RequestOptions.bitmapTransform(multiOption))
-                    .into(object : CustomTarget<Drawable>() {
-                        override fun onResourceReady(a_resource: Drawable, a_transition: Transition<in Drawable>?) {
-                            binding.cardLayout.background = a_resource
-                        }
-
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                        }
-                    })
+                    .into(binding.imgView)
             }
         }
     }
