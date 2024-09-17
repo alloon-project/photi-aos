@@ -30,16 +30,17 @@ data class PartyItem(
 
 class FeedViewModel : ViewModel(){
 
-
     //피드뷰
-
     val comments = arrayListOf<Comment>(
         Comment("aaa","이 책 좋네요"),
         Comment("abc","멋져요"),
         Comment("baa","와우"),
-        Comment("seul","우왕굳 ㅋㅋ"),
+        Comment("Seul","우왕굳 ㅋㅋ"),
         Comment("HB","짱~!"),
-        Comment("aaa","내용")
+        Comment("aaa","엄청긴댓글입니다아홉열열하나다여"),
+        Comment("aaa","이 책 좋네요"),
+        Comment("abc","멋져요"),
+        Comment("aaa","엄청긴댓글입니다아홉열열하나다여")
     )
 
     val feedInItems = arrayListOf<FeedInItem>(

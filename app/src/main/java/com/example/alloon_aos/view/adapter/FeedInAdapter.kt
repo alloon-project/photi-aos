@@ -6,8 +6,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alloon_aos.R
+import com.example.alloon_aos.databinding.ItemFeedCommentBinding
 import com.example.alloon_aos.databinding.ItemFeedDefaultInBinding
 import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog
+import com.example.alloon_aos.viewmodel.Comment
 import com.example.alloon_aos.viewmodel.FeedInItem
 
 class FeedInAdapter(private val fragmentManager: FragmentManager, val feedInItems: ArrayList<FeedInItem>): RecyclerView.Adapter<FeedInAdapter.ViewHolder>() {

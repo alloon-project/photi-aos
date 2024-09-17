@@ -13,8 +13,12 @@ import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.DialogFeedDetailBinding
+import com.example.alloon_aos.databinding.ItemFeedCommentBinding
 import com.example.alloon_aos.viewmodel.Comment
 import com.example.alloon_aos.viewmodel.FeedViewModel
 
@@ -33,11 +37,17 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
             idTextView.text = feed.id
             heartCntTextView.text = feed.heartCnt.toString()
 
+            if(feed.isClick)
+                heartBtn.setImageResource(R.drawable.ic_heart_filled)
+
+
             Glide.with(root)
                 .load(feed.url)
                 .into(feedImgView)
 
-            showCommentsView(feed.comments)
+            commentsRecyclerView.adapter = CommentsAdapter(feed.comments)
+            commentsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+            commentsRecyclerView.setHasFixedSize(true)
 
             backImgBtn.setOnClickListener {
                 dismiss()
@@ -91,19 +101,31 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
                 WindowManager.LayoutParams.FLAG_BLUR_BEHIND
             )
             dialogWindow.attributes?.blurBehindRadius = blurBehindRadius
-            // dialogWindow.setBackgroundBlurRadius(backgroundBlurRadius)
             dialogWindow.setDimAmount(0f)
         }
     }
 
-    private fun showCommentsView(commentsArray: ArrayList<Comment>) {
-        if (commentsArray.isEmpty()) {
-            println("댓글이 없습니다.")
-            return
+    class CommentsAdapter(val comments: ArrayList<Comment>): RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
+        inner class ViewHolder(var binding: ItemFeedCommentBinding) : RecyclerView.ViewHolder(binding.root) {
+            fun setContents(holder: ViewHolder, pos: Int) {
+                with(comments[pos]) {
+                    println(id)
+                    binding.idTextView.text = id
+                    binding.textTextView.text = text
+                }
+            }
         }
-        for (comment in commentsArray) {
-            println("댓글: ${comment.text}")  // Comment 클래스에 따라 적절한 속성 사용
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = ItemFeedCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return ViewHolder(view)
         }
+
+        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+            viewHolder.setContents(viewHolder, position)
+        }
+
+        override fun getItemCount() = comments.size
     }
 
 }
