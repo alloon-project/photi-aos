@@ -59,8 +59,8 @@ class CreateGoalFragment : Fragment() {
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
-                if (visible)    binding.goalEdittext.background = mContext.getDrawable(R.drawable.textarea_line_focus)
-                else    binding.goalEdittext.background = mContext.getDrawable(R.drawable.textarea_line_default)
+                if (visible)    binding.goalEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
+                else    binding.goalEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
             }
         })
 

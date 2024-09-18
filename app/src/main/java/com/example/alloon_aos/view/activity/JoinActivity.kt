@@ -9,6 +9,7 @@ import com.example.alloon_aos.view.fragment.join.JoinChallengeFragment
 
 class JoinActivity : AppCompatActivity() {
     lateinit var binding : ActivityJoinBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_join)
@@ -23,12 +24,8 @@ class JoinActivity : AppCompatActivity() {
         binding.title.setText(appTitle)
 
         binding.actionBar.setNavigationOnClickListener {
-            onBackPressed() // 뒤로가기 동작 수행
+            supportFragmentManager.popBackStack()
         }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed() // 기본 뒤로가기 동작 수행
     }
 
 }

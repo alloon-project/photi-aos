@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             finish()
             startActivity(Intent(this,ReportActivity::class.java))
         }
-        binding.inquiryButton.setOnClickListener {
+        binding.joinButton.setOnClickListener {
             finish()
             startActivity(Intent(this,JoinActivity::class.java))
         }

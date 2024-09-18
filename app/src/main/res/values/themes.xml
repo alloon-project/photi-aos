@@ -14,6 +14,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
     <!-- ////////////////////// Round Button ////////////////////////// -->
     <!-- round button -->
     <style name="Theme.round_btn" parent="Theme.Photi">
@@ -59,57 +60,6 @@
         <item name="android:textSize">14dp</item>
     </style>
 
-    <!-- icon+text button -->
-    <style name="Theme.icon_text_btn" parent="Theme.Photi">
-        <item name="backgroundTint">@color/green400</item>
-        <item name="android:textColor">@color/white</item>
-        <item name ="android:fontFamily">@font/suit_bold</item>
-    </style>
-    <style name="Theme.xlarge_icon_text" parent="Theme.icon_text_btn">
-        <item name="android:width">312dp</item>
-        <item name="android:height">56dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:bottomLeftRadius">16dp</item>
-        <item name="android:bottomRightRadius">16dp</item>
-        <item name="android:topLeftRadius">16dp</item>
-        <item name="android:topRightRadius">16dp</item>
-    </style>
-    <style name="Theme.large_icon_text" parent="Theme.icon_text_btn" >
-        <item name="android:width">264dp</item>
-        <item name="android:height">56dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:bottomLeftRadius">16dp</item>
-        <item name="android:bottomRightRadius">16dp</item>
-        <item name="android:topLeftRadius">16dp</item>
-        <item name="android:topRightRadius">16dp</item>
-    </style>
-    <style name="Theme.medium_icon_text" parent="Theme.icon_text_btn" >
-        <item name="android:width">141dp</item>
-        <item name="android:height">52dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:bottomLeftRadius">14dp</item>
-        <item name="android:bottomRightRadius">14dp</item>
-        <item name="android:topLeftRadius">14dp</item>
-        <item name="android:topRightRadius">14dp</item>
-    </style>
-    <style name="Theme.small_icon_text" parent="Theme.icon_text_btn" >
-        <item name="android:width">120dp</item>
-        <item name="android:height">46dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:bottomLeftRadius">12dp</item>
-        <item name="android:bottomRightRadius">12dp</item>
-        <item name="android:topLeftRadius">12dp</item>
-        <item name="android:topRightRadius">12dp</item>
-    </style>
-    <style name="Theme.xsmall_icon_text" parent="Theme.icon_text_btn" >
-        <item name="android:width">70dp</item>
-        <item name="android:height">34dp</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:bottomLeftRadius">10dp</item>
-        <item name="android:bottomRightRadius">10dp</item>
-        <item name="android:topLeftRadius">10dp</item>
-        <item name="android:topRightRadius">10dp</item>
-    </style>
 
     <!-- line button-->
     <style name="Theme.btn_round_line_xlarge" parent="Theme.Photi">
@@ -161,32 +111,16 @@
 
 
     <!-- ////////////////////// Icon Button ////////////////////////// -->
-    <!-- Priamry Button -->
-    <style name="Theme.icon_btn_blue" parent="Theme.Photi">
+    <style name="Theme.btn_plus_icon" parent="Theme.Photi">
         <item name="srcCompat">@drawable/ic_plus</item>
     </style>
-    <style name="Theme.icon_xlarge_blue" parent="Theme.icon_btn_blue">
-        <item name="android:width">56dp</item>
-        <item name="android:height">56dp</item>
+    <style name="Theme.btn_lock_closed_icon" parent="Theme.Photi">
+        <item name="srcCompat">@drawable/ic_lock_closed</item>
     </style>
-    <style name="Theme.icon_large_blue" parent="Theme.icon_btn_blue">
-        <item name="android:width">48dp</item>
-        <item name="android:height">48dp</item>
+    <style name="Theme.btn_lock_open_icon" parent="Theme.Photi">
+        <item name="srcCompat">@drawable/ic_lock_open</item>
     </style>
 
-    <!-- Gray Button -->
-    <style name="Theme.icon_btn_gray" parent="Theme.Photi">
-        <item name="srcCompat">@drawable/ic_plus</item>
-        <item name="tint">@color/btn_icon_add_color</item>
-    </style>
-    <style name="Theme.icon_xlarge_gray" parent="Theme.icon_btn_gray">
-        <item name="android:width">56dp</item>
-        <item name="android:height">56dp</item>
-        <item name="android:bottomLeftRadius">100dp</item>
-        <item name="android:bottomRightRadius">100dp</item>
-        <item name="android:topLeftRadius">100dp</item>
-        <item name="android:topRightRadius">100dp</item>
-    </style>
 
 
     <!-- ////////////////////// Text Button ////////////////////////// -->

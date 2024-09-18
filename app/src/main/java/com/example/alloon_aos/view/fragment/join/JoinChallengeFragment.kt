@@ -17,10 +17,13 @@ import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.activity.JoinActivity
 import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.adapter.RuleHashAdapter
+import com.example.alloon_aos.view.ui.component.dialog.PrivateCodeDialog
+import com.example.alloon_aos.view.ui.component.dialog.PrivateCodeDialogInterface
 import com.example.alloon_aos.view.ui.component.dialog.RuleCardDialog
+import com.example.alloon_aos.view.ui.component.dialog.UploadCardDialog
 import com.example.alloon_aos.viewmodel.JoinViewModel
 
-class JoinChallengeFragment : Fragment() {
+class JoinChallengeFragment : PrivateCodeDialogInterface, Fragment() {
     private lateinit var binding : FragmentJoinChallengeBinding
     private val joinViewModel by activityViewModels<JoinViewModel>()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
@@ -52,11 +55,23 @@ class JoinChallengeFragment : Fragment() {
             RuleCardDialog(joinViewModel)
                 .show(activity?.supportFragmentManager!!, "CustomDialog")
         }
+
         binding.joinBtn.setOnClickListener {
-            mActivity.supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_Layout, CreateGoalFragment())
-                .commit()
+            PrivateCodeDialog(this)
+                .show(activity?.supportFragmentManager!!, "CustomDialog")
+//            mActivity.supportFragmentManager.beginTransaction()
+//                .replace(R.id.frame_Layout, CreateGoalFragment())
+//                .addToBackStack(null)
+//                .commit()
+
         }
+    }
+
+    override fun onClickYesButton() {
+        mActivity.supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_Layout, CreateGoalFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
 }
