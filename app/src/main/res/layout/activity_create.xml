@@ -6,12 +6,12 @@
     <data>
         <variable
             name="activity"
-            type="com.example.alloon_aos.view.activity.JoinActivity" />
+            type="com.example.alloon_aos.view.activity.CreateActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/inquiry"
-        tools:context=".view.activity.JoinActivity"
+        android:id="@+id/create"
+        tools:context=".view.activity.CreateActivity"
         android:theme="@style/Theme.Photi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,25 +22,15 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:background="@color/white"
-            tools:ignore="MissingConstraints">
+            tools:ignore="MissingConstraints"/>
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:textSize="16dp"
-                android:text="챌린지 조회"
-                android:textColor="@color/gray900"
-                android:fontFamily="@font/suit_bold"/>
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <FrameLayout
-            android:id="@+id/frame_Layout"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_create"
             app:layout_constraintTop_toBottomOf="@+id/action_bar"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

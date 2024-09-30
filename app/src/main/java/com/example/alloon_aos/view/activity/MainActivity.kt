@@ -39,5 +39,9 @@ class MainActivity : AppCompatActivity() {
             finish()
             startActivity(Intent(this,JoinActivity::class.java))
         }
+        binding.createButton.setOnClickListener {
+            finish()
+            startActivity(Intent(this,CreateActivity::class.java))
+        }
     }
 }

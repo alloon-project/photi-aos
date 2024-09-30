@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_create"
+    app:startDestination="@id/createChallengeFragment">
+
+    <fragment
+        android:id="@+id/createChallengeFragment"
+        android:name="com.example.alloon_aos.view.fragment.create.CreateChallengeFragment"
+        android:label=""
+        tools:layout="@layout/fragment_create_challenge">
+        <action
+            android:id="@+id/action_createChallengeFragment_to_createNameFragment"
+            app:destination="@id/createNameFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createNameFragment"
+        android:name="com.example.alloon_aos.view.fragment.create.CreateNameFragment"
+        android:label=""
+        tools:layout="@layout/fragment_create_name" >
+        <action
+            android:id="@+id/action_createNameFragment_to_createContentFragment"
+            app:destination="@id/createContentFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createContentFragment"
+        android:name="com.example.alloon_aos.view.fragment.create.CreateContentFragment"
+        android:label=""
+        tools:layout="@layout/fragment_create_content" >
+        <action
+            android:id="@+id/action_createContentFragment_to_createImageFragment"
+            app:destination="@id/createImageFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createImageFragment"
+        android:name="com.example.alloon_aos.view.fragment.create.CreateImageFragment"
+        android:label=""
+        tools:layout="@layout/fragment_create_image" >
+        <action
+            android:id="@+id/action_createImageFragment_to_createRuleFragment"
+            app:destination="@id/createRuleFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createRuleFragment"
+        android:name="com.example.alloon_aos.view.fragment.create.CreateRuleFragment"
+        android:label=""
+        tools:layout="@layout/fragment_create_rule" >
+        <action
+            android:id="@+id/action_createRuleFragment_to_createHashtagFragment"
+            app:destination="@id/createHashtagFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createHashtagFragment"
+        android:name="com.example.alloon_aos.view.fragment.create.CreateHashtagFragment"
+        android:label=""
+        tools:layout="@layout/fragment_create_hashtag" >
+        <action
+            android:id="@+id/action_createHashtagFragment_to_createChallengeFragment"
+            app:destination="@id/createChallengeFragment"
+            app:popUpTo="@id/createChallengeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+</navigation>

@@ -53,7 +53,7 @@
     <string name="mychallenge">내 챌린지</string>
     <string name="authphoto">무엇으로 인증할까요?</string>
 
-    <!-- Create -->
+    <!-- JOIN -->
     <string name="join">함께하기</string>
     <string name="seeall">전체보기</string>
     <string name="personalgoal">잠깐! 이 챌린지에서 이루고 싶은 \n회원님만의 목표를 알려주세요</string>
@@ -62,4 +62,21 @@
     <string name="save">내 목표 저장하기</string>
     <string name="invitecode">초대코드를 입력해주세요</string>
     <string name="codeerror">초대코드가 일치하지 않아요</string>
+
+    <!-- CREATE -->
+    <string name="createchallenge">개최하고 싶은 \n챌린지가 있나요?</string>
+    <string name="createchallenge2">파티장이 되어보세요</string>
+    <string name="createchallenge3">평균 5~10분 소요돼요</string>
+    <string name="createchallenge4">가보자구요!</string>
+    <string name="createname">챌린지 이름을 정해주세요</string>
+    <string name="createname2">전체공개</string>
+    <string name="createname3">다양한 사람들과 챌린지를 즐겨요</string>
+    <string name="createname4">친한 친구들과 챌린지를 즐겨요</string>
+    <string name="createcontent">챌린지의 목표는 무엇인가요?</string>
+    <string name="createcontent2">이루고자 하는 목표를 알려주세요!</string>
+    <string name="createcontent3">하루 인증 시간을 정해주세요</string>
+    <string name="createcontent4">매일 이 시간에 인증 사진을 올려요</string>
+    <string name="createcontent5">챌린지 종료 날짜를 정해주세요</string>
+    <string name="createcontent6">종료 날짜는 시작 날짜를 앞설 수 없어요</string>
+
 </resources>

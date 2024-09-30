@@ -62,6 +62,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/input_line_default"
             android:ems="10"
+            android:maxLength="16"
             android:fontFamily="@font/suit_medium"
             android:hint="예) 잊지못할 추억 남기기"
             android:inputType="text"

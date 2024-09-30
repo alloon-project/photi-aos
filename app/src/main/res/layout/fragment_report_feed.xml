@@ -148,6 +148,7 @@
                     android:background="@drawable/textarea_line_default"
                     android:gravity="top"
                     android:ems="10"
+                    android:maxLength="120"
                     android:inputType="text"
                     android:hint="신고 내용을 상세히 알려주세요"
                     android:textColorHint="@color/gray400"

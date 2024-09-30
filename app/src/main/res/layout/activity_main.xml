@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="fragment"
+            name="activity"
             type="com.example.alloon_aos.view.activity.MainActivity" />
     </data>
 
@@ -53,6 +53,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="join" />
+        <Button
+            android:id="@+id/createButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="create" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
