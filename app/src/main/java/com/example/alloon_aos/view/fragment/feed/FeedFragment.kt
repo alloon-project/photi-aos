@@ -60,7 +60,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface {
     }
 
     fun showBottomList(){
-        AlignBottomSheet(mContext,this,"최신순","인기순","작성순",selected_order)
+        AlignBottomSheet(mContext,this,"최신순","인기순",selected_order)
             .show(activity?.supportFragmentManager!!, "bottomList")
     }
 
@@ -94,11 +94,6 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface {
     override fun onClickSecondButton() {
         selected_order = "second"
         //인기순으로 정렬
-    }
-
-    override fun onClickThirdButton() {
-        selected_order = "third"
-        //작성순으로 정렬
     }
 
 }
