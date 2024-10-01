@@ -109,15 +109,14 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comments_recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="160dp"
                 android:layout_marginHorizontal="18dp"
-                android:layout_marginTop="320dp"
                 android:layout_marginBottom="18dp"
                 android:scrollbars="vertical"
                 app:layout_constraintBottom_toTopOf="@+id/comment_editText"
                 app:layout_constraintEnd_toEndOf="@+id/feed_imgView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+               />
 
             <EditText
                 android:id="@+id/comment_editText"
@@ -137,7 +136,8 @@
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/textLength_textView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                android:imeOptions="actionDone"/>
 
             <TextView
                 android:id="@+id/textLength_textView"

@@ -11,8 +11,8 @@ data class FeedInItem(
     val id: String,
     val time: String,
     var url: String? = null,
-    var isClick: Boolean,
-    val heartCnt:Int = 0,
+    var isClick: Boolean, //본인이 하트를 눌렀는지
+    var heartCnt:Int = 0, //다른 사용자들이 누른 하트 수
     val comments : ArrayList<Comment> = ArrayList()
 )
 
@@ -48,7 +48,7 @@ class FeedViewModel : ViewModel(){
         FeedInItem("seul","1분전","https://ifh.cc/g/AA0NMd.jpg",false,5,comments),
         FeedInItem("HB","18분전","https://ifh.cc/g/09y6Mo.jpg",false,10),
         FeedInItem("photi1","30분전","https://ifh.cc/g/KB2Vh1.jpg",false,1,comments),
-        FeedInItem("photi2","방금","https://ifh.cc/g/yxgmBH.webp",true),
+        FeedInItem("photi2","방금","https://ifh.cc/g/yxgmBH.webp",false),
     )
 
     val feedOutItems = arrayListOf<FeedOutItem>(

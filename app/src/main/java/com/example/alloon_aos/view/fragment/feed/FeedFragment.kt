@@ -11,11 +11,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFeedBinding
-import com.example.alloon_aos.view.adapter.FeedInAdapter
 import com.example.alloon_aos.view.adapter.FeedOutAdapter
 import com.example.alloon_aos.view.ui.component.bottomsheet.AlignBottomSheet
 import com.example.alloon_aos.view.ui.component.bottomsheet.AlignBottomSheetInterface
@@ -26,7 +24,6 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface {
     private lateinit var binding : FragmentFeedBinding
     private lateinit var mContext: Context
     private val feedViewModel by activityViewModels<FeedViewModel>()
-    private lateinit var feedInAdapter: FeedInAdapter
     private var selected_order = "first"
     private var isMissionClear = false
 
@@ -55,7 +52,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface {
         super.onViewCreated(view, savedInstanceState)
 
         if(!isMissionClear) {
-            showToast("오늘의 인증이 완료되지 않았어요!")
+            showToastAbove("오늘의 인증이 완료되지 않았어요!")
         }
     }
 
@@ -68,7 +65,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface {
         Toast.makeText(requireContext(),"사진찍으러 ㄱㄱ",Toast.LENGTH_SHORT).show()
     }
 
-    private fun showToast(message:String){
+    private fun showToastAbove(message:String){
         val inflater = LayoutInflater.from(requireContext())
         val customToastView = inflater.inflate(R.layout.toast_tooltip_under, null)
 
