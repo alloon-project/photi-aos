@@ -17,6 +17,7 @@ import android.view.WindowManager
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -65,7 +66,17 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
             }
 
             ellipsisImgBtn.setOnClickListener {
-                // 공유하기, 삭제하기
+                var pop = PopupMenu(context, it,Gravity.CENTER,0,R.style.PopupStyle)
+                pop.menuInflater.inflate(R.menu.feed_dialog_menu, pop.menu)
+
+                pop.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.option_remove_feed -> Toast.makeText(context , "remove 클릭됨" , Toast.LENGTH_SHORT).show()
+                        R.id.option_share -> Toast.makeText(context , "share 클릭됨" , Toast.LENGTH_SHORT).show()
+                    }
+                    false
+                }
+                pop.show()
             }
 
             heartBtn.setOnClickListener {
@@ -73,7 +84,6 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
             }
 
 
-            //글자 수 바뀔 때
             commentEditText.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {}
 
@@ -188,6 +198,11 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
                 with(comments[pos]) {
                     binding.idTextView.text = id
                     binding.textTextView.text = text
+
+                    holder.itemView.setOnLongClickListener {
+                        removeComment(pos)
+                        true
+                    }
                 }
             }
         }
@@ -202,6 +217,12 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
         }
 
         override fun getItemCount() = comments.size
+
+        private fun removeComment(position: Int) {
+            comments.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, comments.size)
+        }
     }
 
 

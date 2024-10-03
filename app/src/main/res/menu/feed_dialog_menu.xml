@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="공유하기"
+        android:id="@+id/option_share"/>
+    <item
+        android:title=" "
+        android:id="@+id/separator"
+        android:icon="@drawable/divider_dropdown"
+        android:enabled="false" />
+    <item
+        android:title="피드 삭제하기"
+        android:id="@+id/option_remove_feed"/>
+</menu>

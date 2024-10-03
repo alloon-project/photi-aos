@@ -165,4 +165,12 @@
     <style name="AppBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
     </style>
+
+    <!-- ////////////////////// Option Menu ////////////////////////// -->
+    <style name="PopupStyle" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/radius_dropdown_two</item>
+        <item name="android:textColor">@color/gray900</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">@font/suit_medium</item>
+</style>
 </resources>
