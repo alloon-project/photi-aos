@@ -1,16 +1,11 @@
 package com.example.alloon_aos.view.ui.component.dialog
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RenderEffect
-import android.graphics.Shader
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
@@ -19,11 +14,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.animation.AlphaAnimation
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +29,6 @@ import com.bumptech.glide.Glide
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.DialogFeedDetailBinding
 import com.example.alloon_aos.databinding.ItemFeedCommentBinding
-import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.dpToPx
 import com.example.alloon_aos.viewmodel.Comment
 import com.example.alloon_aos.viewmodel.FeedInItem
@@ -43,6 +39,7 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
     private val binding get() = _binding!!
     private val feedViewModel by activityViewModels<FeedViewModel>()
     private var isFirstInput = true
+    private var isFirstAdd = true
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -89,7 +86,7 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
                         textLengthTextView.text = s.length.toString()+"/16"
 
                         if(isFirstInput){
-                            showToastAbove("엔터를 누르면 댓글이 전송돼요~")
+                            showCustomToast(addCommentToastLayout)
                             isFirstInput = false
                         }
 
@@ -109,9 +106,12 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
 
                         commentsRecyclerView.adapter?.notifyItemInserted(feed.comments.size - 1)
                         commentsRecyclerView.scrollToPosition(feed.comments.size - 1)
-
-                        Toast.makeText(requireContext(), "댓글 전송~", Toast.LENGTH_SHORT).show()
                         commentEditText.setText("")
+
+                        if(isFirstAdd){
+                            showCustomToast(removeCommentToastLayout)
+                            isFirstAdd = false
+                        }
                     }
                     true
                 } else {
@@ -123,12 +123,34 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
         return view
     }
 
-
     private fun updateHeartCountView(heartBtn: ImageButton, heartCntTextView: TextView, feed : FeedInItem) {
         feed.isClick = !feed.isClick
         heartBtn.setImageResource(if (feed.isClick) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
         feed.heartCnt += if (feed.isClick) 1 else -1
         heartCntTextView.text = if (feed.heartCnt == 0) "" else feed.heartCnt.toString()
+    }
+
+    private fun showCustomToast(customToastLayout: ConstraintLayout) {
+        customToastLayout.visibility = View.VISIBLE
+
+        val fadeIn = AlphaAnimation(0f, 1f).apply {
+            duration = 300
+            fillAfter = true
+        }
+
+        val fadeOut = AlphaAnimation(1f, 0f).apply {
+            startOffset = 700 // 0.7초 대기 후 사라지기 시작
+            duration = 300
+            fillAfter = true
+        }
+
+        customToastLayout.visibility = View.VISIBLE
+        customToastLayout.startAnimation(fadeIn)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            customToastLayout.startAnimation(fadeOut)
+            customToastLayout.visibility = View.GONE
+        }, 1000)
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -182,20 +204,5 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
         override fun getItemCount() = comments.size
     }
 
-    //아직 토스트 메시지의 위치 값 넣지 않음.
-    private fun showToastAbove(message:String){
-        val inflater = LayoutInflater.from(requireContext())
-        val customToastView = inflater.inflate(R.layout.toast_tooltip_right, null)
-
-        customToastView.findViewById<TextView>(R.id.textView).text = message
-
-        val toast = Toast(requireContext())
-        val yOffset = requireContext().dpToPx(470f)
-
-        toast.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0,yOffset )
-        toast.duration = Toast.LENGTH_SHORT
-        toast.view = customToastView
-        toast.show()
-    }
 
 }
