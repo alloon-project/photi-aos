@@ -11,7 +11,7 @@ class RuleHashAdapter(private val joinViewModel: JoinViewModel) :
     RecyclerView.Adapter<RuleHashAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: ItemRuleChipRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        @SuppressLint("ResourceAsColor")
+
         fun setContents(pos: Int) {
             with (joinViewModel.hashs[pos]) {
                 binding.hashBtn.text = chip

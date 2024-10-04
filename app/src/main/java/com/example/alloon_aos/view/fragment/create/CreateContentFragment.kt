@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.create
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,13 @@ import androidx.fragment.app.activityViewModels
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentCreateContentBinding
 import com.example.alloon_aos.view.activity.CreateActivity
+import com.example.alloon_aos.view.ui.component.bottomsheet.TimeBottomSheet
+import com.example.alloon_aos.view.ui.component.bottomsheet.TimeBottomSheetInterface
 import com.example.alloon_aos.viewmodel.CreateViewModel
 
-class CreateContentFragment : Fragment() {
+class CreateContentFragment : Fragment(), TimeBottomSheetInterface {
     private lateinit var binding : FragmentCreateContentBinding
+    private lateinit var mContext: Context
     private val createViewModel by activityViewModels<CreateViewModel>()
 
     override fun onCreateView(
@@ -28,6 +32,24 @@ class CreateContentFragment : Fragment() {
         val mActivity = activity as CreateActivity
         mActivity.setAppBar()
 
+        setListener()
+
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
+    fun setListener() {
+        binding.downBtn.setOnClickListener {
+
+            TimeBottomSheet(mContext,createViewModel,this)
+                .show(activity?.supportFragmentManager!!, "bottomList")
+        }
+    }
+
+    override fun onClickSelectButton() {
     }
 }

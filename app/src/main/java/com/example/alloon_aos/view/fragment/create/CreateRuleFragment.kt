@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.create
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.example.alloon_aos.viewmodel.CreateViewModel
 
 class CreateRuleFragment : Fragment() {
     private lateinit var binding : FragmentCreateRuleBinding
+    private lateinit var mContext: Context
     private val createViewModel by activityViewModels<CreateViewModel>()
 
     override fun onCreateView(
@@ -30,4 +32,10 @@ class CreateRuleFragment : Fragment() {
 
         return binding.root
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
 }
