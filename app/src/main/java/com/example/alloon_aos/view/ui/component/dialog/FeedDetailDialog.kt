@@ -17,7 +17,7 @@ import android.view.WindowManager
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageButton
-import android.widget.PopupMenu
+import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -28,9 +28,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alloon_aos.R
+import com.example.alloon_aos.databinding.CustomPopupMenuBinding
 import com.example.alloon_aos.databinding.DialogFeedDetailBinding
 import com.example.alloon_aos.databinding.ItemFeedCommentBinding
-import com.example.alloon_aos.view.ui.util.dpToPx
 import com.example.alloon_aos.viewmodel.Comment
 import com.example.alloon_aos.viewmodel.FeedInItem
 import com.example.alloon_aos.viewmodel.FeedViewModel
@@ -65,18 +65,8 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
                 dismiss()
             }
 
-            ellipsisImgBtn.setOnClickListener {
-                var pop = PopupMenu(context, it,Gravity.CENTER,0,R.style.PopupStyle)
-                pop.menuInflater.inflate(R.menu.feed_dialog_menu, pop.menu)
-
-                pop.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.option_remove_feed -> Toast.makeText(context , "remove 클릭됨" , Toast.LENGTH_SHORT).show()
-                        R.id.option_share -> Toast.makeText(context , "share 클릭됨" , Toast.LENGTH_SHORT).show()
-                    }
-                    false
-                }
-                pop.show()
+            ellipsisImgBtn.setOnClickListener { view ->
+                setCustomPopUp(view)
             }
 
             heartBtn.setOnClickListener {
@@ -133,6 +123,35 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
+    override fun onResume() {
+        super.onResume()
+        setBlurredBackground(50, 0)
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun setBlurredBackground(blurBehindRadius: Int, backgroundBlurRadius: Int) {
+        val dialogWindow = dialog?.window
+        dialogWindow?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        dialogWindow?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogWindow?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+
+        if (dialogWindow?.windowManager?.isCrossWindowBlurEnabled == true) {
+            dialogWindow.setFlags(
+                WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
+                WindowManager.LayoutParams.FLAG_BLUR_BEHIND
+            )
+            dialogWindow.attributes?.blurBehindRadius = blurBehindRadius
+            dialogWindow.setDimAmount(0f)
+        }
+    }
+
     private fun updateHeartCountView(heartBtn: ImageButton, heartCntTextView: TextView, feed : FeedInItem) {
         feed.isClick = !feed.isClick
         heartBtn.setImageResource(if (feed.isClick) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
@@ -163,33 +182,26 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
         }, 1000)
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
-    override fun onResume() {
-        super.onResume()
-        setBlurredBackground(50, 0)
+    private fun setCustomPopUp(view: View) {
+        val popupViewBinding = CustomPopupMenuBinding.inflate(LayoutInflater.from(context))
+        val popupWindow = PopupWindow(popupViewBinding.root, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
 
-    }
+        with(popupViewBinding){
+            optionOne.text = "공유하기"
+            optionTwo.text = "피드 삭제하기"
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+            optionOne.setOnClickListener {
+                Toast.makeText(context, "Share 클릭됨", Toast.LENGTH_SHORT).show()
+                popupWindow.dismiss()
+            }
 
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun setBlurredBackground(blurBehindRadius: Int, backgroundBlurRadius: Int) {
-        val dialogWindow = dialog?.window
-        dialogWindow?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        dialogWindow?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogWindow?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-
-        if (dialogWindow?.windowManager?.isCrossWindowBlurEnabled == true) {
-            dialogWindow.setFlags(
-                WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-                WindowManager.LayoutParams.FLAG_BLUR_BEHIND
-            )
-            dialogWindow.attributes?.blurBehindRadius = blurBehindRadius
-            dialogWindow.setDimAmount(0f)
+            optionTwo.setOnClickListener {
+                Toast.makeText(context, "Remove 클릭됨", Toast.LENGTH_SHORT).show()
+                popupWindow.dismiss()
+            }
         }
+
+        popupWindow.showAsDropDown(view, 0, 0, Gravity.CENTER)
     }
 
     class CommentsAdapter(val comments: ArrayList<Comment>): RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {

@@ -45,7 +45,7 @@
             android:layout_marginLeft="17dp"/>
 
         <ImageButton
-            android:id="@+id/imageButton7"
+            android:id="@+id/ellipsisImgBtn"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="16dp"
@@ -60,8 +60,8 @@
             android:layout_height="24dp"
             android:background="@drawable/ic_share"
             android:backgroundTint="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton7"
-            app:layout_constraintTop_toTopOf="@+id/imageButton7"
+            app:layout_constraintEnd_toStartOf="@+id/ellipsisImgBtn"
+            app:layout_constraintTop_toTopOf="@+id/ellipsisImgBtn"
             android:layout_marginRight="16dp"/>
 
         <TextView

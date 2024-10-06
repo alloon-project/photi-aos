@@ -4,12 +4,17 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityFeedBinding
+import com.example.alloon_aos.databinding.CustomPopupMenuBinding
 import com.example.alloon_aos.view.fragment.feed.IntroduceFragment
 import com.example.alloon_aos.view.fragment.feed.PartyMemberFragment
 import com.example.alloon_aos.view.fragment.feed.FeedFragment
@@ -34,18 +39,13 @@ class FeedActivity : AppCompatActivity() {
 
         val tabLayout = binding.tabLayout
 
-       // val tabTitles = listOf("피드", "소개", "파티원")
-
-//        tabTitles.forEach { title ->
-//            val tab = tabLayout.newTab()
-//            tab.customView = createTabView(title)
-//            tabLayout.addTab(tab)
-//        }
-
         var viewFeedTab = FeedFragment()
         val introduceTab = IntroduceFragment()
         val partyTab = PartyMemberFragment()
 
+        binding.ellipsisImgBtn.setOnClickListener { view ->
+            setCustomPopUp(view)
+        }
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val fragmentManager = supportFragmentManager
@@ -73,14 +73,6 @@ class FeedActivity : AppCompatActivity() {
         })
     }
 
-
-//    private fun createTabView(title: String): View {
-//        val view = LayoutInflater.from(this).inflate(R.layout.custom_tab, null)
-//        val textView = view.findViewById<TextView>(R.id.tab_title)
-//        textView.text = title
-//        return view
-//    }
-
     @RequiresApi(Build.VERSION_CODES.S)
     private fun applyBlurEffect(view: View?) {
         val blurEffect = RenderEffect.createBlurEffect(10f, 10f, Shader.TileMode.CLAMP)
@@ -102,6 +94,29 @@ class FeedActivity : AppCompatActivity() {
                 applyBlurEffect(view)
             }
         }
+    }
+
+    private fun setCustomPopUp(view: View) {
+        val popupViewBinding = CustomPopupMenuBinding.inflate(layoutInflater)
+        val popupWindow = PopupWindow(popupViewBinding.root, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+
+        with(popupViewBinding){
+            optionOne.text = "챌린지 수정하기"
+            optionTwo.text = "챌린지 탈퇴하기"
+
+            optionOne.setOnClickListener {
+                Toast.makeText(this@FeedActivity, "수정하기 클릭됨", Toast.LENGTH_SHORT).show()
+                popupWindow.dismiss()
+            }
+
+            optionTwo.setOnClickListener {
+                Toast.makeText(this@FeedActivity, "탈퇴하기 클릭됨", Toast.LENGTH_SHORT).show()
+                popupWindow.dismiss()
+            }
+
+        }
+
+        popupWindow.showAsDropDown(view, 0, 0, Gravity.CENTER)
     }
 
     fun finishActivity(){
