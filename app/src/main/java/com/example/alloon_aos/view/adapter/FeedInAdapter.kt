@@ -11,8 +11,14 @@ import com.example.alloon_aos.databinding.ItemFeedDefaultInBinding
 import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog
 import com.example.alloon_aos.viewmodel.Comment
 import com.example.alloon_aos.viewmodel.FeedInItem
+interface OnFeedDeletedListener {
+    fun onFeedDeleted(position: Int)
+}
 
-class FeedInAdapter(private val fragmentManager: FragmentManager, val feedInItems: ArrayList<FeedInItem>): RecyclerView.Adapter<FeedInAdapter.ViewHolder>() {
+class FeedInAdapter(
+    private val fragmentManager: FragmentManager,
+    private val feedInItems: ArrayList<FeedInItem>
+) : RecyclerView.Adapter<FeedInAdapter.ViewHolder>(), OnFeedDeletedListener {
     inner class ViewHolder(var binding: ItemFeedDefaultInBinding) : RecyclerView.ViewHolder(binding.root) {
         fun setContents(holder: ViewHolder, pos: Int) {
             with(feedInItems[pos]) {
@@ -33,7 +39,7 @@ class FeedInAdapter(private val fragmentManager: FragmentManager, val feedInItem
                     .into(binding.imgView)
 
                 binding.feed.setOnClickListener {
-                    FeedDetailDialog(pos)
+                    FeedDetailDialog(pos,this@FeedInAdapter)
                         .show(fragmentManager,"tag")
                 }
 
@@ -61,4 +67,9 @@ class FeedInAdapter(private val fragmentManager: FragmentManager, val feedInItem
     }
 
     override fun getItemCount() = feedInItems.size
+    override fun onFeedDeleted(position: Int) {
+        feedInItems.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, feedInItems.size - position)
+    }
 }

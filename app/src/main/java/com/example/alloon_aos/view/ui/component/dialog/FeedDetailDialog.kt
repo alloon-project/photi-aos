@@ -31,11 +31,12 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.CustomPopupMenuBinding
 import com.example.alloon_aos.databinding.DialogFeedDetailBinding
 import com.example.alloon_aos.databinding.ItemFeedCommentBinding
+import com.example.alloon_aos.view.adapter.OnFeedDeletedListener
 import com.example.alloon_aos.viewmodel.Comment
 import com.example.alloon_aos.viewmodel.FeedInItem
 import com.example.alloon_aos.viewmodel.FeedViewModel
 
-class FeedDetailDialog(val index: Int) : DialogFragment()  {
+class FeedDetailDialog(val index: Int,private val listener: OnFeedDeletedListener) : DialogFragment(),CustomTwoButtonDialogInterface  {
     private var _binding: DialogFeedDetailBinding? = null
     private val binding get() = _binding!!
     private val feedViewModel by activityViewModels<FeedViewModel>()
@@ -114,9 +115,8 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
                         }
                     }
                     true
-                } else {
-                    false
-                }
+                } else false
+
             }
         }
 
@@ -196,8 +196,12 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
             }
 
             optionTwo.setOnClickListener {
-                Toast.makeText(context, "Remove 클릭됨", Toast.LENGTH_SHORT).show()
+                CustomTwoButtonDialog(this@FeedDetailDialog,
+                    "피드를 삭제할까요?","삭제한 피드는 복구할 수 없으며,\n" + "오늘 더 이상 피드를 올릴 수 없어요.",
+                    "취소할게요","삭제할게요")
+                .show(requireActivity().supportFragmentManager, "CustomDialog")
                 popupWindow.dismiss()
+                dismiss()
             }
         }
 
@@ -237,5 +241,9 @@ class FeedDetailDialog(val index: Int) : DialogFragment()  {
         }
     }
 
+    override fun onClickFisrtButton() {}
 
+    override fun onClickSecondButton() {
+        listener.onFeedDeleted(index)
+    }
 }

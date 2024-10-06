@@ -81,7 +81,6 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface {
     }
 
 
-
     //피드들 정렬
     override fun onClickFirstButton() {
         selected_order = "first"
