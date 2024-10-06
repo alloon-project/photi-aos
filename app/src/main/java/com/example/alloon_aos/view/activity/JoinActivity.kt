@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityJoinBinding
+import com.example.alloon_aos.view.fragment.join.CreateGoalFragment
 import com.example.alloon_aos.view.fragment.join.JoinChallengeFragment
 
 class JoinActivity : AppCompatActivity() {
@@ -14,9 +15,18 @@ class JoinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_join)
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_Layout, JoinChallengeFragment())
-            .commit()
+        var isFromFeedActivity = intent.getBooleanExtra("IS_FROM_FEED_ACTIVITY", false)
+
+        if(isFromFeedActivity){
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_Layout, CreateGoalFragment())
+                .commit()
+        }
+        else{
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_Layout, JoinChallengeFragment())
+                .commit()
+        }
     }
 
     fun setAppBar(appTitle : String) {

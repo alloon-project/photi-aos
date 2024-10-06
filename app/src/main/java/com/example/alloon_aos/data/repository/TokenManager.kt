@@ -37,4 +37,13 @@ class TokenManager @Inject constructor(
     fun deleteRefreshToken(){
         sharedPreferences.remove("refresh_token")
     }
+
+    fun saveMyGoal(token: String){
+        sharedPreferences.setString("myGaol", token)
+        Log.d("test","set myGoal : "+getMyGoal())
+    }
+
+    fun getMyGoal(): String?{
+        return sharedPreferences.getString("myGoal",null)
+    }
 }

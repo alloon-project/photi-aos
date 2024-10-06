@@ -88,6 +88,7 @@
 
         <Button
             android:id="@+id/next_btn"
+            android:onClick="@{() ->fragment.sendGoal()}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_round_quaternary"

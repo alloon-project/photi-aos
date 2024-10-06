@@ -1,14 +1,19 @@
 package com.example.alloon_aos.view.fragment.feed
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +21,12 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentIntroduceBinding
 import com.example.alloon_aos.databinding.FragmentPartyMemberBinding
 import com.example.alloon_aos.databinding.ItemFeedPartyBinding
+import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.activity.JoinActivity
+import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialog
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.FeedViewModel
+import com.example.alloon_aos.viewmodel.JoinViewModel
 
 class PartyMemberFragment : Fragment() {
     private lateinit var binding : FragmentPartyMemberBinding
@@ -36,6 +46,7 @@ class PartyMemberFragment : Fragment() {
         binding.partyRecyclerView.layoutManager = LinearLayoutManager(mContext)
         binding.partyRecyclerView.setHasFixedSize(true)
 
+        //내 목표 값 다시 받아야함
         return binding.root
     }
 
@@ -54,13 +65,13 @@ class PartyMemberFragment : Fragment() {
                     binding.textTextView.setTextColor(mContext.getColor(R.color.gray600))
                 }
 
-                if(isMe)
+                if(isMe){
                     binding.editImgBtn.visibility = View.VISIBLE
-
-                binding.editImgBtn.setOnClickListener {
-                    Toast.makeText(requireContext(),"목표 수정 ㄱㄱ", Toast.LENGTH_SHORT).show()
+                    binding.editImgBtn.setOnClickListener {
+                        Toast.makeText(requireContext(),"목표 수정 ㄱㄱ", Toast.LENGTH_SHORT).show()
+                        changeMyGoal()
+                    }
                 }
-
             }
         }
     }
@@ -79,5 +90,12 @@ class PartyMemberFragment : Fragment() {
 
         override fun getItemCount() = feedViewModel.paryItem.size
 
+    }
+
+    fun changeMyGoal(){
+        val intent = Intent(requireContext(), JoinActivity::class.java).apply {
+            putExtra("IS_FROM_FEED_ACTIVITY",true)
+        }
+        startActivity(intent)
     }
 }

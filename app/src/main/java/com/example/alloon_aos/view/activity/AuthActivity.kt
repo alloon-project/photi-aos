@@ -62,11 +62,6 @@ class AuthActivity : AppCompatActivity() {
         binding.title.setText(appTitle)
     }
 
-
-    fun isFromSettings() : Boolean{
-        return isFromSettingsActivity
-    }
-
     fun finishActivity() {
         val resultIntent = Intent().apply {
             putExtra("isFromPasswordChangeFragment", true)

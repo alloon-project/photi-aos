@@ -1,5 +1,7 @@
 package com.example.alloon_aos.view.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
