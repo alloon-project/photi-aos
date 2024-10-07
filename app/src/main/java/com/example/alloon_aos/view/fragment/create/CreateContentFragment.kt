@@ -14,6 +14,7 @@ import com.example.alloon_aos.view.activity.CreateActivity
 import com.example.alloon_aos.view.ui.component.bottomsheet.TimeBottomSheet
 import com.example.alloon_aos.view.ui.component.bottomsheet.TimeBottomSheetInterface
 import com.example.alloon_aos.viewmodel.CreateViewModel
+import java.text.DecimalFormat
 
 class CreateContentFragment : Fragment(), TimeBottomSheetInterface {
     private lateinit var binding : FragmentCreateContentBinding
@@ -44,12 +45,16 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface {
 
     fun setListener() {
         binding.downBtn.setOnClickListener {
-
             TimeBottomSheet(mContext,createViewModel,this)
                 .show(activity?.supportFragmentManager!!, "bottomList")
         }
     }
 
-    override fun onClickSelectButton() {
+    override fun onClickSelectButton(time: Int) {
+        val df = DecimalFormat("00")
+        val timetext = df.format(time)
+        binding.timeEdittext.setText("$timetext : 00")
+        binding.timeImageview.setImageResource(R.drawable.ic_time_blue400)
+        binding.timeTextview.setTextColor(mContext.getColor(R.color.blue400))
     }
 }

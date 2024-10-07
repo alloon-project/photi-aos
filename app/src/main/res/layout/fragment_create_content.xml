@@ -105,7 +105,7 @@
                 android:fontFamily="@font/suit_medium"
                 android:hint="00 : 00"
                 android:inputType="text"
-                android:enabled="false"
+                android:focusableInTouchMode="false"
                 android:letterSpacing="-0.03"
                 android:textColorHint="@color/gray400"
                 android:textSize="14dp" />
@@ -126,8 +126,7 @@
             android:id="@+id/time_imageview"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            android:src="@drawable/ic_time"
-            app:tint="@color/gray400"
+            android:src="@drawable/ic_time_gray400"
             app:layout_constraintStart_toStartOf="@+id/time_layout"
             app:layout_constraintTop_toTopOf="@+id/time_textview" />
 

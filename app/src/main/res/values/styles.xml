@@ -42,4 +42,14 @@
 <!--    </style>-->
 
 
+    <!-- ////////////////////// Picker ////////////////////////// -->
+
+    <!-- number picker text style -->
+    <style name="timePickerCustomText">
+        <item name="android:textSize">16dp</item>
+        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:textColor">#2C3338</item>
+        <item name="android:fontFamily">@font/suit_bold</item>
+    </style>
+
 </resources>
