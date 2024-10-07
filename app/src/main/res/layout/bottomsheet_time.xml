@@ -14,7 +14,8 @@
     <NumberPicker
         android:id="@+id/time_picker"
         android:layout_width="312dp"
-        android:layout_height="wrap_content"
+        android:layout_height="180dp"
+        android:background="@drawable/picker_time_background"
         android:theme="@style/timePickerCustomText"
         android:selectionDividerHeight="0dp"
         android:layout_marginBottom="24dp"
