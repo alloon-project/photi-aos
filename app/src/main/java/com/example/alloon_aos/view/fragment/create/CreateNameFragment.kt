@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.create
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -37,6 +38,10 @@ class CreateNameFragment : Fragment() {
         mActivity.setAppBar()
 
         setListener()
+
+        ObjectAnimator.ofInt(binding.progress, "progress", 0,20)
+            .setDuration(500)
+            .start()
 
         return binding.root
     }

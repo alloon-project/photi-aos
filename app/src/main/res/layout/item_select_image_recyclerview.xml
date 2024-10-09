@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/Theme.Photi"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="12dp">
+
+    <ImageView
+        android:id="@+id/src_imageview"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_margin="4dp"
+        android:src="@drawable/select_thumbnail_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_gallery"
+        app:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/src_imageview"
+        app:layout_constraintEnd_toEndOf="@+id/src_imageview"
+        app:layout_constraintStart_toStartOf="@+id/src_imageview"
+        app:layout_constraintTop_toTopOf="@+id/src_imageview" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/suit_bold"
+        android:textColor="@color/gray800"
+        android:text="@string/createimage2"
+        android:textSize="12dp"
+        android:letterSpacing="-0.03"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/src_imageview"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.create
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -44,6 +45,10 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
 
         setTodayDate()
         setListener()
+
+        ObjectAnimator.ofInt(binding.progress, "progress", 20,40)
+            .setDuration(500)
+            .start()
 
         return binding.root
     }

@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.create
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,6 +30,10 @@ class CreateHashtagFragment : Fragment() {
 
         val mActivity = activity as CreateActivity
         mActivity.setAppBar()
+
+        ObjectAnimator.ofInt(binding.progress, "progress", 80,100)
+            .setDuration(500)
+            .start()
 
         return binding.root
     }

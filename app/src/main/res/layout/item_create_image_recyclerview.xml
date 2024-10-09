@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/Theme.Photi"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="12dp">
+
+    <ImageView
+        android:id="@+id/select_imageview"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/select_image_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/src_imageview"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/image222"
+        app:layout_constraintBottom_toBottomOf="@+id/select_imageview"
+        app:layout_constraintEnd_toEndOf="@+id/select_imageview"
+        app:layout_constraintStart_toStartOf="@+id/select_imageview"
+        app:layout_constraintTop_toTopOf="@+id/select_imageview" />
+
+    <TextView
+        android:id="@+id/image_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/suit_bold"
+        android:textColor="@color/gray800"
+        android:text="럭키데이"
+        android:textSize="12dp"
+        android:letterSpacing="-0.03"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/src_imageview"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
