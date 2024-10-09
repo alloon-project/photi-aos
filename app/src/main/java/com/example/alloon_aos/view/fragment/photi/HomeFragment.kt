@@ -39,9 +39,9 @@ class HomeFragment : Fragment() {
 
         val mActivity = activity as PhotiActivity
 
-        if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
-            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
-        else
+//        if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
+//            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
+//        else
             childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
             //childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
 
