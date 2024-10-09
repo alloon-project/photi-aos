@@ -29,7 +29,8 @@ data class PartyItem(
 )
 
 class FeedViewModel : ViewModel(){
-
+    var id = "myId" //api에서 받아올 나의 아이디
+    var isMissionClear = false //api에서 받아올 오늘 미션관련 플래그
     //피드뷰
     val comments = arrayListOf<Comment>(
         Comment("aaa","이 책 좋네요"),

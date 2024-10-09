@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -101,26 +103,46 @@ class FeedDetailDialog(val index: Int,private val listener: OnFeedDeletedListene
                     val newCommentText = commentEditText.text.toString()
 
                     if(newCommentText.isNotEmpty()){
-                        //사용자 id 넣어줘야함
-                        val newComment = Comment(id = "myID", text = newCommentText)
-                        feed.comments.add(newComment)
-
-                        commentsRecyclerView.adapter?.notifyItemInserted(feed.comments.size - 1)
-                        commentsRecyclerView.scrollToPosition(feed.comments.size - 1)
+                        addComment(feed,newCommentText,commentsRecyclerView)
                         commentEditText.setText("")
 
                         if(isFirstAdd){
-                            showCustomToast(removeCommentToastLayout)
+//                            commentsRecyclerView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+//                                override fun onLayoutChange(
+//                                    v: View?,
+//                                    left: Int,
+//                                    top: Int,
+//                                    right: Int,
+//                                    bottom: Int,
+//                                    oldLeft: Int,
+//                                    oldTop: Int,
+//                                    oldRight: Int,
+//                                    oldBottom: Int
+//                                ) {
+//                                    // 레이아웃이 변경된 후에 토스트를 띄움
+                                    showCustomToast(removeCommentToastLayout)
+//
+//                                    // 리스너를 한 번만 적용하고 제거
+//                                    commentsRecyclerView.removeOnLayoutChangeListener(this)
+//                                }
+//                            })
+
                             isFirstAdd = false
                         }
                     }
                     true
                 } else false
-
             }
         }
 
         return view
+    }
+
+    private fun addComment(feed: FeedInItem, commentText: String, recyclerView: RecyclerView) {
+        val newComment = Comment(id = feedViewModel.id, text = commentText)
+        feed.comments.add(newComment)
+        recyclerView.adapter?.notifyItemInserted(feed.comments.size - 1)
+        recyclerView.scrollToPosition(feed.comments.size - 1)
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -160,27 +182,51 @@ class FeedDetailDialog(val index: Int,private val listener: OnFeedDeletedListene
     }
 
     private fun showCustomToast(customToastLayout: ConstraintLayout) {
-        customToastLayout.visibility = View.VISIBLE
+//        // 마지막 아이템의 뷰를 찾아서 그 뷰를 기준으로 토스트 위치를 설정
+//        val lastVisiblePosition = recyclerView.adapter?.itemCount?.minus(1) ?: return@addOnGlobalLayoutListener
+//        val lastVisibleItemView = recyclerView.findViewHolderForAdapterPosition(lastVisiblePosition)?.itemView
+//
+//        if (lastVisibleItemView != null) {
+//            // ConstraintSet을 사용하여 토스트 레이아웃의 제약 조건을 변경
+//            val constraintLayout = customToastLayout.parent as ConstraintLayout
+//            val constraintSet = ConstraintSet()
+//            constraintSet.clone(constraintLayout)
+//
+//            // customToastLayout의 BOTTOM을 새로 추가된 마지막 아이템의 TOP에 맞추기
+//            constraintSet.connect(
+//                customToastLayout.id, // 토스트 레이아웃
+//                ConstraintSet.BOTTOM, // 토스트 레이아웃의 BOTTOM
+//                lastVisibleItemView.id, // 마지막 아이템의 ID
+//                ConstraintSet.TOP // 마지막 아이템의 TOP에 맞추기
+//            )
+//
+//            // 수정된 제약 조건을 적용
+//            constraintSet.applyTo(constraintLayout)
 
-        val fadeIn = AlphaAnimation(0f, 1f).apply {
-            duration = 300
-            fillAfter = true
-        }
+            // 애니메이션 처리
+            val fadeIn = AlphaAnimation(0f, 1f).apply {
+                duration = 300
+                fillAfter = true
+            }
 
-        val fadeOut = AlphaAnimation(1f, 0f).apply {
-            startOffset = 700 // 0.7초 대기 후 사라지기 시작
-            duration = 300
-            fillAfter = true
-        }
+            val fadeOut = AlphaAnimation(1f, 0f).apply {
+                startOffset = 700 // 0.7초 대기 후 사라지기 시작
+                duration = 300
+                fillAfter = true
+            }
 
-        customToastLayout.visibility = View.VISIBLE
-        customToastLayout.startAnimation(fadeIn)
+            customToastLayout.visibility = View.VISIBLE
+            customToastLayout.startAnimation(fadeIn)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            customToastLayout.startAnimation(fadeOut)
-            customToastLayout.visibility = View.GONE
-        }, 1000)
+            Handler(Looper.getMainLooper()).postDelayed({
+                customToastLayout.startAnimation(fadeOut)
+                customToastLayout.visibility = View.GONE
+            }, 1000)
+//        } else {
+//            Log.e("showCustomToast", "RecyclerView의 마지막 아이템을 찾을 수 없습니다.")
+//        }
     }
+
 
     private fun setCustomPopUp(view: View) {
         val popupViewBinding = CustomPopupMenuBinding.inflate(LayoutInflater.from(context))
