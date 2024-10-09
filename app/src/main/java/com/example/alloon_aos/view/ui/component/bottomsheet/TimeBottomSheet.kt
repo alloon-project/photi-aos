@@ -11,7 +11,7 @@ import com.example.alloon_aos.viewmodel.CreateViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 interface TimeBottomSheetInterface {
-    fun onClickSelectButton(time: Int)
+    fun onClickSelectTimeButton(time: Int)
 }
 
 class TimeBottomSheet (val mContext: Context, val createViewModel: CreateViewModel, val timeBottomSheetInterface: TimeBottomSheetInterface) : BottomSheetDialogFragment() {
@@ -33,7 +33,7 @@ class TimeBottomSheet (val mContext: Context, val createViewModel: CreateViewMod
         setTimePicker()
 
         binding.selectBtn.setOnClickListener {
-            timeBottomSheetInterface.onClickSelectButton(time)
+            timeBottomSheetInterface.onClickSelectTimeButton(time)
             dismiss()
         }
 

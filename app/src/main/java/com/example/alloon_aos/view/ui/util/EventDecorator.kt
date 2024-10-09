@@ -43,3 +43,20 @@ class TodayDecorator(context: Context, val month : Int): DayViewDecorator {
         }
     }
 }
+
+class SelectDecorator(context: Context, date: CalendarDay): DayViewDecorator {
+    private val drawble = context.getDrawable(R.drawable.calendar_btn_selected_end)
+    private val color = context.getColor(R.color.white)
+    private val date = date
+
+    override fun shouldDecorate(day: CalendarDay?): Boolean {
+        return day == date
+    }
+
+    override fun decorate(view: DayViewFacade?) {
+        if (drawble != null && color != null ) {
+            view?.setBackgroundDrawable(drawble)
+            view?.addSpan(ForegroundColorSpan(color))
+        }
+    }
+}

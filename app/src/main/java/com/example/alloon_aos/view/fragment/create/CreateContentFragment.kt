@@ -11,17 +11,21 @@ import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentCreateContentBinding
 import com.example.alloon_aos.view.activity.CreateActivity
+import com.example.alloon_aos.view.ui.component.bottomsheet.DateBottomSheet
+import com.example.alloon_aos.view.ui.component.bottomsheet.DateBottomSheetInterface
 import com.example.alloon_aos.view.ui.component.bottomsheet.TimeBottomSheet
 import com.example.alloon_aos.view.ui.component.bottomsheet.TimeBottomSheetInterface
 import com.example.alloon_aos.view.ui.util.KeyboardListener
 import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
 import com.example.alloon_aos.viewmodel.CreateViewModel
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import java.text.DecimalFormat
 
-class CreateContentFragment : Fragment(), TimeBottomSheetInterface {
+class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSheetInterface {
     private lateinit var binding : FragmentCreateContentBinding
     private lateinit var mContext: Context
     private val createViewModel by activityViewModels<CreateViewModel>()
@@ -38,6 +42,7 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface {
         val mActivity = activity as CreateActivity
         mActivity.setAppBar()
 
+        setTodayDate()
         setListener()
 
         return binding.root
@@ -48,10 +53,27 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface {
         mContext = context
     }
 
+    private fun setTodayDate() {
+        val date = CalendarDay.today()
+        val df = DecimalFormat("00")
+        val month = df.format(date.month)
+        val day = df.format(date.day)
+        binding.dateTextview.setText("${date.year}. $month. $day")
+    }
+
     fun setListener() {
-        binding.downBtn.setOnClickListener {
-            TimeBottomSheet(mContext,createViewModel,this)
+        binding.timeBtn.setOnClickListener {
+            TimeBottomSheet(mContext, createViewModel, this)
                 .show(activity?.supportFragmentManager!!, "bottomList")
+        }
+
+        binding.dateBtn.setOnClickListener {
+            DateBottomSheet(mContext, createViewModel, this)
+                .show(activity?.supportFragmentManager!!, "bottomList")
+        }
+
+        binding.nextBtn.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_createContentFragment_to_createImageFragment)
         }
 
         binding.root.setOnClickListener {
@@ -80,11 +102,20 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface {
         })
     }
 
-    override fun onClickSelectButton(time: Int) {
+    override fun onClickSelectTimeButton(time: Int) {
         val df = DecimalFormat("00")
-        val timetext = df.format(time)
-        binding.timeEdittext.setText("$timetext : 00")
+        val timestring = df.format(time)
+        binding.timeEdittext.setText("$timestring : 00")
         binding.timeImageview.setImageResource(R.drawable.ic_time_blue400)
         binding.timeTextview.setTextColor(mContext.getColor(R.color.blue400))
+    }
+
+    override fun onClickSelectDateButton(date: CalendarDay) {
+        if (date != CalendarDay.today()) {
+            val df = DecimalFormat("00")
+            val month = df.format(date.month)
+            val day = df.format(date.day)
+            binding.selectedDateEdittext.setText("${date.year}. $month. $day")
+        }
     }
 }
