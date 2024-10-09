@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -24,19 +25,22 @@ import com.google.android.material.tabs.TabLayout
 
 class FeedActivity : AppCompatActivity() {
     lateinit var binding : ActivityFeedBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_feed)
         binding.activity = this
 
         if (savedInstanceState == null) {
-            // 처음에 표시할 프래그먼트
             val initialFragment = FeedFragment()
 
-            // FragmentManager를 통해 프래그먼트 트랜잭션 시작
             supportFragmentManager.beginTransaction()
-                .replace(R.id.frag_layout, initialFragment)  // 프래그먼트 컨테이너 뷰의 ID와 프래그먼트 인스턴스
+                .replace(R.id.frag_layout, initialFragment)
                 .commit()
+        }
+
+        binding.ellipsisImgBtn.setOnClickListener { view ->
+            setCustomPopUp(view)
         }
 
         val tabLayout = binding.tabLayout
@@ -45,9 +49,6 @@ class FeedActivity : AppCompatActivity() {
         val introduceTab = IntroduceFragment()
         val partyTab = PartyMemberFragment()
 
-        binding.ellipsisImgBtn.setOnClickListener { view ->
-            setCustomPopUp(view)
-        }
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val fragmentManager = supportFragmentManager
@@ -124,4 +125,5 @@ class FeedActivity : AppCompatActivity() {
     fun finishActivity(){
         finish()
     }
+
 }

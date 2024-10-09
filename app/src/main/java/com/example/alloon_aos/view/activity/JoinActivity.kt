@@ -1,5 +1,7 @@
 package com.example.alloon_aos.view.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -36,6 +38,13 @@ class JoinActivity : AppCompatActivity() {
         binding.actionBar.setNavigationOnClickListener {
             supportFragmentManager.popBackStack()
         }
+    }
+
+    fun returnResultToFeedActivity(result: String) {
+        val resultIntent = Intent()
+        resultIntent.putExtra("myGoal", result)
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
     }
 
 }

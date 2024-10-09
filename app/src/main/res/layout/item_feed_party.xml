@@ -58,7 +58,7 @@
         android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/text_textView"
+        android:id="@+id/goal_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -77,6 +77,6 @@
         android:layout_width="26dp"
         android:layout_height="26dp"
         android:src="@drawable/card_goal_shape"
-        app:layout_constraintEnd_toEndOf="@id/text_textView"
-        app:layout_constraintTop_toTopOf="@id/text_textView" />
+        app:layout_constraintEnd_toEndOf="@id/goal_textView"
+        app:layout_constraintTop_toTopOf="@id/goal_textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,6 @@
 package com.example.alloon_aos.view.fragment.join
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,7 +16,6 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentCreateGoalBinding
 import com.example.alloon_aos.view.activity.JoinActivity
-import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.ui.util.KeyboardListener
 import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
 import com.example.alloon_aos.viewmodel.JoinViewModel
@@ -83,8 +80,7 @@ class CreateGoalFragment : Fragment() {
 
     fun sendGoal(){
         val goalText = binding.goalEdittext.text.toString()
-        //저장 방법 고민
-        tokenManager.saveMyGoal(goalText)
-        requireActivity().finish()
+        (activity as JoinActivity).returnResultToFeedActivity(goalText)
     }
+
 }

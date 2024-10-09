@@ -31,6 +31,8 @@ import com.example.alloon_aos.viewmodel.JoinViewModel
 class PartyMemberFragment : Fragment() {
     private lateinit var binding : FragmentPartyMemberBinding
     private lateinit var mContext: Context
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var partyCardAdapter: PartyCardAdapter
     private val feedViewModel by activityViewModels<FeedViewModel>()
 
     override fun onCreateView(
@@ -42,11 +44,11 @@ class PartyMemberFragment : Fragment() {
         binding.viewModel = feedViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.partyRecyclerView.adapter = PartyCardAdapter()
+        partyCardAdapter = PartyCardAdapter()
+        binding.partyRecyclerView.adapter = partyCardAdapter
         binding.partyRecyclerView.layoutManager = LinearLayoutManager(mContext)
         binding.partyRecyclerView.setHasFixedSize(true)
 
-        //내 목표 값 다시 받아야함
         return binding.root
     }
 
@@ -55,22 +57,50 @@ class PartyMemberFragment : Fragment() {
         mContext = context
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val resultValue = data?.getStringExtra("myGoal")
+                resultValue?.let {
+                    receiveGoal(it)
+                }
+            }
+        }
+    }
+
+    fun changeMyGoal(){
+        val intent = Intent(requireContext(), JoinActivity::class.java)
+        intent.putExtra("IS_FROM_FEED_ACTIVITY", true)
+        activityResultLauncher.launch(intent)
+    }
+
+    fun receiveGoal(str : String){
+        val index = feedViewModel.paryItem.indexOfFirst { it.isMe }
+        if (index != -1) {
+            feedViewModel.paryItem[index].text = str
+            partyCardAdapter.notifyItemChanged(index)
+            CustomToast.createToast(activity, "수정 완료! 새로운 목표까지 화이팅이에요!")?.show()
+        }
+    }
+
     inner class ViewHolder(var binding : ItemFeedPartyBinding) : RecyclerView.ViewHolder(binding.root){
         fun setContents(holder: ViewHolder ,pos: Int) {
             with (feedViewModel.paryItem[pos]) {
                 binding.idTextView.text = id
                 binding.timeTextView.text = time+"일 째 활동중"
                 if(text.isNotEmpty()){
-                    binding.textTextView.text = text
-                    binding.textTextView.setTextColor(mContext.getColor(R.color.gray600))
+                    binding.goalTextView.text = text
+                    binding.goalTextView.setTextColor(mContext.getColor(R.color.gray600))
                 }
 
                 if(isMe){
                     binding.editImgBtn.visibility = View.VISIBLE
-                    binding.editImgBtn.setOnClickListener {
-                        Toast.makeText(requireContext(),"목표 수정 ㄱㄱ", Toast.LENGTH_SHORT).show()
-                        changeMyGoal()
-                    }
+                    binding.editImgBtn.setOnClickListener { changeMyGoal() }
                 }
             }
         }
@@ -92,10 +122,4 @@ class PartyMemberFragment : Fragment() {
 
     }
 
-    fun changeMyGoal(){
-        val intent = Intent(requireContext(), JoinActivity::class.java).apply {
-            putExtra("IS_FROM_FEED_ACTIVITY",true)
-        }
-        startActivity(intent)
-    }
 }
