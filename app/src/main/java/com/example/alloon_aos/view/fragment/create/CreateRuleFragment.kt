@@ -10,14 +10,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentCreateRuleBinding
 import com.example.alloon_aos.view.activity.CreateActivity
+import com.example.alloon_aos.view.adapter.CustomRuleAdapter
+import com.example.alloon_aos.view.adapter.DefaultRuleAdapter
+import com.example.alloon_aos.view.ui.component.bottomsheet.RuleBottomSheet
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.CreateViewModel
 
-class CreateRuleFragment : Fragment() {
+class CreateRuleFragment : Fragment(){
     private lateinit var binding : FragmentCreateRuleBinding
     private lateinit var mContext: Context
+    private lateinit var defaultRuleAdapter: DefaultRuleAdapter
+    private lateinit var customRuleAdapter: CustomRuleAdapter
     private val createViewModel by activityViewModels<CreateViewModel>()
 
     override fun onCreateView(
@@ -33,6 +40,23 @@ class CreateRuleFragment : Fragment() {
         mActivity.setAppBar()
 
         setListener()
+        setObserver()
+
+        defaultRuleAdapter = DefaultRuleAdapter(mContext, createViewModel,
+            toastListener = { showToast() })
+        binding.ruleRecyclerview.adapter = defaultRuleAdapter
+        binding.ruleRecyclerview.layoutManager = GridLayoutManager(context, 2)
+        binding.ruleRecyclerview.setHasFixedSize(true)
+
+        customRuleAdapter = CustomRuleAdapter(mContext, createViewModel,
+            onItemClickListener = { RuleBottomSheet(mContext,createViewModel)
+                .show(activity?.supportFragmentManager!!, "CustomDialog") },
+            toastListener = { showToast() }
+        )
+
+        binding.customRecyclerview.adapter = customRuleAdapter
+        binding.customRecyclerview.layoutManager = GridLayoutManager(context, 2)
+        binding.customRecyclerview.setHasFixedSize(true)
 
         ObjectAnimator.ofInt(binding.progress, "progress", 60,80)
             .setDuration(500)
@@ -52,4 +76,17 @@ class CreateRuleFragment : Fragment() {
         }
     }
 
+    private fun setObserver() {
+        createViewModel.defaultRule.observe(viewLifecycleOwner) {
+            defaultRuleAdapter.notifyDataSetChanged()
+        }
+
+        createViewModel.customRule.observe(viewLifecycleOwner) {
+            customRuleAdapter.notifyDataSetChanged()
+        }
+    }
+
+    fun showToast() {
+        CustomToast.createToast(activity,"인증 룰은 5개까지 등록 가능해요")?.show()
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.alloon_aos.view.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
@@ -33,6 +34,12 @@ class CreateActivity : AppCompatActivity() {
 
     fun setAppBar() {
         binding.actionBar.setNavigationIcon(R.drawable.ic_back)
+        binding.title.visibility = View.GONE
+    }
+
+    fun setTitle() {
+        binding.actionBar.setNavigationIcon(R.drawable.ic_back)
+        binding.title.visibility = View.VISIBLE
     }
 
 }

@@ -66,10 +66,14 @@
         android:label=""
         tools:layout="@layout/fragment_create_hashtag" >
         <action
-            android:id="@+id/action_createHashtagFragment_to_createChallengeFragment"
-            app:destination="@id/createChallengeFragment"
-            app:popUpTo="@id/createChallengeFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_createHashtagFragment_to_createCompleteFragment"
+            app:destination="@id/createCompleteFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/createCompleteFragment"
+        android:name="com.example.alloon_aos.view.fragment.create.CreateCompleteFragment"
+        android:label=""
+        tools:layout="@layout/fragment_create_complete"/>
 
 </navigation>

@@ -33,6 +33,7 @@ class CreateImageFragment : Fragment() {
     private lateinit var thumbnailAdapter: ThumbnailAdapter
     private val createViewModel by activityViewModels<CreateViewModel>()
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
+    private lateinit var galleryImage : Uri
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +56,9 @@ class CreateImageFragment : Fragment() {
         binding.thumbnailRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.thumbnailRecyclerView.setHasFixedSize(true)
 
-        createViewModel.initImage()
+        if (!createViewModel.initImage())
+            setImageFromGallery(galleryImage)
+
         setObserver()
         setListener()
 
@@ -89,17 +92,22 @@ class CreateImageFragment : Fragment() {
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
-                Glide.with(binding.thumbnailImageview.context)
-                    .load(it)
-                    .transform(CenterCrop(), RoundedCorners(32))
-                    .into(binding.thumbnailImageview)
-                thumbnailAdapter.notifyDataSetChanged()
+                setImageFromGallery(it)
+                galleryImage = it
             }
         }
     }
 
     private fun pickImageFromGallery() {
         pickImageLauncher.launch("image/*")
+    }
+
+    private fun setImageFromGallery(uri: Uri) {
+        Glide.with(binding.thumbnailImageview.context)
+            .load(uri)
+            .transform(CenterCrop(), RoundedCorners(32))
+            .into(binding.thumbnailImageview)
+        thumbnailAdapter.notifyDataSetChanged()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

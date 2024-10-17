@@ -19,7 +19,6 @@
         android:id="@+id/src_imageview"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/image222"
         app:layout_constraintBottom_toBottomOf="@+id/select_imageview"
         app:layout_constraintEnd_toEndOf="@+id/select_imageview"
         app:layout_constraintStart_toStartOf="@+id/select_imageview"

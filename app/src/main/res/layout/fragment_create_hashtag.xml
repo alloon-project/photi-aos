@@ -43,6 +43,75 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/progress" />
 
+        <FrameLayout
+            android:id="@+id/tag_frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/hashtag_textview">
+
+            <EditText
+                android:id="@+id/hash_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_line_default"
+                android:ems="10"
+                android:fontFamily="@font/suit_medium"
+                android:hint="해시태그"
+                android:inputType="text"
+                android:textColorHint="@color/gray400"
+                android:textSize="14dp" />
+
+            <Button
+                android:id="@+id/add_hash_btn"
+                android:layout_width="70dp"
+                android:layout_height="34dp"
+                android:layout_gravity="end|center"
+                android:layout_margin="6dp"
+                android:background="@drawable/btn_round_primary"
+                android:enabled="false"
+                android:text="추가하기"
+                android:theme="@style/Theme.xsmall_round" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/check_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@+id/tag_frameLayout"
+            app:layout_constraintTop_toBottomOf="@+id/tag_frameLayout">
+
+            <ImageView
+                android:id="@+id/checkLength_icon_view"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_check_grey" />
+
+            <TextView
+                android:id="@+id/checkLength_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:fontFamily="@font/suit_medium"
+                android:text="6자 이하"
+                android:textColor="@color/gray400"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hash_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toBottomOf="@+id/check_layout"/>
 
         <Button
             android:id="@+id/next_btn"
