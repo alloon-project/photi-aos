@@ -12,7 +12,6 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
-import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class HomeFragment : Fragment() {

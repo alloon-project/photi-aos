@@ -1,8 +1,6 @@
 package com.example.alloon_aos.view.fragment.photi
 
 import ProofShotHomeTransformer
-import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -12,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -37,6 +34,7 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private lateinit var photoUri: Uri
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,7 +44,7 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
         binding.viewModel = photiViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        proofShotHomeAdapter = ProofShotHomeAdapter(photiViewModel, emptyList(), onItemClickListener = { position ->
+        proofShotHomeAdapter = ProofShotHomeAdapter(photiViewModel, onItemClickListener = { position ->
             CameraHelper.checkPermissions(this) {
                 CameraHelper.takePicture(this, takePictureLauncher)
             }
@@ -70,6 +68,7 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
 
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
+                photoUri = CameraHelper.getPhotoUri()
                 Log.d("CameraHelper", "사진 촬영 성공: $photoUri")
                 UploadCardDialog(this, photoUri.toString()).show(parentFragmentManager, "CustomDialog")
             } else {
@@ -79,12 +78,14 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
     }
 
     private fun setObserver() {
-        photiViewModel.proofItemList.observe(viewLifecycleOwner) {
-            proofShotHomeAdapter.updatePhotoItems(it)
+        photiViewModel.proofPos.observe(viewLifecycleOwner) {
+            binding.viewPager2.setCurrentItem(photiViewModel.proofItems.size + it, true)
+            proofShotHomeAdapter.notifyDataSetChanged()
         }
     }
 
     override fun onClickUploadButton() {
+        photiViewModel.completeProofShot(photoUri)
         CustomToast.createToast(activity,"인증 완료! 오늘도 수고했어요!")?.show()
     }
 
@@ -94,13 +95,7 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
         if (requestCode == CameraHelper.REQUEST_CAMERA_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.d("Permissions", "카메라 권한 허용됨")
-                val photoFile = CameraHelper.createImageFile(this)
-                photoUri = FileProvider.getUriForFile(
-                    requireContext(),
-                    "com.example.alloon_aos.fileprovider",
-                    photoFile
-                )
-                takePictureLauncher.launch(photoUri)  // 권한 허용 후 카메라 실행
+                CameraHelper.takePicture(this, takePictureLauncher)
             } else {
                 CustomToast.createToast(activity, "카메라 권한이 거부됐습니다")?.show()
             }

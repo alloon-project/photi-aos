@@ -14,7 +14,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -71,6 +70,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
 
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
+                photoUri = CameraHelper.getPhotoUri()
                 Log.d("CameraHelper", "사진 촬영 성공: $photoUri")
                 UploadCardDialog(this, photoUri.toString()).show(parentFragmentManager, "CustomDialog")
             } else {
@@ -84,13 +84,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         if (requestCode == CameraHelper.REQUEST_CAMERA_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.d("Permissions", "카메라 권한 허용됨")
-                val photoFile = CameraHelper.createImageFile(this)
-                photoUri = FileProvider.getUriForFile(
-                    requireContext(),
-                    "com.example.alloon_aos.fileprovider",
-                    photoFile
-                )
-                takePictureLauncher.launch(photoUri)  // 권한 허용 후 카메라 실행
+                CameraHelper.takePicture(this, takePictureLauncher)
             } else {
                 CustomToast.createToast(activity, "카메라 권한이 거부됐습니다")?.show()
             }

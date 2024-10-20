@@ -38,6 +38,10 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
             "UNSUBSCRIBE" -> {
                 CustomToast.createToast(this, "탈퇴가 완료됐어요. 다음에 또 만나요!")?.show()
             }
+            "LEAVE" -> {
+                CustomToast.createToast(this, "챌린지 탈퇴가 완료됐어요.")?.show()
+                binding.navigationView.id = R.id.challengeFragment
+            }
         }
     }
 

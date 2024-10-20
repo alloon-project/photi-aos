@@ -21,9 +21,12 @@ import com.example.alloon_aos.databinding.CustomPopupMenuBinding
 import com.example.alloon_aos.view.fragment.feed.IntroduceFragment
 import com.example.alloon_aos.view.fragment.feed.PartyMemberFragment
 import com.example.alloon_aos.view.fragment.feed.FeedFragment
+import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
+import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.google.android.material.tabs.TabLayout
 
-class FeedActivity : AppCompatActivity() {
+class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     lateinit var binding : ActivityFeedBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,13 +116,26 @@ class FeedActivity : AppCompatActivity() {
             }
 
             optionTwo.setOnClickListener {
-                Toast.makeText(this@FeedActivity, "탈퇴하기 클릭됨", Toast.LENGTH_SHORT).show()
+                CustomTwoButtonDialog(this@FeedActivity,"챌린지를 탈퇴할까요?","탈퇴해도 기록은 남아있어요.\n" +
+                        "탈퇴하시기 전에 직접 지워주세요.","취소할게요","탈퇴할게요")
+                    .show(binding.activity?.supportFragmentManager!!,"CustomDialog")
                 popupWindow.dismiss()
             }
 
         }
 
         popupWindow.showAsDropDown(view, 0, 0, Gravity.CENTER)
+    }
+
+    override fun onClickFisrtButton() {}
+
+    override fun onClickSecondButton() {
+        //탈퇴설정api
+        finish()
+        val intent = Intent(this, PhotiActivity::class.java).apply {
+            putExtra("IS_FROM","UNSUBSCRIBE")
+        }
+        startActivity(intent)
     }
 
     fun finishActivity(){

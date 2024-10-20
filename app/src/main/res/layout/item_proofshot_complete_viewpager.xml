@@ -18,27 +18,25 @@
             app:layout_constraintTop_toTopOf="parent" >
 
             <TextView
-                android:id="@+id/time_textview"
+                android:id="@+id/done_textview"
                 android:layout_width="69dp"
                 android:layout_height="30dp"
-                android:background="@drawable/chip_blue"
+                android:background="@drawable/chip_green"
                 android:fontFamily="@font/suit_medium"
                 android:gravity="center"
-                android:text="4시까지"
-                android:textColor="@color/blue500"
+                android:text="인증완료"
+                android:textColor="@color/green600"
                 android:textSize="14dp"/>
-
         </FrameLayout>
 
         <ImageView
-            android:id="@+id/divider_blue"
+            android:id="@+id/divider_green"
             android:layout_width="205dp"
             android:layout_height="2dp"
             android:scaleType="centerCrop"
             android:src="@drawable/tab_line"
-            app:tint="@color/blue100"
+            app:tint="@color/green0"
             android:layout_marginLeft="14dp"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/time_layout"
             app:layout_constraintStart_toEndOf="@+id/time_layout"
             app:layout_constraintTop_toTopOf="@+id/time_layout" />
@@ -53,14 +51,14 @@
                 android:id="@+id/banner_framelayout"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
-                android:background="@drawable/banner_blue">
+                android:background="@drawable/banner_green">
 
                 <ImageView
                     android:id="@+id/banner_imageview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
-                    android:src="@drawable/graphic_clock"/>
+                    android:src="@drawable/graphic_clover"/>
 
                 <TextView
                     android:id="@+id/banner_textview"
@@ -75,25 +73,24 @@
                 android:id="@+id/proofshot_framelayout"
                 android:layout_width="184dp"
                 android:layout_height="184dp"
-                android:background="@drawable/proofshot_blue"
+                android:background="@drawable/proofshot_green"
                 android:layout_marginTop="48dp"
                 android:layout_marginLeft="48dp"
                 android:rotation="-2">
 
-                <Button
-                    android:id="@+id/proofshot_button"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:visibility="visible"
-                    android:background="@drawable/ic_camera_plus_blue200"
-                    android:layout_gravity="center" />
+                <ImageView
+                    android:id="@+id/proofshot_imageview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/proofshot_shape"/>
 
                 <ImageView
                     android:id="@+id/proofshot_shape"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
-                    android:src="@drawable/graphic_shape_blue300"
+                    android:src="@drawable/graphic_shape_green200"
                     android:layout_marginRight="2dp"
                     android:layout_marginBottom="3dp"/>
 

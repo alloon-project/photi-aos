@@ -60,7 +60,7 @@ object CameraHelper {
     // 사진 촬영 실행
     fun takePicture(fragment: Fragment, takePictureLauncher: ActivityResultLauncher<Uri>) {
         val photoFile = createImageFile(fragment)
-        val photoUri = FileProvider.getUriForFile(
+        photoUri = FileProvider.getUriForFile(
             fragment.requireContext(),
             "com.example.alloon_aos.fileprovider",
             photoFile
@@ -71,5 +71,9 @@ object CameraHelper {
     // 현재 사진 경로 반환
     fun getCurrentPhotoPath(): String {
         return currentPhotoPath
+    }
+
+    fun getPhotoUri(): Uri {
+        return photoUri
     }
 }

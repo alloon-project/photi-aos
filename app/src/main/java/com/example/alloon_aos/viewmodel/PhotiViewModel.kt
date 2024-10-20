@@ -1,5 +1,6 @@
 package com.example.alloon_aos.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -19,9 +20,8 @@ data class ProofShotItem(
     val title: String,
     val date: String,
     val time: String,
-    var url: String? = null,
-    var hashtag: MutableList<String>,
-    var proof: Boolean
+    var url: Uri? = null,
+    var hashtag: MutableList<String>
 )
 
 class PhotiViewModel: ViewModel() {
@@ -115,20 +115,28 @@ class PhotiViewModel: ViewModel() {
 
 
     // 챌린지 있을 때
-    val _proofItem = MutableLiveData<ProofShotItem>() //현재 item
+    val proofPos = MutableLiveData<Int>() //현재 item
     val proofItems = arrayListOf(
-        ProofShotItem("영화 챌린지","~ 2024. 12. 1","10시까지",null, mutableListOf("영화관람"),false),
-        ProofShotItem("면접 연습하기","~ 2024. 8. 22","8시까지",null, mutableListOf("취뽀","스피치"),false),
-        ProofShotItem("헬스 챌린지","~ 2024. 12. 1","7시까지",null, mutableListOf("헬스","요가"),false),
-        ProofShotItem("요리 챌린지","~ 2024. 12. 1","2시까찌","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리"),true),
-        ProofShotItem("스터디 챌린지","~ 2024. 12. 1","8시까지","https://ifh.cc/g/KB2Vh1.jpg", mutableListOf("어학","자격증"),true),
-        ProofShotItem("소설 필사하기","~ 2024. 9. 1","12시까지","https://ifh.cc/g/yxgmBH.webp", mutableListOf("고능해지자","독서"),true)
+        ProofShotItem("영화 챌린지","~ 2024. 12. 1","10시까지",null, mutableListOf("영화관람")),
+        ProofShotItem("면접 연습하기","~ 2024. 8. 22","8시까지",null, mutableListOf("취뽀","스피치")),
+        ProofShotItem("헬스 챌린지","~ 2024. 12. 1","7시까지",null, mutableListOf("헬스","요가")),
+        ProofShotItem("요리 챌린지","~ 2024. 12. 1","2시까찌",null,mutableListOf("요리")),
+        ProofShotItem("스터디 챌린지","~ 2024. 12. 1","8시까지",null, mutableListOf("어학","자격증")),
+        ProofShotItem("소설 필사하기","~ 2024. 9. 1","12시까지",null, mutableListOf("고능해지자","독서"))
+    )
 
-    )//data 받을 list 얘는 페이지 새로 받아올때마다 초기화 하면된다
+    val completeItems = arrayListOf<ProofShotItem>()
+    lateinit var currentItem : ProofShotItem
 
-    val proofItemList = MutableLiveData<ArrayList<ProofShotItem>>()
-    fun setCurrentChallenge(proofItem: ProofShotItem) {
-        _proofItem.value = proofItem
+    fun completeProofShot(url: Uri) {
+        proofItems.remove(currentItem)
+        currentItem.url = url
+        completeItems.add(currentItem)
+        proofPos.value = completeItems.indexOf(currentItem)
+    }
+
+    fun updateCurrentItem(item : ProofShotItem) {
+        currentItem = item
     }
 
 }
