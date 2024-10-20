@@ -41,13 +41,13 @@ class AuthActivity : AppCompatActivity() {
 
         binding.actionBar.setNavigationOnClickListener {
             val currentFragment = navController.currentDestination?.id
-            if (currentFragment == R.id.passwordSendFragment && isFromSettingsActivity) {
+            if (currentFragment == R.id.passwordSendFragment && isFromSettingsActivity)
                 finish()
-            } else {
-                navController.navigateUp()  // 이전 프래그먼트로 돌아가기
-            }
+            else if (currentFragment == R.id.loginFragment)
+                finish()
+            else
+                navController.navigateUp()
         }
-
     }
 
     private fun setNavGraph(isAlreadyLogin: Boolean) {

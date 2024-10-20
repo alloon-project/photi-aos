@@ -14,11 +14,12 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeGuestBinding
 import com.example.alloon_aos.view.activity.AuthActivity
-import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.adapter.GuestHomeAdapter
+import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
+import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
-class HomeGuestFragment : Fragment() {
+class HomeGuestFragment : Fragment(), CustomTwoButtonDialogInterface {
     private lateinit var binding : FragmentHomeGuestBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
@@ -36,18 +37,26 @@ class HomeGuestFragment : Fragment() {
         binding.guestRecyclerview.layoutManager = GridLayoutManager(context, 3)
         binding.guestRecyclerview.setHasFixedSize(true)
 
-        setObserver()
+        if (MyApplication.isTokenExpired) {
+            CustomTwoButtonDialog(this,"재로그인이 필요해요","보안을 위해 자동 로그아웃 됐어요.\n" +
+                    "다시 로그인해주세요.","나중에 할게요","로그인하기")
+                .show(activity?.supportFragmentManager!!,"CustomDialog")
+            MyApplication.isTokenExpired = false
+        }
 
         return binding.root
     }
 
-    private fun setObserver() {
-        binding.nextBtn.setOnClickListener {
-            val intent = Intent(requireContext(), AuthActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
-        }
+    fun redirectToLogin() {
+        val intent = Intent(requireContext(), AuthActivity::class.java)
+        startActivity(intent)
+        //requireActivity().finish()
+    }
 
+    override fun onClickFisrtButton() {}
+
+    override fun onClickSecondButton() {
+        redirectToLogin()
     }
 
 }

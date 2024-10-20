@@ -3,7 +3,7 @@ package com.example.alloon_aos
 import android.app.Application
 import android.content.Intent
 import com.example.alloon_aos.data.repository.MySharedPreferences
-import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.activity.PhotiActivity
 
 /**
  * 이 곳에 SharedPreferences를 선언하는 이유는
@@ -15,6 +15,7 @@ class MyApplication: Application() {
         lateinit var mySharedPreferences: MySharedPreferences
         lateinit var instance: MyApplication
             private set
+        var isTokenExpired = false
     }
 
     override fun onCreate() {
@@ -23,8 +24,9 @@ class MyApplication: Application() {
         instance = this
     }
 
-    fun redirectToLogin() {
-        val intent = Intent(instance.applicationContext, AuthActivity::class.java)
+    fun tokenExpired() {
+        isTokenExpired = true
+        val intent = Intent(instance.applicationContext, PhotiActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         instance.applicationContext.startActivity(intent)
     }

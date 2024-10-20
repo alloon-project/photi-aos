@@ -22,7 +22,7 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
         }
 
         if (refreshToken == null) {
-            MyApplication.instance.redirectToLogin()
+            MyApplication.instance.tokenExpired()
             return null
         }
 
@@ -33,12 +33,12 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
                     response.body()?.accessToken
                 } else {
                     if (response.code() == 401) {
-                        MyApplication.instance.redirectToLogin()
+                        MyApplication.instance.tokenExpired()
                     }
                     null
                 }
             } catch (e: Exception) {
-                MyApplication.instance.redirectToLogin()
+                MyApplication.instance.tokenExpired()
                 null
             }
         }
