@@ -11,6 +11,8 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentMyPageBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.activity.SettingsActivity
+import com.example.alloon_aos.view.ui.component.dialog.ChallengeCheckInDialog
+import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.EventDecorator
 import com.example.alloon_aos.view.ui.util.TodayDecorator
@@ -91,6 +93,12 @@ class MyPageFragment : Fragment() {
            currentDate = currentDate.plusMonths(1)
 
         materialCalendarView.setCurrentDate(currentDate)
+    }
+
+    fun showDialog(){
+        //총 인증 횟수와 챌린지 Id 넘겨줌
+        val dialog = ChallengeCheckInDialog(99,1)
+        dialog.show(activity?.supportFragmentManager!!, "ChallengeCheckInDialog")
     }
 
     fun moveToSettingsActivity(){

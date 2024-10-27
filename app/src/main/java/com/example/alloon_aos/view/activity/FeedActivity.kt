@@ -130,7 +130,7 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     override fun onClickFisrtButton() {}
 
     override fun onClickSecondButton() {
-        //탈퇴설정api
+        //챌린지 탈퇴
         finish()
         val intent = Intent(this, PhotiActivity::class.java).apply {
             putExtra("IS_FROM","UNSUBSCRIBE")

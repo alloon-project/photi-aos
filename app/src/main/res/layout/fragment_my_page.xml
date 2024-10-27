@@ -90,6 +90,7 @@
                     android:layout_marginBottom="16dp"/>
 
                 <TextView
+                    android:onClick="@{() ->fragment.showDialog()}"
                     android:id="@+id/verify_count_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

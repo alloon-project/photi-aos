@@ -1,0 +1,78 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/feed"
+    android:layout_width="match_parent"
+    android:layout_height="183dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="16dp"
+    >
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:clipToOutline="true"
+        android:background="@drawable/shape_feed_card"
+        android:padding="4dp"
+        android:layout_marginBottom="31dp"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_feed_card"
+        android:layout_marginBottom="31dp">
+
+        <TextView
+            android:id="@+id/date_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:fontFamily="@font/suit_medium"
+            android:letterSpacing="-0.03"
+            android:text="2024. 5. 20 인증"
+            android:textColor="#99FFFFFF"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="16dp"/>
+
+        <ImageView
+            android:id="@+id/proofshot_shape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/graphic_shape_gray200"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/chip_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:background="@drawable/part_text_line"
+        android:fontFamily="@font/suit_medium"
+        android:minWidth="41dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:stateListAnimator="@null"
+        android:text="소설 필사하기"
+        android:textAllCaps="false"
+        android:textColor="@color/gray800"
+        android:textSize="10dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgView" />
+
+
+    <ImageButton
+        android:id="@+id/shortcut_imgBtn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@null"
+        android:src="@drawable/ic_shortcut"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imgView"
+        android:layout_marginRight="2dp"
+        app:tint="@color/gray400" />
+</androidx.constraintlayout.widget.ConstraintLayout>
