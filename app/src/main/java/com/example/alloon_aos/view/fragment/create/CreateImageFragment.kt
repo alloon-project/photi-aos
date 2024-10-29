@@ -32,6 +32,7 @@ class CreateImageFragment : Fragment() {
     private lateinit var mContext: Context
     private lateinit var thumbnailAdapter: ThumbnailAdapter
     private val createViewModel by activityViewModels<CreateViewModel>()
+    private lateinit var mActivity: CreateActivity
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     private lateinit var galleryImage : Uri
 
@@ -44,8 +45,11 @@ class CreateImageFragment : Fragment() {
         binding.viewModel = createViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as CreateActivity
+        mActivity = activity as CreateActivity
         mActivity.setAppBar()
+
+        if (mActivity.isFromChallenge)
+            setModifyLayout()
 
         thumbnailAdapter = ThumbnailAdapter(createViewModel, onItemClickListener = { position ->
             CameraHelper.checkPermissions(this) {
@@ -69,6 +73,12 @@ class CreateImageFragment : Fragment() {
         return binding.root
     }
 
+    private fun setModifyLayout() {
+        mActivity.setTitle("대표 이미지 수정")
+        binding.progress.visibility = View.GONE
+        binding.nextBtn.setText("저장하기")
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -76,7 +86,10 @@ class CreateImageFragment : Fragment() {
 
     fun setListener() {
         binding.nextBtn.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_createImageFragment_to_createRuleFragment)
+            if (mActivity.isFromChallenge)
+                requireActivity().finish()
+            else
+                view?.findNavController()?.navigate(R.id.action_createImageFragment_to_createRuleFragment)
         }
     }
 

@@ -30,6 +30,7 @@ class CreateHashtagFragment : Fragment() {
     private lateinit var mContext: Context
     private lateinit var addHashAdapter: AddHashAdapter
     private val createViewModel by activityViewModels<CreateViewModel>()
+    private lateinit var mActivity: CreateActivity
     private var hash = ""
 
     override fun onCreateView(
@@ -41,8 +42,11 @@ class CreateHashtagFragment : Fragment() {
         binding.viewModel = createViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as CreateActivity
+        mActivity = activity as CreateActivity
         mActivity.setAppBar()
+
+        if (mActivity.isFromChallenge)
+            setModifyLayout()
 
         addHashAdapter = AddHashAdapter(createViewModel)
         binding.hashRecyclerview.adapter = addHashAdapter
@@ -57,6 +61,12 @@ class CreateHashtagFragment : Fragment() {
             .start()
 
         return binding.root
+    }
+
+    private fun setModifyLayout() {
+        mActivity.setTitle("챌린지 해시태그 수정")
+        binding.progress.visibility = View.GONE
+        binding.nextBtn.setText("저장하기")
     }
 
     override fun onAttach(context: Context) {
@@ -108,9 +118,13 @@ class CreateHashtagFragment : Fragment() {
         }
 
         binding.nextBtn.setOnClickListener {
-            val intent = Intent(requireContext(), ChallengeActivity::class.java)
-            intent.putExtra("IS_FROM_CREATE",true)
-            startActivity(intent)
+            if (mActivity.isFromChallenge)
+                requireActivity().finish()
+            else {
+                val intent = Intent(requireContext(), ChallengeActivity::class.java)
+                intent.putExtra("IS_FROM_CREATE",true)
+                startActivity(intent)
+            }
         }
     }
 

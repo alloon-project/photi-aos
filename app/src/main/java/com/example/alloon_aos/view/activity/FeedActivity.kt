@@ -23,6 +23,7 @@ import com.example.alloon_aos.view.fragment.feed.PartyMemberFragment
 import com.example.alloon_aos.view.fragment.feed.FeedFragment
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.google.android.material.tabs.TabLayout
 
 class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
@@ -86,6 +87,7 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 val resultValue = data?.getStringExtra("ID")
                 resultValue?.let {
                     //수정된 id받음
+                    CustomToast.createToast(this,"챌린지 수정이 완료됐어요.")?.show()
                 }
             }
         }

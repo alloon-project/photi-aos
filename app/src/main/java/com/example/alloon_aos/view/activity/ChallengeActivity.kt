@@ -3,7 +3,9 @@ package com.example.alloon_aos.view.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -13,7 +15,7 @@ import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.ActivityChallengeBinding
-import com.example.alloon_aos.view.adapter.RuleHashAdapter
+import com.example.alloon_aos.databinding.ItemRuleChipRecyclerviewBinding
 import com.example.alloon_aos.view.ui.component.dialog.PrivateCodeDialog
 import com.example.alloon_aos.view.ui.component.dialog.PrivateCodeDialogInterface
 import com.example.alloon_aos.view.ui.component.dialog.RuleCardDialog
@@ -44,10 +46,9 @@ class ChallengeActivity : PrivateCodeDialogInterface, AppCompatActivity() {
         if (isFromFeed)
             isFrom = "feed"
 
-
         binding.actionBar.setNavigationIcon(R.drawable.ic_back)
 
-        binding.hashRecyclerview.adapter = RuleHashAdapter(challengeViewModel)
+        binding.hashRecyclerview.adapter = RuleHashAdapter()
         binding.hashRecyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         binding.hashRecyclerview.setHasFixedSize(true)
 
@@ -76,7 +77,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, AppCompatActivity() {
             "feed" -> {
                 setModifyClick()
 
-                binding.title.setText("")
+                binding.title.setText("수정하기")
                 id = intent.getStringExtra("ID").toString()
 
                 binding.joinBtn.visibility = View.GONE
@@ -87,9 +88,12 @@ class ChallengeActivity : PrivateCodeDialogInterface, AppCompatActivity() {
     }
 
     private fun setModifyClick() {
-        binding.titleTextview.setOnClickListener {
-
-        }
+        binding.titleTextview.setOnClickListener { startModify("title") }
+        binding.photoLayout.setOnClickListener { startModify("photo") }
+        binding.timeLayout.setOnClickListener { startModify("time") }
+        binding.goalLayout.setOnClickListener { startModify("goal") }
+        binding.ruleLayout.setOnClickListener { startModify("rule") }
+        binding.dateLayout.setOnClickListener { startModify("date") }
     }
 
     private fun setListener() {
@@ -125,6 +129,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, AppCompatActivity() {
         startGoal()
     }
 
+
     fun startGoal() { //join
         val intent = Intent(this, GoalActivity::class.java)
         intent.putExtra("TITLE","title")
@@ -141,5 +146,39 @@ class ChallengeActivity : PrivateCodeDialogInterface, AppCompatActivity() {
         resultIntent.putExtra("ID","id")
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
+    }
+
+    fun startModify(value: String) {
+        val intent = Intent(this, CreateActivity::class.java)
+        intent.putExtra("IS_FROM_CHALLENGE",true)
+        intent.putExtra("MODIFY",value)
+        startActivity(intent)
+    }
+
+
+    inner class ViewHolder(private val binding: ItemRuleChipRecyclerviewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun setContents(pos: Int) {
+            with (challengeViewModel.hashs[pos]) {
+                binding.hashBtn.text = chip
+                binding.hashBtn.setOnClickListener {
+                    startModify("hash")
+                }
+            }
+        }
+    }
+
+    inner class RuleHashAdapter() : RecyclerView.Adapter<ViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val binding = ItemRuleChipRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return ViewHolder(binding)
+        }
+
+        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+            viewHolder.setContents(position)
+        }
+
+        override fun getItemCount() = challengeViewModel.hashs.size
+
     }
 }

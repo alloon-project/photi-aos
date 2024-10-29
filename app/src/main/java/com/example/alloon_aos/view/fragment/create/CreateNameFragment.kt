@@ -24,6 +24,7 @@ class CreateNameFragment : Fragment() {
     private lateinit var binding : FragmentCreateNameBinding
     private lateinit var mContext: Context
     private val createViewModel by activityViewModels<CreateViewModel>()
+    private lateinit var mActivity: CreateActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +35,11 @@ class CreateNameFragment : Fragment() {
         binding.viewModel = createViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as CreateActivity
+        mActivity = activity as CreateActivity
         mActivity.setAppBar()
+
+        if (mActivity.isFromChallenge)
+            setModifyLayout()
 
         setListener()
 
@@ -44,6 +48,16 @@ class CreateNameFragment : Fragment() {
             .start()
 
         return binding.root
+    }
+
+    private fun setModifyLayout() {
+        mActivity.setTitle("챌린지 이름 수정")
+        binding.progress.visibility = View.GONE
+        binding.nameTextview2.visibility = View.GONE
+        binding.nameImageview.visibility = View.GONE
+        binding.nameTextview3.visibility = View.GONE
+        binding.toggle.visibility = View.GONE
+        binding.nextBtn.setText("저장하기")
     }
 
     override fun onAttach(context: Context) {
@@ -79,7 +93,10 @@ class CreateNameFragment : Fragment() {
         })
 
         binding.nextBtn.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_createNameFragment_to_createContentFragment)
+            if (mActivity.isFromChallenge)
+                requireActivity().finish()
+            else
+                view?.findNavController()?.navigate(R.id.action_createNameFragment_to_createContentFragment)
         }
 
         binding.toggle.setOnCheckedChangeListener { buttonView, isChecked ->

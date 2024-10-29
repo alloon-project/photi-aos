@@ -26,6 +26,7 @@ class CreateRuleFragment : Fragment(){
     private lateinit var defaultRuleAdapter: DefaultRuleAdapter
     private lateinit var customRuleAdapter: CustomRuleAdapter
     private val createViewModel by activityViewModels<CreateViewModel>()
+    private lateinit var mActivity: CreateActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +37,11 @@ class CreateRuleFragment : Fragment(){
         binding.viewModel = createViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as CreateActivity
+        mActivity = activity as CreateActivity
         mActivity.setAppBar()
+
+        if (mActivity.isFromChallenge)
+            setModifyLayout()
 
         setListener()
         setObserver()
@@ -65,6 +69,12 @@ class CreateRuleFragment : Fragment(){
         return binding.root
     }
 
+    private fun setModifyLayout() {
+        mActivity.setTitle("챌린지 인증 룰 수정")
+        binding.progress.visibility = View.GONE
+        binding.nextBtn.setText("저장하기")
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -72,7 +82,10 @@ class CreateRuleFragment : Fragment(){
 
     private fun setListener() {
         binding.nextBtn.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_createRuleFragment_to_createHashtagFragment)
+            if (mActivity.isFromChallenge)
+                requireActivity().finish()
+            else
+                view?.findNavController()?.navigate(R.id.action_createRuleFragment_to_createHashtagFragment)
         }
     }
 

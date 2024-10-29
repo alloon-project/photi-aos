@@ -30,6 +30,7 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
     private lateinit var binding : FragmentCreateContentBinding
     private lateinit var mContext: Context
     private val createViewModel by activityViewModels<CreateViewModel>()
+    private lateinit var mActivity: CreateActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,8 +41,11 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
         binding.viewModel = createViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as CreateActivity
+        mActivity = activity as CreateActivity
         mActivity.setAppBar()
+
+        if (mActivity.isFromChallenge)
+            setModifyLayout()
 
         setTodayDate()
         setListener()
@@ -51,6 +55,12 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
             .start()
 
         return binding.root
+    }
+
+    private fun setModifyLayout() {
+        mActivity.setTitle("챌린지 소개 수정")
+        binding.progress.visibility = View.GONE
+        binding.nextBtn.setText("저장하기")
     }
 
     override fun onAttach(context: Context) {
@@ -78,7 +88,10 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
         }
 
         binding.nextBtn.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_createContentFragment_to_createImageFragment)
+            if (mActivity.isFromChallenge)
+                requireActivity().finish()
+            else
+                view?.findNavController()?.navigate(R.id.action_createContentFragment_to_createImageFragment)
         }
 
         binding.root.setOnClickListener {
@@ -113,6 +126,7 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
         binding.timeEdittext.setText("$timestring : 00")
         binding.timeImageview.setImageResource(R.drawable.ic_time_blue400)
         binding.timeTextview.setTextColor(mContext.getColor(R.color.blue400))
+        binding.timeTextview.setText("하루 인증 시간을 정해주세요")
     }
 
     override fun onClickSelectDateButton(date: CalendarDay) {

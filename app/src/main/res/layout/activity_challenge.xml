@@ -64,7 +64,7 @@
 
                     <TextView
                         android:id="@+id/title_textview"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/suit_bold"
                         android:letterSpacing="-0.03"
@@ -80,6 +80,7 @@
                         android:clipToPadding="false" />
 
                     <LinearLayout
+                        android:id="@+id/time_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="55dp"
@@ -117,6 +118,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/photo_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/card_shape3"
@@ -200,6 +202,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/top_layout">
 
                 <LinearLayout
+                    android:id="@+id/goal_layout"
                     android:layout_width="160dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/card_info"
@@ -237,6 +240,7 @@
                     android:layout_weight="5">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/rule_layout"
                         android:layout_width="match_parent"
                         android:layout_height="233dp"
                         android:layout_weight="1"
@@ -318,6 +322,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout
+                        android:id="@+id/date_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
