@@ -44,10 +44,13 @@
             android:name=".view.activity.PhotiActivity"
             android:exported="true"/>
         <activity
-            android:name=".view.activity.JoinActivity"
+            android:name=".view.activity.GoalActivity"
             android:exported="true"/>
         <activity
             android:name=".view.activity.CreateActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".view.activity.ChallengeActivity"
             android:exported="true"/>
         <provider
             android:name="androidx.core.content.FileProvider"

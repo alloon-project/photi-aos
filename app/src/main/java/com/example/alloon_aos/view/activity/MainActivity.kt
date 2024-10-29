@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.joinButton.setOnClickListener {
             finish()
-            startActivity(Intent(this,JoinActivity::class.java))
+            startActivity(Intent(this,GoalActivity::class.java))
         }
         binding.createButton.setOnClickListener {
             finish()

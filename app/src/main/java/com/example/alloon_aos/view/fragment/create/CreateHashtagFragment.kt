@@ -2,6 +2,7 @@ package com.example.alloon_aos.view.fragment.create
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,11 +13,11 @@ import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentCreateHashtagBinding
+import com.example.alloon_aos.view.activity.ChallengeActivity
 import com.example.alloon_aos.view.activity.CreateActivity
 import com.example.alloon_aos.view.adapter.AddHashAdapter
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
@@ -107,7 +108,9 @@ class CreateHashtagFragment : Fragment() {
         }
 
         binding.nextBtn.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_createHashtagFragment_to_createCompleteFragment)
+            val intent = Intent(requireContext(), ChallengeActivity::class.java)
+            intent.putExtra("IS_FROM_CREATE",true)
+            startActivity(intent)
         }
     }
 

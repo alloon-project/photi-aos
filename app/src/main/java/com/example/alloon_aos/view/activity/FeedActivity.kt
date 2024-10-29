@@ -10,7 +10,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -23,11 +23,11 @@ import com.example.alloon_aos.view.fragment.feed.PartyMemberFragment
 import com.example.alloon_aos.view.fragment.feed.FeedFragment
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
-import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.google.android.material.tabs.TabLayout
 
 class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     lateinit var binding : ActivityFeedBinding
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +77,18 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
         })
+
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val resultValue = data?.getStringExtra("ID")
+                resultValue?.let {
+                    //수정된 id받음
+                }
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -111,7 +123,10 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             optionTwo.text = "챌린지 탈퇴하기"
 
             optionOne.setOnClickListener {
-                Toast.makeText(this@FeedActivity, "수정하기 클릭됨", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@FeedActivity, ChallengeActivity::class.java)
+                intent.putExtra("IS_FROM_FEED",true)
+                intent.putExtra("ID","id")
+                activityResultLauncher.launch(intent)
                 popupWindow.dismiss()
             }
 

@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.photi
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentChallengeCommendBinding
+import com.example.alloon_aos.view.activity.ChallengeActivity
 import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.adapter.HashCardAdapter
 import com.example.alloon_aos.view.adapter.HashTagAdapter
@@ -32,12 +34,12 @@ class ChallengeCommendFragment : Fragment() {
         binding.fragment = this
         val mActivity = activity as PhotiActivity
 
-        hotCardAdapter = HotCardAdapter(photiViewModel)
+        hotCardAdapter = HotCardAdapter(this, photiViewModel)
         binding.hotRecyclerView.adapter = hotCardAdapter
         binding.hotRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.hotRecyclerView.setHasFixedSize(true)
 
-        hashCardAdapter = HashCardAdapter(photiViewModel)
+        hashCardAdapter = HashCardAdapter(this, photiViewModel)
         binding.hashtagRecyclerView.adapter = hashCardAdapter
         binding.hashtagRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.hashtagRecyclerView.setHasFixedSize(true)
@@ -56,5 +58,12 @@ class ChallengeCommendFragment : Fragment() {
         photiViewModel.hotItemsListData.observe(viewLifecycleOwner) { // 데이터에 변화가 있을 때 어댑터에게 변경을 알림
             hotCardAdapter.notifyDataSetChanged() // 어댑터가 리사이클러뷰에게 알려 내용을 갱신함
         }
+    }
+
+    fun setOnclick() {
+        val intent = Intent(requireContext(), ChallengeActivity::class.java)
+        intent.putExtra("IS_FROM_HOME",true)
+        intent.putExtra("ID","id")
+        startActivity(intent)
     }
 }

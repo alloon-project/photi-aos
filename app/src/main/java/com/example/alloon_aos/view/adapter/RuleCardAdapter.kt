@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.databinding.ItemInquiryRuleRecyclerviewBinding
-import com.example.alloon_aos.viewmodel.JoinViewModel
+import com.example.alloon_aos.viewmodel.ChallengeViewModel
 
-class RuleCardAdapter(private val joinViewModel: JoinViewModel) :
+class RuleCardAdapter(private val challengeViewModel: ChallengeViewModel) :
     RecyclerView.Adapter<RuleCardAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: ItemInquiryRuleRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setContents(pos: Int) {
-            with (joinViewModel.rules[pos]) {
+            with (challengeViewModel.rules[pos]) {
                 binding.ruleTextview.text = rule
             }
         }
@@ -27,6 +27,6 @@ class RuleCardAdapter(private val joinViewModel: JoinViewModel) :
 
     }
 
-    override fun getItemCount() = joinViewModel.rules.size
+    override fun getItemCount() = challengeViewModel.rules.size
 
 }

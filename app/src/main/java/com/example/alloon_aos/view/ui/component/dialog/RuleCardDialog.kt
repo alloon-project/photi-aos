@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.databinding.DialogCardRuleBinding
 import com.example.alloon_aos.view.adapter.RuleCardAdapter
-import com.example.alloon_aos.viewmodel.JoinViewModel
+import com.example.alloon_aos.viewmodel.ChallengeViewModel
 
 
-class RuleCardDialog(val joinViewModel: JoinViewModel) : DialogFragment() {
+class RuleCardDialog(val challengeViewModel: ChallengeViewModel) : DialogFragment() {
     private var _binding: DialogCardRuleBinding? = null
     private val binding get() = _binding!!
 
@@ -27,7 +27,7 @@ class RuleCardDialog(val joinViewModel: JoinViewModel) : DialogFragment() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.setCanceledOnTouchOutside(false)
 
-        binding.ruleRecyclerview.adapter = RuleCardAdapter(joinViewModel)
+        binding.ruleRecyclerview.adapter = RuleCardAdapter(challengeViewModel)
         binding.ruleRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.ruleRecyclerview.setHasFixedSize(true)
 

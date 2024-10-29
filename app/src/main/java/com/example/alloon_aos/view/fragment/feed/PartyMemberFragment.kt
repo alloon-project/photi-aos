@@ -8,25 +8,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.FragmentIntroduceBinding
 import com.example.alloon_aos.databinding.FragmentPartyMemberBinding
 import com.example.alloon_aos.databinding.ItemFeedPartyBinding
-import com.example.alloon_aos.view.activity.AuthActivity
-import com.example.alloon_aos.view.activity.JoinActivity
-import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialog
+import com.example.alloon_aos.view.activity.GoalActivity
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.FeedViewModel
-import com.example.alloon_aos.viewmodel.JoinViewModel
 
 class PartyMemberFragment : Fragment() {
     private lateinit var binding : FragmentPartyMemberBinding
@@ -74,8 +67,9 @@ class PartyMemberFragment : Fragment() {
     }
 
     fun changeMyGoal(){
-        val intent = Intent(requireContext(), JoinActivity::class.java)
+        val intent = Intent(requireContext(), GoalActivity::class.java)
         intent.putExtra("IS_FROM_FEED_ACTIVITY", true)
+        intent.putExtra("TITLE","title")
         activityResultLauncher.launch(intent)
     }
 

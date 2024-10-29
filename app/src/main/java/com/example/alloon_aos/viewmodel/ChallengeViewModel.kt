@@ -1,13 +1,11 @@
 package com.example.alloon_aos.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 data class Rule(val rule:String)
 data class Hash(val chip:String)
 
-class JoinViewModel : ViewModel() {
-    var myGoal =  MutableLiveData("")
+class ChallengeViewModel : ViewModel() {
 
     val rules = arrayListOf<Rule>(
         Rule("장소 나오게 찍기 장소 나오게 찍기장소 나오게 찍기 장소 나오게 찍기"),
