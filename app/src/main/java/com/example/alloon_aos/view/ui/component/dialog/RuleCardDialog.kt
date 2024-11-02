@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.databinding.DialogCardRuleBinding
-import com.example.alloon_aos.view.adapter.RuleCardAdapter
+import com.example.alloon_aos.databinding.ItemInquiryRuleRecyclerviewBinding
 import com.example.alloon_aos.viewmodel.ChallengeViewModel
 
 
@@ -27,7 +27,7 @@ class RuleCardDialog(val challengeViewModel: ChallengeViewModel) : DialogFragmen
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.setCanceledOnTouchOutside(false)
 
-        binding.ruleRecyclerview.adapter = RuleCardAdapter(challengeViewModel)
+        binding.ruleRecyclerview.adapter = RuleCardAdapter()
         binding.ruleRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.ruleRecyclerview.setHasFixedSize(true)
 
@@ -64,5 +64,27 @@ class RuleCardDialog(val challengeViewModel: ChallengeViewModel) : DialogFragmen
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    inner class ViewHolder(private val binding: ItemInquiryRuleRecyclerviewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun setContents(pos: Int) {
+            with (challengeViewModel.rules[pos]) {
+                binding.ruleTextview.text = rule
+            }
+        }
+    }
+
+    inner class RuleCardAdapter() : RecyclerView.Adapter<ViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val binding = ItemInquiryRuleRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return ViewHolder(binding)
+        }
+
+        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+            viewHolder.setContents(position)
+        }
+
+        override fun getItemCount() = challengeViewModel.rules.size
     }
 }

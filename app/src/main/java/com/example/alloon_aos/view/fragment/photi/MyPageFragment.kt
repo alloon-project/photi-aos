@@ -7,20 +7,23 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentMyPageBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.activity.SettingsActivity
+import com.example.alloon_aos.view.ui.component.dialog.ProofShotByDateDialog
 import com.example.alloon_aos.view.ui.component.dialog.ProofShotsGalleryDialog
-import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.EventDecorator
 import com.example.alloon_aos.view.ui.util.TodayDecorator
+import com.example.alloon_aos.viewmodel.PhotiViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 
 
 class MyPageFragment : Fragment() {
     private lateinit var binding : FragmentMyPageBinding
+    private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var materialCalendarView: MaterialCalendarView
     private lateinit var eventDecorator: EventDecorator
     private lateinit var todayDecorator: TodayDecorator
@@ -32,6 +35,7 @@ class MyPageFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_page, container, false)
         binding.fragment = this
+        binding.viewModel = photiViewModel
         val mActivity = activity as PhotiActivity
 
         setCalendarView()
@@ -59,10 +63,11 @@ class MyPageFragment : Fragment() {
         }
 
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
-            //CustomToast.createToast(activity,date.date.toString())?.show()
 
-            if(materialCalendarView.currentDate.month == date.month && calendarList.contains(date))
-                CustomToast.createToast(activity,"$date 가 포함되어있음")?.show()
+            if(materialCalendarView.currentDate.month == date.month && calendarList.contains(date)) {
+                ProofShotByDateDialog(photiViewModel)
+                    .show(parentFragmentManager, "CustomDialog")
+            }
         }
 
     }

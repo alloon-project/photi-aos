@@ -8,7 +8,7 @@
             type="com.example.alloon_aos.view.fragment.photi.MyPageFragment" />
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.AuthViewModel" />
+            type="com.example.alloon_aos.viewmodel.PhotiViewModel" />
     </data>
     <ScrollView
         android:layout_width="match_parent"
