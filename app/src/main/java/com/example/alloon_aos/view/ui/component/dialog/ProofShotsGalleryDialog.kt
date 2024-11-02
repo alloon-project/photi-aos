@@ -9,23 +9,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.alloon_aos.databinding.DialogProofShotsGalleryBinding
-import com.example.alloon_aos.databinding.ItemChallengeCheckInBinding
-import com.example.alloon_aos.viewmodel.Comment
+import com.example.alloon_aos.databinding.ItemProofShotsGalleryBinding
+import com.example.alloon_aos.viewmodel.FeedInItem
 
 class ProofShotsGalleryDialog(val count : Int, val challenge_id : Int): DialogFragment() {
     private var _binding: DialogProofShotsGalleryBinding? = null
     private val binding get() = _binding!!
-    val comments = arrayListOf<Comment>(
-        Comment("aaa","이 책 좋네요"),
-        Comment("abc","멋져요"),
-        Comment("baa","와우"),
-        Comment("Seul","우왕굳 ㅋㅋ"),
-        Comment("HB","짱~!"),
-        Comment("aaa","엄청긴댓글입니다아홉열열하나다여"),
-        Comment("aaa","이 책 좋네요"),
-        Comment("abc","멋져요"),
-        Comment("aaa","엄청긴댓글입니다아홉열열하나다여")
+    val feedInItems = arrayListOf<FeedInItem>(
+        FeedInItem("photi","방금","https://ifh.cc/g/6HRkxa.jpg",true,2),
+        FeedInItem("seul","1분전","https://ifh.cc/g/AA0NMd.jpg",false,5),
+        FeedInItem("HB","18분전","https://ifh.cc/g/09y6Mo.jpg",false,10),
+        FeedInItem("photi1","30분전","https://ifh.cc/g/KB2Vh1.jpg",false,1),
+        FeedInItem("photi2","방금","https://ifh.cc/g/yxgmBH.webp",false),
     )
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = DialogProofShotsGalleryBinding.inflate(inflater, container, false)
@@ -33,7 +30,7 @@ class ProofShotsGalleryDialog(val count : Int, val challenge_id : Int): DialogFr
 
         with(binding){
             countTextView.text = count.toString()
-            challengeRecyclerview.adapter = CertificationAdapter(comments)
+            challengeRecyclerview.adapter = ProofShotsGalleryAdapter(feedInItems)
             challengeRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
             challengeRecyclerview.setHasFixedSize(true)
             backImgBtn.setOnClickListener {
@@ -59,13 +56,16 @@ class ProofShotsGalleryDialog(val count : Int, val challenge_id : Int): DialogFr
         _binding = null
     }
 
-    class CertificationAdapter(val comments: ArrayList<Comment>): RecyclerView.Adapter<CertificationAdapter.ViewHolder>() {
-        inner class ViewHolder(var binding: ItemChallengeCheckInBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ProofShotsGalleryAdapter(val comments: ArrayList<FeedInItem>): RecyclerView.Adapter<ProofShotsGalleryAdapter.ViewHolder>() {
+        inner class ViewHolder(var binding: ItemProofShotsGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
             fun setContents(holder: ViewHolder, pos: Int) {
                 with(comments[pos]) {
                     binding.dateTextView.text = id
                     binding.chipBtn.text = "크로아상 만들기"
-
+                    Glide
+                        .with(holder.itemView.context)
+                        .load(url)
+                        .into(binding.imgView)
                     binding.shortcutImgBtn.setOnClickListener{
                         //공유하기
                     }
@@ -74,7 +74,7 @@ class ProofShotsGalleryDialog(val count : Int, val challenge_id : Int): DialogFr
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = ItemChallengeCheckInBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val view = ItemProofShotsGalleryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return ViewHolder(view)
         }
 
