@@ -96,6 +96,7 @@ class MyPageFragment : Fragment() {
     }
 
     fun showDialog(){
+        //if(인증 횟수가 0이 아니면)
         //총 인증 횟수와 챌린지 Id 넘겨줌
         val dialog = ChallengeCheckInDialog(99,1)
         dialog.show(activity?.supportFragmentManager!!, "ChallengeCheckInDialog")

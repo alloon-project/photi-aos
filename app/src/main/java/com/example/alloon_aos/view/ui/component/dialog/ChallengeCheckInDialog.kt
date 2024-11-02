@@ -44,6 +44,9 @@ class ChallengeCheckInDialog(val count : Int, val challenge_id : Int): DialogFra
             challengeRecyclerview.adapter = CertificationAdapter(comments)
             challengeRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
             challengeRecyclerview.setHasFixedSize(true)
+            backImgBtn.setOnClickListener {
+                dismiss()
+            }
         }
 
         return view

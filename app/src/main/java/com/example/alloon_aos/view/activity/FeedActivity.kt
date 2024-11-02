@@ -43,6 +43,10 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 .commit()
         }
 
+        binding.shareImgBtn.setOnClickListener {
+            //챌린지 공유
+        }
+
         binding.ellipsisImgBtn.setOnClickListener { view ->
             setCustomPopUp(view)
         }
