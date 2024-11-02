@@ -21,22 +21,114 @@
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/navigationView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_layout"
             app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/navigationView"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:background="@drawable/bottom_nav"
-                app:itemIconTint="@drawable/menu_click_color"
-                app:itemTextColor="@drawable/menu_click_color"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:menu="@menu/home_menu"
-                tools:ignore="MissingConstraints"
-                android:paddingTop="12dp"/>
+<!--            <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--                android:id="@+id/navigationView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="70dp"-->
+<!--                android:background="@drawable/bottom_nav"-->
+<!--                app:itemIconTint="@drawable/menu_click_color"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:menu="@menu/home_menu"-->
+<!--                tools:ignore="MissingConstraints"-->
+<!--                android:paddingTop="12dp"/>-->
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:src="@drawable/bottom_nav_layered"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/bottom_navigation_layout"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/bottom_nav"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="28dp"
+            android:paddingRight="28dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:id="@+id/home_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/home_imageview"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="6dp"
+                    android:src="@drawable/ic_home"/>
+
+                <TextView
+                    android:id="@+id/home_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="홈"
+                    android:textSize="12dp"
+                    android:textColor="@color/gray400"
+                    android:fontFamily="@font/suit_bold"
+                    android:letterSpacing="-0.03"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/challenge_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/challenge_imageview"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="6dp"
+                    android:src="@drawable/ic_postit"/>
+
+                <TextView
+                    android:id="@+id/challenge_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="챌린지"
+                    android:textSize="12dp"
+                    android:textColor="@color/gray400"
+                    android:fontFamily="@font/suit_bold"
+                    android:letterSpacing="-0.03"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mypage_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/mypage_imageview"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="6dp"
+                    android:src="@drawable/ic_user_gray"/>
+
+                <TextView
+                    android:id="@+id/mypage_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="마이"
+                    android:textSize="12dp"
+                    android:textColor="@color/gray400"
+                    android:fontFamily="@font/suit_bold"
+                    android:letterSpacing="-0.03"/>
+            </LinearLayout>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

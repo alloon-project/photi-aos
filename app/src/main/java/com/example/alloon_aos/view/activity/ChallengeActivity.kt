@@ -161,8 +161,11 @@ class ChallengeActivity : PrivateCodeDialogInterface, AppCompatActivity() {
         fun setContents(pos: Int) {
             with (challengeViewModel.hashs[pos]) {
                 binding.hashBtn.text = chip
-                binding.hashBtn.setOnClickListener {
-                    startModify("hash")
+
+                if (isFrom == "feed") {
+                    binding.hashBtn.setOnClickListener {
+                        startModify("hash")
+                    }
                 }
             }
         }
