@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.activity
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -19,16 +20,18 @@ import com.example.alloon_aos.view.ui.component.toast.CustomToast
 private const val TAG_CHALLENGE = "challenge_fragment"
 private const val TAG_HOME = "home_fragment"
 private const val TAG_PROFILE = "profile_fragment"
+
 class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
-    private var previousSelectedItemId: Int = R.id.homeFragment
     lateinit var binding : ActivityPhotiBinding
+    private lateinit var mContext: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_photi)
+        mContext = this
 
-        setFragment(TAG_HOME, HomeFragment())
+        setBottomNavigation(TAG_HOME)
         setListener()
 
         val isFrom = intent.getStringExtra("IS_FROM")
@@ -41,29 +44,60 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
             }
             "LEAVE" -> {
                 CustomToast.createToast(this, "챌린지 탈퇴가 완료됐어요.")?.show()
-                binding.navigationView.id = R.id.challengeFragment
+                //binding.navigationView.id = R.id.challenge_icon
+                setBottomNavigation(TAG_PROFILE)
             }
         }
     }
 
+
     private fun setListener(){
-        binding.navigationView.setOnItemSelectedListener { item ->
-            if (item.itemId != R.id.myPageFragment) {
-                previousSelectedItemId = item.itemId
+        binding.homeIcon.setOnClickListener {
+            setBottomNavigation(TAG_HOME)
+        }
+
+        binding.challengeIcon.setOnClickListener {
+            setBottomNavigation(TAG_CHALLENGE)
+        }
+
+        binding.mypageIcon.setOnClickListener {
+            if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
+                CustomTwoButtonDialog(this,"로그인하고 다양한 챌린지에\n 참여해보세요!","","나중에 하기","로그인하기")
+                    .show(supportFragmentManager, "CustomDialog")
+            else
+                setBottomNavigation(TAG_PROFILE)
+        }
+    }
+
+    private fun setBottomNavigation(tag: String) {
+        when(tag) {
+            TAG_HOME -> {
+                setFragment(tag, HomeFragment())
+                binding.homeImageview.setImageResource(R.drawable.ic_home_blue)
+                binding.homeTextview.setTextColor(mContext.getColor(R.color.blue500))
+                binding.challengeImageview.setImageResource(R.drawable.ic_postit)
+                binding.challengeTextview.setTextColor(mContext.getColor(R.color.gray400))
+                binding.mypageImageview.setImageResource(R.drawable.ic_user_gray)
+                binding.mypageTextview.setTextColor(mContext.getColor(R.color.gray400))
             }
-            when(item.itemId) {
-                R.id.homeFragment -> setFragment(TAG_HOME, HomeFragment())
-                R.id.challengeFragment -> setFragment(TAG_CHALLENGE, ChallengeFragment())
-                R.id.myPageFragment-> {
-                    if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null){
-                        CustomTwoButtonDialog(this,"로그인하고 다양한 챌린지에\n 참여해보세요!","","나중에 하기","로그인하기")
-                            .show(supportFragmentManager, "CustomDialog")
-                    }
-                    else
-                        setFragment(TAG_PROFILE, MyPageFragment())
-                }
+            TAG_CHALLENGE -> {
+                setFragment(tag, ChallengeFragment())
+                binding.homeImageview.setImageResource(R.drawable.ic_home)
+                binding.homeTextview.setTextColor(mContext.getColor(R.color.gray400))
+                binding.challengeImageview.setImageResource(R.drawable.ic_postit_blue)
+                binding.challengeTextview.setTextColor(mContext.getColor(R.color.blue500))
+                binding.mypageImageview.setImageResource(R.drawable.ic_user_gray)
+                binding.mypageTextview.setTextColor(mContext.getColor(R.color.gray400))
             }
-            true
+            TAG_PROFILE -> {
+                setFragment(tag, MyPageFragment())
+                binding.homeImageview.setImageResource(R.drawable.ic_home)
+                binding.homeTextview.setTextColor(mContext.getColor(R.color.gray400))
+                binding.challengeImageview.setImageResource(R.drawable.ic_postit)
+                binding.challengeTextview.setTextColor(mContext.getColor(R.color.gray400))
+                binding.mypageImageview.setImageResource(R.drawable.ic_user_blue)
+                binding.mypageTextview.setTextColor(mContext.getColor(R.color.blue500))
+            }
         }
     }
 
@@ -114,7 +148,6 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
 
 
     override fun onClickFisrtButton() {
-        binding.navigationView.selectedItemId = previousSelectedItemId
     }
 
     override fun onClickSecondButton() {
