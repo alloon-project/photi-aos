@@ -11,8 +11,7 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentMyPageBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.activity.SettingsActivity
-import com.example.alloon_aos.view.ui.component.dialog.ChallengeCheckInDialog
-import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog
+import com.example.alloon_aos.view.ui.component.dialog.ProofShotsGalleryDialog
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.EventDecorator
 import com.example.alloon_aos.view.ui.util.TodayDecorator
@@ -98,7 +97,7 @@ class MyPageFragment : Fragment() {
     fun showDialog(){
         //if(인증 횟수가 0이 아니면)
         //총 인증 횟수와 챌린지 Id 넘겨줌
-        val dialog = ChallengeCheckInDialog(99,1)
+        val dialog = ProofShotsGalleryDialog(99,1)
         dialog.show(activity?.supportFragmentManager!!, "ChallengeCheckInDialog")
     }
 

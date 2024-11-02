@@ -233,10 +233,15 @@ class FeedDetailDialog(val index: Int,private val listener: OnFeedDeletedListene
         val popupWindow = PopupWindow(popupViewBinding.root, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
 
         with(popupViewBinding){
-            optionOne.text = "인스타 공유하기"
-            optionTwo.text = "피드 삭제하기"
+            //if(본인이 아니면)
+                //optionOne.text = 피드 신고하기
+            //else
+                optionOne.text = "인스타 공유하기"
+                optionTwo.text = "피드 삭제하기"
 
             optionOne.setOnClickListener {
+                //if(본인이 아니면)
+                    //피드 신고 플로우
                 Toast.makeText(context, "Share 클릭됨", Toast.LENGTH_SHORT).show()
                 popupWindow.dismiss()
             }
