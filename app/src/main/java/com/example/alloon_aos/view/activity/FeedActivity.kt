@@ -43,6 +43,10 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 .commit()
         }
 
+        binding.shareImgBtn.setOnClickListener {
+            //챌린지 공유
+        }
+
         binding.ellipsisImgBtn.setOnClickListener { view ->
             setCustomPopUp(view)
         }
@@ -121,10 +125,15 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         val popupWindow = PopupWindow(popupViewBinding.root, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
 
         with(popupViewBinding){
-            optionOne.text = "챌린지 수정하기"
-            optionTwo.text = "챌린지 탈퇴하기"
+            //if(파티장)
+                optionOne.text = "챌린지 수정하기"
+            //else(파티원
+                //optionOne.text = "챌린지 신고하기"
+                optionTwo.text = "챌린지 탈퇴하기"
 
             optionOne.setOnClickListener {
+                //if(파티장)
+                    //챌린지 신고하기 플로우
                 val intent = Intent(this@FeedActivity, ChallengeActivity::class.java)
                 intent.putExtra("IS_FROM_FEED",true)
                 intent.putExtra("ID","id")
@@ -133,9 +142,12 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             }
 
             optionTwo.setOnClickListener {
-                CustomTwoButtonDialog(this@FeedActivity,"챌린지를 탈퇴할까요?","탈퇴해도 기록은 남아있어요.\n" +
-                        "탈퇴하시기 전에 직접 지워주세요.","취소할게요","탈퇴할게요")
-                    .show(binding.activity?.supportFragmentManager!!,"CustomDialog")
+                //if(마지막 파티원인 경우)
+                    //챌린지 삭제된다는 다이얼로그 띄움
+                //else
+                    CustomTwoButtonDialog(this@FeedActivity,"챌린지를 탈퇴할까요?","탈퇴해도 기록은 남아있어요.\n" +
+                            "탈퇴하시기 전에 직접 지워주세요.","취소할게요","탈퇴할게요")
+                        .show(binding.activity?.supportFragmentManager!!,"CustomDialog")
                 popupWindow.dismiss()
             }
 

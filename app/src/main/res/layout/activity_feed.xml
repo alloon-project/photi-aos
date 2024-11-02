@@ -56,6 +56,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
+            android:id="@+id/share_imgBtn"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="@drawable/ic_share"

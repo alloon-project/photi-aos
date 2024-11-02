@@ -6,23 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.alloon_aos.databinding.DialogChallengeCheckInBinding
-import com.example.alloon_aos.databinding.DialogOneBtnBinding
+import com.example.alloon_aos.databinding.DialogProofShotsGalleryBinding
 import com.example.alloon_aos.databinding.ItemChallengeCheckInBinding
-import com.example.alloon_aos.databinding.ItemFeedCommentBinding
-import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog.CommentsAdapter
-import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.Comment
 
-class ChallengeCheckInDialog(val count : Int, val challenge_id : Int): DialogFragment() {
-    private var _binding: DialogChallengeCheckInBinding? = null
+class ProofShotsGalleryDialog(val count : Int, val challenge_id : Int): DialogFragment() {
+    private var _binding: DialogProofShotsGalleryBinding? = null
     private val binding get() = _binding!!
     val comments = arrayListOf<Comment>(
         Comment("aaa","이 책 좋네요"),
@@ -36,7 +28,7 @@ class ChallengeCheckInDialog(val count : Int, val challenge_id : Int): DialogFra
         Comment("aaa","엄청긴댓글입니다아홉열열하나다여")
     )
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = DialogChallengeCheckInBinding.inflate(inflater, container, false)
+        _binding = DialogProofShotsGalleryBinding.inflate(inflater, container, false)
         val view = binding.root
 
         with(binding){
@@ -44,6 +36,9 @@ class ChallengeCheckInDialog(val count : Int, val challenge_id : Int): DialogFra
             challengeRecyclerview.adapter = CertificationAdapter(comments)
             challengeRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
             challengeRecyclerview.setHasFixedSize(true)
+            backImgBtn.setOnClickListener {
+                dismiss()
+            }
         }
 
         return view
