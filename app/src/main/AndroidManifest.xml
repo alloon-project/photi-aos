@@ -52,6 +52,9 @@
         <activity
             android:name=".view.activity.ChallengeActivity"
             android:exported="true"/>
+        <activity
+            android:name=".view.activity.SearchActivity"
+            android:exported="true"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.alloon_aos.fileprovider"

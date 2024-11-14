@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/Theme.Photi"
+    android:layout_width="wrap_content"
+    android:layout_height="30dp"
+    android:background="@drawable/chip_gray_line"
+    android:stateListAnimator="@null"
+    android:layout_marginRight="10dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/hashtag_textveiw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="4dp"
+        android:fontFamily="@font/suit_medium"
+        android:text="해시태그"
+        android:textColor="@color/gray800"
+        android:textSize="14dp" />
+
+    <ImageView
+        android:id="@+id/delete_btn"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/ic_close_default"
+        android:layout_marginRight="10dp"
+        app:tint="@color/gray700" />
+
+</LinearLayout>

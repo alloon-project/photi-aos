@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.photi
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentChallengeBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
+import com.example.alloon_aos.view.activity.SearchActivity
 import com.google.android.material.tabs.TabLayout
 
 class ChallengeFragment : Fragment() {
@@ -28,6 +30,11 @@ class ChallengeFragment : Fragment() {
 
         val mActivity = activity as PhotiActivity
         mActivity.supportFragmentManager.beginTransaction().add(R.id.frame_layout, commendTab).commit()
+
+        binding.searchEdittext.setOnClickListener {
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(p0: TabLayout.Tab?) {
