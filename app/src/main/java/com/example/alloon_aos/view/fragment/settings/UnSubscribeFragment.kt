@@ -84,7 +84,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     }
 
     fun goBack(){
-        view?.findNavController()?.navigate(R.id.action_unSubscribeFragment_to_profileModifyFragment)
+        view?.findNavController()?.popBackStack()
     }
 
     fun checkPassword(){

@@ -26,7 +26,7 @@ class EndedChallengesDialog(val count : Int, val challenge_id : Int): DialogFrag
         EndedChallenge("산책챌린지","https://ifh.cc/g/6HRkxa.jpg", "2024.06.30", 1),
         EndedChallenge("독서챌린지", "https://ifh.cc/g/AA0NMd.jpg","2024.07.15", 3),
         EndedChallenge("요리챌린지", "https://ifh.cc/g/09y6Mo.jpg","2024.08.01", 12),
-        EndedChallenge("러닝챌린지", "https://ifh.cc/g/KB2Vh1.jpg","2024.09.10", 1),
+        EndedChallenge("러닝챌린지", "https://ifh.cc/g/KB2Vh1.jpg","2024.09.10", 2),
         EndedChallenge("명상챌린지", "https://ifh.cc/g/yxgmBH.webp","2024.10.05", 20)
     )
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -73,13 +73,16 @@ class EndedChallengesDialog(val count : Int, val challenge_id : Int): DialogFrag
                         .into(binding.imgView)
 
                     when (memberCount) {
-                        1 -> {}
+                        1 -> {
+                            binding.avatarOneLayout.visibility = View.VISIBLE
+                        }
+                        2-> {
+                            binding.avatarTwoLayout.visibility = View.VISIBLE
+                        }
                         3 -> {
-                            binding.avatarOneLayout.visibility = View.GONE
                             binding.avatarThreeLayout.visibility = View.VISIBLE
                         }
                         else -> {
-                            binding.avatarOneLayout.visibility = View.GONE
                             binding.avatarMultipleLayout.visibility = View.VISIBLE
                             binding.countTextView.text = "+"+(memberCount - 2).toString()
                         }

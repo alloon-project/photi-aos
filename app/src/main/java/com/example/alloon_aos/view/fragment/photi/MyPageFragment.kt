@@ -51,8 +51,12 @@ class MyPageFragment : Fragment() {
         materialCalendarView = binding.calendarview
         materialCalendarView.setTopbarVisible(false)
 
-
+        val koWeekDays = listOf("일", "월", "화", "수", "목", "금", "토")
+        materialCalendarView.setWeekDayFormatter { dayOfWeek ->
+            koWeekDays[dayOfWeek.ordinal]
+        }
         materialCalendarView.state().edit()
+                //필요시최대최소날짜설정
 //            .setMinimumDate(CalendarDay.from(2024, 7, 3))
 //            .setMaximumDate(CalendarDay.from(2024, 9, 30))
             .commit()
@@ -103,13 +107,13 @@ class MyPageFragment : Fragment() {
     fun showProofShotsDialog(){
         //if(인증 횟수가 0이 아니면)
         //총 인증 횟수와 챌린지 Id 넘겨줌
-        val dialog = ProofShotsGalleryDialog(99,1)
+        val dialog = ProofShotsGalleryDialog(5,1)
         dialog.show(activity?.supportFragmentManager!!, "ChallengeCheckInDialog")
     }
 
     fun showEndedChallengesDialog(){
         //if(종료 횟수가 0이 아니면)
-        val dialog = EndedChallengesDialog(99,1)
+        val dialog = EndedChallengesDialog(5,1)
         dialog.show(activity?.supportFragmentManager!!, "ChallengeCheckInDialog")
     }
 

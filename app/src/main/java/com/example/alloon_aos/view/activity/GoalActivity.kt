@@ -30,7 +30,7 @@ class GoalActivity : AppCompatActivity() {
 
         if (isFromFeedActivity) {
             isFrom = "feed"
-            title = intent.getStringExtra("TITLE").toString()
+            title = "소설필사하기"
         } else {
             isFrom = "join"
             title = intent.getStringExtra("TITLE").toString()

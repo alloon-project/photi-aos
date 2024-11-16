@@ -16,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFeedBinding
@@ -53,9 +54,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         binding.feedOutRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.feedOutRecyclerView.setHasFixedSize(true)
 
-        if(!feedViewModel.isMissionClear) {
-            showToastAbove("오늘의 인증이 완료되지 않았어요!")
-        }
+        setObserver()
 
         return binding.root
     }
@@ -91,6 +90,15 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         }
     }
 
+    fun setObserver(){
+        feedViewModel.isMissionClear.observe(viewLifecycleOwner) { isClear ->
+            if (isClear) {
+                binding.fixedImageButton.visibility = View.GONE
+            }
+            else
+                showToastAbove("오늘의 인증이 완료되지 않았어요!")
+        }
+    }
     fun showBottomList(){
         AlignBottomSheet(mContext,this,"최신순","인기순",selected_order)
             .show(activity?.supportFragmentManager!!, "bottomList")
@@ -128,8 +136,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
     }
 
     override fun onClickUploadButton() {
-        feedViewModel.isMissionClear = true
-        binding.fixedImageButton.visibility = View.GONE
+        feedViewModel.isMissionClear.value = true
         CustomToast.createToast(activity, "인증 완료! 오늘도 수고했어요!")?.show()
 
         val newFeedInItem= FeedInItem(feedViewModel.id,"방금",photoUri.toString(),false,0)
