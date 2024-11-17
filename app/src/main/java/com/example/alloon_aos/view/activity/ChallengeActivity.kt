@@ -16,13 +16,15 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.ActivityChallengeBinding
 import com.example.alloon_aos.databinding.ItemRuleChipRecyclerviewBinding
+import com.example.alloon_aos.view.ui.component.dialog.JoinGuestDialog
+import com.example.alloon_aos.view.ui.component.dialog.JoinGuestDialogInterface
 import com.example.alloon_aos.view.ui.component.dialog.PrivateCodeDialog
 import com.example.alloon_aos.view.ui.component.dialog.PrivateCodeDialogInterface
 import com.example.alloon_aos.view.ui.component.dialog.RuleCardDialog
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.ChallengeViewModel
 
-class ChallengeActivity : PrivateCodeDialogInterface, AppCompatActivity() {
+class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, AppCompatActivity() {
     lateinit var binding : ActivityChallengeBinding
     lateinit var id : String
     lateinit var isFrom : String
@@ -107,12 +109,14 @@ class ChallengeActivity : PrivateCodeDialogInterface, AppCompatActivity() {
         }
 
         binding.joinBtn.setOnClickListener {
-            PrivateCodeDialog(this)
+
+            JoinGuestDialog(this)
                 .show(this.supportFragmentManager!!, "CustomDialog")
-//            mActivity.supportFragmentManager.beginTransaction()
-//                .replace(R.id.frame_Layout, CreateGoalFragment())
-//                .addToBackStack(null)
-//                .commit()
+
+//            PrivateCodeDialog(this)
+//                .show(this.supportFragmentManager!!, "CustomDialog")
+
+            //startGoal()
 
         }
 
@@ -129,6 +133,11 @@ class ChallengeActivity : PrivateCodeDialogInterface, AppCompatActivity() {
         startGoal()
     }
 
+    override fun onClickLoginButton() {
+        val intent = Intent(this, AuthActivity::class.java)
+        //intent.putExtra("IS_FROM_SETTINGS_ACTIVITY",true)
+        startActivity(intent)
+    }
 
     fun startGoal() { //join
         val intent = Intent(this, GoalActivity::class.java)

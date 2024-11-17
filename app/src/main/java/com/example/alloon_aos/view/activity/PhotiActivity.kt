@@ -1,6 +1,8 @@
 package com.example.alloon_aos.view.activity
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -33,6 +35,7 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
 
         setBottomNavigation(TAG_HOME)
         setListener()
+        setDeepLink()
 
         val isFrom = intent.getStringExtra("IS_FROM")
         when(isFrom){
@@ -46,6 +49,22 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
                 CustomToast.createToast(this, "챌린지 탈퇴가 완료됐어요.")?.show()
                 //binding.navigationView.id = R.id.challenge_icon
                 setBottomNavigation(TAG_PROFILE)
+            }
+        }
+    }
+
+    private fun setDeepLink() {
+        val intent = intent
+        val action = intent.action
+        val data: Uri? = intent.data
+
+        if (Intent.ACTION_VIEW == action && data != null) {
+            val inviteCode = data.getQueryParameter("inviteCode")
+            if (inviteCode != null) {
+                val intent = Intent(this, ChallengeActivity::class.java)
+                intent.putExtra("IS_FROM_HOME",true)
+                intent.putExtra("code", inviteCode)
+                startActivity(intent)
             }
         }
     }
