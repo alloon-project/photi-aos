@@ -3,6 +3,7 @@ package com.example.alloon_aos.view.fragment.auth
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +42,7 @@ class SignupEmailFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
-        authViewModel.resetCodeValue()
+        authViewModel.resetApiResponseValue()
         setObserve()
         setListener()
 
@@ -91,25 +92,27 @@ class SignupEmailFragment : Fragment() {
     }
 
     fun setObserve() {
-        authViewModel.code.observe(viewLifecycleOwner){
-            if(it.isNotEmpty()) {
-                when(it) {
-                    "EMAIL_VERIFICATION_CODE_SENT" -> {
-                        view?.findNavController()?.navigate(R.id.action_signupEmailFragment_to_signupAuthFragment)
-                    }
-                    "EXISTING_EMAIL" -> {
-                        binding.emailLinearlayout.isVisible = true
-                        binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
-                        binding.nextBtn.isEnabled = false
-                        binding.emailErrorTextview.text = "이미 가입된 이메일이에요"
-                    }
-                    "IO_Exception" ->{
-                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
-                    }
+        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "201 CREATED" -> {
+                    view?.findNavController()?.navigate(R.id.action_signupEmailFragment_to_signupAuthFragment)
+                }
+                "EXISTING_EMAIL" -> {
+                    binding.emailLinearlayout.isVisible = true
+                    binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
+                    binding.nextBtn.isEnabled = false
+                    binding.emailErrorTextview.text = "이미 가입된 이메일이에요"
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
             }
         }
     }
+
 
     fun checkEmailValidation(){
         var email =binding.emailEdittext.text.toString().trim()

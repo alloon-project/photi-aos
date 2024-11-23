@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +41,7 @@ class SignupAuthFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
-        authViewModel.resetCodeValue()
+        authViewModel.resetApiResponseValue()
         authViewModel.resetAuthCodeValue()
         setObserve()
         setListener()
@@ -79,27 +80,29 @@ class SignupAuthFragment : Fragment() {
     }
 
     fun setObserve() {
-        authViewModel.code.observe(viewLifecycleOwner){
-            if(it.isNotEmpty()) {
-                when(it) {
-                    "IO_Exception" ->{
-                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
-                    }
+        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    authViewModel.resetIdValue()
+                    view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
+                }
 
-                    "EMAIL_VERIFICATION_CODE_SENT" -> {
-                        CustomToast.createToast(activity,"인증메일이 재전송되었어요")?.show()
-                    }
+                "201 CREATED" -> {
+                    CustomToast.createToast(activity, "인증메일이 재전송되었어요")?.show()
+                }
 
-                    "EMAIL_VERIFICATION_CODE_INVALID" ->{
-                        binding.authLinearlayout.isVisible = true
-                        binding.authEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
-                        binding.nextBtn.isEnabled = false
-                    }
+                "EMAIL_VERIFICATION_CODE_INVALID" -> {
+                    binding.authLinearlayout.isVisible = true
+                    binding.authEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
+                    binding.nextBtn.isEnabled = false
+                }
 
-                    "EMAIL_VERIFICATION_CODE_VERIFIED" -> {
-                        authViewModel.resetIdValue()
-                        view?.findNavController()?.navigate(R.id.action_signupAuthFragment_to_signupIdFragment)
-                    }
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
             }
         }

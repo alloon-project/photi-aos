@@ -56,7 +56,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         blue  = mContext.getColor(R.color.blue400)
         gray = mContext.getColor(R.color.gray400)
 
-        authViewModel.resetCodeValue()
+        authViewModel.resetApiResponseValue()
         setObserve()
         setListener()
 
@@ -152,25 +152,27 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     }
 
     fun setObserve() {
-        authViewModel.code.observe(viewLifecycleOwner){
-            if(it.isNotEmpty()) {
-                when(it) {
-                    "IO_Exception" ->{
-                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
-                    }
+        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "201 CREATED" -> {
+                    val token = MyApplication.mySharedPreferences.getString("Authorization", "no")
+                    Log.d("TAG", "token : $token")
+                    val intent = Intent(requireContext(), PhotiActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
 
-                    "USER_REGISTERED" -> {
-                        ObjectAnimator.ofInt(binding.pwProgress, "progress", 80,100)
-                            .setDuration(500)
-                            .start()
-                        ListBottomSheet(this,"포티 서비스 이용을 위한\n" +
-                                "필수 약관에 동의해주세요","개인정보 수집 및 이용 동의","서비스 이용약관 동의","동의 후 계속")
-                            .show(activity?.supportFragmentManager!!, "CustomDialog")
-                    }
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
             }
         }
     }
+
 
     @SuppressLint("ResourceAsColor")
     fun checkRequirements() {
@@ -222,6 +224,15 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         }
     }
 
+    fun showBottomList(){
+        ObjectAnimator.ofInt(binding.pwProgress, "progress", 80,100)
+            .setDuration(500)
+            .start()
+        ListBottomSheet(this,"포티 서비스 이용을 위한\n" +
+                "필수 약관에 동의해주세요","개인정보 수집 및 이용 동의","서비스 이용약관 동의","동의 후 계속")
+            .show(activity?.supportFragmentManager!!, "CustomDialog")
+    }
+
     override fun onClickImgButton1() {
         CustomToast.createToast(activity,"첫번째 약관 클릭")?.show()
     }
@@ -231,10 +242,6 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     }
 
     override fun onClickButton() {
-        val token = MyApplication.mySharedPreferences.getString("Authorization","no")
-        Log.d("TAG","token : $token")
-        val intent = Intent(requireContext(), PhotiActivity::class.java)
-        startActivity(intent)
-        requireActivity().finish()
+        authViewModel.signUp()
     }
 }

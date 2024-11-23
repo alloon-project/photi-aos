@@ -2,6 +2,7 @@ package com.example.alloon_aos.view.fragment.auth
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -63,30 +64,7 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
         })
     }
 
-    fun setObserve(){
-        authViewModel.code.observe(viewLifecycleOwner){
-            if(it.isNotEmpty()) {
-                when(it){
-                    "USERNAME_SENT" -> {
-                        CustomOneButtonDialog(this,"이메일로 회원정보를 보내드렸어요","다시 로그인해주세요","확인")
-                            .show(activity?.supportFragmentManager!!, "CustomDialog")
-                    }
-                    "USER_NOT_FOUND" ->{
-                        binding.emailLinearlayout.visibility = View.VISIBLE
-                        binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_error)
-                        binding.errorTextView.text = mContext.getString(R.string.emailerror2)
 
-                    }
-                    "EMAIL_SEND_ERROR" -> {
-                        CustomToast.createToast(activity,"이메일 전송 중 서버 에러가 발생했습니다.")?.show()
-                    }
-                    "IO_Exception" ->{
-                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
-                    }
-                }
-            }
-        }
-    }
 
 
     fun checkEmailValidation(){
@@ -111,6 +89,33 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
         view?.findNavController()?.navigate(R.id.action_findIdFragment_to_loginFragment)
     }
 
+    fun setObserve() {
+        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    CustomOneButtonDialog(
+                        this,
+                        "이메일로 회원정보를 보내드렸어요",
+                        "다시 로그인해주세요",
+                        "확인"
+                    ).show(activity?.supportFragmentManager!!, "CustomDialog")
+                }
 
+                "USER_NOT_FOUND" -> {
+                    binding.emailLinearlayout.visibility = View.VISIBLE
+                    binding.emailEditText.background = mContext.getDrawable(R.drawable.input_line_error)
+                    binding.errorTextView.text = mContext.getString(R.string.emailerror2)
+                }
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
+    }
 
 }

@@ -119,31 +119,33 @@ class LoginFragment : Fragment() {
     }
 
 
-    fun setObserve(){
-        authViewModel.code.observe(viewLifecycleOwner){
-            if(it.isNotEmpty()) {
-                when(it) {
-                    "USERNAME_FIELD_REQUIRED", "PASSWORD_FIELD_REQUIRED" -> {
-                        CustomToast.createToast(activity, "아이디와 비밀번호 모두 입력해주세요")?.show()
-                    }
-                    "USER_LOGIN" -> {
-                        val token = MyApplication.mySharedPreferences.getString("Authorization","no")
-                        Log.d("TAG","token : $token")
-                        val intent = Intent(requireContext(), PhotiActivity::class.java)
-                        startActivity(intent)
-                        requireActivity().finish()
-                    }
-                    "LOGIN_UNAUTHENTICATED" -> {
-                        binding.idEdittext.setBackgroundResource(R.drawable.input_line_error)
-                        binding.pwEdittext.setBackgroundResource(R.drawable.input_line_error)
-                        binding.idLinearlayout.isVisible = true
-                        binding.pwLinearlayout.isVisible = true
-                    }
-                    "IO_Exception" ->{
-                        CustomToast.createToast(activity,"네트워크가 불안정해요. 다시 시도해주세요.","circle")?.show()
-                    }
+    fun setObserve() {
+        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    val token = MyApplication.mySharedPreferences.getString("Authorization", "no")
+                    Log.d("TAG", "token : $token")
+                    val intent = Intent(requireContext(), PhotiActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+
+                "LOGIN_UNAUTHENTICATED", "DELETED_USER" -> {
+                    binding.idEdittext.setBackgroundResource(R.drawable.input_line_error)
+                    binding.pwEdittext.setBackgroundResource(R.drawable.input_line_error)
+                    binding.idLinearlayout.isVisible = true
+                    binding.pwLinearlayout.isVisible = true
+                }
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
             }
         }
     }
+
 }

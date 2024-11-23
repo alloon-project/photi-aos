@@ -248,7 +248,7 @@
 
             <Button
                 android:id="@+id/next_btn"
-                android:onClick="@{() ->viewModel.signUp()}"
+                android:onClick="@{() ->fragment.showBottomList()}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_round_primary"

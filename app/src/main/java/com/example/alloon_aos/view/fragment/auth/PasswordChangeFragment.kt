@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +53,7 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
 
         blue  = mContext.getColor(R.color.blue400)
         grey = mContext.getColor(R.color.gray400)
-        authViewModel.resetCodeValue()
+        authViewModel.resetApiResponseValue()
         setListener()
         setObserve()
 
@@ -108,33 +109,41 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
         })
     }
 
-    fun setObserve(){
-        authViewModel.code.observe(viewLifecycleOwner){
-            if(it.isNotEmpty()) {
-                when(it){
-                    "PASSWORD_CHANGED" -> {
-                        CustomOneButtonDialog(this,"비밀번호가 변경되었어요","새 비밀번호로 로그인 해주세요","확인")
-                            .show(activity?.supportFragmentManager!!, "CustomDialog")
-                    }
-                    "PASSWORD_MATCH_INVALID" -> {
-                        CustomToast.createToast(activity,"비밀번호와 비밀번호 재입력이 동일하지 않습니다.")?.show()
-                    }
-                    "TOKEN_UNAUTHENTICATED" ->{
-                        CustomToast.createToast(activity,"승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
-                    }
-                    "LOGIN_UNAUTHENTICATED" -> {
-                        CustomToast.createToast(activity,"아이디 또는 비밀번호가 틀렸습니다.")?.show()
-                    }
-                    "TOKEN_UNAUTHORIZED"->{
-                        CustomToast.createToast(activity,"권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
-                    }
-                    "IO_Exception" ->{
-                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
-                    }
+    fun setObserve() {
+        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    CustomOneButtonDialog(
+                        this,
+                        "비밀번호가 변경되었어요",
+                        "새 비밀번호로 로그인 해주세요",
+                        "확인"
+                    ).show(activity?.supportFragmentManager!!, "CustomDialog")
+                }
+
+                "PASSWORD_MATCH_INVALID" -> {
+                    CustomToast.createToast(activity, "비밀번호와 비밀번호 재입력이 동일하지 않습니다.")?.show()
+                }
+
+                "LOGIN_UNAUTHENTICATED" -> {
+                    CustomToast.createToast(activity, "아이디 또는 비밀번호가 틀렸습니다.")?.show()
+                }
+
+                "TOKEN_UNAUTHORIZED" -> {
+                    CustomToast.createToast(activity, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
             }
         }
     }
+
 
     fun checkRequirements(){
         binding.apply{

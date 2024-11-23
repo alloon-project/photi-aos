@@ -20,8 +20,7 @@ object CustomToast {
                 binding.icon.setImageResource(R.drawable.ic_check_grey)
             }
             "circle" -> {
-                binding.icon.setImageResource(R.drawable.ic_close_circle)
-                binding.icon.setColorFilter(R.color.red400)
+                binding.icon.setImageResource(R.drawable.ic_close_circle_red)
             }
         }
         return Toast(context).apply {

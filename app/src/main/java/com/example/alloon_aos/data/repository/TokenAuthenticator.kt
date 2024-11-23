@@ -28,7 +28,7 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
 
         val newAccessToken = runBlocking {
             try {
-                val response = apiService.token(RefreshTokenRequest(refreshToken)).execute()
+                val response = apiService.post_token(RefreshTokenRequest(refreshToken)).execute()
                 if (response.isSuccessful) {
                     response.body()?.accessToken
                 } else {

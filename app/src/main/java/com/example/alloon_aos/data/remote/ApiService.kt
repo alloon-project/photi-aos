@@ -11,8 +11,6 @@ import com.example.alloon_aos.data.model.UserData
 import com.example.alloon_aos.data.model.NewPwd
 import com.example.alloon_aos.data.model.RefreshTokenRequest
 import com.example.alloon_aos.data.model.RefreshTokenResponse
-import retrofit2.Response
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.PATCH
 
@@ -59,7 +57,7 @@ interface ApiService {
     ): Call<AuthDTO>
 
     @POST("/api/users/token")
-    fun token(
+    fun post_token(
         @Body refreshToken:RefreshTokenRequest
     ): Call<RefreshTokenResponse>
 }

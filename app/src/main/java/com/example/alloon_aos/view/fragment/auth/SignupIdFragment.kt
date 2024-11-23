@@ -3,6 +3,7 @@ package com.example.alloon_aos.view.fragment.auth
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +44,7 @@ class SignupIdFragment : Fragment() {
         blue  = mContext.getColor(R.color.blue400)
         red = mContext.getColor(R.color.red400)
 
-        authViewModel.resetCodeValue()
+        authViewModel.resetApiResponseValue()
         setObserve()
         setListener()
 
@@ -86,54 +87,46 @@ class SignupIdFragment : Fragment() {
     }
 
     fun setObserve() {
-        authViewModel.code.observe(viewLifecycleOwner){
-            if(it.isNotEmpty()) {
-                when(it) {
-                    "IO_Exception" ->{
-                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
-                    }
-//없어짐
-//                    "USERNAME_LENGTH_INVALID" ->{
-//                        binding.idLinearlayout.isVisible = true
-//                        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
-//                        binding.nextBtn.isEnabled = false
-//                        binding.checkBtn.isEnabled = false
-//                        binding.idErrorTextview.setTextColor(red)
-//                        binding.idIconView.setImageResource(R.drawable.ic_close_default)
-//                        binding.idErrorTextview.text = "아이디는 5~20자만 가능합니다"
-//                    }
+        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    binding.idLinearlayout.isVisible = true
+                    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
+                    binding.idErrorTextview.text = "사용할 수 있는 아이디예요"
+                    binding.idErrorTextview.setTextColor(blue)
+                    binding.idIconView.setImageResource(R.drawable.ic_check_blue)
+                    binding.nextBtn.isEnabled = true
+                }
 
-                    "USERNAME_FORMAT_INVALID"->{
-                        binding.idLinearlayout.isVisible = true
-                        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
-                        binding.nextBtn.isEnabled = false
-                        binding.checkBtn.isEnabled = false
-                        binding.idErrorTextview.setTextColor(red)
-                        binding.idIconView.setImageResource(R.drawable.ic_close_default)
-                        binding.idErrorTextview.text = "아이디는 소문자 영어, 숫자, 특수문자(_)의 조합으로 입력해 주세요"
-                    }
+                "USERNAME_FORMAT_INVALID" -> {
+                    binding.idLinearlayout.isVisible = true
+                    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
+                    binding.nextBtn.isEnabled = false
+                    binding.checkBtn.isEnabled = false
+                    binding.idErrorTextview.setTextColor(red)
+                    binding.idIconView.setImageResource(R.drawable.ic_close_default)
+                    binding.idErrorTextview.text = "아이디는 소문자 영어, 숫자, 특수문자(_)의 조합으로 입력해 주세요"
+                }
 
-                    //이미 사용중인 아이디 코드 확정 아님!!!!
-                    "UNAVAILABLE_USERNAME" -> {
-                        binding.idLinearlayout.isVisible = true
-                        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
-                        binding.nextBtn.isEnabled = false
-                        binding.checkBtn.isEnabled = false
-                        binding.idErrorTextview.setTextColor(red)
-                        binding.idIconView.setImageResource(R.drawable.ic_close_default)
-                        binding.idErrorTextview.text = "이미 사용중인 아이디예요"
-                    }
+                "UNAVAILABLE_USERNAME" -> {
+                    binding.idLinearlayout.isVisible = true
+                    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
+                    binding.nextBtn.isEnabled = false
+                    binding.checkBtn.isEnabled = false
+                    binding.idErrorTextview.setTextColor(red)
+                    binding.idIconView.setImageResource(R.drawable.ic_close_default)
+                    binding.idErrorTextview.text = "이미 가입된 아이디예요"
+                }
 
-                    "USERNAME_AVAILABLE" -> {
-                        binding.idLinearlayout.isVisible = true
-                        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
-                        binding.idErrorTextview.text = "사용할 수 있는 아이디예요"
-                        binding.idErrorTextview.setTextColor(blue)
-                        binding.idIconView.setImageResource(R.drawable.ic_check_blue)
-                        binding.nextBtn.isEnabled = true
-                    }
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
             }
         }
     }
+
 }

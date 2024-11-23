@@ -2,6 +2,7 @@ package com.example.alloon_aos.view.fragment.auth
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -35,10 +36,10 @@ class PasswordEnterFragment : Fragment() {
         val mActivity = activity as AuthActivity
         mActivity.setAppBar("비밀번호 찾기")
 
-        authViewModel.resetCodeValue()
+        authViewModel.resetApiResponseValue()
         authViewModel.password = ""
         setListener()
-        setObserver()
+        setObserve()
         return binding.root
     }
 
@@ -65,40 +66,42 @@ class PasswordEnterFragment : Fragment() {
         })
     }
 
-    fun setObserver(){
-        authViewModel.code.observe(viewLifecycleOwner){
-            if(it.isNotEmpty()) {
-                when(it){
-                    "PASSWORD_SENT" -> {
-                        CustomToast.createToast(activity,"인증메일이 재전송되었어요")?.show()
+    fun setObserve() {
+        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    when (response.action) {
+                        "login" -> {
+                            view?.findNavController()?.navigate(R.id.action_passwordEnterFragment_to_passwordChangeFragment)
+                        }
+                        "sendEmailCode" -> {
+                            CustomToast.createToast(activity, "인증메일이 재전송되었어요")?.show()
+                        }
+                        else -> {
+                            Log.d("Observer", "Unhandled action for 200 OK: ${response.action}")
+                        }
                     }
-                    "EMAIL_FIELD_REQUIRED" -> {
-                        CustomToast.createToast(activity,"이메일은 필수 입력입니다")?.show()
-                    }
-                    "USERNAME_FIELD_REQUIRED" ->{
-                        CustomToast.createToast(activity,"아이디는 필수 입력입니다")?.show()
+                }
 
-                    }
-                    "USER_NOT_FOUND" -> {
-                        CustomToast.createToast(activity,"아이디 혹은 이메일이 일치하지 않아요")?.show()
-                    }
-                    "EMAIL_SEND_ERROR" ->{
-                        CustomToast.createToast(activity,"이메일 전송 중 서버 에러가 발생했습니다")?.show()
-                    }
-                    "IO_Exception" ->{
-                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
-                    }
-                    "USER_LOGIN" -> {
-                        view?.findNavController()?.navigate(R.id.action_passwordEnterFragment_to_passwordChangeFragment)
-                    }
-                    "LOGIN_UNAUTHENTICATED","PASSWORD_FIELD_REQUIRED" -> {
-                        //비밀번호 불일치
-                        binding.newPasswordEditText.setBackgroundResource(R.drawable.input_line_error)
-                        binding.emailLinearlayout.visibility = View.VISIBLE
-                    }
+                "USER_LOGIN" -> { // 미완성, 임시 비밀번호 일치
+                    view?.findNavController()?.navigate(R.id.action_passwordEnterFragment_to_passwordChangeFragment)
+                }
+
+                "LOGIN_UNAUTHENTICATED", "DELETED_USER" -> {
+                    binding.newPasswordEditText.setBackgroundResource(R.drawable.input_line_error)
+                    binding.emailLinearlayout.visibility = View.VISIBLE
+                }
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
             }
         }
     }
+
 
 }

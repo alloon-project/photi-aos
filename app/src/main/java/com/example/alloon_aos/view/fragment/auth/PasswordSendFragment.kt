@@ -2,6 +2,7 @@ package com.example.alloon_aos.view.fragment.auth
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +42,7 @@ class PasswordSendFragment : Fragment() {
         authViewModel.resetAllValue()
 
         setListener()
-        setObserver()
+        setObserve()
 
         return binding.root
     }
@@ -83,33 +84,28 @@ class PasswordSendFragment : Fragment() {
         })
     }
 
-    fun setObserver(){
-        authViewModel.code.observe(viewLifecycleOwner){
-            if(it.isNotEmpty()) {
-                when(it){
-                    "PASSWORD_SENT" -> {
-                        view?.findNavController()?.navigate(R.id.action_passwordSendFragment_to_passwordEnterFragment)
-                    }
-                    "EMAIL_FIELD_REQUIRED" -> {
-                        CustomToast.createToast(activity,"이메일은 필수 입력입니다")?.show()
-                    }
-                    "USERNAME_FIELD_REQUIRED" ->{
-                        CustomToast.createToast(activity,"아이디는 필수 입력입니다")?.show()
+    fun setObserve() {
+        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    view?.findNavController()?.navigate(R.id.action_passwordSendFragment_to_passwordEnterFragment)
+                }
 
-                    }
-                    "USER_NOT_FOUND" -> {
-                        CustomToast.createToast(activity,"아이디 혹은 이메일이 일치하지 않아요")?.show()
-                    }
-                    "EMAIL_SEND_ERROR" ->{
-                        CustomToast.createToast(activity,"이메일 전송 중 서버 에러가 발생했습니다")?.show()
-                    }
-                    "IO_Exception" ->{
-                        CustomToast.createToast(activity,"IO_Exception: 인터넷이나 서버 연결을 확인해주세요")?.show()
-                    }
+                "USER_NOT_FOUND" -> {
+                    CustomToast.createToast(activity, "아이디 혹은 이메일이 일치하지 않아요")?.show()
+                }
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
             }
         }
     }
+
 
     fun checkEmailValidation(){
         var email =binding.emailEditText.text.toString().trim()
