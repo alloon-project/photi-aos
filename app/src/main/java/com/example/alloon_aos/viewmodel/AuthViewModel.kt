@@ -4,19 +4,18 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.alloon_aos.data.model.ApiResponse
-import com.example.alloon_aos.data.model.AuthDTO
-import com.example.alloon_aos.data.model.EmailCode
-import com.example.alloon_aos.data.model.NewPwd
-import com.example.alloon_aos.data.model.UserData
+import com.example.alloon_aos.data.model.request.EmailCode
+import com.example.alloon_aos.data.model.request.NewPwd
+import com.example.alloon_aos.data.model.request.UserData
+import com.example.alloon_aos.data.model.response.AuthResponse
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.MyRepository
 import com.example.alloon_aos.data.repository.MainRepositoryCallback
 import com.example.alloon_aos.view.ui.util.StringUtil
-import com.google.android.material.tabs.TabLayout.TabGravity
 import okio.IOException
 import org.json.JSONObject
 
-class  AuthViewModel : ViewModel() {
+class AuthViewModel : ViewModel() {
 
     companion object {
         private const val TAG = "AUTH"
@@ -33,7 +32,6 @@ class  AuthViewModel : ViewModel() {
     var newPassword = ""
     var checkPassword = ""
 
-    // init Code
     fun resetAllValue() {
         apiResponse.value = ApiResponse()
         email = ""
@@ -41,7 +39,9 @@ class  AuthViewModel : ViewModel() {
         id = ""
         password = ""
         newPassword = ""
+        checkPassword = ""
     }
+
     fun resetApiResponseValue() {
         apiResponse.value = ApiResponse()
     }
@@ -58,208 +58,163 @@ class  AuthViewModel : ViewModel() {
         password = ""
         newPassword = ""
     }
-/*
-*
-*
-* 회원가입
-*
-**/
-    fun sendEmailCode(){
+
+    fun sendEmailCode() {
         email = StringUtil.removeSpaces(email)
-        repository.sendEmailCode(mapOf("email" to email),object :
-            MainRepositoryCallback<AuthDTO> {
-            override fun onSuccess(data: AuthDTO) {
+        repository.sendEmailCode(mapOf("email" to email), object :
+            MainRepositoryCallback<AuthResponse> {
+            override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
                 apiResponse.value = ApiResponse(result, "sendEmailCode")
-                Log.d(TAG,"sendEmailCode: $mes $result")
+                Log.d(TAG, "sendEmailCode: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
-                when(error){
-                    is IOException -> {
-                        apiResponse.value = ApiResponse("IO_Exception")
-                    }
-                    else -> {
-                        val jObjError = JSONObject(error.message.toString())
-                        apiResponse.value = ApiResponse(jObjError.getString("code"))
-                        Log.d(TAG, "sendEamilCode error: ${apiResponse.value!!.code}")
-                    }
-                }
+                handleFailure(error)
             }
         })
     }
 
     fun verifyEmailCode() {
+        email = StringUtil.removeSpaces(email)
+        email_code = StringUtil.removeSpaces(email_code)
         repository.verifyEmailCode(EmailCode(email, email_code), object :
-            MainRepositoryCallback<AuthDTO> {
-            override fun onSuccess(data: AuthDTO) {
+            MainRepositoryCallback<AuthResponse> {
+            override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result) // action은 기본값
+                apiResponse.value = ApiResponse(result)
                 Log.d(TAG, "verifyEmailCode: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
-                when (error) {
-                    is IOException -> {
-                        apiResponse.value = ApiResponse("IO_Exception")
-                    }
-                    else -> {
-                        val jObjError = JSONObject(error.message.toString())
-                        apiResponse.value = ApiResponse(jObjError.getString("code"))
-                        Log.d(TAG, "verifyEmailCode error: ${apiResponse.value!!.code}")
-                    }
-                }
+                handleFailure(error)
             }
         })
     }
 
     fun verifyId() {
-        repository.verifyId(id, object : MainRepositoryCallback<AuthDTO> {
-            override fun onSuccess(data: AuthDTO) {
+        id = StringUtil.removeSpaces(id)
+        repository.verifyId(id, object : MainRepositoryCallback<AuthResponse> {
+            override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result) // action은 기본값
+                apiResponse.value = ApiResponse(result)
                 Log.d(TAG, "verifyId: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
-                when (error) {
-                    is IOException -> {
-                        apiResponse.value = ApiResponse("IO_Exception")
-                    }
-                    else -> {
-                        val jObjError = JSONObject(error.message.toString())
-                        apiResponse.value = ApiResponse(jObjError.getString("code"))
-                        Log.d(TAG, "verifyId error: ${apiResponse.value!!.code}")
-                    }
-                }
+                handleFailure(error)
             }
         })
     }
 
     fun signUp() {
+        email = StringUtil.removeSpaces(email)
+        email_code = StringUtil.removeSpaces(email_code)
+        id = StringUtil.removeSpaces(id)
+        password = StringUtil.removeSpaces(password)
+        checkPassword = StringUtil.removeSpaces(checkPassword)
         repository.signUp(UserData(email, email_code, id, password, checkPassword), object :
-            MainRepositoryCallback<AuthDTO> {
-            override fun onSuccess(data: AuthDTO) {
+            MainRepositoryCallback<AuthResponse> {
+            override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result) // action은 기본값
+                apiResponse.value = ApiResponse(result)
                 Log.d(TAG, "signUp: $id $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
-                when (error) {
-                    is IOException -> {
-                        apiResponse.value = ApiResponse("IO_Exception")
-                    }
-                    else -> {
-                        val jObjError = JSONObject(error.message.toString())
-                        apiResponse.value = ApiResponse(jObjError.getString("code"))
-                        Log.d(TAG, "signUp error: ${apiResponse.value!!.code}")
-                    }
-                }
+                handleFailure(error)
             }
         })
     }
 
     fun login() {
+        id = StringUtil.removeSpaces(id)
+        password = StringUtil.removeSpaces(password)
         val user = UserData(username = id, password = password)
-        repository.login(user, object : MainRepositoryCallback<AuthDTO> {
-            override fun onSuccess(data: AuthDTO) {
+        repository.login(user, object : MainRepositoryCallback<AuthResponse> {
+            override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result,"login")
+                apiResponse.value = ApiResponse(result, "login")
                 Log.d(TAG, "login: $id $result")
             }
 
             override fun onFailure(error: Throwable) {
-                when (error) {
-                    is IOException -> {
-                        apiResponse.value = ApiResponse("IO_Exception")
-                    }
-                    else -> {
-                        val jObjError = JSONObject(error.message.toString())
-                        apiResponse.value = ApiResponse(jObjError.getString("code"))
-                        Log.d(TAG, "login error: ${apiResponse.value!!.code}")
-                    }
-                }
+                handleFailure(error)
             }
         })
     }
 
     fun checkSignedUp() {
-        repository.findId(mapOf("email" to email), object : MainRepositoryCallback<AuthDTO> {
-            override fun onSuccess(data: AuthDTO) {
+        email = StringUtil.removeSpaces(email)
+        repository.findId(mapOf("email" to email), object : MainRepositoryCallback<AuthResponse> {
+            override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result) // action은 기본값
+                apiResponse.value = ApiResponse(result)
                 Log.d(TAG, "checkSignedUp: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
-                when (error) {
-                    is IOException -> {
-                        apiResponse.value = ApiResponse("IO_Exception")
-                    }
-                    else -> {
-                        val jObjError = JSONObject(error.message.toString())
-                        apiResponse.value = ApiResponse(jObjError.getString("code"))
-                        Log.d(TAG, "checkSignedUp error: ${apiResponse.value!!.code}")
-                    }
-                }
+                handleFailure(error)
             }
         })
     }
 
     fun sendNewPassword() {
+        email = StringUtil.removeSpaces(email)
+        id = StringUtil.removeSpaces(id)
         repository.sendNewPassword(UserData(email = email, username = id), object :
-            MainRepositoryCallback<AuthDTO> {
-            override fun onSuccess(data: AuthDTO) {
+            MainRepositoryCallback<AuthResponse> {
+            override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result) // action은 기본값
+                apiResponse.value = ApiResponse(result)
                 Log.d(TAG, "sendNewPassword: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
-                when (error) {
-                    is IOException -> {
-                        apiResponse.value = ApiResponse("IO_Exception")
-                    }
-                    else -> {
-                        val jObjError = JSONObject(error.message.toString())
-                        apiResponse.value = ApiResponse(jObjError.getString("code"))
-                        Log.d(TAG, "sendNewPassword error: ${apiResponse.value!!.code}")
-                    }
-                }
+                handleFailure(error)
             }
         })
     }
 
     fun modifyPassword() {
+        password = StringUtil.removeSpaces(password)
+        newPassword = StringUtil.removeSpaces(newPassword)
         val newPwd = NewPwd(password, newPassword, newPassword)
-        repository.modifyPassword(newPwd, object : MainRepositoryCallback<AuthDTO> {
-            override fun onSuccess(data: AuthDTO) {
+        repository.modifyPassword(newPwd, object : MainRepositoryCallback<AuthResponse> {
+            override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result) // action은 기본값
+                apiResponse.value = ApiResponse(result)
                 Log.d(TAG, "modifyPassword: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
-                when (error) {
-                    is IOException -> {
-                        apiResponse.value = ApiResponse("IO_Exception")
-                    }
-                    else -> {
-                        val jObjError = JSONObject(error.message.toString())
-                        apiResponse.value = ApiResponse(jObjError.getString("code"))
-                        Log.d(TAG, "modifyPassword error: ${apiResponse.value!!.code}")
-                    }
-                }
+                handleFailure(error)
             }
         })
+    }
+
+    private fun handleFailure(error: Throwable) {
+        when (error) {
+            is IOException -> {
+                apiResponse.value = ApiResponse("IO_Exception")
+            }
+            else -> {
+                try {
+                    val jObjError = JSONObject(error.message.toString())
+                    apiResponse.value = ApiResponse(jObjError.getString("code"))
+                    Log.d(TAG, "Error: ${apiResponse.value!!.code}")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error parsing error response: ${e.message}")
+                }
+            }
+        }
     }
 }

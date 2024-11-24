@@ -2,7 +2,7 @@ package com.example.alloon_aos.data.repository
 
 import android.util.Log
 import com.example.alloon_aos.MyApplication
-import com.example.alloon_aos.data.model.RefreshTokenRequest
+import com.example.alloon_aos.data.model.request.RefreshTokenRequest
 import com.example.alloon_aos.data.remote.RetrofitClient.apiService
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator

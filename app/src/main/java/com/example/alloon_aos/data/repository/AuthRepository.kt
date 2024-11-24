@@ -1,11 +1,8 @@
 package com.example.alloon_aos.data.repository
 
-import android.util.Log
 import com.example.alloon_aos.MyApplication
-import com.example.alloon_aos.data.model.EmailCode
-import com.example.alloon_aos.data.model.AuthDTO
-import com.example.alloon_aos.data.model.UserData
-import com.example.alloon_aos.data.model.NewPwd
+import com.example.alloon_aos.data.model.request.*
+import com.example.alloon_aos.data.model.response.AuthResponse
 import com.example.alloon_aos.data.remote.ApiService
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,71 +15,64 @@ interface MainRepositoryCallback<T> {
 
 class MyRepository(private val apiService: ApiService) {
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
-    //private val email : Map<String, String> = mapOf("email" to "ejsong428@gmail.com")
 
-    fun sendEmailCode(email: Map<String, String>,callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.post_sendEmailCode(email).enqueue(object : Callback<AuthDTO> {
-            override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
+    fun sendEmailCode(email: Map<String, String>, callback: MainRepositoryCallback<AuthResponse>) {
+        apiService.post_sendEmailCode(email).enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
-                    //Exception 400 : ex.이메일 인증을 먼저 해주세요.
-                    var error = response.errorBody()?.string()!!
+                    val error = response.errorBody()?.string()!!
                     callback.onFailure(Throwable(error))
                 }
             }
 
-            override fun onFailure(call: Call<AuthDTO>, t: Throwable) {
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                 callback.onFailure(t)
-
             }
         })
     }
 
-    fun verifyEmailCode(emailCode: EmailCode,callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.patch_verifyEmailCode(emailCode).enqueue(object : Callback<AuthDTO> {
-            override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
+    fun verifyEmailCode(emailCode: EmailCode, callback: MainRepositoryCallback<AuthResponse>) {
+        apiService.patch_verifyEmailCode(emailCode).enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
-                    var error = response.errorBody()?.string()!!
+                    val error = response.errorBody()?.string()!!
                     callback.onFailure(Throwable(error))
                 }
             }
 
-            override fun onFailure(call: Call<AuthDTO>, t: Throwable) {
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                 callback.onFailure(t)
-
             }
         })
     }
 
-    fun verifyId(name:String, callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.get_verifyId(name).enqueue(object : Callback<AuthDTO> {
-            override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
+    fun verifyId(name: String, callback: MainRepositoryCallback<AuthResponse>) {
+        apiService.get_verifyId(name).enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
-                    var error = response.errorBody()?.string()!!
+                    val error = response.errorBody()?.string()!!
                     callback.onFailure(Throwable(error))
                 }
             }
 
-            override fun onFailure(call: Call<AuthDTO>, t: Throwable) {
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                 callback.onFailure(t)
-
             }
         })
     }
 
-    fun signUp(userData: UserData,callback: MainRepositoryCallback<AuthDTO>) {
-        //val data = UserData("byeolstar12@naver.com","NwEkGX","hb_hb_hb","password1!","password1!")
-        apiService.post_signUp(userData).enqueue(object : Callback<AuthDTO> {
-            override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
+    fun signUp(userData: UserData, callback: MainRepositoryCallback<AuthResponse>) {
+        apiService.post_signUp(userData).enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 if (response.isSuccessful) {
                     val accessToken = response.headers()["authorization"]?.replace("Bearer ", "")
                     val refreshToken = response.headers()["refresh-Token"]
-                    // 액세스 토큰과 리프레시 토큰 저장
                     if (accessToken != null) {
                         tokenManager.saveAccessToken(accessToken)
                     }
@@ -91,63 +81,57 @@ class MyRepository(private val apiService: ApiService) {
                     }
                     callback.onSuccess(response.body()!!)
                 } else {
-                    var error = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(error))
-                }
-
-            }
-
-            override fun onFailure(call: Call<AuthDTO>, t: Throwable) {
-                callback.onFailure(t)
-
-            }
-        })
-    }
-
-    fun findId(email: Map<String, String>,callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.post_findId(email).enqueue(object : Callback<AuthDTO> {
-            override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
-                if (response.isSuccessful) {
-                    callback.onSuccess(response.body()!!)
-                }
-                else {
-                    var error = response.errorBody()?.string()!!
+                    val error = response.errorBody()?.string()!!
                     callback.onFailure(Throwable(error))
                 }
             }
 
-            override fun onFailure(call: Call<AuthDTO>, t: Throwable) {
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                 callback.onFailure(t)
-
             }
         })
     }
 
-    fun sendNewPassword(user: UserData, callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.post_findPwd(user).enqueue(object : Callback<AuthDTO> {
-            override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
+    fun findId(email: Map<String, String>, callback: MainRepositoryCallback<AuthResponse>) {
+        apiService.post_findId(email).enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
-                    var error = response.errorBody()?.string()!!
+                    val error = response.errorBody()?.string()!!
                     callback.onFailure(Throwable(error))
                 }
             }
 
-            override fun onFailure(call: Call<AuthDTO>, t: Throwable) {
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                 callback.onFailure(t)
-
             }
         })
     }
 
-    fun login(user: UserData,callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.post_login(user).enqueue(object : Callback<AuthDTO> {
-            override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
+    fun sendNewPassword(user: UserData, callback: MainRepositoryCallback<AuthResponse>) {
+        apiService.post_findPwd(user).enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(response.body()!!)
+                } else {
+                    val error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
+                }
+            }
+
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
+
+    fun login(user: UserData, callback: MainRepositoryCallback<AuthResponse>) {
+        apiService.post_login(user).enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 if (response.isSuccessful) {
                     val accessToken = response.headers()["authorization"]?.replace("Bearer ", "")
                     val refreshToken = response.headers()["refresh-Token"]
-                    // 액세스 토큰과 리프레시 토큰 저장
                     if (accessToken != null) {
                         tokenManager.saveAccessToken(accessToken)
                     }
@@ -156,32 +140,30 @@ class MyRepository(private val apiService: ApiService) {
                     }
                     callback.onSuccess(response.body()!!)
                 } else {
-                    var error = response.errorBody()?.string()!!
+                    val error = response.errorBody()?.string()!!
                     callback.onFailure(Throwable(error))
                 }
             }
 
-            override fun onFailure(call: Call<AuthDTO>, t: Throwable) {
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                 callback.onFailure(t)
-
             }
         })
     }
 
-    fun modifyPassword(newPwd : NewPwd, callback: MainRepositoryCallback<AuthDTO>) {
-        apiService.patch_modifyPwd(newPwd).enqueue(object : Callback<AuthDTO> {
-            override fun onResponse(call: Call<AuthDTO>, response: Response<AuthDTO>) {
+    fun modifyPassword(newPwd: NewPwd, callback: MainRepositoryCallback<AuthResponse>) {
+        apiService.patch_modifyPwd(newPwd).enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
-                    var error = response.errorBody()?.string()!!
+                    val error = response.errorBody()?.string()!!
                     callback.onFailure(Throwable(error))
                 }
             }
 
-            override fun onFailure(call: Call<AuthDTO>, t: Throwable) {
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                 callback.onFailure(t)
-
             }
         })
     }
