@@ -1,6 +1,7 @@
 package com.example.alloon_aos.data.repository
 
 import android.util.Log
+import com.example.alloon_aos.data.model.ApiConfig
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Protocol
@@ -13,14 +14,15 @@ class TokenInterceptor @Inject constructor( // request 헤더에 jwt 토큰 추�
     private val tokenManager: TokenManager
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        Log.d("test","interceptor~")
+        Log.d("token","interceptor")
 
         val request = chain.request()
         val url = request.url.toString()
+        val method = request.method
 
         val newRequestBuilder = request.newBuilder()
 
-        if (url.contains("/password")) {
+        if (shouldAddToken(url, method)) {
             val token: String = runBlocking {
                 tokenManager.getAccessToken()
             } ?: return errorResponse(chain.request())
@@ -30,6 +32,11 @@ class TokenInterceptor @Inject constructor( // request 헤더에 jwt 토큰 추�
 
         val newRequest = newRequestBuilder.build()
         return chain.proceed(newRequest)
+    }
+
+    private fun shouldAddToken(url: String, method: String): Boolean {
+        // URL이 ApiConfig.tokenRequiredApis에 설정된 URL과 일치하고, 메서드가 해당 값과 일치하는지 확인
+        return ApiConfig.tokenRequiredApis[url] == method
     }
 
     private fun errorResponse(request: Request): Response = Response.Builder()
