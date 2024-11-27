@@ -129,6 +129,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 checkRequirements()
+                binding.checkPwEdittext.setText("")
             }
         })
 
@@ -155,9 +156,8 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "201 CREATED" -> {
-                    val token = MyApplication.mySharedPreferences.getString("Authorization", "no")
-                    Log.d("TAG", "token : $token")
                     val intent = Intent(requireContext(), PhotiActivity::class.java)
+                    intent.putExtra("IS_FROM","LOGIN")
                     startActivity(intent)
                     requireActivity().finish()
                 }

@@ -17,6 +17,11 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
     override fun authenticate(route: Route?, response: Response): Request? {
         Log.d("test","authenticator~")
 
+        if (response.request.url.toString().contains("login")) {
+            // 로그인 요청일 경우 토큰 인증을 처리하지 않음
+            return null
+        }
+
         val refreshToken = runBlocking {
             tokenManager.getRefreshToken()
         }

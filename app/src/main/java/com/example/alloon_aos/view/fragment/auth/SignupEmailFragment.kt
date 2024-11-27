@@ -95,9 +95,10 @@ class SignupEmailFragment : Fragment() {
         authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "201 CREATED" -> {
+                    authViewModel.resetAuthCodeValue()
                     view?.findNavController()?.navigate(R.id.action_signupEmailFragment_to_signupAuthFragment)
                 }
-                "EXISTING_EMAIL" -> {
+                "EXISTING_EMAIL", "DELETED_USER" -> {
                     binding.emailLinearlayout.isVisible = true
                     binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                     binding.nextBtn.isEnabled = false

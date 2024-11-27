@@ -123,9 +123,8 @@ class LoginFragment : Fragment() {
         authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    val token = MyApplication.mySharedPreferences.getString("Authorization", "no")
-                    Log.d("TAG", "token : $token")
                     val intent = Intent(requireContext(), PhotiActivity::class.java)
+                    intent.putExtra("IS_FROM","LOGIN")
                     startActivity(intent)
                     requireActivity().finish()
                 }

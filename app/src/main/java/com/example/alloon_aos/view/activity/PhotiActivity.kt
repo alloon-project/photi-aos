@@ -47,8 +47,10 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
             }
             "LEAVE" -> {
                 CustomToast.createToast(this, "챌린지 탈퇴가 완료됐어요.")?.show()
-                //binding.navigationView.id = R.id.challenge_icon
                 setBottomNavigation(TAG_PROFILE)
+            }
+            "LOGIN" -> {
+                CustomToast.createToast(this, "photi님 환영합니다!")?.show()
             }
         }
     }
@@ -170,6 +172,7 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
     }
 
     override fun onClickSecondButton() {
-        println("로그인하기 페이지로 이동")
+        val intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent)
     }
 }

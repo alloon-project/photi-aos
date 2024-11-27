@@ -3,6 +3,8 @@ package com.example.alloon_aos.view.fragment.auth
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -79,9 +81,33 @@ class SignupIdFragment : Fragment() {
                 if (visible) {
                     binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
                     binding.idLinearlayout.isVisible = false
+                } else {
                     binding.checkBtn.isEnabled = true
+                    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
+
+                    val length = binding.idEdittext.text.length
+                    if (length < 5 || length > 20) {
+                        setErrorMsg()
+                        binding.idErrorTextview.text = "아이디는 5~20자만 가능해요"
+                    }
+
+                    val regex = "^[a-z0-9_]+$".toRegex()
+                    if (!binding.idEdittext.text.matches(regex)) {
+                        setErrorMsg()
+                        binding.idErrorTextview.text = "아이디는 소문자 영어, 숫자, 특수문자(_)의 조합으로 입력해 주세요"
+                    }
                 }
-                else    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
+            }
+        })
+
+        binding.idEdittext.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.nextBtn.isEnabled = false
+                binding.checkBtn.isEnabled = false
             }
         })
     }
@@ -98,23 +124,8 @@ class SignupIdFragment : Fragment() {
                     binding.nextBtn.isEnabled = true
                 }
 
-                "USERNAME_FORMAT_INVALID" -> {
-                    binding.idLinearlayout.isVisible = true
-                    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
-                    binding.nextBtn.isEnabled = false
-                    binding.checkBtn.isEnabled = false
-                    binding.idErrorTextview.setTextColor(red)
-                    binding.idIconView.setImageResource(R.drawable.ic_close_default)
-                    binding.idErrorTextview.text = "아이디는 소문자 영어, 숫자, 특수문자(_)의 조합으로 입력해 주세요"
-                }
-
-                "UNAVAILABLE_USERNAME" -> {
-                    binding.idLinearlayout.isVisible = true
-                    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
-                    binding.nextBtn.isEnabled = false
-                    binding.checkBtn.isEnabled = false
-                    binding.idErrorTextview.setTextColor(red)
-                    binding.idIconView.setImageResource(R.drawable.ic_close_default)
+                "EXISTING_USERNAME", "UNAVAILABLE_USERNAME" -> {
+                    setErrorMsg()
                     binding.idErrorTextview.text = "이미 가입된 아이디예요"
                 }
 
@@ -129,4 +140,12 @@ class SignupIdFragment : Fragment() {
         }
     }
 
+    private fun setErrorMsg() {
+        binding.idLinearlayout.isVisible = true
+        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
+        binding.nextBtn.isEnabled = false
+        binding.checkBtn.isEnabled = false
+        binding.idErrorTextview.setTextColor(red)
+        binding.idIconView.setImageResource(R.drawable.ic_close_default)
+    }
 }

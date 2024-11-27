@@ -38,10 +38,10 @@ class HomeFragment : Fragment() {
 
         val mActivity = activity as PhotiActivity
 
-//        if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
-//            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
-//        else
-        childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
+        if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
+            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
+        else
+            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
 
         //비회원
         // childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()

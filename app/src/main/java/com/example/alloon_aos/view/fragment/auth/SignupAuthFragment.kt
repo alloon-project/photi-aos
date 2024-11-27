@@ -4,6 +4,8 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +44,6 @@ class SignupAuthFragment : Fragment() {
         mActivity.setAppBar("")
 
         authViewModel.resetApiResponseValue()
-        authViewModel.resetAuthCodeValue()
         setObserve()
         setListener()
 
@@ -72,9 +73,20 @@ class SignupAuthFragment : Fragment() {
                 if (visible) {
                     binding.authEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
                     binding.authLinearlayout.isVisible = false
-                    binding.nextBtn.isEnabled = true
                 }
                 else    binding.authEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
+            }
+        })
+
+        binding.authEdittext.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.nextBtn.isEnabled = false
+                if(s!!.length == 4)
+                    binding.nextBtn.isEnabled = true
             }
         })
     }
