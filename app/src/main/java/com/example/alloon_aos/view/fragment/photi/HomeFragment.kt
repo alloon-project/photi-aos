@@ -38,22 +38,20 @@ class HomeFragment : Fragment() {
 
         val mActivity = activity as PhotiActivity
 
-        if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
-            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
-        else
-            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
-
-        //비회원
-        // childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
-
-        //회원 챌린지없음
-        // childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
-
-        //회원 챌린지 있음
-        // childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
-
-        //CustomToast.createToast(activity,tokenManager.getAccessToken().toString())?.show()
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        if (tokenManager.hasNoTokens()) {
+            //비회원
+            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
+        } else {
+            //회원 챌린지 있음
+            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
+            //회원 챌린지 없음
+            // childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
+        }
+    }
 }

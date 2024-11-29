@@ -7,14 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.repository.TokenManager
 import com.example.alloon_aos.databinding.FragmentChallengeBinding
+import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.activity.CreateActivity
 import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.activity.SearchActivity
+import com.example.alloon_aos.view.ui.component.dialog.JoinGuestDialog
+import com.example.alloon_aos.view.ui.component.dialog.JoinGuestDialogInterface
 import com.google.android.material.tabs.TabLayout
 
-class ChallengeFragment : Fragment() {
+class ChallengeFragment : Fragment(), JoinGuestDialogInterface {
     private lateinit var binding : FragmentChallengeBinding
+    private lateinit var mActivity: PhotiActivity
+    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
+
     lateinit var commendTab: ChallengeCommendFragment
     lateinit var latestTab: ChallengeLatestFragment
 
@@ -28,8 +37,16 @@ class ChallengeFragment : Fragment() {
         commendTab = ChallengeCommendFragment()
         latestTab = ChallengeLatestFragment()
 
-        val mActivity = activity as PhotiActivity
+        mActivity = activity as PhotiActivity
         mActivity.supportFragmentManager.beginTransaction().add(R.id.frame_layout, commendTab).commit()
+
+        setListener()
+
+
+        return binding.root
+    }
+
+    private fun setListener() {
 
         binding.searchEdittext.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
@@ -66,6 +83,19 @@ class ChallengeFragment : Fragment() {
 
         })
 
-        return binding.root
+        binding.createBtn.setOnClickListener {
+            if (tokenManager.hasNoTokens()) {
+                JoinGuestDialog(this)
+                    .show(activity?.supportFragmentManager!!, "CustomDialog")
+            } else {
+                val intent = Intent(requireContext(), CreateActivity::class.java)
+                startActivity(intent)
+            }
+        }
+    }
+
+    override fun onClickLoginButton() {
+        val intent = Intent(requireContext(), AuthActivity::class.java)
+        startActivity(intent)
     }
 }

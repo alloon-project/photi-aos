@@ -103,6 +103,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/line_view"/>
 
             <ImageButton
+                android:id="@+id/create_btn"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_gravity="bottom"

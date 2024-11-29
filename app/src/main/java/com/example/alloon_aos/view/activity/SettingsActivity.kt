@@ -52,7 +52,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun logout(){
-        finish()
+        finishAffinity()
         val intent = Intent(this, PhotiActivity::class.java).apply {
             putExtra("IS_FROM","LOGOUT")
         }

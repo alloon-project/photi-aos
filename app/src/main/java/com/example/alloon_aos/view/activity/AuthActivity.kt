@@ -2,7 +2,6 @@ package com.example.alloon_aos.view.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -10,11 +9,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.example.alloon_aos.MyApplication.Companion.mySharedPreferences
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityAuthBinding
-import com.example.alloon_aos.view.fragment.auth.PasswordChangeFragment
-import com.example.alloon_aos.view.fragment.auth.PasswordSendFragment
 
 class AuthActivity : AppCompatActivity() {
    lateinit var binding : ActivityAuthBinding
@@ -64,7 +60,7 @@ class AuthActivity : AppCompatActivity() {
 
     fun finishActivity() {
         val resultIntent = Intent().apply {
-            putExtra("isFromPasswordChangeFragment", true)
+            putExtra("IS_FROM_LOGIN", true)
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()

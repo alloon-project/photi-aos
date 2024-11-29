@@ -178,6 +178,10 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     }
 
     fun finishActivity(){
+        if (isTaskRoot) { // 최상위 스택에 있으면 홈으로
+            val intent = Intent(this, PhotiActivity::class.java)
+            startActivity(intent)
+        }
         finish()
     }
 

@@ -1,9 +1,12 @@
 package com.example.alloon_aos.view.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -27,6 +30,7 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     lateinit var binding : ActivityPhotiBinding
     private lateinit var mContext: Context
+    private lateinit var startForResult: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +55,14 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
             }
             "LOGIN" -> {
                 CustomToast.createToast(this, "photi님 환영합니다!")?.show()
+            }
+        }
+
+        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data?.getBooleanExtra("IS_FROM_LOGIN",false)
+                if(data == true)
+                    setBottomNavigation(TAG_PROFILE)
             }
         }
     }
@@ -82,7 +94,7 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         }
 
         binding.mypageIcon.setOnClickListener {
-            if(tokenManager.getAccessToken() == null && tokenManager.getRefreshToken() == null)
+            if(tokenManager.hasNoTokens())
                 CustomTwoButtonDialog(this,"로그인하고 다양한 챌린지에\n 참여해보세요!","","나중에 하기","로그인하기")
                     .show(supportFragmentManager, "CustomDialog")
             else
@@ -173,6 +185,6 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
 
     override fun onClickSecondButton() {
         val intent = Intent(this, AuthActivity::class.java)
-        startActivity(intent)
+        startForResult.launch(intent)
     }
 }

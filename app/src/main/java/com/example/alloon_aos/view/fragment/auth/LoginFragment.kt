@@ -1,7 +1,6 @@
 package com.example.alloon_aos.view.fragment.auth
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -16,17 +15,16 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
-import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentLoginBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
-import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class LoginFragment : Fragment() {
     private lateinit var binding : FragmentLoginBinding
     private val authViewModel by activityViewModels<AuthViewModel>()
+    private lateinit var mActivity: AuthActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +34,7 @@ class LoginFragment : Fragment() {
         binding.fragment = this
         binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        val mActivity = activity as AuthActivity
+        mActivity = activity as AuthActivity
         mActivity.setAppBar("로그인")
 
         //token 초기화
@@ -123,10 +121,7 @@ class LoginFragment : Fragment() {
         authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    val intent = Intent(requireContext(), PhotiActivity::class.java)
-                    intent.putExtra("IS_FROM","LOGIN")
-                    startActivity(intent)
-                    requireActivity().finish()
+                    mActivity.finishActivity()
                 }
 
                 "LOGIN_UNAUTHENTICATED", "DELETED_USER" -> {

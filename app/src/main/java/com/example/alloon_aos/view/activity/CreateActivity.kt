@@ -79,7 +79,8 @@ class CreateActivity : AppCompatActivity() {
         }
 
         binding.actionBar.setNavigationOnClickListener {
-            if (isFromChallenge)
+            val currentFragment = navController.currentDestination?.id
+            if (isFromChallenge || currentFragment == R.id.createChallengeFragment)
                 finish()
             else
                 navController.navigateUp()

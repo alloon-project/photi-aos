@@ -33,6 +33,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     private lateinit var binding : FragmentSignupPwBinding
     private lateinit var mContext: Context
     private val authViewModel by activityViewModels<AuthViewModel>()
+    private lateinit var mActivity: AuthActivity
 
     private val num_pattern = Pattern.compile("[0-9]")
     private val eng_pattern = Pattern.compile("[a-zA-Z]")
@@ -50,7 +51,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as AuthActivity
+        mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
         blue  = mContext.getColor(R.color.blue400)
@@ -156,10 +157,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "201 CREATED" -> {
-                    val intent = Intent(requireContext(), PhotiActivity::class.java)
-                    intent.putExtra("IS_FROM","LOGIN")
-                    startActivity(intent)
-                    requireActivity().finish()
+                    mActivity.finishActivity()
                 }
 
                 "IO_Exception" -> {

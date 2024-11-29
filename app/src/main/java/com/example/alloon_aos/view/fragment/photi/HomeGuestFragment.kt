@@ -44,7 +44,6 @@ class HomeGuestFragment : Fragment(), CustomTwoButtonDialogInterface {
     fun redirectToLogin() {
         val intent = Intent(requireContext(), AuthActivity::class.java)
         startActivity(intent)
-        //requireActivity().finish()
     }
 
     override fun onClickFisrtButton() {}

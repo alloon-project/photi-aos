@@ -37,7 +37,7 @@ class ProfilePasswordFragment : Fragment() {
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data?.getBooleanExtra("isFromPasswordChangeFragment",false)
+                val data = result.data?.getBooleanExtra("IS_FROM_LOGIN",false)
                 if(data == true)
                     findNavController().popBackStack()
             }

@@ -109,15 +109,14 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         }
 
         binding.joinBtn.setOnClickListener {
-
-            JoinGuestDialog(this)
-                .show(this.supportFragmentManager!!, "CustomDialog")
-
+            if(tokenManager.hasNoTokens()) {
+                JoinGuestDialog(this)
+                    .show(this.supportFragmentManager!!, "CustomDialog")
+            } else {
+                startGoal()
 //            PrivateCodeDialog(this)
 //                .show(this.supportFragmentManager!!, "CustomDialog")
-
-            //startGoal()
-
+            }
         }
 
         binding.createBtn.setOnClickListener {
@@ -135,7 +134,6 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
     override fun onClickLoginButton() {
         val intent = Intent(this, AuthActivity::class.java)
-        //intent.putExtra("IS_FROM_SETTINGS_ACTIVITY",true)
         startActivity(intent)
     }
 
