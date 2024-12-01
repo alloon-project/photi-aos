@@ -11,24 +11,34 @@ import okhttp3.Response
 import okhttp3.ResponseBody
 import javax.inject.Inject
 
-class TokenInterceptor @Inject constructor( // request 헤더에 jwt 토큰 추가 해주는 역할
+class TokenInterceptor @Inject constructor(
     private val tokenManager: TokenManager
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        Log.d("token","interceptor")
+        Log.d("TokenInterceptor", "Intercepting request...")
 
         val request = chain.request()
         val url = request.url.toString()
         val method = request.method
 
+        Log.d("TokenInterceptor", "Request URL: $url, Method: $method")
+
         val newRequestBuilder = request.newBuilder()
 
         if (shouldAddToken(url, method)) {
-            val token: String = runBlocking {
+            val token: String? = runBlocking {
                 tokenManager.getAccessToken()
-            } ?: return errorResponse(chain.request())
+            }
 
+            if (token.isNullOrEmpty()) {
+                Log.e("TokenInterceptor", "AccessToken is null or empty!")
+                return errorResponse(request)
+            }
+
+            Log.d("TokenInterceptor", "Adding Authorization Header: Bearer $token")
             newRequestBuilder.header("Authorization", "Bearer $token")
+        } else {
+            Log.d("TokenInterceptor", "No Authorization header added for URL: $url")
         }
 
         val newRequest = newRequestBuilder.build()
@@ -36,15 +46,19 @@ class TokenInterceptor @Inject constructor( // request 헤더에 jwt 토큰 추�
     }
 
     private fun shouldAddToken(url: String, method: String): Boolean {
-        // URL이 ApiConfig.tokenRequiredApis에 설정된 URL과 일치하고, 메서드가 해당 값과 일치하는지 확인
-        return ApiConfig.tokenRequiredApis[url] == method
+        val match = ApiConfig.tokenRequiredApis.keys.any { apiUrl ->
+            url.contains(apiUrl) && ApiConfig.tokenRequiredApis[apiUrl] == method
+        }
+        Log.d("TokenInterceptor", "Should Add Token: $match for URL: $url")
+        return match
     }
+
 
     private fun errorResponse(request: Request): Response = Response.Builder()
         .request(request)
         .protocol(Protocol.HTTP_2)
         .code(401)
-        .message("")
+        .message("Unauthorized: AccessToken is missing or invalid")
         .body(ResponseBody.create(null, ""))
         .build()
 }
