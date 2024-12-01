@@ -36,7 +36,8 @@
             android:exported="true" />
         <activity
             android:name=".view.activity.SettingsActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".view.activity.AuthActivity"
             android:exported="true" />
