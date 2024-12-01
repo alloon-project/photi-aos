@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
-import com.example.alloon_aos.data.repository.TokenManager
+import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeChallengeBinding
 import com.example.alloon_aos.view.adapter.ChallengeCardAdapter
 import com.example.alloon_aos.view.adapter.ProofShotHomeAdapter

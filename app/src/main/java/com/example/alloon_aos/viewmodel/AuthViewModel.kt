@@ -9,7 +9,7 @@ import com.example.alloon_aos.data.model.request.NewPwd
 import com.example.alloon_aos.data.model.request.UserData
 import com.example.alloon_aos.data.model.response.AuthResponse
 import com.example.alloon_aos.data.remote.RetrofitClient
-import com.example.alloon_aos.data.repository.MyRepository
+import com.example.alloon_aos.data.repository.AuthRepository
 import com.example.alloon_aos.data.repository.MainRepositoryCallback
 import com.example.alloon_aos.view.ui.util.StringUtil
 import okio.IOException
@@ -22,7 +22,7 @@ class AuthViewModel : ViewModel() {
     }
 
     private val apiService = RetrofitClient.apiService
-    private val repository = MyRepository(apiService)
+    private val repository = AuthRepository(apiService)
 
     val apiResponse = MutableLiveData<ApiResponse>()
     var email = ""

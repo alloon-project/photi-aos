@@ -12,7 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
-import com.example.alloon_aos.data.repository.TokenManager
+import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeNochallengeBinding
 import com.example.alloon_aos.view.activity.FeedActivity
 import com.example.alloon_aos.view.adapter.MemberHomeAdapter

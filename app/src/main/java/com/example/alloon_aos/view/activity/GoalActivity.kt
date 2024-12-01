@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
-import com.example.alloon_aos.data.repository.TokenManager
+import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.ActivityGoalBinding
 import com.example.alloon_aos.view.ui.util.KeyboardListener
 import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener

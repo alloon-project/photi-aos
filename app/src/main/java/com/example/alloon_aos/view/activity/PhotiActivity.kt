@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
-import com.example.alloon_aos.data.repository.TokenManager
+import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.ActivityPhotiBinding
 import com.example.alloon_aos.view.fragment.photi.ChallengeFragment
 import com.example.alloon_aos.view.fragment.photi.HomeFragment

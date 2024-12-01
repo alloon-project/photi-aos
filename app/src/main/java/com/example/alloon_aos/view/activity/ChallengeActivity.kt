@@ -3,6 +3,7 @@ package com.example.alloon_aos.view.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
-import com.example.alloon_aos.data.repository.TokenManager
+import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.ActivityChallengeBinding
 import com.example.alloon_aos.databinding.ItemRuleChipRecyclerviewBinding
 import com.example.alloon_aos.view.ui.component.dialog.JoinGuestDialog

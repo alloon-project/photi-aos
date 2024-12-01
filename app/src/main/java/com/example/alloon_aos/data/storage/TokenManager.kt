@@ -1,6 +1,7 @@
-package com.example.alloon_aos.data.repository
+package com.example.alloon_aos.data.storage
 
 import android.util.Log
+import com.example.alloon_aos.data.storage.MySharedPreferences
 import javax.inject.Inject
 
 class TokenManager @Inject constructor(

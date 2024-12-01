@@ -1,9 +1,9 @@
 package com.example.alloon_aos.data.remote
 
 import com.example.alloon_aos.MyApplication
-import com.example.alloon_aos.data.repository.TokenAuthenticator
-import com.example.alloon_aos.data.repository.TokenInterceptor
-import com.example.alloon_aos.data.repository.TokenManager
+import com.example.alloon_aos.data.storage.TokenAuthenticator
+import com.example.alloon_aos.data.storage.TokenInterceptor
+import com.example.alloon_aos.data.storage.TokenManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
