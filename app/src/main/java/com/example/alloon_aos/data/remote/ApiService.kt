@@ -21,6 +21,11 @@ interface ApiService {
         @Body params:Map<String, String>)
     : Call<AuthResponse>
 
+    @PATCH("/api/users")
+    fun patch_deleteUser(
+        @Body params: Map<String, String>
+    ): Call<AuthResponse>
+
     @PATCH("/api/contacts/verify")
     fun patch_verifyEmailCode(
         @Body params:EmailCode

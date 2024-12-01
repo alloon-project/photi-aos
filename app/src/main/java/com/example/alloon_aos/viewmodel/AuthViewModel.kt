@@ -10,6 +10,7 @@ import com.example.alloon_aos.data.model.request.UserData
 import com.example.alloon_aos.data.model.response.AuthResponse
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.AuthRepository
+import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.MainRepositoryCallback
 import com.example.alloon_aos.view.ui.util.StringUtil
 import okio.IOException
@@ -201,20 +202,8 @@ class AuthViewModel : ViewModel() {
         })
     }
 
-    private fun handleFailure(error: Throwable) {
-        when (error) {
-            is IOException -> {
-                apiResponse.value = ApiResponse("IO_Exception")
-            }
-            else -> {
-                try {
-                    val jObjError = JSONObject(error.message.toString())
-                    apiResponse.value = ApiResponse(jObjError.getString("code"))
-                    Log.d(TAG, "Error: ${apiResponse.value!!.code}")
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error parsing error response: ${e.message}")
-                }
-            }
-        }
+    fun handleFailure(error: Throwable) {
+        val errorCode = ErrorHandler.handle(error)
+        apiResponse.value = ApiResponse(errorCode)
     }
 }

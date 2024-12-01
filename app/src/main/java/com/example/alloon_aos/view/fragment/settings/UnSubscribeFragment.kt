@@ -6,11 +6,13 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentUnSubscribeBinding
@@ -18,11 +20,12 @@ import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.SettingsActivity
+import com.example.alloon_aos.viewmodel.SettingsViewModel
 
 class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentUnSubscribeBinding
     private lateinit var mContext: Context
-    // private val authViewModel by activityViewModels<AuthViewModel>()
+    private val settingsViewmodel by activityViewModels<SettingsViewModel>()
     private lateinit var password: String
 
     override fun onCreateView(
@@ -31,12 +34,13 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_un_subscribe, container, false)
         binding.fragment = this
-        // binding.viewModel = authViewModel
+        binding.viewModel = settingsViewmodel
         binding.lifecycleOwner = viewLifecycleOwner
         val mActivity = activity as SettingsActivity
         mActivity.setAppBar(" ")
 
         setListener()
+        setObserve()
         return binding.root
     }
 
@@ -87,16 +91,34 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
         view?.findNavController()?.popBackStack()
     }
 
-    fun checkPassword(){
-        val str = "123"
-        if(password.equals(str)){
-            val mActivity = activity as SettingsActivity
-            mActivity.unsubscribe()
-        }
-        else
-            CustomOneButtonDialog(this,"비밀번호가 일치하지 않아요.","다시 입력해 주세요.","알겠어요")
-                .show(activity?.supportFragmentManager!!, "CustomDialog")
 
+    fun setObserve() {
+        settingsViewmodel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    val mActivity = activity as SettingsActivity
+                    mActivity.unsubscribe()
+                }
+
+                "LOGIN_UNAUTHENTICATED" -> {
+                    CustomOneButtonDialog(this,"비밀번호가 일치하지 않아요.","다시 입력해 주세요.","알겠어요")
+                        .show(activity?.supportFragmentManager!!, "CustomDialog")
+                }
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                "TOKEN_UNAUTHORIZED" -> {
+                    Log.d("Observer", "response code: ${response.code} ")
+                }
+
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
     }
 
     override fun onClickYesButton() {

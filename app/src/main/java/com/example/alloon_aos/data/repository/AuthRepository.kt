@@ -9,14 +9,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-interface MainRepositoryCallback<T> {
-    fun onSuccess(data: T)
-    fun onFailure(error: Throwable)
-}
-
 class AuthRepository(private val apiService: ApiService) {
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
-
 
     //GET
     fun verifyId(name: String, callback: MainRepositoryCallback<AuthResponse>) {
@@ -38,8 +32,6 @@ class AuthRepository(private val apiService: ApiService) {
 
 
     //PATCH
-    //회원 탈퇴
-
     fun modifyPassword(newPwd: NewPwd, callback: MainRepositoryCallback<AuthResponse>) {
         apiService.patch_modifyPwd(newPwd).enqueue(object : Callback<AuthResponse> {
             override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
