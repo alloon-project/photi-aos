@@ -2,7 +2,7 @@ package com.example.alloon_aos
 
 import android.app.Application
 import android.content.Intent
-import com.example.alloon_aos.data.repository.MySharedPreferences
+import com.example.alloon_aos.data.storage.MySharedPreferences
 import com.example.alloon_aos.view.activity.PhotiActivity
 
 /**

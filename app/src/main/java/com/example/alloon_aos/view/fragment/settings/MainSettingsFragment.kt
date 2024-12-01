@@ -1,9 +1,6 @@
 package com.example.alloon_aos.view.fragment.settings
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +9,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
-import com.example.alloon_aos.data.repository.TokenManager
+import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.FragmentMainSettingsBinding
-import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
-import com.example.alloon_aos.view.ui.component.toast.CustomToast
 
 class MainSettingsFragment : Fragment(),CustomTwoButtonDialogInterface{
     private lateinit var binding : FragmentMainSettingsBinding

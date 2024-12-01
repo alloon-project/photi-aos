@@ -1,4 +1,4 @@
-package com.example.alloon_aos.data.repository
+package com.example.alloon_aos.data.storage
 
 import android.util.Log
 import javax.inject.Inject

@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
-import com.example.alloon_aos.data.repository.TokenManager
+import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.ActivitySearchBinding
 import com.example.alloon_aos.databinding.ItemSearchChallengeRecyclerviewBinding
 import com.example.alloon_aos.databinding.ItemSearchChipRecyclerviewBinding
