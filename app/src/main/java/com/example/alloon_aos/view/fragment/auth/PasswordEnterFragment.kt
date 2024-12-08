@@ -67,7 +67,7 @@ class PasswordEnterFragment : Fragment() {
     }
 
     fun setObserve() {
-        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+        authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
                     when (response.action) {

@@ -2,8 +2,6 @@ package com.example.alloon_aos.view.fragment.settings
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -93,7 +91,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
 
 
     fun setObserve() {
-        settingsViewmodel.apiResponse.observe(viewLifecycleOwner) { response ->
+        settingsViewmodel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
                     val mActivity = activity as SettingsActivity

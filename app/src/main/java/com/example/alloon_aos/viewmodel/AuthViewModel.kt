@@ -3,7 +3,7 @@ package com.example.alloon_aos.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.alloon_aos.data.model.ApiResponse
+import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.request.EmailCode
 import com.example.alloon_aos.data.model.request.NewPwd
 import com.example.alloon_aos.data.model.request.UserData
@@ -13,8 +13,6 @@ import com.example.alloon_aos.data.repository.AuthRepository
 import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.MainRepositoryCallback
 import com.example.alloon_aos.view.ui.util.StringUtil
-import okio.IOException
-import org.json.JSONObject
 
 class AuthViewModel : ViewModel() {
 
@@ -25,7 +23,7 @@ class AuthViewModel : ViewModel() {
     private val apiService = RetrofitClient.apiService
     private val repository = AuthRepository(apiService)
 
-    val apiResponse = MutableLiveData<ApiResponse>()
+    val actionApiResponse = MutableLiveData<ActionApiResponse>()
     var email = ""
     var email_code = ""
     var id = ""
@@ -34,7 +32,7 @@ class AuthViewModel : ViewModel() {
     var checkPassword = ""
 
     fun resetAllValue() {
-        apiResponse.value = ApiResponse()
+        actionApiResponse.value = ActionApiResponse()
         email = ""
         email_code = ""
         id = ""
@@ -44,7 +42,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun resetApiResponseValue() {
-        apiResponse.value = ApiResponse()
+        actionApiResponse.value = ActionApiResponse()
     }
 
     fun resetAuthCodeValue() {
@@ -67,7 +65,7 @@ class AuthViewModel : ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result, "sendEmailCode")
+                actionApiResponse.value = ActionApiResponse(result, "sendEmailCode")
                 Log.d(TAG, "sendEmailCode: $mes $result")
             }
 
@@ -85,7 +83,7 @@ class AuthViewModel : ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result)
+                actionApiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "verifyEmailCode: $mes $result")
             }
 
@@ -101,7 +99,7 @@ class AuthViewModel : ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result)
+                actionApiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "verifyId: $mes $result")
             }
 
@@ -122,7 +120,7 @@ class AuthViewModel : ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result)
+                actionApiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "signUp: $id $mes $result")
             }
 
@@ -140,7 +138,7 @@ class AuthViewModel : ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result, "login")
+                actionApiResponse.value = ActionApiResponse(result, "login")
                 Log.d(TAG, "login: $id $result")
             }
 
@@ -156,7 +154,7 @@ class AuthViewModel : ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result)
+                actionApiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "checkSignedUp: $mes $result")
             }
 
@@ -174,7 +172,7 @@ class AuthViewModel : ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result)
+                actionApiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "sendNewPassword: $mes $result")
             }
 
@@ -192,7 +190,7 @@ class AuthViewModel : ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result)
+                actionApiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "modifyPassword: $mes $result")
             }
 
@@ -204,6 +202,6 @@ class AuthViewModel : ViewModel() {
 
     fun handleFailure(error: Throwable) {
         val errorCode = ErrorHandler.handle(error)
-        apiResponse.value = ApiResponse(errorCode)
+        actionApiResponse.value = ActionApiResponse(errorCode)
     }
 }

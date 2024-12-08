@@ -118,7 +118,7 @@ class LoginFragment : Fragment() {
 
 
     fun setObserve() {
-        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+        authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
                     mActivity.finishActivity()

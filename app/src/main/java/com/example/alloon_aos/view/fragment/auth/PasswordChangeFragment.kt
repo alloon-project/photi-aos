@@ -1,7 +1,6 @@
 package com.example.alloon_aos.view.fragment.auth
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,7 +18,6 @@ import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomOneButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
-import com.example.alloon_aos.view.fragment.settings.ProfilePasswordFragment
 import com.example.alloon_aos.viewmodel.AuthViewModel
 import java.util.regex.Pattern
 
@@ -110,7 +108,7 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
     }
 
     fun setObserve() {
-        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+        authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
                     CustomOneButtonDialog(
@@ -189,8 +187,10 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
 
             if(isProperLength && containsEng && !notContainsSpecial && containsNum)
                 checkLayout.visibility = View.VISIBLE
-            else
-                checkLayout.visibility = View.GONE
+            else {
+                binding.checkLayout.visibility = View.GONE
+                binding.newPassword2EditText.text.clear()
+            }
         }
     }
 

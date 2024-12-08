@@ -3,8 +3,7 @@ package com.example.alloon_aos.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.alloon_aos.data.model.ApiResponse
-import com.example.alloon_aos.data.model.request.NewPwd
+import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.response.AuthResponse
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ErrorHandler
@@ -19,7 +18,7 @@ class SettingsViewModel: ViewModel() {
 
     private val apiService = RetrofitClient.apiService
     private val repository = SettingsRepository(apiService)
-    val apiResponse = MutableLiveData<ApiResponse>()
+    val actionApiResponse = MutableLiveData<ActionApiResponse>()
 
     var password = ""
 
@@ -29,7 +28,7 @@ class SettingsViewModel: ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ApiResponse(result)
+                actionApiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "deleteUser: $mes $result")
             }
 
@@ -41,6 +40,6 @@ class SettingsViewModel: ViewModel() {
 
     fun handleFailure(error: Throwable) {
         val errorCode = ErrorHandler.handle(error)
-        apiResponse.value = ApiResponse(errorCode)
+        actionApiResponse.value = ActionApiResponse(errorCode)
     }
 }

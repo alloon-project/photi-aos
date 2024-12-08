@@ -3,7 +3,6 @@ package com.example.alloon_aos.view.fragment.auth
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,13 +16,10 @@ import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
-import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentSignupPwBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity
-import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheet
 import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheetInterface
 import com.example.alloon_aos.viewmodel.AuthViewModel
@@ -154,7 +150,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     }
 
     fun setObserve() {
-        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+        authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "201 CREATED" -> {
                     mActivity.finishActivity()

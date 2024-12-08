@@ -21,8 +21,6 @@ import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.KeyboardListener
 import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
 import com.example.alloon_aos.view.activity.AuthActivity
-import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheet
-import com.example.alloon_aos.view.ui.component.bottomsheet.ListBottomSheetInterface
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class SignupEmailFragment : Fragment() {
@@ -92,7 +90,7 @@ class SignupEmailFragment : Fragment() {
     }
 
     fun setObserve() {
-        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+        authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "201 CREATED" -> {
                     authViewModel.resetAuthCodeValue()

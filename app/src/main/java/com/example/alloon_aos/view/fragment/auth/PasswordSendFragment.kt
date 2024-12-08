@@ -85,7 +85,7 @@ class PasswordSendFragment : Fragment() {
     }
 
     fun setObserve() {
-        authViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+        authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
                     view?.findNavController()?.navigate(R.id.action_passwordSendFragment_to_passwordEnterFragment)
