@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.model.MyData
 import com.example.alloon_aos.databinding.ActivityFeedBinding
 import com.example.alloon_aos.databinding.CustomPopupMenuBinding
 import com.example.alloon_aos.view.fragment.feed.IntroduceFragment
@@ -24,11 +26,13 @@ import com.example.alloon_aos.view.fragment.feed.FeedFragment
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
+import com.example.alloon_aos.viewmodel.FeedViewModel
 import com.google.android.material.tabs.TabLayout
 
 class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     lateinit var binding : ActivityFeedBinding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private val feedViewModel : FeedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +45,20 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frag_layout, initialFragment)
                 .commit()
+        }
+
+        val challengeId = intent.getIntExtra("ID",-1)
+        val challengeData = intent.getParcelableExtra<MyData>("data")
+        val imageFile = intent.getStringExtra("image")
+
+        challengeId?.let {
+            feedViewModel.challengeId = it
+        }
+        challengeData?.let {
+            feedViewModel.setChallengeData(it)
+        }
+        imageFile?.let {
+            feedViewModel.imgFile = it
         }
 
         binding.shareImgBtn.setOnClickListener {
@@ -98,9 +116,9 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         ) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
-                val resultValue = data?.getStringExtra("ID")
+                val resultValue = data?.getIntExtra("ID", -1)
                 resultValue?.let {
-                    //수정된 id받음
+                    feedViewModel.challengeId = it
                     CustomToast.createToast(this,"챌린지 수정이 완료됐어요.")?.show()
                 }
             }
@@ -146,7 +164,9 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                     //챌린지 신고하기 플로우
                 val intent = Intent(this@FeedActivity, ChallengeActivity::class.java)
                 intent.putExtra("IS_FROM_FEED",true)
-                intent.putExtra("ID","id")
+                intent.putExtra("ID", feedViewModel.challengeId)
+                intent.putExtra("data", feedViewModel.getData())
+                intent.putExtra("image", feedViewModel.imgFile)
                 activityResultLauncher.launch(intent)
                 popupWindow.dismiss()
             }

@@ -9,6 +9,7 @@ import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody
+import java.net.URL
 import javax.inject.Inject
 
 class TokenInterceptor @Inject constructor(
@@ -25,7 +26,7 @@ class TokenInterceptor @Inject constructor(
 
         val newRequestBuilder = request.newBuilder()
 
-        if (shouldAddToken(url, method)) {
+        if (ApiConfig.isTokenRequired(getPathFromUrl(url), method)) {
             val token: String? = runBlocking {
                 tokenManager.getAccessToken()
             }
@@ -47,10 +48,15 @@ class TokenInterceptor @Inject constructor(
 
     private fun shouldAddToken(url: String, method: String): Boolean {
         val match = ApiConfig.tokenRequiredApis.keys.any { apiUrl ->
-            url.contains(apiUrl) && ApiConfig.tokenRequiredApis[apiUrl] == method
+            getPathFromUrl(url) == apiUrl && ApiConfig.tokenRequiredApis[apiUrl] == method
         }
         Log.d("TokenInterceptor", "Should Add Token: $match for URL: $url")
         return match
+    }
+
+    private fun getPathFromUrl(url: String): String {
+        val parsedUrl = URL(url)  // URL 객체로 변환
+        return parsedUrl.path  // 경로만 추출
     }
 
 

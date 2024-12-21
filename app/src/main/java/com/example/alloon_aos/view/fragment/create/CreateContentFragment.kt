@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.example.alloon_aos.view.ui.component.bottomsheet.DateBottomSheet
 import com.example.alloon_aos.view.ui.component.bottomsheet.DateBottomSheetInterface
 import com.example.alloon_aos.view.ui.component.bottomsheet.TimeBottomSheet
 import com.example.alloon_aos.view.ui.component.bottomsheet.TimeBottomSheetInterface
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.KeyboardListener
 import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
 import com.example.alloon_aos.viewmodel.CreateViewModel
@@ -47,8 +49,12 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
         if (mActivity.isFromChallenge)
             setModifyLayout()
 
+        createViewModel.resetApiResponseValue()
+
         setTodayDate()
         setListener()
+        setObserver()
+        checkData()
 
         ObjectAnimator.ofInt(binding.progress, "progress", 20,40)
             .setDuration(500)
@@ -61,6 +67,8 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
         mActivity.setTitle("챌린지 소개 수정")
         binding.progress.visibility = View.GONE
         binding.nextBtn.setText("저장하기")
+        binding.timeEdittext.setText(createViewModel.proveTime)
+        binding.selectedDateEdittext.setText(createViewModel.endDate)
     }
 
     override fun onAttach(context: Context) {
@@ -76,6 +84,27 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
         binding.dateTextview.setText("${date.year}. $month. $day")
     }
 
+    fun setObserver() {
+        createViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    view?.findNavController()?.navigate(R.id.action_createContentFragment_to_createImageFragment)
+                }
+
+                "LOGIN_UNAUTHENTICATED", "DELETED_USER" -> {
+                }
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
+    }
+
     fun setListener() {
         binding.timeBtn.setOnClickListener {
             TimeBottomSheet(mContext, createViewModel, this)
@@ -89,9 +118,9 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
 
         binding.nextBtn.setOnClickListener {
             if (mActivity.isFromChallenge)
-                requireActivity().finish()
+                mActivity.modifyContent()
             else
-                view?.findNavController()?.navigate(R.id.action_createContentFragment_to_createImageFragment)
+                createViewModel.getExamImg()
         }
 
         binding.root.setOnClickListener {
@@ -116,17 +145,29 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.numTextview.setText("${s!!.length}/120")
+                checkData()
             }
         })
+    }
+
+    private fun checkData() {
+        if (binding.timeEdittext.text.isNotEmpty()
+            && binding.selectedDateEdittext.text.isNotEmpty()
+            && binding.contentEdittext.text.length > 10)
+            binding.nextBtn.isEnabled = true
+        else
+            binding.nextBtn.isEnabled = false
     }
 
     override fun onClickSelectTimeButton(time: Int) {
         val df = DecimalFormat("00")
         val timestring = df.format(time)
+        createViewModel.proveTime = "$timestring:00"
         binding.timeEdittext.setText("$timestring : 00")
         binding.timeImageview.setImageResource(R.drawable.ic_time_blue400)
         binding.timeTextview.setTextColor(mContext.getColor(R.color.blue400))
         binding.timeTextview.setText("하루 인증 시간을 정해주세요")
+        checkData()
     }
 
     override fun onClickSelectDateButton(date: CalendarDay) {
@@ -134,7 +175,9 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
             val df = DecimalFormat("00")
             val month = df.format(date.month)
             val day = df.format(date.day)
+            createViewModel.endDate = "${date.year}-$month-$day"
             binding.selectedDateEdittext.setText("${date.year}. $month. $day")
+            checkData()
         }
     }
 }

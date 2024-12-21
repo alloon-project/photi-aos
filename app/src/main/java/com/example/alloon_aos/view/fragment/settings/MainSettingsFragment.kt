@@ -63,8 +63,7 @@ class MainSettingsFragment : Fragment(),CustomTwoButtonDialogInterface{
     override fun onClickFisrtButton() {}
 
     override fun onClickSecondButton() {
-        tokenManager.deleteAccessToken()
-        tokenManager.deleteRefreshToken()
+        tokenManager.deleteAllToken()
         val mActivity = activity as SettingsActivity
         mActivity.logout()
     }

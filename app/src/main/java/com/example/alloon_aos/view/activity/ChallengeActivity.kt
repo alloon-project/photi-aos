@@ -7,13 +7,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.model.MyData
+import com.example.alloon_aos.data.model.request.HashTag
+import com.example.alloon_aos.data.model.request.Rule
 import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.ActivityChallengeBinding
 import com.example.alloon_aos.databinding.ItemRuleChipRecyclerviewBinding
@@ -29,13 +37,16 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
     lateinit var binding : ActivityChallengeBinding
     lateinit var id : String
     lateinit var isFrom : String
+    lateinit var hashAdapter: RuleHashAdapter
     private val challengeViewModel : ChallengeViewModel by viewModels()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_challenge)
         binding.viewModel = challengeViewModel
+        challengeViewModel.resetApiResponseValue()
 
         val isFromHome = intent.getBooleanExtra("IS_FROM_HOME", false)
         if (isFromHome)
@@ -49,57 +60,156 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         if (isFromFeed)
             isFrom = "feed"
 
-        binding.actionBar.setNavigationIcon(R.drawable.ic_back)
+        val challengeId = intent.getIntExtra("ID",-1)
+        val challengeData = intent.getParcelableExtra<MyData>("data")
+        val imageFile = intent.getStringExtra("image")
+        val isUri = intent.getBooleanExtra("isUri",false)
 
-        binding.hashRecyclerview.adapter = RuleHashAdapter()
+        challengeId?.let {
+            challengeViewModel.setChallengeId(it)
+        }
+        challengeData?.let {
+            challengeViewModel.setChallengeData(it)
+        }
+        imageFile?.let {
+            challengeViewModel.setImgData(it)
+        }
+        isUri.let {
+            challengeViewModel.setIsUri(it)
+        }
+
+        hashAdapter = RuleHashAdapter()
+        binding.hashRecyclerview.adapter = hashAdapter
         binding.hashRecyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         binding.hashRecyclerview.setHasFixedSize(true)
 
         setLayout()
         setListener()
+
+        binding.actionBar.setNavigationIcon(R.drawable.ic_back)
+
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+
+                val title = data?.getStringExtra("title")
+                val photo = data?.getStringExtra("photo")
+                val time = data?.getStringExtra("time")
+                val goal = data?.getStringExtra("goal")
+                val date = data?.getStringExtra("date")
+                val rule = data?.getParcelableArrayListExtra<Rule>("rule")
+                val hash = data?.getParcelableArrayListExtra<HashTag>("hash")
+                val isURI = data?.getBooleanExtra("isUri",false)
+
+                title?.let {
+                    challengeViewModel.setTitleData(it)
+                    binding.titleTextview.setText(it)
+                }
+                photo?.let { challengeViewModel.setImgData(it) }
+                time?.let {
+                    challengeViewModel.setTimeData(it)
+                    binding.timeTextview.setText(it)
+                }
+                goal?.let {
+                    challengeViewModel.setGoalData(it)
+                    binding.goalTextview.setText(it)
+                }
+                date?.let {
+                    challengeViewModel.setDateDate(it)
+                    binding.dateTextview.setText(it)
+                }
+                rule?.let {
+                    challengeViewModel.setRuleData(it)
+                    setRuleLayout()
+                }
+                hash?.let {
+                    challengeViewModel.setHashData(it)
+                    hashAdapter.notifyDataSetChanged()
+                }
+                isURI?.let { challengeViewModel.setIsUri(it) }
+            }
+        }
     }
 
     private fun setLayout() {
         when(isFrom) {
             "home" -> {
-                binding.title.setText("")
-                id = intent.getStringExtra("ID").toString()
+                binding.title.setText(challengeViewModel.name)
 
+                binding.memberImgLayout.visibility = View.VISIBLE
                 binding.joinBtn.visibility = View.VISIBLE
                 binding.createBtn.visibility = View.GONE
                 binding.modifyBtn.visibility = View.GONE
+
+                setJoinObserve()
             }
             "create" -> {
-                // 정보 다 받아오기
                 CustomToast.createToast(this,"완성된 챌린지를 확인해볼까요? 찰칵~")?.show()
 
                 binding.joinBtn.visibility = View.GONE
                 binding.createBtn.visibility = View.VISIBLE
                 binding.modifyBtn.visibility = View.GONE
+
+                setCreateObserve()
             }
             "feed" -> {
                 setModifyClick()
-
                 binding.title.setText("수정하기")
-                id = intent.getStringExtra("ID").toString()
 
                 binding.joinBtn.visibility = View.GONE
                 binding.createBtn.visibility = View.GONE
                 binding.modifyBtn.visibility = View.VISIBLE
+
+                setModifyObserve()
+            }
+        }
+        setRuleLayout()
+    }
+
+    private fun setRuleLayout() {
+        val rules = challengeViewModel.rules
+        if (rules.isNotEmpty()) {
+            rules.forEachIndexed { index, rule ->
+                when (index) {
+                    0 -> {
+                        binding.ruleTextview.text = rule.rule
+                        binding.divider.visibility = View.GONE
+                        binding.rule2Textview.visibility = View.GONE
+                        binding.allButton.visibility = View.GONE
+                    }
+                    1 -> {
+                        binding.rule2Textview.text = rule.rule
+                        binding.rule2Textview.visibility = View.VISIBLE
+                        binding.divider.visibility = View.VISIBLE
+                        binding.allButton.visibility = View.GONE
+                    }
+                    2 -> {
+                        binding.allButton.visibility = View.VISIBLE
+                    }
+                }
             }
         }
     }
 
     private fun setModifyClick() {
-        binding.titleTextview.setOnClickListener { startModify("title") }
-        binding.photoLayout.setOnClickListener { startModify("photo") }
-        binding.timeLayout.setOnClickListener { startModify("time") }
-        binding.goalLayout.setOnClickListener { startModify("goal") }
-        binding.ruleLayout.setOnClickListener { startModify("rule") }
-        binding.dateLayout.setOnClickListener { startModify("date") }
+        binding.titleTextview.setOnClickListener { startModifyTitle() }
+        binding.photoLayout.setOnClickListener { startModifyPhoto() }
+        binding.timeLayout.setOnClickListener { startModifyContent() }
+        binding.goalLayout.setOnClickListener { startModifyContent() }
+        binding.dateLayout.setOnClickListener { startModifyContent() }
+        binding.ruleLayout.setOnClickListener { startModifyRule() }
     }
 
     private fun setListener() {
+        challengeViewModel._img.observe(this) {
+            Glide.with(binding.photoImageview.context)
+                .load(it)
+                .transform(CenterCrop(), RoundedCorners(20))
+                .into(binding.photoImageview)
+        }
+
         binding.actionBar.setNavigationOnClickListener {
             finish()
         }
@@ -114,18 +224,112 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                 JoinGuestDialog(this)
                     .show(this.supportFragmentManager!!, "CustomDialog")
             } else {
-                startGoal()
-//            PrivateCodeDialog(this)
-//                .show(this.supportFragmentManager!!, "CustomDialog")
+                if (challengeViewModel.isPublic)
+                    startGoal()
+                else
+                    PrivateCodeDialog(this)
+                        .show(this.supportFragmentManager!!, "CustomDialog")
             }
         }
 
         binding.createBtn.setOnClickListener {
-            startFeed()
+            challengeViewModel.createChallenge(this)
         }
 
         binding.modifyBtn.setOnClickListener {
-            returnFeed()
+            challengeViewModel.modifyChallenge(this)
+        }
+    }
+
+    fun setJoinObserve() {
+
+    }
+
+    fun setCreateObserve() {
+        challengeViewModel.apiResponse.observe(this) { response ->
+            when (response.code) {
+                "201 CREATED" -> {
+                    startFeed()
+                }
+
+                "EMPTY_FILE_INVALID" -> {
+                    CustomToast.createToast(this, "비어있는 파일은 저장할 수 없습니다.")?.show()
+                }
+
+                "TOKEN_UNAUTHENTICATED" -> {
+                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                }
+
+                "TOKEN_UNAUTHORIZED" -> {
+                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+
+                "USER_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 회원입니다.")?.show()
+                }
+
+                "FILE_SIZE_EXCEED" -> {
+                    CustomToast.createToast(this, "파일 사이즈는 8MB 이하만 가능합니다.")?.show()
+                }
+
+                "IMAGE_TYPE_UNSUPPORTED" -> {
+                    CustomToast.createToast(this, "이미지는 '.jpeg', '.jpg', '.png', '.gif' 타입만 가능합니다.")?.show()
+                }
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
+    }
+
+    fun setModifyObserve() {
+        challengeViewModel.apiResponse.observe(this) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    returnFeed()
+                }
+
+                "TOKEN_UNAUTHENTICATED" -> {
+                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                }
+
+                "TOKEN_UNAUTHORIZED" -> {
+                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+
+                "CHALLENGE_CREATOR_FORBIDDEN" -> {
+                    CustomToast.createToast(this, "챌린지 파티장 권한이 없습니다.")?.show()
+                }
+
+                "CHALLENGE_MEMBER_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 챌린지 파티원입니다.")?.show()
+                }
+
+                "CHALLENGE_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 챌린지입니다.")?.show()
+                }
+
+                "FILE_SIZE_EXCEED" -> {
+                    CustomToast.createToast(this, "파일 사이즈는 8MB 이하만 가능합니다.")?.show()
+                }
+
+                "IMAGE_TYPE_UNSUPPORTED" -> {
+                    CustomToast.createToast(this, "이미지는 '.jpeg', '.jpg', '.png', '.gif' 타입만 가능합니다.")?.show()
+                }
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
         }
     }
 
@@ -140,27 +344,66 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
     fun startGoal() { //join
         val intent = Intent(this, GoalActivity::class.java)
-        intent.putExtra("TITLE","title")
+        intent.putExtra("TITLE",challengeViewModel.name)
         startActivity(intent)
     }
 
     fun startFeed() { //create
-        startActivity(Intent(this,FeedActivity::class.java))
+        val intent = Intent(this, FeedActivity::class.java)
+        intent.putExtra("ID",challengeViewModel.id)
+        intent.putExtra("data",challengeViewModel.getData())
+        intent.putExtra("image",challengeViewModel.imageFile)
+        startActivity(intent)
         finishAffinity()
     }
 
     fun returnFeed() { //modify
         val resultIntent = Intent()
-        resultIntent.putExtra("ID","id")
+        resultIntent.putExtra("ID",challengeViewModel.id)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
 
-    fun startModify(value: String) {
+    fun startModifyTitle() {
         val intent = Intent(this, CreateActivity::class.java)
         intent.putExtra("IS_FROM_CHALLENGE",true)
-        intent.putExtra("MODIFY",value)
-        startActivity(intent)
+        intent.putExtra("MODIFY","title")
+        intent.putExtra("titleData",challengeViewModel.name)
+        activityResultLauncher.launch(intent)
+    }
+
+    fun startModifyPhoto() {
+        val intent = Intent(this, CreateActivity::class.java)
+        intent.putExtra("IS_FROM_CHALLENGE",true)
+        intent.putExtra("MODIFY","photo")
+        intent.putExtra("photoData",challengeViewModel.imageFile)
+        activityResultLauncher.launch(intent)
+    }
+
+    fun startModifyContent() {
+        val intent = Intent(this, CreateActivity::class.java)
+        intent.putExtra("IS_FROM_CHALLENGE",true)
+        intent.putExtra("MODIFY","content")
+        intent.putExtra("goalData",challengeViewModel.goal)
+        intent.putExtra("timeData",challengeViewModel.proveTime)
+        intent.putExtra("dateData",challengeViewModel.endDate)
+        activityResultLauncher.launch(intent)
+    }
+
+    fun startModifyRule() {
+        val intent = Intent(this, CreateActivity::class.java)
+        intent.putExtra("IS_FROM_CHALLENGE",true)
+        intent.putExtra("MODIFY","rule")
+        intent.putParcelableArrayListExtra("ruleData",ArrayList(challengeViewModel.rules))
+        activityResultLauncher.launch(intent)
+    }
+
+    fun startModifyHash() {
+        val intent = Intent(this, CreateActivity::class.java)
+        intent.putExtra("IS_FROM_CHALLENGE",true)
+        intent.putExtra("MODIFY","hash")
+        intent.putParcelableArrayListExtra("hashData",ArrayList(challengeViewModel.hashs))
+        activityResultLauncher.launch(intent)
     }
 
 
@@ -168,11 +411,11 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         RecyclerView.ViewHolder(binding.root) {
         fun setContents(pos: Int) {
             with (challengeViewModel.hashs[pos]) {
-                binding.hashBtn.text = chip
+                binding.hashBtn.text = hashtag
 
                 if (isFrom == "feed") {
                     binding.hashBtn.setOnClickListener {
-                        startModify("hash")
+                        startModifyHash()
                     }
                 }
             }

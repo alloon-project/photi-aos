@@ -3,6 +3,7 @@ package com.example.alloon_aos.view.fragment.create
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,6 +74,7 @@ class CreateRuleFragment : Fragment(){
         mActivity.setTitle("챌린지 인증 룰 수정")
         binding.progress.visibility = View.GONE
         binding.nextBtn.setText("저장하기")
+        binding.nextBtn.isEnabled = true
     }
 
     override fun onAttach(context: Context) {
@@ -82,8 +84,9 @@ class CreateRuleFragment : Fragment(){
 
     private fun setListener() {
         binding.nextBtn.setOnClickListener {
+            createViewModel.setRuleList()
             if (mActivity.isFromChallenge)
-                requireActivity().finish()
+                mActivity.modifyRule()
             else
                 view?.findNavController()?.navigate(R.id.action_createRuleFragment_to_createHashtagFragment)
         }
@@ -92,10 +95,14 @@ class CreateRuleFragment : Fragment(){
     private fun setObserver() {
         createViewModel.defaultRule.observe(viewLifecycleOwner) {
             defaultRuleAdapter.notifyDataSetChanged()
+
+            binding.nextBtn.isEnabled = createViewModel.selectNum != 0
         }
 
         createViewModel.customRule.observe(viewLifecycleOwner) {
             customRuleAdapter.notifyDataSetChanged()
+
+            binding.nextBtn.isEnabled = createViewModel.selectNum != 0
         }
     }
 

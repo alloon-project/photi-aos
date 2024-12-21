@@ -25,18 +25,11 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
             return null
         }
 
-        val accessToken = runBlocking {
-            tokenManager.getAccessToken()
-        }
-        if (accessToken != null) {
-            return null
-        }
-
         val refreshToken = runBlocking {
             tokenManager.getRefreshToken()
         }
         if (refreshToken == null) {
-            MyApplication.instance.tokenExpired()
+            doTokenExired()
             return null
         }
 
@@ -47,23 +40,31 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
                     response.body()?.accessToken
                 } else {
                     if (response.code() == 401) {
-                        MyApplication.instance.tokenExpired()
+                        doTokenExired()
                     }
+                    Log.d("token","code: ${response.code()}")
                     null
                 }
             } catch (e: Exception) {
-                MyApplication.instance.tokenExpired()
+                doTokenExired()
                 null
             }
         }
 
-        if (newAccessToken == null)
+        if (newAccessToken == null) {
+            doTokenExired()
             return null
-        else {
+        } else {
+            tokenManager.saveAccessToken(newAccessToken)
             return response.request.newBuilder().apply {
                 removeHeader("Authorization")
                 addHeader("Authorization", "Bearer $newAccessToken")
             }.build()
         }
+    }
+
+    private fun doTokenExired() {
+        tokenManager.deleteAllToken()
+        MyApplication.instance.tokenExpired()
     }
 }

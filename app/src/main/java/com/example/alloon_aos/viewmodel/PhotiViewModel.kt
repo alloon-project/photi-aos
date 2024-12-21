@@ -1,8 +1,21 @@
 package com.example.alloon_aos.viewmodel
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.alloon_aos.data.model.ActionApiResponse
+import com.example.alloon_aos.data.model.MyData
+import com.example.alloon_aos.data.model.request.HashTag
+import com.example.alloon_aos.data.model.request.MemberImg
+import com.example.alloon_aos.data.model.request.Rule
+import com.example.alloon_aos.data.model.response.ChallengeData
+import com.example.alloon_aos.data.model.response.ChallengeResponse
+import com.example.alloon_aos.data.model.response.ExamImgResponse
+import com.example.alloon_aos.data.remote.RetrofitClient
+import com.example.alloon_aos.data.repository.ChallengeRepository
+import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
+import com.example.alloon_aos.data.repository.ErrorHandler
 
 data class Item(val title:String, val date: String, val url: String? = null, var hashtag: MutableList<String> = mutableListOf()  )
 data class Chip(val id:String)
@@ -25,6 +38,72 @@ data class ProofShotItem(
 )
 
 class PhotiViewModel: ViewModel() {
+
+    companion object {
+        private const val TAG = "PHOTI"
+    }
+
+    private val challengeService = RetrofitClient.challengeService
+    private val repository = ChallengeRepository(challengeService)
+
+    val apiResponse = MutableLiveData<ActionApiResponse>()
+
+    var id = -1
+    var name = ""
+    var isPublic = true
+    var goal = ""
+    var proveTime = ""
+    var endDate = ""
+    var rules: List<Rule> = listOf()
+    var hashtags: List<HashTag> = listOf()
+    var memberImg: List<MemberImg> = listOf()
+    var memberCnt = -1
+    var imgFile = ""
+
+    fun resetApiResponseValue() {
+        apiResponse.value = ActionApiResponse()
+    }
+
+    fun getData() : MyData {
+        var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags, memberCnt, memberImg)
+        return data
+    }
+
+    fun setChallengeData(data: ChallengeData) {
+        name = data.name
+        isPublic = data.isPublic
+        goal = data.goal
+        proveTime = data.proveTime
+        endDate = data.endDate
+        rules = data.rules
+        hashtags = data.hashtags
+        memberCnt = data.currentMemberCnt
+        memberImg = data.memberImages
+        imgFile = data.imageUrl
+    }
+
+    fun getChallengeInfo() {
+        repository.getChallengeInfo(id, object : ChallengeRepositoryCallback<ChallengeResponse> {
+            override fun onSuccess(data: ChallengeResponse) {
+                val result = data.code
+                val mes = data.message
+                val data = data.data
+                setChallengeData(data)
+                apiResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "getChallengeInfo: $mes $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                handleFailure(error)
+            }
+        })
+    }
+
+    fun handleFailure(error: Throwable) {
+        val errorCode = ErrorHandler.handle(error)
+        apiResponse.value = ActionApiResponse(errorCode)
+    }
+
 
     //인기있는 챌린지
     val hotItemsListData = MutableLiveData<ArrayList<Item>>()

@@ -4,6 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.alloon_aos.databinding.ItemCreateImageRecyclerviewBinding
 import com.example.alloon_aos.databinding.ItemSelectImageRecyclerviewBinding
 import com.example.alloon_aos.viewmodel.CreateViewModel
@@ -21,7 +24,6 @@ class ThumbnailAdapter(private val createViewModel: CreateViewModel,
             fun setListener(pos : Int) {
                 binding.root.setOnClickListener {
                     onItemClickListener(pos)
-                    createViewModel.select(4)
                 }
             }
         }
@@ -29,8 +31,12 @@ class ThumbnailAdapter(private val createViewModel: CreateViewModel,
     inner class ImageViewHolder(private val binding: ItemCreateImageRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setContents(pos: Int) {
-            with (createViewModel.images[pos]) {
-                binding.srcImageview.setImageResource(image)
+            with (createViewModel.examImages[pos]) {
+                Glide.with(binding.srcImageview.context)
+                    .load(image)
+                    .transform(CenterCrop(), RoundedCorners(24))
+                    .into(binding.srcImageview)
+
                 binding.imageTextview.setText(content)
 
                 if (select)
@@ -39,8 +45,10 @@ class ThumbnailAdapter(private val createViewModel: CreateViewModel,
                     binding.selectImageview.visibility = View.INVISIBLE
 
                 binding.root.setOnClickListener {
-                    if (!select)
+                    if (!select) {
                         createViewModel.select(pos)
+                        createViewModel.setImageURL()
+                    }
                 }
             }
         }

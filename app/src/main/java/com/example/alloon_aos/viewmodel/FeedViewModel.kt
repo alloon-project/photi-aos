@@ -2,6 +2,9 @@ package com.example.alloon_aos.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.alloon_aos.data.model.MyData
+import com.example.alloon_aos.data.model.request.HashTag
+import com.example.alloon_aos.data.model.request.Rule
 
 data class FeedOutItem(
     val daysAgo : Int,
@@ -30,6 +33,34 @@ data class PartyItem(
 )
 
 class FeedViewModel : ViewModel(){
+    var challengeId = -1
+    var name = ""
+    var isPublic = false
+    var goal = ""
+    var proveTime = ""
+    var endDate = ""
+    var rules: List<Rule> = listOf()
+    var hashtags: List<HashTag> = listOf()
+    var imgFile = ""
+
+    fun getData() : MyData {
+        var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags)
+        return data
+    }
+
+    fun setChallengeData(data: MyData) {
+        name = data.name
+        isPublic = data.isPublic
+        goal = data.goal
+        proveTime = data.proveTime
+        endDate = data.endData
+        rules = data.rules
+        hashtags = data.hashtags
+        imgFile = data.imageUrl.toString()
+    }
+
+
+
     var id = "myId" //api에서 받아올 나의 아이디
     val isMissionClear = MutableLiveData(false) //api에서 받아올 오늘 미션관련 플래그
     //피드뷰

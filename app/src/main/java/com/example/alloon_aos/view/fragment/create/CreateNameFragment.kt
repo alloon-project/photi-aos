@@ -88,13 +88,16 @@ class CreateNameFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.numTextview.setText("${s!!.length}/16")
-                binding.nextBtn.isEnabled = true
+                if (s!!.length < 2)
+                    binding.nextBtn.isEnabled = false
+                else
+                    binding.nextBtn.isEnabled = true
             }
         })
 
         binding.nextBtn.setOnClickListener {
             if (mActivity.isFromChallenge)
-                requireActivity().finish()
+                mActivity.modifyName()
             else
                 view?.findNavController()?.navigate(R.id.action_createNameFragment_to_createContentFragment)
         }
@@ -103,9 +106,11 @@ class CreateNameFragment : Fragment() {
             if (isChecked) {
                 binding.nameTextview3.setText(R.string.createname3)
                 binding.nameImageview.setImageResource(R.drawable.ic_postit_blue)
+                createViewModel.isPublic = true
             } else {
                 binding.nameTextview3.setText(R.string.createname4)
                 binding.nameImageview.setImageResource(R.drawable.ic_people_blue)
+                createViewModel.isPublic = false
             }
         }
 

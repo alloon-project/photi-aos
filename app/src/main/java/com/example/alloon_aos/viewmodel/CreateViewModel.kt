@@ -1,50 +1,152 @@
 package com.example.alloon_aos.viewmodel
 
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.alloon_aos.R
+import com.example.alloon_aos.data.model.ActionApiResponse
+import com.example.alloon_aos.data.model.MyData
+import com.example.alloon_aos.data.model.request.HashTag
+import com.example.alloon_aos.data.model.request.Rule
+import com.example.alloon_aos.data.model.response.ExamImgResponse
+import com.example.alloon_aos.data.remote.RetrofitClient
+import com.example.alloon_aos.data.repository.ChallengeRepository
+import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
+import com.example.alloon_aos.data.repository.ErrorHandler
 
-data class Image(val content : String, val image : Int, var select : Boolean)
+data class Image(val content : String, val image : String, var select : Boolean)
 data class RuleItem(val rule : String, var select : Boolean)
 
 class CreateViewModel : ViewModel() {
-    //create image
+    companion object {
+        private const val TAG = "CREATE"
+    }
 
-    var selectImage = MutableLiveData<Int>()
+    private val challengeService = RetrofitClient.challengeService
+    private val repository = ChallengeRepository(challengeService)
 
-    var images = arrayListOf<Image>(
-        Image("럭키데이", R.drawable.image222, true),
-        Image("인증샷", R.drawable.image33, false),
-        Image("오운완", R.drawable.image44, false),
-        Image("스터디", R.drawable.image555, false)
-    )
+    val apiResponse = MutableLiveData<ActionApiResponse>()
 
-    fun initImage(): Boolean {
-        for (pos in images) {
-            if (pos.select) {
-                selectImage.value = pos.image
-                return true
-            }
+    var name = ""
+    var isPublic = true
+    var goal = ""
+    var proveTime = ""
+    var endDate = ""
+    var rules: List<Rule> = listOf()
+    var hashtags: List<HashTag> = listOf()
+    var imgFile = ""
+    var isUri = false
+
+    fun resetApiResponseValue() {
+        apiResponse.value = ActionApiResponse()
+    }
+
+    fun setTitleData(title: String) { name = title }
+    fun setTimeData(time: String) { proveTime = time }
+    fun setGoalData(goal: String) { this.goal = goal }
+    fun setDateDate(date: String) { endDate = date }
+    fun setImgData(img: String) {
+        select(4)
+        selectURL = img
+    }
+    fun setRuleData(rules: List<Rule>) {
+        for (rule in rules) {
+            val matchedRuleItem = defaultRules.find { it.rule == rule.rule }
+
+            if (matchedRuleItem != null) {
+                selectNum++
+                matchedRuleItem.select = true
+            } else
+                addRule(rule.rule)
         }
-        return false
+    }
+    fun setHashData(hashs: List<HashTag>) {
+        for(hash in hashs) {
+            addHash(hash.hashtag)
+        }
+    }
+
+    fun getData() : MyData {
+        var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags)
+        return data
+    }
+
+
+    //create image
+    var selectURL = ""
+    var _selectURL = MutableLiveData<String>()
+
+    var examImages : ArrayList<Image> = arrayListOf()
+    var select = 0
+
+    fun setExamImg(list: List<String>) {
+        val imgList = arrayListOf<Image> (
+            Image("럭키데이", list[0], false),
+            Image("인증샷", list[1], false),
+            Image("오운완", list[2], false),
+            Image("스터디", list[3], false)
+        )
+        examImages = imgList
+    }
+
+    fun getExamImg() {
+        repository.getExamImg(object : ChallengeRepositoryCallback<ExamImgResponse> {
+            override fun onSuccess(data: ExamImgResponse) {
+                val result = data.code
+                val mes = data.message
+                val data = data.data
+                setExamImg(data.list)
+                apiResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "getExamImg: $mes $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                handleFailure(error)
+            }
+        })
+    }
+
+    fun handleFailure(error: Throwable) {
+        val errorCode = ErrorHandler.handle(error)
+        apiResponse.value = ActionApiResponse(errorCode)
+    }
+
+    fun initImage() {
+        select(select)
+        if (select == 0)
+            _selectURL.value = examImages[0].image
     }
 
     fun select(pos : Int) {
         for (n in 0..3) {
             if (n == pos)
-                images[n].select = true
+                examImages[n].select = true
             else
-                images[n].select = false
+                examImages[n].select = false
         }
-        if (pos < 4)
-            selectImage.value = images[pos].image
-        else
-            selectImage = MutableLiveData<Int>()
+        select = pos
+    }
+
+    fun setCustomImg() {
+        _selectURL.value = selectURL
+    }
+
+    fun setImageURL() {
+        _selectURL.value = examImages[select].image
+        isUri = false
+    }
+
+    fun setUriToURL(uri: Uri) {
+        _selectURL.value = uri.toString()
+        isUri = true
+    }
+
+    fun setImageFile(file: String) {
+        imgFile = file
     }
 
 
     //create rule
-
     var defaultRule = MutableLiveData<ArrayList<RuleItem>>()
     var customRule = MutableLiveData<ArrayList<RuleItem>>()
 
@@ -71,9 +173,9 @@ class CreateViewModel : ViewModel() {
     }
 
     fun addRule(rule : String) {
+        selectNum++
         customRules.add(RuleItem(rule, true))
         customRule.value = customRules
-        selectNum++
     }
 
     fun deleteRule(item : RuleItem) {
@@ -83,9 +185,16 @@ class CreateViewModel : ViewModel() {
         customRule.value = customRules
     }
 
+    fun setRuleList() {
+        val selectedRules: List<Rule> = (defaultRules + customRules)
+            .filter { it.select }
+            .map { Rule(it.rule) }
+
+        rules = selectedRules
+    }
+
 
     //create hash
-
     var hashs = MutableLiveData<ArrayList<String>>()
     var _hashs = arrayListOf<String>()
 
@@ -97,5 +206,10 @@ class CreateViewModel : ViewModel() {
     fun deleteHash(hash : String){
         _hashs.remove(hash)
         hashs.value = _hashs
+    }
+
+    fun setHashList(){
+        val hashTagList: List<HashTag> = _hashs.map { HashTag(it) }
+        hashtags = hashTagList
     }
 }

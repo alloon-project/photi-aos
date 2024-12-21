@@ -2,6 +2,7 @@ package com.example.alloon_aos.view.fragment.photi
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.adapter.HashCardAdapter
 import com.example.alloon_aos.view.adapter.HashTagAdapter
 import com.example.alloon_aos.view.adapter.HotCardAdapter
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class ChallengeCommendFragment : Fragment() {
@@ -49,7 +51,7 @@ class ChallengeCommendFragment : Fragment() {
         binding.chipRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.chipRecyclerview.setHasFixedSize(true)
 
-        //setObserver()
+        setObserver()
 
         return binding.root
     }
@@ -58,12 +60,41 @@ class ChallengeCommendFragment : Fragment() {
         photiViewModel.hotItemsListData.observe(viewLifecycleOwner) { // 데이터에 변화가 있을 때 어댑터에게 변경을 알림
             hotCardAdapter.notifyDataSetChanged() // 어댑터가 리사이클러뷰에게 알려 내용을 갱신함
         }
+
+        photiViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    startChallenge()
+                }
+                "TOKEN_UNAUTHENTICATED" -> {
+                    CustomToast.createToast(activity, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                }
+                "TOKEN_UNAUTHORIZED" -> {
+                    CustomToast.createToast(activity, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+                "CHALLENGE_NOT_FOUND" -> {
+                    CustomToast.createToast(activity, "존재하지 않는 챌린지입니다.", "circle")?.show()
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
     }
 
     fun setOnclick() {
+        photiViewModel.getChallengeInfo()
+    }
+
+    private fun startChallenge() {
         val intent = Intent(requireContext(), ChallengeActivity::class.java)
         intent.putExtra("IS_FROM_HOME",true)
-        intent.putExtra("ID","id")
+        intent.putExtra("ID",photiViewModel.id)
+        intent.putExtra("data", photiViewModel.getData())
+        intent.putExtra("image", photiViewModel.imgFile)
         startActivity(intent)
     }
 }

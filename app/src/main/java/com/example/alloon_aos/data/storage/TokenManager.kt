@@ -1,7 +1,6 @@
 package com.example.alloon_aos.data.storage
 
 import android.util.Log
-import com.example.alloon_aos.data.storage.MySharedPreferences
 import javax.inject.Inject
 
 class TokenManager @Inject constructor(
@@ -40,5 +39,10 @@ class TokenManager @Inject constructor(
 
     fun deleteRefreshToken(){
         sharedPreferences.remove(REFRESH_TOKEN_KEY)
+    }
+
+    fun deleteAllToken() {
+        deleteAccessToken()
+        deleteRefreshToken()
     }
 }

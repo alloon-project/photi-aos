@@ -68,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/suit_bold"
                         android:letterSpacing="-0.03"
-                        android:text="title"
+                        android:text="@={viewModel.name}"
                         android:textColor="@color/gray900"
                         android:textSize="22dp" />
 
@@ -103,7 +103,7 @@
                             android:layout_marginTop="14dp"
                             android:fontFamily="@font/suit_semibold"
                             android:letterSpacing="-0.03"
-                            android:text="14:00"
+                            android:text="@={viewModel.proveTime}"
                             android:textColor="@color/gray800"
                             android:textSize="14dp" />
 
@@ -124,10 +124,17 @@
                         android:background="@drawable/card_shape3"
                         android:orientation="vertical">
 
+                        <android.widget.ImageView
+                            android:id="@+id/photo_imageview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
                         <LinearLayout
+                            android:id="@+id/memberImg_layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:visibility="gone"
                             android:layout_marginTop="14dp"
                             android:layout_marginLeft="14dp"
                             android:layout_marginRight="14dp">
@@ -226,7 +233,7 @@
                         android:fontFamily="@font/suit_semibold"
                         android:letterSpacing="-0.03"
                         android:lineSpacingExtra="4sp"
-                        android:text="하루에 한번씩 꼭 독서를 하는 것이 우리 챌린지의 목표입니다."
+                        android:text="@={viewModel.goal}"
                         android:textColor="@color/gray800"
                         android:textSize="14dp"
                         android:translationY="-1.76sp" />
@@ -267,7 +274,6 @@
                             android:fontFamily="@font/suit_semibold"
                             android:letterSpacing="-0.03"
                             android:lineSpacingExtra="4sp"
-                            android:text="매일 한 페이지라도 찍어서 올리기"
                             android:textColor="@color/gray800"
                             android:textSize="14dp"
                             android:layout_marginRight="16dp"
@@ -284,6 +290,7 @@
                             android:layerType="software"
                             android:layout_marginTop="16dp"
                             app:tint="@color/green200"
+                            android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/rule_textview" />
@@ -296,9 +303,9 @@
                             android:fontFamily="@font/suit_semibold"
                             android:letterSpacing="-0.03"
                             android:lineSpacingExtra="4sp"
-                            android:text="일주일에 1회 아니고 2회 아니고 3회 이상 인증하기"
                             android:textColor="@color/gray800"
                             android:textSize="14dp"
+                            android:visibility="gone"
                             android:layout_marginRight="16dp"
                             android:layout_marginLeft="16dp"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -315,6 +322,7 @@
                             android:textColor="@color/green500"
                             android:theme="@style/Theme.xsmall_round"
                             android:stateListAnimator="@null"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
@@ -345,7 +353,7 @@
                             android:layout_marginTop="14dp"
                             android:fontFamily="@font/suit_semibold"
                             android:letterSpacing="-0.03"
-                            android:text="~2025. 01. 01"
+                            android:text="@={viewModel.endDate}"
                             android:textColor="@color/gray800"
                             android:textSize="14dp" />
 

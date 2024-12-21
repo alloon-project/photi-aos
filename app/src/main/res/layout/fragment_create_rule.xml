@@ -85,7 +85,7 @@
             android:background="@drawable/btn_round_primary"
             android:theme="@style/Theme.xlarge_round"
             android:text="다음"
-            android:enabled="true"
+            android:enabled="false"
             android:layout_marginBottom="20dp"
             android:layout_marginRight="24dp"
             android:layout_marginLeft="24dp"

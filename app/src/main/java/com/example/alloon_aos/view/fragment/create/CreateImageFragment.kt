@@ -34,7 +34,6 @@ class CreateImageFragment : Fragment() {
     private val createViewModel by activityViewModels<CreateViewModel>()
     private lateinit var mActivity: CreateActivity
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
-    private lateinit var galleryImage : Uri
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +47,12 @@ class CreateImageFragment : Fragment() {
         mActivity = activity as CreateActivity
         mActivity.setAppBar()
 
-        if (mActivity.isFromChallenge)
+        if (mActivity.isFromChallenge){
             setModifyLayout()
+            createViewModel.setCustomImg()
+        } else {
+            createViewModel.initImage()
+        }
 
         thumbnailAdapter = ThumbnailAdapter(createViewModel, onItemClickListener = { position ->
             CameraHelper.checkPermissions(this) {
@@ -59,9 +62,6 @@ class CreateImageFragment : Fragment() {
         binding.thumbnailRecyclerView.adapter = thumbnailAdapter
         binding.thumbnailRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.thumbnailRecyclerView.setHasFixedSize(true)
-
-        if (!createViewModel.initImage())
-            setImageFromGallery(galleryImage)
 
         setObserver()
         setListener()
@@ -87,16 +87,21 @@ class CreateImageFragment : Fragment() {
     fun setListener() {
         binding.nextBtn.setOnClickListener {
             if (mActivity.isFromChallenge)
-                requireActivity().finish()
+                mActivity.modifyImage()
             else
                 view?.findNavController()?.navigate(R.id.action_createImageFragment_to_createRuleFragment)
         }
     }
 
     fun setObserver() {
-        createViewModel.selectImage.observe(viewLifecycleOwner) {
-            binding.thumbnailImageview.setImageResource(it)
+        createViewModel._selectURL.observe(viewLifecycleOwner) {
+            Glide.with(binding.thumbnailImageview.context)
+                .load(it)
+                .transform(CenterCrop(), RoundedCorners(32))
+                .into(binding.thumbnailImageview)
             thumbnailAdapter.notifyDataSetChanged()
+
+            createViewModel.setImageFile(it)
         }
     }
 
@@ -105,22 +110,14 @@ class CreateImageFragment : Fragment() {
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
-                setImageFromGallery(it)
-                galleryImage = it
+                createViewModel.select(4)
+                createViewModel.setUriToURL(uri)
             }
         }
     }
 
     private fun pickImageFromGallery() {
         pickImageLauncher.launch("image/*")
-    }
-
-    private fun setImageFromGallery(uri: Uri) {
-        Glide.with(binding.thumbnailImageview.context)
-            .load(uri)
-            .transform(CenterCrop(), RoundedCorners(32))
-            .into(binding.thumbnailImageview)
-        thumbnailAdapter.notifyDataSetChanged()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

@@ -23,6 +23,7 @@ import com.example.alloon_aos.view.adapter.AddHashAdapter
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.KeyboardListener
 import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
+import com.example.alloon_aos.view.ui.util.StringUtil
 import com.example.alloon_aos.viewmodel.CreateViewModel
 
 class CreateHashtagFragment : Fragment() {
@@ -111,18 +112,25 @@ class CreateHashtagFragment : Fragment() {
 
         binding.addHashBtn.setOnClickListener {
             hash = binding.hashEdittext.text.toString()
-            if (createViewModel._hashs.size == 3)
+            hash = StringUtil.removeSpaces(hash)
+            if (createViewModel._hashs.size == 3) {
                 CustomToast.createToast(activity,"해시태그는 3개까지 등록 가능해요")?.show()
-            else
+            } else {
                 createViewModel.addHash(hash)
+                binding.hashEdittext.setText("")
+            }
         }
 
         binding.nextBtn.setOnClickListener {
-            if (mActivity.isFromChallenge)
-                requireActivity().finish()
-            else {
+            createViewModel.setHashList()
+            if (mActivity.isFromChallenge) {
+                mActivity.modifyHash()
+            } else {
                 val intent = Intent(requireContext(), ChallengeActivity::class.java)
                 intent.putExtra("IS_FROM_CREATE",true)
+                intent.putExtra("data", createViewModel.getData())
+                intent.putExtra("image", createViewModel.imgFile)
+                intent.putExtra("isUri",createViewModel.isUri)
                 startActivity(intent)
             }
         }
