@@ -27,6 +27,7 @@ import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.FeedViewModel
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
 
 class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
@@ -123,6 +124,8 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 }
             }
         }
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
