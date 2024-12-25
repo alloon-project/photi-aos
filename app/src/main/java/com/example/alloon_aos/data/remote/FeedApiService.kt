@@ -24,25 +24,25 @@ interface FeedApiService {
 
     @GET("/api/challenges/{challengeId}/info")
     suspend fun get_challengeInfo(
-        @Path("challengeId") challengeId: Long // 챌린지 ID
+        @Path("challengeId") challengeId: Long
     ):  Response<ApiResponse<ChallengeInfoData>>
 
     @GET("/api/challenges/{challengeId}/feeds/{feedId}")
     suspend fun get_challengeFeedDetail(
-        @Path("challengeId") challengeId: Long, // 챌린지 ID
-        @Path("feedId") feedId: Long            // 피드 ID
+        @Path("challengeId") challengeId: Long,
+        @Path("feedId") feedId: Long
     ): Response<ApiResponse<FeedDetailData>>
 
     @GET("/api/challenges/{challengeId}/challenge-members")
     suspend fun get_challengeMembers(
-        @Path("challengeId") challengeId: Long // 챌린지 ID
+        @Path("challengeId") challengeId: Long
     ): Response<ApiResponse<List<ChallengeMember>>>
 
 
     @GET("/api/challenges/feeds/{feedId}/comments")
     suspend fun get_feedComments(
-        @Path("feedId") feedId: Long,          // 피드 ID
-        @Query("page") page: Int = 0,          // 페이지 번호 (기본값: 0)
-        @Query("size") size: Int = 10          // 페이지 크기 (기본값: 10)
+        @Path("feedId") feedId: Long,
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 10
     ): Response<ApiResponse<FeedCommentsData>>
 }

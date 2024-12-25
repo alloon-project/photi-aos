@@ -4,18 +4,28 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.MyData
 import com.example.alloon_aos.data.model.request.HashTag
 import com.example.alloon_aos.data.model.request.MemberImg
 import com.example.alloon_aos.data.model.request.Rule
+import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeResponse
-import com.example.alloon_aos.data.model.response.ExamImgResponse
+import com.example.alloon_aos.data.model.response.MyChallenges
+import com.example.alloon_aos.data.model.response.ProfileImageData
+import com.example.alloon_aos.data.model.response.UserProfile
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
 import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
 import com.example.alloon_aos.data.repository.ErrorHandler
+import com.example.alloon_aos.data.repository.UserRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
 data class Item(val title:String, val date: String, val url: String? = null, var hashtag: MutableList<String> = mutableListOf()  )
 data class Chip(val id:String)
@@ -46,6 +56,9 @@ class PhotiViewModel: ViewModel() {
     private val challengeService = RetrofitClient.challengeService
     private val repository = ChallengeRepository(challengeService)
 
+    private val userService = RetrofitClient.userService
+    private val user_repository = UserRepository(userService)
+
     val apiResponse = MutableLiveData<ActionApiResponse>()
 
     var id = -1
@@ -60,6 +73,16 @@ class PhotiViewModel: ViewModel() {
     var memberCnt = -1
     var imgFile = ""
 
+
+    //userData
+    private val _userProfile = MutableStateFlow<ApiResponse<UserProfile>?>(null)
+    val userProfile: StateFlow<ApiResponse<UserProfile>?> = _userProfile
+
+    private val _challenges = MutableStateFlow<ApiResponse<MyChallenges>?>(null)
+    val challenges: StateFlow<ApiResponse<MyChallenges>?> = _challenges
+
+    private val _profileImage = MutableStateFlow<ApiResponse<ProfileImageData>?>(null)
+    val profileImage: StateFlow<ApiResponse<ProfileImageData>?> = _profileImage
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
     }
@@ -229,4 +252,43 @@ class PhotiViewModel: ViewModel() {
         ProofShotItem("스터디 챌린지","~ 2024. 12. 1","8시까지",null, mutableListOf("어학","자격증")),
         ProofShotItem("소설 필사하기","~ 2024. 9. 1","12시까지",null, mutableListOf("고능해지자","독서"))
     )
+
+    fun fetchUserProfile() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = user_repository.getUsers()
+                if (response.isSuccessful) {
+                    _userProfile.value = response.body()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun fetchMyChallenges(page: Int, size: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = user_repository.getMyChallenges(page, size)
+                if (response.isSuccessful) {
+                    _challenges.value = response.body()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun uploadProfileImage(imageFile: MultipartBody.Part) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = user_repository.postImage(imageFile)
+                if (response.isSuccessful) {
+                    _profileImage.value = response.body()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

@@ -8,6 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentMyPageBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
@@ -20,6 +23,8 @@ import com.example.alloon_aos.view.ui.util.TodayDecorator
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class MyPageFragment : Fragment() {
@@ -43,6 +48,20 @@ class MyPageFragment : Fragment() {
         setLisetener()
         upDateCalendar()
 
+
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                photiViewModel.userProfile.collectLatest { profile ->
+//                    profile?.let {
+//                        println("User Profile: ${it.data}")
+//                    }
+//                }
+//            }
+//        }
+
+
+
+        //photiViewModel.fetchUserProfile()
 
         return binding.root
     }
