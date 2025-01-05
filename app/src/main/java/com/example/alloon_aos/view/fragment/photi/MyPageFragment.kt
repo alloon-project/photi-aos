@@ -1,4 +1,5 @@
 package com.example.alloon_aos.view.fragment.photi
+
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,12 +12,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentMyPageBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.activity.SettingsActivity
-import com.example.alloon_aos.view.ui.component.dialog.ProofShotByDateDialog
 import com.example.alloon_aos.view.ui.component.dialog.EndedChallengesDialog
+import com.example.alloon_aos.view.ui.component.dialog.ProofShotByDateDialog
 import com.example.alloon_aos.view.ui.component.dialog.ProofShotsGalleryDialog
 import com.example.alloon_aos.view.ui.util.EventDecorator
 import com.example.alloon_aos.view.ui.util.TodayDecorator
@@ -28,12 +32,12 @@ import kotlinx.coroutines.launch
 
 
 class MyPageFragment : Fragment() {
-    private lateinit var binding : FragmentMyPageBinding
+    private lateinit var binding: FragmentMyPageBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var materialCalendarView: MaterialCalendarView
     private lateinit var eventDecorator: EventDecorator
     private lateinit var todayDecorator: TodayDecorator
-    var calendarYearMonth  = ObservableField<String>("")
+    var calendarYearMonth = ObservableField<String>("")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,25 +52,50 @@ class MyPageFragment : Fragment() {
         setLisetener()
         upDateCalendar()
 
+        // 데이터 변화 감지 및 UI 업데이트
+        observeUserProfile()
+        //   observeChallenges()
 
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                photiViewModel.userProfile.collectLatest { profile ->
-//                    profile?.let {
-//                        println("User Profile: ${it.data}")
-//                    }
-//                }
-//            }
-//        }
-
-
-
-        //photiViewModel.fetchUserProfile()
 
         return binding.root
     }
 
-    private fun setCalendarView(){
+    private fun observeUserProfile() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                photiViewModel.userProfile.collectLatest { profile ->
+                    profile?.let {
+                        it.data.let { userData ->
+                            binding.idTextView.text = userData.username
+
+                            Glide.with(binding.userImgImageView.context)
+                                .load(userData.imageUrl)
+                                .transform(CenterCrop(), RoundedCorners(24))
+                                .into(binding.userImgImageView)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+//    private fun observeChallenges() {
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                photiViewModel.challenges.collectLatest { challenges ->
+//                    challenges?.let {
+//
+//                        it.data.let { challengeList ->
+//                            binding.challengeCountTextView.text =
+//                                "Challenges: ${challengeList.size}"
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+    private fun setCalendarView() {
         materialCalendarView = binding.calendarview
         materialCalendarView.setTopbarVisible(false)
 
@@ -75,20 +104,20 @@ class MyPageFragment : Fragment() {
             koWeekDays[dayOfWeek.ordinal]
         }
         materialCalendarView.state().edit()
-                //필요시최대최소날짜설정
+            //필요시최대최소날짜설정
 //            .setMinimumDate(CalendarDay.from(2024, 7, 3))
 //            .setMaximumDate(CalendarDay.from(2024, 9, 30))
             .commit()
     }
 
-    private fun setLisetener(){
+    private fun setLisetener() {
         materialCalendarView.setOnMonthChangedListener { widget, date ->
-           upDateCalendar()
+            upDateCalendar()
         }
 
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
 
-            if(materialCalendarView.currentDate.month == date.month && calendarList.contains(date)) {
+            if (materialCalendarView.currentDate.month == date.month && calendarList.contains(date)) {
                 ProofShotByDateDialog(photiViewModel)
                     .show(parentFragmentManager, "CustomDialog")
             }
@@ -96,58 +125,59 @@ class MyPageFragment : Fragment() {
 
     }
 
-    private fun upDateCalendar(){
+    private fun upDateCalendar() {
         materialCalendarView.removeDecorators()
 
         val year = materialCalendarView.currentDate.year
         val month = materialCalendarView.currentDate.month
 
-        eventDecorator = EventDecorator(requireContext(),month, calendarList)
-        todayDecorator = TodayDecorator(requireContext(),month)
+        eventDecorator = EventDecorator(requireContext(), month, calendarList)
+        todayDecorator = TodayDecorator(requireContext(), month)
 
-        materialCalendarView.addDecorators(todayDecorator,eventDecorator)
+        materialCalendarView.addDecorators(todayDecorator, eventDecorator)
         calendarYearMonth.set("${year}년 ${month}월")
     }
 
-    fun changeMonth(flag : Int){
+    fun changeMonth(flag: Int) {
         //1 : 다음달
         //2 : 이전달
         var currentDate = materialCalendarView.currentDate.date
 
-        if(flag == 1)
+        if (flag == 1)
             currentDate = currentDate.minusMonths(1)
-
         else
-           currentDate = currentDate.plusMonths(1)
+            currentDate = currentDate.plusMonths(1)
 
         materialCalendarView.setCurrentDate(currentDate)
     }
 
-    fun showProofShotsDialog(){
+    fun showProofShotsDialog() {
         //if(인증 횟수가 0이 아니면)
         //총 인증 횟수와 챌린지 Id 넘겨줌
-        val dialog = ProofShotsGalleryDialog(5,1)
+        val dialog = ProofShotsGalleryDialog(5, 1)
         dialog.show(activity?.supportFragmentManager!!, "ChallengeCheckInDialog")
     }
 
-    fun showEndedChallengesDialog(){
+    fun showEndedChallengesDialog() {
         //if(종료 횟수가 0이 아니면)
-        val dialog = EndedChallengesDialog(5,1)
+        val dialog = EndedChallengesDialog(5, 1)
         dialog.show(activity?.supportFragmentManager!!, "ChallengeCheckInDialog")
     }
 
-    fun moveToSettingsActivity(){
+    fun moveToSettingsActivity() {
         startActivity(Intent(activity, SettingsActivity::class.java))
     }
 
     companion object {
         // 사용자 피드 정보
         // 해당 날짜 미리 선택되있음
-        val calendarList: HashSet<CalendarDay> = HashSet(listOf(
-            CalendarDay.from(2024, 8, 14),
-            CalendarDay.from(2024, 9, 1),
-            CalendarDay.from(2024, 9, 11),
-            CalendarDay.from(2024, 9, 12)
-        ))
+        val calendarList: HashSet<CalendarDay> = HashSet(
+            listOf(
+                CalendarDay.from(2024, 8, 14),
+                CalendarDay.from(2024, 9, 1),
+                CalendarDay.from(2024, 9, 11),
+                CalendarDay.from(2024, 9, 12)
+            )
+        )
     }
 }

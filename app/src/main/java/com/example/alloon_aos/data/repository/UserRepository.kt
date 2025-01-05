@@ -1,16 +1,27 @@
 package com.example.alloon_aos.data.repository
 
-import com.example.alloon_aos.data.model.response.*
+import com.example.alloon_aos.data.model.response.ApiResponse
+import com.example.alloon_aos.data.model.response.ChallengeRecordData
+import com.example.alloon_aos.data.model.response.EndedChallengeData
+import com.example.alloon_aos.data.model.response.FeedByDate
+import com.example.alloon_aos.data.model.response.FeedDate
+import com.example.alloon_aos.data.model.response.FeedHistoryData
+import com.example.alloon_aos.data.model.response.MyChallengeCount
+import com.example.alloon_aos.data.model.response.MyChallenges
+import com.example.alloon_aos.data.model.response.ProfileImageData
+import com.example.alloon_aos.data.model.response.UserProfile
 import com.example.alloon_aos.data.remote.UserApiService
 import okhttp3.MultipartBody
 import retrofit2.Response
 
 class UserRepository(private val apiService: UserApiService) {
 
+    //설정페이지 사용자 정보
     suspend fun getUsers(): Response<ApiResponse<UserProfile>> {
         return apiService.get_users()
     }
 
+    //사용자 참옂 중인 챌린지 조회
     suspend fun getMyChallenges(page: Int, size: Int): Response<ApiResponse<MyChallenges>> {
         return apiService.get_my_challenges(page, size)
     }
@@ -23,14 +34,20 @@ class UserRepository(private val apiService: UserApiService) {
         return apiService.get_feeds_by_date(date)
     }
 
+    //인증 횟수 모아보기 리스트
     suspend fun getFeedHistory(page: Int, size: Int): Response<ApiResponse<FeedHistoryData>> {
         return apiService.get_feed_history(page, size)
     }
 
-    suspend fun getEndedChallenges(page: Int, size: Int): Response<ApiResponse<EndedChallengeData>> {
+    //종료된 챌린지 모아보기 리스트
+    suspend fun getEndedChallenges(
+        page: Int,
+        size: Int
+    ): Response<ApiResponse<EndedChallengeData>> {
         return apiService.get_ended_challenges(page, size)
     }
 
+    //참여중인 챌린지 갯수(어디서 사용?)
     suspend fun getChallenges(): Response<ApiResponse<MyChallengeCount>> {
         return apiService.get_challenges()
     }

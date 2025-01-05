@@ -2,6 +2,7 @@ package com.example.alloon_aos.viewmodel
 
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +13,10 @@ import com.example.alloon_aos.data.model.request.MemberImg
 import com.example.alloon_aos.data.model.request.Rule
 import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.ChallengeData
+import com.example.alloon_aos.data.model.response.ChallengeRecordData
 import com.example.alloon_aos.data.model.response.ChallengeResponse
+import com.example.alloon_aos.data.model.response.FeedByDate
+import com.example.alloon_aos.data.model.response.FeedDate
 import com.example.alloon_aos.data.model.response.MyChallenges
 import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.UserProfile
@@ -22,13 +26,17 @@ import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
 import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 
-data class Item(val title:String, val date: String, val url: String? = null, var hashtag: MutableList<String> = mutableListOf()  )
-data class Chip(val id:String)
+data class Item(
+    val title: String,
+    val date: String,
+    val url: String? = null,
+    var hashtag: MutableList<String> = mutableListOf()
+)
+
+data class Chip(val id: String)
 data class ChallengeItem(
     val title: String,
     val data: String,
@@ -47,7 +55,7 @@ data class ProofShotItem(
     var hashtag: MutableList<String>
 )
 
-class PhotiViewModel: ViewModel() {
+class PhotiViewModel : ViewModel() {
 
     companion object {
         private const val TAG = "PHOTI"
@@ -75,20 +83,36 @@ class PhotiViewModel: ViewModel() {
 
 
     //userData
-    private val _userProfile = MutableStateFlow<ApiResponse<UserProfile>?>(null)
-    val userProfile: StateFlow<ApiResponse<UserProfile>?> = _userProfile
 
-    private val _challenges = MutableStateFlow<ApiResponse<MyChallenges>?>(null)
-    val challenges: StateFlow<ApiResponse<MyChallenges>?> = _challenges
+    //사용x
+    private val _userProfile = MutableLiveData<ApiResponse<UserProfile>?>(null)
+    val userProfile: LiveData<ApiResponse<UserProfile>?> = _userProfile
 
-    private val _profileImage = MutableStateFlow<ApiResponse<ProfileImageData>?>(null)
-    val profileImage: StateFlow<ApiResponse<ProfileImageData>?> = _profileImage
+    private val _challenges = MutableLiveData<ApiResponse<MyChallenges>?>(null)
+    val challenges: LiveData<ApiResponse<MyChallenges>?> = _challenges
+
+
+    //사용 o
+    private val _profileImage = MutableLiveData<ApiResponse<ProfileImageData>?>(null)
+    val profileImage: LiveData<ApiResponse<ProfileImageData>?> = _profileImage
+
+
+    private val _challengeRecodData = MutableLiveData<ApiResponse<ChallengeRecordData>?>(null)
+    val challengeRecodData: LiveData<ApiResponse<ChallengeRecordData>?> = _challengeRecodData
+
+    private val _feedsData = MutableLiveData<ApiResponse<FeedDate>>()
+    val feedsData: LiveData<ApiResponse<FeedDate>> get() = _feedsData
+
+    private val _feedsByDateData = MutableLiveData<List<FeedByDate>>()
+    val feedsByDateData: LiveData<List<FeedByDate>> get() = _feedsByDateData
+
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
     }
 
-    fun getData() : MyData {
-        var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags, memberCnt, memberImg)
+    fun getData(): MyData {
+        var data =
+            MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags, memberCnt, memberImg)
         return data
     }
 
@@ -130,10 +154,17 @@ class PhotiViewModel: ViewModel() {
 
     //인기있는 챌린지
     val hotItemsListData = MutableLiveData<ArrayList<Item>>()
-    val hotItems = arrayListOf<Item>(Item("헬스 미션","~ 2024. 8. 22","https://ifh.cc/g/V4Bb5Q.jpg", mutableListOf("요가","헬스")),
-        Item("요리 챌린지","~ 2024. 12. 1","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리")),
-        Item("면접 연습하기","~ 2024. 8. 22","https://ifh.cc/g/PJpN7X.jpg",mutableListOf("취뽀","스피치")),
-        Item("멋진 개발자가 되어서 초코칩 만들기","~ 2024. 12. 1","https://ifh.cc/g/Okx9DW.jpg",mutableListOf("코딩","안드로이드")))
+    val hotItems = arrayListOf<Item>(
+        Item("헬스 미션", "~ 2024. 8. 22", "https://ifh.cc/g/V4Bb5Q.jpg", mutableListOf("요가", "헬스")),
+        Item("요리 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/09y6Mo.jpg", mutableListOf("요리")),
+        Item("면접 연습하기", "~ 2024. 8. 22", "https://ifh.cc/g/PJpN7X.jpg", mutableListOf("취뽀", "스피치")),
+        Item(
+            "멋진 개발자가 되어서 초코칩 만들기",
+            "~ 2024. 12. 1",
+            "https://ifh.cc/g/Okx9DW.jpg",
+            mutableListOf("코딩", "안드로이드")
+        )
+    )
 
     fun addHotItem(item: Item) {
         hotItems.add(item)
@@ -152,24 +183,47 @@ class PhotiViewModel: ViewModel() {
 
 
     //해시태그별 챌린지
-    val hashItems = arrayListOf<Item>(Item("영화 미션","~ 2024. 12. 1","https://ifh.cc/g/6HRkxa.jpg", mutableListOf("영화관람")),
-        Item("소설 필사하기","~ 2024. 9. 1","https://ifh.cc/g/yxgmBH.webp", mutableListOf("고능해지자","독서")),
-        Item("멋진 개발자가 되어서 초코칩 만들기","~2024. 10. 12","https://ifh.cc/g/Okx9DW.jpg", mutableListOf("코딩","ios")),
-        Item("바빌론 감상평쓰기","~2024. 12. 1","https://ifh.cc/g/Vwdj5C.jpg", mutableListOf("감상평","글쓰기"))
+    val hashItems = arrayListOf<Item>(
+        Item("영화 미션", "~ 2024. 12. 1", "https://ifh.cc/g/6HRkxa.jpg", mutableListOf("영화관람")),
+        Item(
+            "소설 필사하기",
+            "~ 2024. 9. 1",
+            "https://ifh.cc/g/yxgmBH.webp",
+            mutableListOf("고능해지자", "독서")
+        ),
+        Item(
+            "멋진 개발자가 되어서 초코칩 만들기",
+            "~2024. 10. 12",
+            "https://ifh.cc/g/Okx9DW.jpg",
+            mutableListOf("코딩", "ios")
+        ),
+        Item(
+            "바빌론 감상평쓰기",
+            "~2024. 12. 1",
+            "https://ifh.cc/g/Vwdj5C.jpg",
+            mutableListOf("감상평", "글쓰기")
         )
+    )
 
 
     //최신순 챌린지
-    val latestItems = arrayListOf<Item>(Item("코딩 챌린지","~ 2024. 12. 1","https://ifh.cc/g/rKbcYM.jpg",
-        mutableListOf("ios","android")
-    ),
-        Item("영화 챌린지","~ 2024. 12. 1","https://ifh.cc/g/6HRkxa.jpg", mutableListOf("영화관람")),
-        Item("면접 연습하기","~ 2024. 8. 22","https://ifh.cc/g/PJpN7X.jpg",mutableListOf("취뽀","스피치")),
-        Item("헬스 챌린지","~ 2024. 12. 1","https://ifh.cc/g/AA0NMd.jpg", mutableListOf("헬스","요가")),
-        Item("요리 챌린지","~ 2024. 12. 1","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리")),
-        Item("스터디 챌린지","~ 2024. 12. 1","https://ifh.cc/g/KB2Vh1.jpg", mutableListOf("어학","자격증")),
-        Item("헬스 미션","~ 2024. 8. 22","https://ifh.cc/g/V4Bb5Q.jpg", mutableListOf("요가","헬스")),
-        Item("소설 필사하기","~ 2024. 9. 1","https://ifh.cc/g/yxgmBH.webp", mutableListOf("고능해지자","독서"))
+    val latestItems = arrayListOf<Item>(
+        Item(
+            "코딩 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/rKbcYM.jpg",
+            mutableListOf("ios", "android")
+        ),
+        Item("영화 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/6HRkxa.jpg", mutableListOf("영화관람")),
+        Item("면접 연습하기", "~ 2024. 8. 22", "https://ifh.cc/g/PJpN7X.jpg", mutableListOf("취뽀", "스피치")),
+        Item("헬스 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/AA0NMd.jpg", mutableListOf("헬스", "요가")),
+        Item("요리 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/09y6Mo.jpg", mutableListOf("요리")),
+        Item("스터디 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/KB2Vh1.jpg", mutableListOf("어학", "자격증")),
+        Item("헬스 미션", "~ 2024. 8. 22", "https://ifh.cc/g/V4Bb5Q.jpg", mutableListOf("요가", "헬스")),
+        Item(
+            "소설 필사하기",
+            "~ 2024. 9. 1",
+            "https://ifh.cc/g/yxgmBH.webp",
+            mutableListOf("고능해지자", "독서")
+        )
     )
 
 
@@ -201,12 +255,60 @@ class PhotiViewModel: ViewModel() {
     // 챌린지 없을 때
     val _photoItem = MutableLiveData<ChallengeItem>() //현재 item
     val photoItems = arrayListOf(
-        ChallengeItem("영화 챌린지","~ 2024. 12. 1","10시까지","영화를 봅시다","https://ifh.cc/g/6HRkxa.jpg", mutableListOf("영화관람"),"3명"),
-        ChallengeItem("면접 연습하기","~ 2024. 8. 22","8시까지","면접 연습을 해야해요","https://ifh.cc/g/PJpN7X.jpg",mutableListOf("취뽀","스피치"),"2명"),
-        ChallengeItem("헬스 챌린지","~ 2024. 12. 1","7시까지","헬스는 꾸쭌히!","https://ifh.cc/g/AA0NMd.jpg", mutableListOf("헬스","요가"),"네명"),
-        ChallengeItem("요리 챌린지","~ 2024. 12. 1","2시까찌","요리는 즐거워~~","https://ifh.cc/g/09y6Mo.jpg",mutableListOf("요리"),"다슷명"),
-        ChallengeItem("스터디 챌린지","~ 2024. 12. 1","8시까지","공부해라","https://ifh.cc/g/KB2Vh1.jpg", mutableListOf("어학","자격증"),"두명"),
-        ChallengeItem("소설 필사하기","~ 2024. 9. 1","12시까지","당신의 최애 소설은?","https://ifh.cc/g/yxgmBH.webp", mutableListOf("고능해지자","독서"),"7명")
+        ChallengeItem(
+            "영화 챌린지",
+            "~ 2024. 12. 1",
+            "10시까지",
+            "영화를 봅시다",
+            "https://ifh.cc/g/6HRkxa.jpg",
+            mutableListOf("영화관람"),
+            "3명"
+        ),
+        ChallengeItem(
+            "면접 연습하기",
+            "~ 2024. 8. 22",
+            "8시까지",
+            "면접 연습을 해야해요",
+            "https://ifh.cc/g/PJpN7X.jpg",
+            mutableListOf("취뽀", "스피치"),
+            "2명"
+        ),
+        ChallengeItem(
+            "헬스 챌린지",
+            "~ 2024. 12. 1",
+            "7시까지",
+            "헬스는 꾸쭌히!",
+            "https://ifh.cc/g/AA0NMd.jpg",
+            mutableListOf("헬스", "요가"),
+            "네명"
+        ),
+        ChallengeItem(
+            "요리 챌린지",
+            "~ 2024. 12. 1",
+            "2시까찌",
+            "요리는 즐거워~~",
+            "https://ifh.cc/g/09y6Mo.jpg",
+            mutableListOf("요리"),
+            "다슷명"
+        ),
+        ChallengeItem(
+            "스터디 챌린지",
+            "~ 2024. 12. 1",
+            "8시까지",
+            "공부해라",
+            "https://ifh.cc/g/KB2Vh1.jpg",
+            mutableListOf("어학", "자격증"),
+            "두명"
+        ),
+        ChallengeItem(
+            "소설 필사하기",
+            "~ 2024. 9. 1",
+            "12시까지",
+            "당신의 최애 소설은?",
+            "https://ifh.cc/g/yxgmBH.webp",
+            mutableListOf("고능해지자", "독서"),
+            "7명"
+        )
 
     )//data 받을 list 얘는 페이지 새로 받아올때마다 초기화 하면된다
 
@@ -219,16 +321,16 @@ class PhotiViewModel: ViewModel() {
     // 챌린지 있을 때
     val proofPos = MutableLiveData<Int>() //현재 item
     val proofItems = arrayListOf(
-        ProofShotItem("영화 챌린지","~ 2024. 12. 1","10시까지",null, mutableListOf("영화관람")),
-        ProofShotItem("면접 연습하기","~ 2024. 8. 22","8시까지",null, mutableListOf("취뽀","스피치")),
-        ProofShotItem("헬스 챌린지","~ 2024. 12. 1","7시까지",null, mutableListOf("헬스","요가")),
-        ProofShotItem("요리 챌린지","~ 2024. 12. 1","2시까찌",null,mutableListOf("요리")),
-        ProofShotItem("스터디 챌린지","~ 2024. 12. 1","8시까지",null, mutableListOf("어학","자격증")),
-        ProofShotItem("소설 필사하기","~ 2024. 9. 1","12시까지",null, mutableListOf("고능해지자","독서"))
+        ProofShotItem("영화 챌린지", "~ 2024. 12. 1", "10시까지", null, mutableListOf("영화관람")),
+        ProofShotItem("면접 연습하기", "~ 2024. 8. 22", "8시까지", null, mutableListOf("취뽀", "스피치")),
+        ProofShotItem("헬스 챌린지", "~ 2024. 12. 1", "7시까지", null, mutableListOf("헬스", "요가")),
+        ProofShotItem("요리 챌린지", "~ 2024. 12. 1", "2시까찌", null, mutableListOf("요리")),
+        ProofShotItem("스터디 챌린지", "~ 2024. 12. 1", "8시까지", null, mutableListOf("어학", "자격증")),
+        ProofShotItem("소설 필사하기", "~ 2024. 9. 1", "12시까지", null, mutableListOf("고능해지자", "독서"))
     )
 
     val completeItems = arrayListOf<ProofShotItem>()
-    lateinit var currentItem : ProofShotItem
+    lateinit var currentItem: ProofShotItem
 
     fun completeProofShot(url: Uri) {
         proofItems.remove(currentItem)
@@ -237,20 +339,19 @@ class PhotiViewModel: ViewModel() {
         proofPos.value = completeItems.indexOf(currentItem)
     }
 
-    fun updateCurrentItem(item : ProofShotItem) {
+    fun updateCurrentItem(item: ProofShotItem) {
         currentItem = item
     }
 
 
-
     //마이페이지 날짜별 인증보기
     val dateProofItems = arrayListOf(
-        ProofShotItem("영화 챌린지","~ 2024. 12. 1","10시까지",null, mutableListOf("영화관람")),
-        ProofShotItem("면접 연습하기","~ 2024. 8. 22","8시까지",null, mutableListOf("취뽀","스피치")),
-        ProofShotItem("헬스 챌린지","~ 2024. 12. 1","7시까지",null, mutableListOf("헬스","요가")),
-        ProofShotItem("요리 챌린지","~ 2024. 12. 1","2시까찌",null,mutableListOf("요리")),
-        ProofShotItem("스터디 챌린지","~ 2024. 12. 1","8시까지",null, mutableListOf("어학","자격증")),
-        ProofShotItem("소설 필사하기","~ 2024. 9. 1","12시까지",null, mutableListOf("고능해지자","독서"))
+        ProofShotItem("영화 챌린지", "~ 2024. 12. 1", "10시까지", null, mutableListOf("영화관람")),
+        ProofShotItem("면접 연습하기", "~ 2024. 8. 22", "8시까지", null, mutableListOf("취뽀", "스피치")),
+        ProofShotItem("헬스 챌린지", "~ 2024. 12. 1", "7시까지", null, mutableListOf("헬스", "요가")),
+        ProofShotItem("요리 챌린지", "~ 2024. 12. 1", "2시까찌", null, mutableListOf("요리")),
+        ProofShotItem("스터디 챌린지", "~ 2024. 12. 1", "8시까지", null, mutableListOf("어학", "자격증")),
+        ProofShotItem("소설 필사하기", "~ 2024. 9. 1", "12시까지", null, mutableListOf("고능해지자", "독서"))
     )
 
     fun fetchUserProfile() {
@@ -259,6 +360,20 @@ class PhotiViewModel: ViewModel() {
                 val response = user_repository.getUsers()
                 if (response.isSuccessful) {
                     _userProfile.value = response.body()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    //사용자 챌린지 기록 조회(아이디, 프로필 사진, 인증 횟수, 종료된 챌린지 갯수)
+    fun fetchChallengeHistory() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = user_repository.getChallengeHistory()
+                if (response.isSuccessful) {
+                    _challengeRecodData.value = response.body()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -278,6 +393,37 @@ class PhotiViewModel: ViewModel() {
             }
         }
     }
+
+    //인증 날짜 리스트 (달력)
+    fun fetchFeeds() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = user_repository.getFeeds()
+                if (response.isSuccessful) {
+                    // API 응답 값을 LiveData 또는 StateFlow로 업데이트
+                    _feedsData.value = response.body()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // 필요 시 에러 상태를 업데이트하거나 처리
+            }
+        }
+    }
+
+    //개별 날짜별 조회
+    fun fetchFeedsByDate(date: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = user_repository.getFeedsByDate(date)
+                // 직접 데이터를 업데이트하거나 처리
+                _feedsByDateData.value = response.data
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // 필요 시 에러 상태를 업데이트하거나 처리
+            }
+        }
+    }
+
 
     fun uploadProfileImage(imageFile: MultipartBody.Part) {
         viewModelScope.launch(Dispatchers.IO) {

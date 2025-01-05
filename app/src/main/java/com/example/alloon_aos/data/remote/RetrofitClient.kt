@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
     //private const val BASE_URL = "http://10.0.2.2:8080" //에뮬레이
-    //private const val BASE_URL = "http://172.30.1.48:8080" //스라
+    private const val BASE_URL = "http://172.30.1.76:8080" //스라
     //private const val BASE_URL = "http://192.168.35.235:8080" //별 카페
-    private const val BASE_URL = "http://172.16.100.34:8080" //신촌 커피빈
+    //private const val BASE_URL = "http://172.16.100.34:8080" //신촌 커피빈
     //private const val BASE_URL = "http://172.20.10.4:8080" //별 핫스팟
 
 
@@ -44,15 +44,18 @@ object RetrofitClient {
             .build()
     }
 
-    val apiService : ApiService by lazy {
+    val apiService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
     }
 
-    val challengeService : ChallengeService by lazy {
+    val challengeService: ChallengeService by lazy {
         retrofit.create(ChallengeService::class.java)
     }
 
-    val userService : UserApiService by lazy {
+    val feedService: FeedApiService by lazy {
+        retrofit.create(FeedApiService::class.java)
+    }
+    val userService: UserApiService by lazy {
         retrofit.create(UserApiService::class.java)
     }
 }

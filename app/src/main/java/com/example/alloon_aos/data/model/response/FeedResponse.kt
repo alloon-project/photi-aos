@@ -68,3 +68,7 @@ data class Comment(
     val username: String, // 작성자 이름
     val comment: String   // 댓글 내용
 )
+
+data class SuccessMessageReponse(
+    val successMessage: String // 성공 메시지
+)
