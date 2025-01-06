@@ -66,10 +66,12 @@ class PartyMemberFragment : Fragment() {
         }
     }
 
-    fun changeMyGoal(){
+    fun changeMyGoal(goal : String){
         val intent = Intent(requireContext(), GoalActivity::class.java)
         intent.putExtra("IS_FROM_FEED_ACTIVITY", true)
-        intent.putExtra("TITLE","title")
+        intent.putExtra("ID", feedViewModel.challengeId)
+        intent.putExtra("TITLE", feedViewModel.name)
+        intent.putExtra("GOAL", goal)
         activityResultLauncher.launch(intent)
     }
 
@@ -94,7 +96,7 @@ class PartyMemberFragment : Fragment() {
 
                 if(isMe){
                     binding.editImgBtn.visibility = View.VISIBLE
-                    binding.editImgBtn.setOnClickListener { changeMyGoal() }
+                    binding.editImgBtn.setOnClickListener { changeMyGoal(text) }
                 }
             }
         }

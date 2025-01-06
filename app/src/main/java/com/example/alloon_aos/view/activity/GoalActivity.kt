@@ -6,41 +6,53 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.ActivityGoalBinding
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.KeyboardListener
 import com.example.alloon_aos.view.ui.util.OnKeyboardVisibilityListener
+import com.example.alloon_aos.viewmodel.GoalViewModel
 
 class GoalActivity : AppCompatActivity() {
     lateinit var binding : ActivityGoalBinding
-    lateinit var title : String
     lateinit var isFrom : String
+    private val goalViewModel : GoalViewModel by viewModels()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_goal)
 
-        var isFromFeedActivity = intent.getBooleanExtra("IS_FROM_FEED_ACTIVITY", false)
-
-        if (isFromFeedActivity) {
+        val isFromFeedActivity = intent.getBooleanExtra("IS_FROM_FEED_ACTIVITY", false)
+        if (isFromFeedActivity)
             isFrom = "feed"
-            title = "소설필사하기"
-        } else {
+        else
             isFrom = "join"
-            title = intent.getStringExtra("TITLE").toString()
+
+        val id = intent.getIntExtra("ID", -1)
+        id.let {
+            goalViewModel.id = it
+        }
+        val goal = intent.getStringExtra("GOAL")
+        goal?.let {
+            goalViewModel.goal = it
+        }
+        val title = intent.getStringExtra("TITLE")
+        title?.let {
+            binding.title.setText(it)
         }
 
-        binding.title.setText(title)
         binding.actionBar.setNavigationIcon(R.drawable.ic_back)
 
         setListener()
-
+        setObserver()
     }
 
     private fun setListener() {
@@ -70,28 +82,59 @@ class GoalActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.numTextview.setText("${s!!.length}/16")
-                binding.nextBtn.setBackgroundResource(R.drawable.btn_round_primary)
-                binding.nextBtn.setText(R.string.save)
-                binding.nextBtn.setTextColor(this@GoalActivity.getColor(R.color.white))
+                if (s!!.isEmpty()) {
+                    binding.nextBtn.setBackgroundResource(R.drawable.btn_round_quaternary)
+                    binding.nextBtn.setText(R.string.skip)
+                    binding.nextBtn.setTextColor(this@GoalActivity.getColor(R.color.gray600))
+                    goalViewModel.goal = ""
+                } else {
+                    binding.nextBtn.setBackgroundResource(R.drawable.btn_round_primary)
+                    binding.nextBtn.setText(R.string.save)
+                    binding.nextBtn.setTextColor(this@GoalActivity.getColor(R.color.white))
+                    goalViewModel.goal = s!!.toString()
+                }
             }
         })
 
         binding.nextBtn.setOnClickListener {
-            returnResultToActivity()
+            goalViewModel.setGoal()
+        }
+    }
+
+    fun setObserver() {
+        goalViewModel.apiResponse.observe(this) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    returnResultToActivity()
+                }
+                "CHALLENGE_MEMBER_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 챌린지 파티원입니다.")?.show()
+                }
+                "TOKEN_UNAUTHENTICATED" -> {
+                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                }
+                "TOKEN_UNAUTHORIZED" -> {
+                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
         }
     }
 
     fun returnResultToActivity() {
-        if (isFrom.equals("feed")){
+        if (isFrom == "feed"){
             val resultIntent = Intent()
-            resultIntent.putExtra("myGoal", binding.goalEdittext.text.toString())
+            resultIntent.putExtra("myGoal", goalViewModel.goal)
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
         } else {
-            //join
             startActivity(Intent(this,FeedActivity::class.java))
             finishAffinity()
         }
     }
-
 }

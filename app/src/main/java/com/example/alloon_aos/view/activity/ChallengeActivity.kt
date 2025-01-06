@@ -245,6 +245,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
     }
 
     fun setJoinObserve() {
+        //참여하기 api
         challengeViewModel.apiResponse.observe(this) { response ->
             when (response.code) {
                 "200 OK" -> {
@@ -364,7 +365,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
     fun startGoal() { //join
         val intent = Intent(this, GoalActivity::class.java)
-        intent.putExtra("ID", challengeViewModel.id)
+        intent.putExtra("ID",challengeViewModel.id)
         intent.putExtra("TITLE",challengeViewModel.name)
         startActivity(intent)
     }

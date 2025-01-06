@@ -90,6 +90,9 @@ class ChallengeViewModel : ViewModel() {
     fun setIsUri(boolean: Boolean) {
         isUri = boolean
     }
+    fun setInviteCode(code: String) {
+        invitecode = code
+    }
 
 
     fun makeFile(context : Context, callback: (File?) -> Unit){
@@ -194,7 +197,7 @@ class ChallengeViewModel : ViewModel() {
                         val result = data.code
                         val mes = data.message
                         val data = data.data
-                        id = data.id
+                        setChallengeId(data.id)
                         apiResponse.value = ActionApiResponse(result, "createChallenge")
                         Log.d(TAG, "createChallenge: $id $mes $result")
                     }
@@ -214,7 +217,7 @@ class ChallengeViewModel : ViewModel() {
             override fun onSuccess(data: CodeResponse) {
                 val result = data.code
                 val mes = data.message
-                invitecode = data.data.invitationCode
+                setInviteCode(data.data.invitationCode)
                 //apiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "getInviteCode: $mes $result $invitecode")
             }
