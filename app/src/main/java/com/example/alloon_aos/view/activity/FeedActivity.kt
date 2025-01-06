@@ -62,10 +62,13 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             feedViewModel.imgFile = it
         }
 
+        if(!feedViewModel.isPublic)
+            feedViewModel.getInviteCode()
+
         setObserve()
 
         binding.shareImgBtn.setOnClickListener {
-            val inviteCode = "HSIEJ23Q"
+            val inviteCode = feedViewModel.invitecode
             val appLink = "https://photi.com/challenge/$inviteCode"
             val chooserTitle = "소설 필사하기"
             val message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* 초대코드 : $inviteCode \n\n$appLink"
@@ -160,7 +163,7 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 optionOne.text = "챌린지 수정하기"
             //else(파티원
                 //optionOne.text = "챌린지 신고하기"
-                optionTwo.text = "챌린지 탈퇴하기"
+            optionTwo.text = "챌린지 탈퇴하기"
 
             optionOne.setOnClickListener {
                 //if(파티장)
@@ -171,7 +174,7 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                     intent.putExtra("image", feedViewModel.imgFile)
                     activityResultLauncher.launch(intent)
                 //else (파티원
-                    //챌린지 수정하기
+                    //챌린지 신고하기
 
                 popupWindow.dismiss()
             }

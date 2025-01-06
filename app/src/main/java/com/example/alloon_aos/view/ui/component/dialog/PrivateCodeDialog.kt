@@ -12,12 +12,15 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.DialogPrivateCodeBinding
+import com.example.alloon_aos.viewmodel.ChallengeViewModel
 
 interface PrivateCodeDialogInterface {
-    fun onClickYesButton()
+    fun onResultSuccess()
+    fun onResultFail()
 }
 
-class PrivateCodeDialog(val privateCodeDialogInterface: PrivateCodeDialogInterface) : DialogFragment() {
+class PrivateCodeDialog(val privateCodeDialogInterface: PrivateCodeDialogInterface,
+    val challengeViewModel: ChallengeViewModel) : DialogFragment() {
     private var _binding: DialogPrivateCodeBinding? = null
     private val binding get() = _binding!!
 
@@ -27,28 +30,33 @@ class PrivateCodeDialog(val privateCodeDialogInterface: PrivateCodeDialogInterfa
 
         binding.codeBtn.isEnabled = false
 
-        //green : 초대코드 일치
-//        binding.codeBtn.setBackgroundResource(R.drawable.btn_icon_secondary)
-//        binding.codeBtn.setImageResource(R.drawable.ic_lock_open)
-
-
         binding.codeEdittext.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.codeBtn.isEnabled = true
+                if (s!!.isEmpty())
+                    binding.codeBtn.isEnabled = false
+                else
+                    binding.codeBtn.isEnabled = true
             }
         })
 
+        binding.codeBtn.setOnClickListener {
+            val code = binding.codeEdittext.text.toString()
+            if (code == challengeViewModel.invitecode) {
+                binding.codeBtn.setBackgroundResource(R.drawable.btn_icon_secondary)
+                binding.codeBtn.setImageResource(R.drawable.ic_lock_open)
+                privateCodeDialogInterface.onResultSuccess()
+                dismiss()
+            } else {
+                privateCodeDialogInterface.onResultFail()
+            }
+        }
+
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        binding.codeBtn.setOnClickListener {
-            privateCodeDialogInterface.onClickYesButton()
-            dismiss()
-        }
 
         return view
     }

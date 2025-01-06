@@ -18,42 +18,54 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface ChallengeService {
+    //DELETE
     @DELETE("/api/challenges/{challengeId}")
-    fun delete_exitChallenge(
+    fun delete_exitChallenge( //챌린지 탈퇴
         @Path("challengeId") challengeId: Int
     ): Call<MessageResponse>
 
-    @GET("/api/challenges/example-images")
-    fun get_exampleImg(
-    ): Call<ExamImgResponse>
+    //GET
+    @GET("/api/challenges")
+    fun get_challengeLatest( ////////////최신순-모든 챌린지 조회
+    )
 
     @GET("/api/challenges/{challengeId}")
-    fun get_challengeInfo(
+    fun get_challengeInfo( //챌린지 개별 조회
         @Path("challengeId") challengeId: Int
     ): Call<ChallengeResponse>
 
     @GET("/api/challenges/{challengeId}/invitation-code")
-    fun get_challengeCode(
+    fun get_challengeCode( //챌린지 초대코드 조회
         @Path("challengeId") challengeId: Int
     ): Call<CodeResponse>
 
+    @GET("/api/challenges/popular")
+    fun get_challengePopular( ///////////추천순-인기있는 챌린지 조회
+    )
+
+    @GET("/api/challenges/example-images")
+    fun get_exampleImg( //예시 이미지 리스트 조회
+    ): Call<ExamImgResponse>
+
+    //PATCH
     @Multipart
     @PATCH("/api/challenges/{challengeId}")
-    fun patch_modifyChallenge(
+    fun patch_modifyChallenge( //챌린지 수정
         @Path("challengeId") challengeId: Int,
         @Part("request") request: RequestBody,
         @Part imageFile: MultipartBody.Part
     ): Call<MessageResponse>
 
     @PATCH("/api/challenges/{challengeId}/challenge-members/goal")
-    fun patch_setGoal(
+    fun patch_setGoal( //개인 목표 작성
         @Path("challengeId") challengeId: Int,
         @Body params: Goal
     ): Call<MessageResponse>
 
+    //POST
     @Multipart
     @POST("/api/challenges")
-    fun post_createChallenge(
+    fun post_createChallenge( //챌린지 생성
         @Part("request") request: RequestBody,
         @Part imageFile: MultipartBody.Part
     ): Call<ChallengeResponse>

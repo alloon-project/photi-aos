@@ -62,7 +62,7 @@ class PhotiViewModel : ViewModel() {
     }
 
     private val challengeService = RetrofitClient.challengeService
-    private val repository = ChallengeRepository(challengeService)
+    private val challenge_repository = ChallengeRepository(challengeService)
 
     private val userService = RetrofitClient.userService
     private val user_repository = UserRepository(userService)
@@ -130,7 +130,7 @@ class PhotiViewModel : ViewModel() {
     }
 
     fun getChallengeInfo() {
-        repository.getChallengeInfo(id, object : ChallengeRepositoryCallback<ChallengeResponse> {
+        challenge_repository.getChallengeInfo(id, object : ChallengeRepositoryCallback<ChallengeResponse> {
             override fun onSuccess(data: ChallengeResponse) {
                 val result = data.code
                 val mes = data.message

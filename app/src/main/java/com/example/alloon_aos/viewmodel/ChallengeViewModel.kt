@@ -13,6 +13,7 @@ import com.example.alloon_aos.data.model.request.MemberImg
 import com.example.alloon_aos.data.model.request.ModifyData
 import com.example.alloon_aos.data.model.request.Rule
 import com.example.alloon_aos.data.model.response.ChallengeResponse
+import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
@@ -48,6 +49,7 @@ class ChallengeViewModel : ViewModel() {
 
     var isUri = false
     var _img = MutableLiveData<String>()
+    var invitecode = ""
 
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
@@ -205,6 +207,22 @@ class ChallengeViewModel : ViewModel() {
                 Log.e(TAG, "Failed to make file")
             }
         }
+    }
+
+    fun getInviteCode() {
+        repository.getChallengeCode(id, object : ChallengeRepositoryCallback<CodeResponse> {
+            override fun onSuccess(data: CodeResponse) {
+                val result = data.code
+                val mes = data.message
+                invitecode = data.data.invitationCode
+                //apiResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "getInviteCode: $mes $result $invitecode")
+            }
+
+            override fun onFailure(error: Throwable) {
+                handleFailure(error)
+            }
+        })
     }
 
     fun handleFailure(error: Throwable) {

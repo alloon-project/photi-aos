@@ -143,6 +143,9 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                 binding.createBtn.visibility = View.GONE
                 binding.modifyBtn.visibility = View.GONE
 
+                if (!challengeViewModel.isPublic)
+                    challengeViewModel.getInviteCode()
+
                 setJoinObserve()
             }
             "create" -> {
@@ -225,9 +228,9 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                     .show(this.supportFragmentManager!!, "CustomDialog")
             } else {
                 if (challengeViewModel.isPublic)
-                    startGoal()
+                    startGoal() //목표설정
                 else
-                    PrivateCodeDialog(this)
+                    PrivateCodeDialog(this, challengeViewModel)
                         .show(this.supportFragmentManager!!, "CustomDialog")
             }
         }
@@ -242,7 +245,21 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
     }
 
     fun setJoinObserve() {
+        challengeViewModel.apiResponse.observe(this) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    CustomToast.createToast(this, "뭔가를 성공했어요.")?.show()
+                }
 
+                "IO_Exception" -> {
+                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
     }
 
     fun setCreateObserve() {
@@ -333,8 +350,11 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         }
     }
 
-    override fun onClickYesButton() {
+    override fun onResultSuccess() {
         startGoal()
+    }
+    override fun onResultFail() {
+        CustomToast.createToast(this, "초대코드가 일치하지 않아요")?.show()
     }
 
     override fun onClickLoginButton() {
@@ -344,6 +364,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
     fun startGoal() { //join
         val intent = Intent(this, GoalActivity::class.java)
+        intent.putExtra("ID", challengeViewModel.id)
         intent.putExtra("TITLE",challengeViewModel.name)
         startActivity(intent)
     }

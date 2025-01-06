@@ -14,6 +14,7 @@ import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
+import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.MessageResponse
@@ -75,6 +76,7 @@ class FeedViewModel : ViewModel() {
     var imgFile = ""
     var currentMemberCnt = 0
     var memberImages: List<MemberImg> = listOf()
+    var invitecode = ""
 
     fun getData(): MyData {
         var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags)
@@ -99,6 +101,22 @@ class FeedViewModel : ViewModel() {
                 val mes = data.message
                 apiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "deleteChallenge: $mes $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                handleFailure(error)
+            }
+        })
+    }
+
+    fun getInviteCode() {
+        repository.getChallengeCode(challengeId, object : ChallengeRepositoryCallback<CodeResponse> {
+            override fun onSuccess(data: CodeResponse) {
+                val result = data.code
+                val mes = data.message
+                invitecode = data.data.invitationCode
+                //apiResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "getInviteCode: $mes $result $invitecode")
             }
 
             override fun onFailure(error: Throwable) {
