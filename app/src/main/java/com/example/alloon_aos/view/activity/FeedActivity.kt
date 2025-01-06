@@ -6,6 +6,7 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -60,6 +61,8 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         imageFile?.let {
             feedViewModel.imgFile = it
         }
+
+        setObserve()
 
         binding.shareImgBtn.setOnClickListener {
             val inviteCode = "HSIEJ23Q"
@@ -161,40 +164,72 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
 
             optionOne.setOnClickListener {
                 //if(파티장)
-                    //챌린지 신고하기 플로우
-                val intent = Intent(this@FeedActivity, ChallengeActivity::class.java)
-                intent.putExtra("IS_FROM_FEED",true)
-                intent.putExtra("ID", feedViewModel.challengeId)
-                intent.putExtra("data", feedViewModel.getData())
-                intent.putExtra("image", feedViewModel.imgFile)
-                activityResultLauncher.launch(intent)
+                    val intent = Intent(this@FeedActivity, ChallengeActivity::class.java)
+                    intent.putExtra("IS_FROM_FEED",true)
+                    intent.putExtra("ID", feedViewModel.challengeId)
+                    intent.putExtra("data", feedViewModel.getData())
+                    intent.putExtra("image", feedViewModel.imgFile)
+                    activityResultLauncher.launch(intent)
+                //else (파티원
+                    //챌린지 수정하기
+
                 popupWindow.dismiss()
             }
 
             optionTwo.setOnClickListener {
-                //if(마지막 파티원인 경우)
-                    //챌린지 삭제된다는 다이얼로그 띄움
-                //else
+                if (feedViewModel.currentMemberCnt <= 1) {
+                    CustomTwoButtonDialog(this@FeedActivity,"챌린지를 탈퇴할까요?","회원님은 이 챌린지의 마지막 파티원이에요.\n" +
+                            "지금 탈퇴하면 챌린지가 삭제돼요.\n" +
+                            "삭제된 챌린지는 복구할 수 없어요.\n" +
+                            "정말 탈퇴하시겠어요? ","취소할게요","탈퇴할게요")
+                        .show(binding.activity?.supportFragmentManager!!,"CustomDialog")
+                } else {
                     CustomTwoButtonDialog(this@FeedActivity,"챌린지를 탈퇴할까요?","탈퇴해도 기록은 남아있어요.\n" +
                             "탈퇴하시기 전에 직접 지워주세요.","취소할게요","탈퇴할게요")
                         .show(binding.activity?.supportFragmentManager!!,"CustomDialog")
+                }
                 popupWindow.dismiss()
             }
-
         }
-
         popupWindow.showAsDropDown(view, 0, 0, Gravity.CENTER)
     }
 
     override fun onClickFisrtButton() {}
 
     override fun onClickSecondButton() {
-        //챌린지 탈퇴
-        finish()
-        val intent = Intent(this, PhotiActivity::class.java).apply {
-            putExtra("IS_FROM","UNSUBSCRIBE")
+        feedViewModel.deleteChallenge()
+    }
+
+    fun setObserve() {
+        feedViewModel.apiResponse.observe(this) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    finishAffinity()
+                    val intent = Intent(this, PhotiActivity::class.java).apply {
+                        putExtra("IS_FROM","UNSUBSCRIBE")
+                    }
+                    startActivity(intent)
+                }
+                "TOKEN_UNAUTHENTICATED" -> {
+                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                }
+                "TOKEN_UNAUTHORIZED" -> {
+                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+                "CHALLENGE_MEMBER_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 챌린지 파티원입니다.")?.show()
+                }
+                "CHALLENGE_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 챌린지입니다.")?.show()
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
         }
-        startActivity(intent)
     }
 
     fun finishActivity(){

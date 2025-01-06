@@ -1,11 +1,14 @@
 package com.example.alloon_aos.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.MyData
 import com.example.alloon_aos.data.model.request.HashTag
+import com.example.alloon_aos.data.model.request.MemberImg
 import com.example.alloon_aos.data.model.request.Rule
 import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
@@ -13,8 +16,12 @@ import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
+import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
 import com.example.alloon_aos.data.remote.RetrofitClient
+import com.example.alloon_aos.data.repository.ChallengeRepository
+import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
+import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.FeedRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,6 +54,16 @@ data class PartyItem(
 )
 
 class FeedViewModel : ViewModel() {
+    companion object {
+        private const val TAG = "FEED"
+    }
+
+    private val challengeService = RetrofitClient.challengeService
+    private val repository = ChallengeRepository(challengeService)
+
+    val apiResponse = MutableLiveData<ActionApiResponse>()
+
+
     var challengeId = -1
     var name = ""
     var isPublic = false
@@ -56,6 +73,8 @@ class FeedViewModel : ViewModel() {
     var rules: List<Rule> = listOf()
     var hashtags: List<HashTag> = listOf()
     var imgFile = ""
+    var currentMemberCnt = 0
+    var memberImages: List<MemberImg> = listOf()
 
     fun getData(): MyData {
         var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags)
@@ -72,6 +91,28 @@ class FeedViewModel : ViewModel() {
         hashtags = data.hashtags
         imgFile = data.imageUrl.toString()
     }
+
+    fun deleteChallenge() {
+        repository.deleteChallenge(challengeId, object : ChallengeRepositoryCallback<MessageResponse> {
+            override fun onSuccess(data: MessageResponse) {
+                val result = data.code
+                val mes = data.message
+                apiResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "deleteChallenge: $mes $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                handleFailure(error)
+            }
+        })
+    }
+
+    fun handleFailure(error: Throwable) {
+        val errorCode = ErrorHandler.handle(error)
+        apiResponse.value = ActionApiResponse(errorCode)
+    }
+
+    /////////////////////////////////////////////////////////
 
 
     var id = "myId" //api에서 받아올 나의 아이디
