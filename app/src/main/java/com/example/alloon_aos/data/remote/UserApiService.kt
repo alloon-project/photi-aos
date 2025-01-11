@@ -1,7 +1,6 @@
 package com.example.alloon_aos.data.remote
 
 import com.example.alloon_aos.data.model.response.ApiResponse
-import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeRecordData
 import com.example.alloon_aos.data.model.response.EndedChallengeData
 import com.example.alloon_aos.data.model.response.FeedByDate
@@ -36,8 +35,8 @@ interface UserApiService {
 
     @GET("/api/users/feeds-by-date")
     suspend fun get_feeds_by_date(
-        @Query("date") date : String, //2024-10-23
-    ): ApiResponse<List<FeedByDate>>
+        @Query("date") date: String, //2024-10-23
+    ): Response<ApiResponse<List<FeedByDate>>>
 
     @GET("/api/users/feed-history")
     suspend fun get_feed_history(

@@ -2,6 +2,7 @@ package com.example.alloon_aos.view.fragment.photi
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentMyPageBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
@@ -22,13 +19,12 @@ import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.ui.component.dialog.EndedChallengesDialog
 import com.example.alloon_aos.view.ui.component.dialog.ProofShotByDateDialog
 import com.example.alloon_aos.view.ui.component.dialog.ProofShotsGalleryDialog
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.EventDecorator
 import com.example.alloon_aos.view.ui.util.TodayDecorator
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 
 class MyPageFragment : Fragment() {
@@ -53,31 +49,81 @@ class MyPageFragment : Fragment() {
         upDateCalendar()
 
         // 데이터 변화 감지 및 UI 업데이트
-        observeUserProfile()
+        //observeUserProfile()
         //   observeChallenges()
-
-
+        //observeChallengeRecordData()
+        setObserve()
+        photiViewModel.fetchChallengeHistory()
         return binding.root
     }
 
     private fun observeUserProfile() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                photiViewModel.userProfile.collectLatest { profile ->
-                    profile?.let {
-                        it.data.let { userData ->
-                            binding.idTextView.text = userData.username
+        photiViewModel.userProfile.observe(viewLifecycleOwner) { profile ->
+            profile?.let {
+                it.data.let { userData ->
 
-                            Glide.with(binding.userImgImageView.context)
-                                .load(userData.imageUrl)
-                                .transform(CenterCrop(), RoundedCorners(24))
-                                .into(binding.userImgImageView)
-                        }
-                    }
+                    binding.idTextView.text = userData.username
+
+                    Glide.with(binding.userImgImageView.context)
+                        .load(userData.imageUrl)
+                        .transform(CircleCrop())
+                        .into(binding.userImgImageView)
                 }
             }
         }
     }
+
+    private fun setObserve() {
+        // API 응답 코드 관찰
+        photiViewModel.code.observe(viewLifecycleOwner) { code ->
+            when (code) {
+                "200 OK" -> {
+                    val data = photiViewModel.challengeRecodData.value!!
+                    binding.idTextView.text = data.username
+
+                    Glide.with(binding.userImgImageView.context)
+                        .load(data.imageUrl)
+                        .transform(CircleCrop())
+                        .into(binding.userImgImageView)
+
+                    binding.verifyCountTextView.text = data.feedCnt.toString()
+                    binding.challengeEndedTextView.text = data.endedChallengeCnt.toString()
+                }
+
+                "USER_NOT_FOUND" -> {
+                    Log.e("ChallengeFragment", "Error: USER_NOT_FOUND - 존재하지 않는 회원입니다.")
+                }
+
+                "TOKEN_UNAUTHENTICATED" -> {
+                    Log.e(
+                        "ChallengeFragment",
+                        "Error: TOKEN_UNAUTHENTICATED - 승인되지 않은 요청입니다. 다시 로그인 해주세요."
+                    )
+                }
+
+                "TOKEN_UNAUTHORIZED" -> {
+                    Log.e(
+                        "ChallengeFragment",
+                        "Error: TOKEN_UNAUTHORIZED - 권한이 없는 요청입니다. 로그인 후 다시 시도해주세요."
+                    )
+                }
+
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+                "UNKNOWN_ERROR" -> {
+                    Log.e("ChallengeFragment", "Error: UNKNOWN_ERROR - 알 수 없는 오류가 발생했습니다.")
+                }
+
+                else -> {
+                    Log.e("ChallengeFragment", "Error: $code - 예기치 않은 오류가 발생했습니다.")
+                }
+            }
+        }
+    }
+
 
 //    private fun observeChallenges() {
 //        viewLifecycleOwner.lifecycleScope.launch {

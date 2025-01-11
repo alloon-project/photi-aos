@@ -3,19 +3,32 @@ package com.example.alloon_aos.data.model
 object ApiConfig {
     // 토큰을 추가할 API 목록을 Map으로 관리 (URL, Method) :: 하나씩 추가
     val tokenRequiredApis = mapOf(
-        //auth
+        // auth
         "/api/users" to "PATCH", // 회원 탈퇴
         "/api/users/password" to "PATCH", // 비밀번호 변경
         "/api/users/token" to "POST", // 토큰 재발급
-        //challenge
+
+        // challenge
         "/api/challenges/{challengeId}" to mapOf(
             "DELETE" to "챌린지 탈퇴", // DELETE 메소드에 대한 구분
             "PATCH" to "챌린지 수정"   // PATCH 메소드에 대한 구분
         ),
         "/api/challenges/{challengeId}/invitation-code" to "GET", // 챌린지 초대 코드 조회
         "/api/challenges/{challengeId}/challenge-members/goal" to "PATCH", // 챌린지 개인 목표 작성
-        "/api/challenges" to "POST" // 챌린지 생성
+        "/api/challenges" to "POST", // 챌린지 생성
+
+        // user
+        "/api/users" to "GET",
+        "/api/my-challenges" to "GET",
+        "/api/feeds" to "GET",
+        "/api/users/feeds-by-date" to "GET",
+        "/api/users/feed-history" to "GET",
+        "/api/users/ended-challenges" to "GET",
+        "/api/users/challenges" to "GET", // 챌린지 카운트 조회
+        "/api/users/challenge-history" to "GET", // 챌린지 기록 조회
+        "/api/users/image" to "POST" // 이미지 업로드
     )
+
 
     fun convertTemplateToRegex(urlTemplate: String): String {
         return urlTemplate.replace(Regex("\\{([^/]+)\\}")) { match ->

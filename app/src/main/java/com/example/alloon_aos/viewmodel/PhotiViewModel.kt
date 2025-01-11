@@ -25,8 +25,10 @@ import com.example.alloon_aos.data.repository.ChallengeRepository
 import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
 import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.UserRepository
+import com.example.alloon_aos.data.repository.handleApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
 data class Item(
@@ -93,18 +95,20 @@ class PhotiViewModel : ViewModel() {
 
 
     //사용 o
-    private val _profileImage = MutableLiveData<ApiResponse<ProfileImageData>?>(null)
-    val profileImage: LiveData<ApiResponse<ProfileImageData>?> = _profileImage
+    private val _code = MutableLiveData<String>()
+    val code: LiveData<String> get() = _code
 
+    private val _profileImage = MutableLiveData<ProfileImageData?>(null)
+    val profileImage: LiveData<ProfileImageData?> = _profileImage
 
-    private val _challengeRecodData = MutableLiveData<ApiResponse<ChallengeRecordData>?>(null)
-    val challengeRecodData: LiveData<ApiResponse<ChallengeRecordData>?> = _challengeRecodData
+    private val _challengeRecodData = MutableLiveData<ChallengeRecordData?>(null)
+    val challengeRecodData: LiveData<ChallengeRecordData?> = _challengeRecodData
 
-    private val _feedsData = MutableLiveData<ApiResponse<FeedDate>>()
-    val feedsData: LiveData<ApiResponse<FeedDate>> get() = _feedsData
+    private val _feedCalendarData = MutableLiveData<FeedDate?>()
+    val feedCalendarData: LiveData<FeedDate?> get() = _feedCalendarData
 
-    private val _feedsByDateData = MutableLiveData<List<FeedByDate>>()
-    val feedsByDateData: LiveData<List<FeedByDate>> get() = _feedsByDateData
+    private val _feedsByDateData = MutableLiveData<List<FeedByDate>?>()
+    val feedsByDateData: LiveData<List<FeedByDate>?> get() = _feedsByDateData
 
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
@@ -130,20 +134,22 @@ class PhotiViewModel : ViewModel() {
     }
 
     fun getChallengeInfo() {
-        challenge_repository.getChallengeInfo(id, object : ChallengeRepositoryCallback<ChallengeResponse> {
-            override fun onSuccess(data: ChallengeResponse) {
-                val result = data.code
-                val mes = data.message
-                val data = data.data
-                setChallengeData(data)
-                apiResponse.value = ActionApiResponse(result)
-                Log.d(TAG, "getChallengeInfo: $mes $result")
-            }
+        challenge_repository.getChallengeInfo(
+            id,
+            object : ChallengeRepositoryCallback<ChallengeResponse> {
+                override fun onSuccess(data: ChallengeResponse) {
+                    val result = data.code
+                    val mes = data.message
+                    val data = data.data
+                    setChallengeData(data)
+                    apiResponse.value = ActionApiResponse(result)
+                    Log.d(TAG, "getChallengeInfo: $mes $result")
+                }
 
-            override fun onFailure(error: Throwable) {
-                handleFailure(error)
-            }
-        })
+                override fun onFailure(error: Throwable) {
+                    handleFailure(error)
+                }
+            })
     }
 
     fun handleFailure(error: Throwable) {
@@ -359,7 +365,10 @@ class PhotiViewModel : ViewModel() {
             try {
                 val response = user_repository.getUsers()
                 if (response.isSuccessful) {
-                    _userProfile.value = response.body()
+                    withContext(Dispatchers.Main) {
+                        _userProfile.value = response.body()
+                    }
+
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -367,74 +376,82 @@ class PhotiViewModel : ViewModel() {
         }
     }
 
-    //사용자 챌린지 기록 조회(아이디, 프로필 사진, 인증 횟수, 종료된 챌린지 갯수)
+
     fun fetchChallengeHistory() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = user_repository.getChallengeHistory()
-                if (response.isSuccessful) {
-                    _challengeRecodData.value = response.body()
+        viewModelScope.launch {
+            handleApiCall(
+                call = { user_repository.getChallengeHistory() },
+                onSuccess = { data ->
+                    _challengeRecodData.value = data
+                    _code.value = "200 OK"
+                },
+                onFailure = { errorCode ->
+                    _challengeRecodData.value = null
+                    _code.value = errorCode
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            )
+        }
+    }
+//
+//    fun fetchMyChallenges(page: Int, size: Int) {
+//        viewModelScope.launch {
+//            handleApiCall(
+//                call = { user_repository.getMyChallenges(page, size) },
+//                onSuccess = { data -> _challenges.value = data },
+//                onFailure = { errorCode ->
+//                    _challenges.value = null
+//                    _code.value = errorCode
+//                }
+//            )
+//        }
+//    }
+
+    fun fetchCalendarData() {
+        viewModelScope.launch {
+            handleApiCall(
+                call = { user_repository.getFeeds() },
+                onSuccess = { data ->
+                    _feedCalendarData.value = data
+                    _code.value = "200 OK"
+                },
+                onFailure = { errorCode ->
+                    _feedCalendarData.value = null
+                    _code.value = errorCode
+                }
+            )
         }
     }
 
-    fun fetchMyChallenges(page: Int, size: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = user_repository.getMyChallenges(page, size)
-                if (response.isSuccessful) {
-                    _challenges.value = response.body()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    //인증 날짜 리스트 (달력)
-    fun fetchFeeds() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = user_repository.getFeeds()
-                if (response.isSuccessful) {
-                    // API 응답 값을 LiveData 또는 StateFlow로 업데이트
-                    _feedsData.value = response.body()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                // 필요 시 에러 상태를 업데이트하거나 처리
-            }
-        }
-    }
-
-    //개별 날짜별 조회
     fun fetchFeedsByDate(date: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = user_repository.getFeedsByDate(date)
-                // 직접 데이터를 업데이트하거나 처리
-                _feedsByDateData.value = response.data
-            } catch (e: Exception) {
-                e.printStackTrace()
-                // 필요 시 에러 상태를 업데이트하거나 처리
-            }
+        viewModelScope.launch {
+            handleApiCall(
+                call = { user_repository.getFeedsByDate(date) },
+                onSuccess = { data ->
+                    _feedsByDateData.value = data
+                    _code.value = "200 OK"
+                },
+                onFailure = { errorCode ->
+                    _feedsByDateData.value = null
+                    _code.value = errorCode
+                }
+            )
         }
     }
-
 
     fun uploadProfileImage(imageFile: MultipartBody.Part) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = user_repository.postImage(imageFile)
-                if (response.isSuccessful) {
-                    _profileImage.value = response.body()
+        viewModelScope.launch {
+            handleApiCall(
+                call = { user_repository.postImage(imageFile) },
+                onSuccess = { data ->
+                    _profileImage.value = data
+                    _code.value = "200 OK"
+                },
+                onFailure = { errorCode ->
+                    _profileImage.value = null
+                    _code.value = errorCode
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            )
         }
     }
+
 }

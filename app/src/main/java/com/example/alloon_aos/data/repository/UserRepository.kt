@@ -30,7 +30,7 @@ class UserRepository(private val apiService: UserApiService) {
         return apiService.get_feeds()
     }
 
-    suspend fun getFeedsByDate(date: String): ApiResponse<List<FeedByDate>> {
+    suspend fun getFeedsByDate(date: String): Response<ApiResponse<List<FeedByDate>>> {
         return apiService.get_feeds_by_date(date)
     }
 

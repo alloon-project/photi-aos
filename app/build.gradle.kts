@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id ("kotlin-parcelize")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -41,20 +41,21 @@ android {
 }
 
 dependencies {
+
     //zigzag
-    implementation ("ir.beigirad:ZigzagView:1.2.1")
+    implementation("ir.beigirad:ZigzagView:1.2.1")
 
     //calendar
-    implementation ("com.github.prolificinteractive:material-calendarview:2.0.1")
-    implementation ("com.jakewharton.threetenabp:threetenabp:1.1.1")
+    implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
+    implementation("com.jakewharton.threetenabp:threetenabp:1.1.1")
 
     //glide
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.14.0")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.14.0")
 
-    implementation ("com.google.android.material:material:1.3.0")
+    implementation("com.google.android.material:material:1.3.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
