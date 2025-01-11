@@ -48,9 +48,8 @@ class MyPageFragment : Fragment() {
         setLisetener()
         upDateCalendar()
 
-        // 데이터 변화 감지 및 UI 업데이트
         //observeUserProfile()
-        //   observeChallenges()
+        //observeChallenges()
         //observeChallengeRecordData()
         setObserve()
         photiViewModel.fetchChallengeHistory()
@@ -61,9 +60,7 @@ class MyPageFragment : Fragment() {
         photiViewModel.userProfile.observe(viewLifecycleOwner) { profile ->
             profile?.let {
                 it.data.let { userData ->
-
                     binding.idTextView.text = userData.username
-
                     Glide.with(binding.userImgImageView.context)
                         .load(userData.imageUrl)
                         .transform(CircleCrop())

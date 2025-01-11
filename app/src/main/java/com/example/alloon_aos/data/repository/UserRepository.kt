@@ -9,17 +9,11 @@ import com.example.alloon_aos.data.model.response.FeedHistoryData
 import com.example.alloon_aos.data.model.response.MyChallengeCount
 import com.example.alloon_aos.data.model.response.MyChallenges
 import com.example.alloon_aos.data.model.response.ProfileImageData
-import com.example.alloon_aos.data.model.response.UserProfile
 import com.example.alloon_aos.data.remote.UserApiService
 import okhttp3.MultipartBody
 import retrofit2.Response
 
 class UserRepository(private val apiService: UserApiService) {
-
-    //설정페이지 사용자 정보
-    suspend fun getUsers(): Response<ApiResponse<UserProfile>> {
-        return apiService.get_users()
-    }
 
     //사용자 참옂 중인 챌린지 조회
     suspend fun getMyChallenges(page: Int, size: Int): Response<ApiResponse<MyChallenges>> {

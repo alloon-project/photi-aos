@@ -9,7 +9,6 @@ import com.example.alloon_aos.data.model.response.FeedHistoryData
 import com.example.alloon_aos.data.model.response.MyChallengeCount
 import com.example.alloon_aos.data.model.response.MyChallenges
 import com.example.alloon_aos.data.model.response.ProfileImageData
-import com.example.alloon_aos.data.model.response.UserProfile
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.GET
@@ -20,9 +19,6 @@ import retrofit2.http.Query
 
 interface UserApiService {
     @Headers("Content-Type: application/json")
-
-    @GET("/api/users")
-    suspend fun get_users(): Response<ApiResponse<UserProfile>>
 
     @GET("/api/my-challenges")
     suspend fun get_my_challenges(

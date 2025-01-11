@@ -1,14 +1,23 @@
 package com.example.alloon_aos.data.repository
 
-import com.example.alloon_aos.data.model.request.NewPwd
+import com.example.alloon_aos.data.model.request.InquiryRequest
+import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.AuthResponse
+import com.example.alloon_aos.data.model.response.UserProfile
 import com.example.alloon_aos.data.remote.ApiService
-import com.example.alloon_aos.data.remote.RetrofitClient.apiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SettingsRepository(private val apiService: ApiService)  {
+class SettingsRepository(private val apiService: ApiService) {
+    suspend fun getUsers(): Response<ApiResponse<UserProfile>> {
+        return apiService.get_users()
+    }
+
+    suspend fun postInquiries(inquiryRequest: InquiryRequest): Response<ApiResponse<String>> {
+        return apiService.post_inquiries(inquiryRequest)
+    }
+
     fun deleteUser(pwd: Map<String, String>, callback: MainRepositoryCallback<AuthResponse>) {
         apiService.patch_deleteUser(pwd).enqueue(object : Callback<AuthResponse> {
             override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {

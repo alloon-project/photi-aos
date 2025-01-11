@@ -26,9 +26,7 @@ import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
 import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.UserRepository
 import com.example.alloon_aos.data.repository.handleApiCall
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 
 data class Item(
@@ -359,23 +357,6 @@ class PhotiViewModel : ViewModel() {
         ProofShotItem("스터디 챌린지", "~ 2024. 12. 1", "8시까지", null, mutableListOf("어학", "자격증")),
         ProofShotItem("소설 필사하기", "~ 2024. 9. 1", "12시까지", null, mutableListOf("고능해지자", "독서"))
     )
-
-    fun fetchUserProfile() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = user_repository.getUsers()
-                if (response.isSuccessful) {
-                    withContext(Dispatchers.Main) {
-                        _userProfile.value = response.body()
-                    }
-
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
 
     fun fetchChallengeHistory() {
         viewModelScope.launch {
