@@ -3,6 +3,7 @@ package com.example.alloon_aos.data.repository
 import com.example.alloon_aos.data.model.request.InquiryRequest
 import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.AuthResponse
+import com.example.alloon_aos.data.model.response.InquiryResponse
 import com.example.alloon_aos.data.model.response.UserProfile
 import com.example.alloon_aos.data.remote.ApiService
 import retrofit2.Call
@@ -14,7 +15,7 @@ class SettingsRepository(private val apiService: ApiService) {
         return apiService.get_users()
     }
 
-    suspend fun postInquiries(inquiryRequest: InquiryRequest): Response<ApiResponse<String>> {
+    suspend fun postInquiries(inquiryRequest: InquiryRequest): Response<ApiResponse<InquiryResponse>> {
         return apiService.post_inquiries(inquiryRequest)
     }
 

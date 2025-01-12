@@ -25,3 +25,7 @@ data class AuthData(
 data class RefreshTokenResponse(
     val accessToken: String
 )
+
+data class InquiryResponse(
+    val successMessage: String
+)

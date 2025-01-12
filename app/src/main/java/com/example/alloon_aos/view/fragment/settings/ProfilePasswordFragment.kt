@@ -5,21 +5,21 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentProfilePasswordBinding
 import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.activity.SettingsActivity
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class ProfilePasswordFragment : Fragment() {
@@ -38,6 +38,7 @@ class ProfilePasswordFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_profile_password, container, false)
         binding.fragment = this
+        binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
         val mActivity = activity as SettingsActivity
         mActivity.setAppBar(" ")
@@ -55,7 +56,7 @@ class ProfilePasswordFragment : Fragment() {
                     }
                 }
             }
-
+        setObserve()
         return binding.root
     }
 
@@ -67,6 +68,45 @@ class ProfilePasswordFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
+    }
+
+    private fun setObserve() {
+        authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
+
+            when (response.code) {
+                "200 OK" -> {
+                    CustomToast.createToast(activity, "비밀번호 변경이 완료됐어요")?.show()
+                }
+
+                "PASSWORD_DUPLICATE_INVALID" -> {
+                    binding.passwordRuleLayout.visibility = View.GONE
+                    binding.passwordMatchLayout.visibility = View.VISIBLE
+                }
+
+                "PASSWORD_MATCH_INVALID" -> {
+                    // CustomToast.createToast(activity, "비밀번호와 비밀번호 재입력이 동일하지 않습니다.")?.show()
+                }
+
+                "LOGIN_UNAUTHENTICATED" -> {
+
+                    binding.passwordErrorLayout.visibility = View.VISIBLE
+                }
+
+                "TOKEN_UNAUTHORIZED" -> {
+                    CustomToast.createToast(activity, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")
+                        ?.show() //로그아웃 추가
+                }
+
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+
+
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
     }
 
     fun changeInputType(fieldIndex: Int) {
@@ -97,12 +137,21 @@ class ProfilePasswordFragment : Fragment() {
         isPasswordValid = validatePassword(password.toString())
         updateValidationFeedback(password.toString())
         updateNextButtonState()
+
+        binding.passwordRuleLayout.visibility = View.VISIBLE
+        binding.passwordMatchLayout.visibility = View.GONE
+        binding.passwordErrorLayout.visibility = View.GONE
     }
 
     fun onConfirmPasswordChanged(confirmPassword: CharSequence) {
-        isPasswordMatching = confirmPassword.toString() == binding.newPasswordEditText.text.toString()
+        isPasswordMatching =
+            confirmPassword.toString() == binding.newPasswordEditText.text.toString()
         updatePasswordMatchFeedback()
         updateNextButtonState()
+
+        binding.passwordRuleLayout.visibility = View.VISIBLE
+        binding.passwordMatchLayout.visibility = View.GONE
+        binding.passwordErrorLayout.visibility = View.GONE
     }
 
     private fun validatePassword(password: String): Boolean {
@@ -114,9 +163,18 @@ class ProfilePasswordFragment : Fragment() {
 
     private fun updateValidationFeedback(password: String) {
         val conditions = listOf(
-            Pair(password.any { it.isLetter() }, binding.checkEngIconView to binding.checkEngTextView),
-            Pair(password.any { it.isDigit() }, binding.checkNumIconView to binding.checkNumTextView),
-            Pair(password.any { !it.isLetterOrDigit() }, binding.checkSpecIconView to binding.checkSpecTextView),
+            Pair(
+                password.any { it.isLetter() },
+                binding.checkEngIconView to binding.checkEngTextView
+            ),
+            Pair(
+                password.any { it.isDigit() },
+                binding.checkNumIconView to binding.checkNumTextView
+            ),
+            Pair(
+                password.any { !it.isLetterOrDigit() },
+                binding.checkSpecIconView to binding.checkSpecTextView
+            ),
             Pair(password.length in 8..30, binding.checkLenghIconView to binding.checkLenghTextView)
         )
 

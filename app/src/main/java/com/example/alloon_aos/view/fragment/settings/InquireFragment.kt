@@ -114,7 +114,7 @@ class InquireFragment : Fragment() {
                 "TOKEN_UNAUTHORIZED" -> {
                     Log.e(
                         "ChallengeFragment",
-                        "Error: TOKEN_UNAUTHORIZED - 권한이 없는 요청입니다. 로그인 후 다시 시도해주세요."
+                        "Error: TOKEN_UNAUTHORIZED - 권한이 없는 요청입니다. 로그인 후 다시 시도해주세요." //TODO 로그아웃
                     )
                 }
 
@@ -135,10 +135,7 @@ class InquireFragment : Fragment() {
     }
 
     fun Click() {
-        if (selectedInquiryType == null) {
-            print("라디오버튼클린된거임?")
-            return
-        }
+        
         settingsViewModel.sendInquiries(selectedInquiryType!!)
     }
 }

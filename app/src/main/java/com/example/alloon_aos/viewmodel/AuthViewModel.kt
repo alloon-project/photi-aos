@@ -185,6 +185,10 @@ class AuthViewModel : ViewModel() {
     fun modifyPassword() {
         password = StringUtil.removeSpaces(password)
         newPassword = StringUtil.removeSpaces(newPassword)
+        if (password == newPassword) {
+            actionApiResponse.value = ActionApiResponse(code = "PASSWORD_DUPLICATE_INVALID")
+            return
+        }
         val newPwd = NewPwd(password, newPassword, newPassword)
         repository.modifyPassword(newPwd, object : MainRepositoryCallback<AuthResponse> {
             override fun onSuccess(data: AuthResponse) {

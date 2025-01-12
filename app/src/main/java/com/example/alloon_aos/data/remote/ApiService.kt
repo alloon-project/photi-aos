@@ -7,6 +7,7 @@ import com.example.alloon_aos.data.model.request.RefreshTokenRequest
 import com.example.alloon_aos.data.model.request.UserData
 import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.AuthResponse
+import com.example.alloon_aos.data.model.response.InquiryResponse
 import com.example.alloon_aos.data.model.response.RefreshTokenResponse
 import com.example.alloon_aos.data.model.response.UserProfile
 import retrofit2.Call
@@ -79,6 +80,6 @@ interface ApiService {
     @POST("/api/inquiries")
     suspend fun post_inquiries(
         @Body params: InquiryRequest
-    ): Response<ApiResponse<String>>
+    ): Response<ApiResponse<InquiryResponse>>
 }
 
