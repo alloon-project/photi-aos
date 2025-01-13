@@ -19,3 +19,15 @@ data class MyData(
     val memberImages: List<MemberImg> = emptyList(),
     val imageUrl: String? = null
 ): Parcelable
+
+data class CommendData(
+    val id: Int,
+    val name: String,
+    val imageUrl: String,
+    val goal: String,
+    val currentMemberCnt: Int,
+    val proveTime: String,
+    val endData: String,
+    val hashtags: List<HashTag>,
+    val memberImages: List<MemberImg>
+)

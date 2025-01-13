@@ -8,11 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.MyData
+import com.example.alloon_aos.data.model.CommendData
 import com.example.alloon_aos.data.model.request.HashTag
 import com.example.alloon_aos.data.model.request.MemberImg
 import com.example.alloon_aos.data.model.request.Rule
 import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.ChallengeData
+import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeRecordData
 import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.FeedByDate
@@ -68,6 +70,9 @@ class PhotiViewModel : ViewModel() {
     private val user_repository = UserRepository(userService)
 
     val apiResponse = MutableLiveData<ActionApiResponse>()
+    val popularResponse = MutableLiveData<ActionApiResponse>()
+    val latestResponse = MutableLiveData<ActionApiResponse>()
+    val hashResponse = MutableLiveData<ActionApiResponse>()
 
     var id = -1
     var name = ""
@@ -112,12 +117,11 @@ class PhotiViewModel : ViewModel() {
         apiResponse.value = ActionApiResponse()
     }
 
+
     fun getData(): MyData {
-        var data =
-            MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags, memberCnt, memberImg)
+        var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags, memberCnt, memberImg)
         return data
     }
-
     fun setChallengeData(data: ChallengeData) {
         name = data.name
         isPublic = data.isPublic
@@ -130,11 +134,34 @@ class PhotiViewModel : ViewModel() {
         memberImg = data.memberImages
         imgFile = data.imageUrl
     }
+    fun changeToCommendData(data: List<ChallengeData>): ArrayList<CommendData> {
+        var listData: ArrayList<CommendData> = arrayListOf()
+        for(item in data) {
+            val newData = CommendData(item.id, item.name, item.imageUrl, item.goal, item.currentMemberCnt,
+                item.proveTime, item.endDate, item.hashtags, item.memberImages)
+            listData.add(newData)
+        }
+        return listData
+    }
+
+
+    fun getChallengeLatest() {
+        challenge_repository.getChallengeLatest(object : ChallengeRepositoryCallback<ChallengeListResponse> {
+            override fun onSuccess(data: ChallengeListResponse) {
+                val result = data.code
+                val mes = data.message
+                latestResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "getChallengeLatest: $mes $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                handleFailure(error)
+            }
+        })
+    }
 
     fun getChallengeInfo() {
-        challenge_repository.getChallengeInfo(
-            id,
-            object : ChallengeRepositoryCallback<ChallengeResponse> {
+        challenge_repository.getChallengeInfo(id, object : ChallengeRepositoryCallback<ChallengeResponse> {
                 override fun onSuccess(data: ChallengeResponse) {
                     val result = data.code
                     val mes = data.message
@@ -150,40 +177,39 @@ class PhotiViewModel : ViewModel() {
             })
     }
 
+    fun getChallengePopular() {
+        challenge_repository.getChallengePopular(object : ChallengeRepositoryCallback<ChallengeListResponse> {
+            override fun onSuccess(data: ChallengeListResponse) {
+                val result = data.code
+                val mes = data.message
+                val data = data.data
+                addHotItem(changeToCommendData(data))
+                popularResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "getChallengePopular: $mes $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                handleFailure(error)
+            }
+        })
+    }
+
     fun handleFailure(error: Throwable) {
         val errorCode = ErrorHandler.handle(error)
         apiResponse.value = ActionApiResponse(errorCode)
     }
 
 
+
     //인기있는 챌린지
-    val hotItemsListData = MutableLiveData<ArrayList<Item>>()
-    val hotItems = arrayListOf<Item>(
-        Item("헬스 미션", "~ 2024. 8. 22", "https://ifh.cc/g/V4Bb5Q.jpg", mutableListOf("요가", "헬스")),
-        Item("요리 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/09y6Mo.jpg", mutableListOf("요리")),
-        Item("면접 연습하기", "~ 2024. 8. 22", "https://ifh.cc/g/PJpN7X.jpg", mutableListOf("취뽀", "스피치")),
-        Item(
-            "멋진 개발자가 되어서 초코칩 만들기",
-            "~ 2024. 12. 1",
-            "https://ifh.cc/g/Okx9DW.jpg",
-            mutableListOf("코딩", "안드로이드")
-        )
-    )
+    val hotItemsListData = MutableLiveData<ArrayList<CommendData>>()
+    var hotItems : ArrayList<CommendData> = arrayListOf()
 
-    fun addHotItem(item: Item) {
-        hotItems.add(item)
-        hotItemsListData.value = hotItems // let the observer know the livedata changed
-    }
-
-    fun updateItem(pos: Int, item: Item) {
-        hotItems[pos] = item
-        hotItemsListData.value = hotItems // 옵저버에게 라이브데이터가 변경된 것을 알리기 위해
-    }
-
-    fun deleteItem(pos: Int) {
-        hotItems.removeAt(pos)
+    fun addHotItem(list: ArrayList<CommendData>) {
+        hotItems = list
         hotItemsListData.value = hotItems
     }
+
 
 
     //해시태그별 챌린지

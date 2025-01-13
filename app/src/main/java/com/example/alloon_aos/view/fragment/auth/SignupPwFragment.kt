@@ -33,7 +33,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
 
     private val num_pattern = Pattern.compile("[0-9]")
     private val eng_pattern = Pattern.compile("[a-zA-Z]")
-    private val spe_regex = "[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣|@\\-\\_\\.\\;\\·ㆍᆞᆢ•‥a·﹕]*".toRegex()
+    private val spe_regex = "[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]*".toRegex()
 
     private var blue  = 0
     private var gray = 0

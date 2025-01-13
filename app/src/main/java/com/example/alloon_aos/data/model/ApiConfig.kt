@@ -4,7 +4,10 @@ object ApiConfig {
     // 토큰을 추가할 API 목록을 Map으로 관리 (URL, Method) :: 하나씩 추가
     val tokenRequiredApis = mapOf(
         // auth
-        "/api/users" to "PATCH", // 회원 탈퇴
+        "/api/users" to mapOf(
+            "PATCH" to "회원 탈퇴", // 회원 탈퇴
+            "GET" to "사용자 정보 조회" // 사용자 정보 조회
+        ),
         "/api/users/password" to "PATCH", // 비밀번호 변경
         "/api/users/token" to "POST", // 토큰 재발급
         "/api/inquiries" to "POST",
@@ -19,7 +22,6 @@ object ApiConfig {
         "/api/challenges" to "POST", // 챌린지 생성
 
         // user
-        "/api/users" to "GET",
         "/api/my-challenges" to "GET",
         "/api/feeds" to "GET",
         "/api/users/feeds-by-date" to "GET",

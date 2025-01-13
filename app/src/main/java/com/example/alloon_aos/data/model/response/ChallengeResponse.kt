@@ -13,6 +13,14 @@ data class ChallengeResponse(
     @field:Json(name = "data")
     val data: ChallengeData
 )
+data class ChallengeListResponse(
+    @field:Json(name = "code")
+    val code: String,
+    @field:Json(name = "message")
+    val message: String,
+    @field:Json(name = "data")
+    val data: List<ChallengeData>
+)
 data class ChallengeData(
     @field:Json(name = "id")
     val id: Int,

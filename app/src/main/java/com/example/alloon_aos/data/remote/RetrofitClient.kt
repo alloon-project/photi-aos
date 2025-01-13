@@ -16,9 +16,8 @@ object RetrofitClient {
     // URL = "http://10.0.2.2:8080" //에뮬레이
     private const val BASE_URL = "http://172.30.1.76:8080" //스라
     //private const val BASE_URL = "http://172.30.1.44:8080"
-    //private const val BASE_URL = "http://192.168.35.235:8080" //별 카페
     //private const val BASE_URL = "http://172.16.100.34:8080" //신촌 커피빈
-    //private const val BASE_URL = "http://172.20.10.4:8080" //별 핫스팟
+    //private const val BASE_URL = "http://192.168.219.101:8080" //별 핫스팟
 
 
     private val tokenManager: TokenManager by lazy {
@@ -57,6 +56,7 @@ object RetrofitClient {
     val feedService: FeedApiService by lazy {
         retrofit.create(FeedApiService::class.java)
     }
+
     val userService: UserApiService by lazy {
         retrofit.create(UserApiService::class.java)
     }

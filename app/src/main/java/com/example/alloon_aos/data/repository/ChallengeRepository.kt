@@ -4,6 +4,7 @@ import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.data.model.request.CreateData
 import com.example.alloon_aos.data.model.request.Goal
 import com.example.alloon_aos.data.model.request.ModifyData
+import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
@@ -54,9 +55,9 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
 
 
     //GET
-    fun getExamImg(callback: ChallengeRepositoryCallback<ExamImgResponse>) {
-        challengeService.get_exampleImg().enqueue(object : Callback<ExamImgResponse> {
-            override fun onResponse(call: Call<ExamImgResponse>, response: Response<ExamImgResponse>) {
+    fun getChallengeLatest(callback: ChallengeRepositoryCallback<ChallengeListResponse>) {
+        challengeService.get_challengeLatest().enqueue(object : Callback<ChallengeListResponse> {
+            override fun onResponse(call: Call<ChallengeListResponse>, response: Response<ChallengeListResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
@@ -65,7 +66,24 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
                 }
             }
 
-            override fun onFailure(call: Call<ExamImgResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ChallengeListResponse>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
+
+    fun getChallengeCode(id: Int, callback: ChallengeRepositoryCallback<CodeResponse>) {
+        challengeService.get_challengeCode(id).enqueue(object : Callback<CodeResponse> {
+            override fun onResponse(call: Call<CodeResponse>, response: Response<CodeResponse>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(response.body()!!)
+                } else {
+                    val error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
+                }
+            }
+
+            override fun onFailure(call: Call<CodeResponse>, t: Throwable) {
                 callback.onFailure(t)
             }
         })
@@ -88,9 +106,13 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
         })
     }
 
-    fun getChallengeCode(id: Int, callback: ChallengeRepositoryCallback<CodeResponse>) {
-        challengeService.get_challengeCode(id).enqueue(object : Callback<CodeResponse> {
-            override fun onResponse(call: Call<CodeResponse>, response: Response<CodeResponse>) {
+    // 챌린지 이름 검색
+
+    // 챌린지 해시태그 검색
+
+    fun getChallengePopular(callback: ChallengeRepositoryCallback<ChallengeListResponse>) {
+        challengeService.get_challengePopular().enqueue(object : Callback<ChallengeListResponse> {
+            override fun onResponse(call: Call<ChallengeListResponse>, response: Response<ChallengeListResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
@@ -99,11 +121,32 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
                 }
             }
 
-            override fun onFailure(call: Call<CodeResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ChallengeListResponse>, t: Throwable) {
                 callback.onFailure(t)
             }
         })
     }
+
+    //해시태그리스트조회
+
+    fun getExamImg(callback: ChallengeRepositoryCallback<ExamImgResponse>) {
+        challengeService.get_exampleImg().enqueue(object : Callback<ExamImgResponse> {
+            override fun onResponse(call: Call<ExamImgResponse>, response: Response<ExamImgResponse>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(response.body()!!)
+                } else {
+                    val error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
+                }
+            }
+
+            override fun onFailure(call: Call<ExamImgResponse>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
+
+    //해시태그 모아보기 조회
 
 
     //PATCH
@@ -146,6 +189,7 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
         })
     }
 
+
     //POST
     fun createChallenge(imageFile: File, challenge: CreateData, callback: ChallengeRepositoryCallback<ChallengeResponse>) {
         val gson = Gson()
@@ -169,4 +213,7 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
         })
     }
 
+    //공개 챌린지 참여
+
+    //비공개 챌린지 참여
 }

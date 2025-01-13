@@ -1,6 +1,7 @@
 package com.example.alloon_aos.data.remote
 
 import com.example.alloon_aos.data.model.request.Goal
+import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
@@ -27,25 +28,33 @@ interface ChallengeService {
     //GET
     @GET("/api/challenges")
     fun get_challengeLatest( ////////////최신순-모든 챌린지 조회
-    )
-
-    @GET("/api/challenges/{challengeId}")
-    fun get_challengeInfo( //챌린지 개별 조회
-        @Path("challengeId") challengeId: Int
-    ): Call<ChallengeResponse>
+    ): Call<ChallengeListResponse>
 
     @GET("/api/challenges/{challengeId}/invitation-code")
     fun get_challengeCode( //챌린지 초대코드 조회
         @Path("challengeId") challengeId: Int
     ): Call<CodeResponse>
 
+    @GET("/api/challenges/{challengeId}")
+    fun get_challengeInfo( //챌린지 소개 조회
+        @Path("challengeId") challengeId: Int
+    ): Call<ChallengeResponse>
+
+    // 챌린지 이름 검색
+
+    // 챌린지 해시태그 검색
+
     @GET("/api/challenges/popular")
-    fun get_challengePopular( ///////////추천순-인기있는 챌린지 조회
-    )
+    fun get_challengePopular( //추천순-인기있는 챌린지 조회
+    ): Call<ChallengeListResponse>
+
+    //해시태그 리스트 조회
 
     @GET("/api/challenges/example-images")
     fun get_exampleImg( //예시 이미지 리스트 조회
     ): Call<ExamImgResponse>
+
+    //해시태그 모아보기 조회
 
     //PATCH
     @Multipart
@@ -69,4 +78,8 @@ interface ChallengeService {
         @Part("request") request: RequestBody,
         @Part imageFile: MultipartBody.Part
     ): Call<ChallengeResponse>
+
+    //공개 챌린지 참여하기
+
+    //비공개 챌린지 참여하기
 }

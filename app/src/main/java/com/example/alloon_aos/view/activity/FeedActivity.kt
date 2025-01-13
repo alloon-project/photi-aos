@@ -71,7 +71,12 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             val inviteCode = feedViewModel.invitecode
             val appLink = "https://photi.com/challenge/$inviteCode"
             val chooserTitle = "소설 필사하기"
-            val message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* 초대코드 : $inviteCode \n\n$appLink"
+            var message = ""
+
+            if (!feedViewModel.isPublic)
+                message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* 초대코드 : $inviteCode \n\n$appLink"
+            else
+                message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* \n\n$appLink"
 
             val sendIntent = Intent(Intent.ACTION_SEND)
             sendIntent.type = "text/plain"

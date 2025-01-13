@@ -51,6 +51,8 @@ class ChallengeCommendFragment : Fragment() {
         binding.chipRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.chipRecyclerview.setHasFixedSize(true)
 
+        photiViewModel.getChallengePopular()
+
         setObserver()
 
         return binding.root
@@ -58,7 +60,7 @@ class ChallengeCommendFragment : Fragment() {
 
     private fun setObserver() {
         photiViewModel.hotItemsListData.observe(viewLifecycleOwner) { // 데이터에 변화가 있을 때 어댑터에게 변경을 알림
-            hotCardAdapter.notifyDataSetChanged() // 어댑터가 리사이클러뷰에게 알려 내용을 갱신함
+            hotCardAdapter.notifyDataSetChanged()
         }
 
         photiViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
@@ -74,6 +76,19 @@ class ChallengeCommendFragment : Fragment() {
                 }
                 "CHALLENGE_NOT_FOUND" -> {
                     CustomToast.createToast(activity, "존재하지 않는 챌린지입니다.", "circle")?.show()
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
+
+        photiViewModel.popularResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
                 }
                 "IO_Exception" -> {
                     CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
