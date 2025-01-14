@@ -5,8 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -21,6 +23,7 @@ import com.example.alloon_aos.view.fragment.photi.MyPageFragment
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
+import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 private const val TAG_CHALLENGE = "challenge_fragment"
 private const val TAG_HOME = "home_fragment"
@@ -31,6 +34,7 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
     lateinit var binding : ActivityPhotiBinding
     private lateinit var mContext: Context
     private lateinit var startForResult: ActivityResultLauncher<Intent>
+    private val photiViewModel : PhotiViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +44,7 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         setBottomNavigation(TAG_HOME)
         setListener()
         setDeepLink()
+        setObserver()
 
         val isFrom = intent.getStringExtra("IS_FROM")
         when(isFrom){
@@ -57,6 +62,11 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
                 CustomToast.createToast(this, "photi님 환영합니다!")?.show()
             }
         }
+
+        photiViewModel.resetAllResponseValue()
+        photiViewModel.getChallengePopular()
+        photiViewModel.getChallengeLatest()
+        photiViewModel.getChallengeHash()
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -79,6 +89,21 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
                 intent.putExtra("IS_FROM_HOME",true)
                 intent.putExtra("code", inviteCode)
                 startActivity(intent)
+            }
+        }
+    }
+
+    private fun setObserver() {
+        photiViewModel.popularResponse.observe(this) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(this@PhotiActivity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
             }
         }
     }

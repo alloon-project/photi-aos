@@ -28,6 +28,7 @@ class ChallengeCommendFragment : Fragment() {
     private lateinit var hashTagAdapter: HashTagAdapter
 
     private val photiViewModel by activityViewModels<PhotiViewModel>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,8 +52,7 @@ class ChallengeCommendFragment : Fragment() {
         binding.chipRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.chipRecyclerview.setHasFixedSize(true)
 
-        photiViewModel.getChallengePopular()
-
+        photiViewModel.resetApiResponseValue()
         setObserver()
 
         return binding.root
@@ -76,19 +76,6 @@ class ChallengeCommendFragment : Fragment() {
                 }
                 "CHALLENGE_NOT_FOUND" -> {
                     CustomToast.createToast(activity, "존재하지 않는 챌린지입니다.", "circle")?.show()
-                }
-                "IO_Exception" -> {
-                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
-                }
-                else -> {
-                    Log.d("Observer", "Unhandled response code: ${response.code}")
-                }
-            }
-        }
-
-        photiViewModel.popularResponse.observe(viewLifecycleOwner) { response ->
-            when (response.code) {
-                "200 OK" -> {
                 }
                 "IO_Exception" -> {
                     CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()

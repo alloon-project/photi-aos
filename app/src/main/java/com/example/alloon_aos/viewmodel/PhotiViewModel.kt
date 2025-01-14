@@ -19,6 +19,7 @@ import com.example.alloon_aos.data.model.response.ChallengeRecordData
 import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.FeedByDate
 import com.example.alloon_aos.data.model.response.FeedDate
+import com.example.alloon_aos.data.model.response.LatestListResponse
 import com.example.alloon_aos.data.model.response.MyChallenges
 import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.UserProfile
@@ -85,6 +86,26 @@ class PhotiViewModel : ViewModel() {
     var memberImg: List<MemberImg> = listOf()
     var memberCnt = -1
     var imgFile = ""
+    var page = 0
+    var size = 10
+
+    fun resetApiResponseValue() {
+        apiResponse.value = ActionApiResponse()
+    }
+    fun resetLatestResponseValue() {
+        latestResponse.value = ActionApiResponse()
+    }
+    fun resetAllResponseValue() {
+        apiResponse.value = ActionApiResponse()
+        popularResponse.value = ActionApiResponse()
+        latestResponse.value = ActionApiResponse()
+        hashResponse.value = ActionApiResponse()
+        resetPaging()
+    }
+    fun resetPaging() {
+        page = 0
+        size = 10
+    }
 
 
     //userData
@@ -113,10 +134,6 @@ class PhotiViewModel : ViewModel() {
     private val _feedsByDateData = MutableLiveData<List<FeedByDate>?>()
     val feedsByDateData: LiveData<List<FeedByDate>?> get() = _feedsByDateData
 
-    fun resetApiResponseValue() {
-        apiResponse.value = ActionApiResponse()
-    }
-
 
     fun getData(): MyData {
         var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags, memberCnt, memberImg)
@@ -143,13 +160,23 @@ class PhotiViewModel : ViewModel() {
         }
         return listData
     }
+    fun changeToCommendDataLast(data: List<ChallengeData>): ArrayList<CommendData> {
+        var listData: ArrayList<CommendData> = arrayListOf()
+        for(item in data) {
+            val newData = CommendData(id = item.id, name = item.name, imageUrl = item.imageUrl, endDate = item.endDate, hashtags = item.hashtags)
+            listData.add(newData)
+        }
+        return listData
+    }
 
 
     fun getChallengeLatest() {
-        challenge_repository.getChallengeLatest(object : ChallengeRepositoryCallback<ChallengeListResponse> {
-            override fun onSuccess(data: ChallengeListResponse) {
+        challenge_repository.getChallengeLatest(page, size, object : ChallengeRepositoryCallback<LatestListResponse> {
+            override fun onSuccess(data: LatestListResponse) {
                 val result = data.code
                 val mes = data.message
+                val data = data.data
+                addLatestItem(changeToCommendDataLast(data.content))
                 latestResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "getChallengeLatest: $mes $result")
             }
@@ -194,6 +221,10 @@ class PhotiViewModel : ViewModel() {
         })
     }
 
+    fun getChallengeHash() {
+
+    }
+
     fun handleFailure(error: Throwable) {
         val errorCode = ErrorHandler.handle(error)
         apiResponse.value = ActionApiResponse(errorCode)
@@ -210,6 +241,15 @@ class PhotiViewModel : ViewModel() {
         hotItemsListData.value = hotItems
     }
 
+
+    //최신순 챌린지
+    val latestItemsListData = MutableLiveData<ArrayList<CommendData>>()
+    var latestItems : ArrayList<CommendData> = arrayListOf()
+
+    fun addLatestItem(list: ArrayList<CommendData>) {
+        latestItems.addAll(list)
+        latestItemsListData.value = latestItems
+    }
 
 
     //해시태그별 챌린지
@@ -232,27 +272,6 @@ class PhotiViewModel : ViewModel() {
             "~2024. 12. 1",
             "https://ifh.cc/g/Vwdj5C.jpg",
             mutableListOf("감상평", "글쓰기")
-        )
-    )
-
-
-    //최신순 챌린지
-    val latestItems = arrayListOf<Item>(
-        Item(
-            "코딩 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/rKbcYM.jpg",
-            mutableListOf("ios", "android")
-        ),
-        Item("영화 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/6HRkxa.jpg", mutableListOf("영화관람")),
-        Item("면접 연습하기", "~ 2024. 8. 22", "https://ifh.cc/g/PJpN7X.jpg", mutableListOf("취뽀", "스피치")),
-        Item("헬스 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/AA0NMd.jpg", mutableListOf("헬스", "요가")),
-        Item("요리 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/09y6Mo.jpg", mutableListOf("요리")),
-        Item("스터디 챌린지", "~ 2024. 12. 1", "https://ifh.cc/g/KB2Vh1.jpg", mutableListOf("어학", "자격증")),
-        Item("헬스 미션", "~ 2024. 8. 22", "https://ifh.cc/g/V4Bb5Q.jpg", mutableListOf("요가", "헬스")),
-        Item(
-            "소설 필사하기",
-            "~ 2024. 9. 1",
-            "https://ifh.cc/g/yxgmBH.webp",
-            mutableListOf("고능해지자", "독서")
         )
     )
 

@@ -88,7 +88,7 @@ class FeedViewModel : ViewModel() {
         isPublic = data.isPublic
         goal = data.goal
         proveTime = data.proveTime
-        endDate = data.endData
+        endDate = data.endDate
         rules = data.rules
         hashtags = data.hashtags
         imgFile = data.imageUrl.toString()

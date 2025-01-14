@@ -9,6 +9,7 @@ import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.ExamImgResponse
+import com.example.alloon_aos.data.model.response.LatestListResponse
 import com.example.alloon_aos.data.remote.ChallengeService
 import com.example.alloon_aos.data.storage.TokenManager
 import com.google.gson.Gson
@@ -55,9 +56,9 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
 
 
     //GET
-    fun getChallengeLatest(callback: ChallengeRepositoryCallback<ChallengeListResponse>) {
-        challengeService.get_challengeLatest().enqueue(object : Callback<ChallengeListResponse> {
-            override fun onResponse(call: Call<ChallengeListResponse>, response: Response<ChallengeListResponse>) {
+    fun getChallengeLatest(page: Int, size: Int, callback: ChallengeRepositoryCallback<LatestListResponse>) {
+        challengeService.get_challengeLatest(page = page, size = size).enqueue(object : Callback<LatestListResponse> {
+            override fun onResponse(call: Call<LatestListResponse>, response: Response<LatestListResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
                 } else {
@@ -66,7 +67,7 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
                 }
             }
 
-            override fun onFailure(call: Call<ChallengeListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<LatestListResponse>, t: Throwable) {
                 callback.onFailure(t)
             }
         })

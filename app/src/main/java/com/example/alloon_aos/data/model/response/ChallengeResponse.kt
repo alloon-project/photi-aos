@@ -45,7 +45,26 @@ data class ChallengeData(
     @field:Json(name = "memberImages")
     val memberImages: List<MemberImg>
 )
-
+data class LatestListResponse(
+    @field:Json(name = "code")
+    val code: String,
+    @field:Json(name = "message")
+    val message: String,
+    @field:Json(name = "data")
+    val data: LatestData
+)
+data class LatestData(
+    @field:Json(name = "content")
+    val content: List<ChallengeData>,
+    @field:Json(name = "page")
+    val page: Int,
+    @field:Json(name = "size")
+    val size: Int,
+    @field:Json(name = "first")
+    val first: Boolean,
+    @field:Json(name = "last")
+    val last: Boolean
+)
 data class ExamImgResponse(
     @field:Json(name = "code")
     val code: String,

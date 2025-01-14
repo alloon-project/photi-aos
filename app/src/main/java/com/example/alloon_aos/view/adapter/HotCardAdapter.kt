@@ -18,7 +18,7 @@ class HotCardAdapter(private val fragment: ChallengeCommendFragment, private val
             with (photiViewModel.hotItems[pos]) {
                 binding.cardLayout.layoutParams.width = convertDpToPixel(150, itemView.context)
                 binding.titleTextView.text = name
-                binding.dateTextView.text = endData
+                binding.dateTextView.text = endDate
 
                 if(hashtags.isNotEmpty()) {
                     hashtags.forEachIndexed { index, hashtag ->

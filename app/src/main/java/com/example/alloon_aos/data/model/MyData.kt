@@ -12,7 +12,7 @@ data class MyData(
     val isPublic: Boolean,
     val goal: String,
     val proveTime: String,
-    val endData: String,
+    val endDate: String,
     val rules: List<Rule> = emptyList(),
     val hashtags: List<HashTag> = emptyList(),
     val currentMemberCnt: Int = 0,
@@ -24,10 +24,10 @@ data class CommendData(
     val id: Int,
     val name: String,
     val imageUrl: String,
-    val goal: String,
-    val currentMemberCnt: Int,
-    val proveTime: String,
-    val endData: String,
+    val goal: String? = null,
+    val currentMemberCnt: Int = 0,
+    val proveTime: String? = null,
+    val endDate: String,
     val hashtags: List<HashTag>,
-    val memberImages: List<MemberImg>
+    val memberImages: List<MemberImg> = emptyList()
 )

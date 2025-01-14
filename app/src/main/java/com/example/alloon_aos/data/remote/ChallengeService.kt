@@ -6,6 +6,7 @@ import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.ExamImgResponse
+import com.example.alloon_aos.data.model.response.LatestListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -17,6 +18,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ChallengeService {
     //DELETE
@@ -27,8 +29,10 @@ interface ChallengeService {
 
     //GET
     @GET("/api/challenges")
-    fun get_challengeLatest( ////////////최신순-모든 챌린지 조회
-    ): Call<ChallengeListResponse>
+    fun get_challengeLatest( //최신순-모든 챌린지 조회
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<LatestListResponse>
 
     @GET("/api/challenges/{challengeId}/invitation-code")
     fun get_challengeCode( //챌린지 초대코드 조회

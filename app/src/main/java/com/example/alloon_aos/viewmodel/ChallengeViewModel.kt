@@ -64,7 +64,7 @@ class ChallengeViewModel : ViewModel() {
         isPublic = data.isPublic
         goal = data.goal
         proveTime = data.proveTime
-        endDate = data.endData
+        endDate = data.endDate
         setRuleData(data.rules)
         setHashData(data.hashtags)
         setImgData(data.imageUrl.toString())
