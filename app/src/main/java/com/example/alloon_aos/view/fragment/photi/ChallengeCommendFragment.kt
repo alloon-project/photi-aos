@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.fragment.photi
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,8 +28,10 @@ class ChallengeCommendFragment : Fragment() {
     private lateinit var hotCardAdapter: HotCardAdapter
     private lateinit var hashCardAdapter: HashCardAdapter
     private lateinit var hashTagAdapter: HashTagAdapter
+    private lateinit var nestedScrollView: NestedScrollView
 
     private val photiViewModel by activityViewModels<PhotiViewModel>()
+    private lateinit var mContext : Context
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,20 +51,58 @@ class ChallengeCommendFragment : Fragment() {
         binding.hashtagRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.hashtagRecyclerView.setHasFixedSize(true)
 
-        hashTagAdapter = HashTagAdapter(photiViewModel)
+        hashTagAdapter = HashTagAdapter(mContext,this, photiViewModel)
         binding.chipRecyclerview.adapter = hashTagAdapter
         binding.chipRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.chipRecyclerview.setHasFixedSize(true)
 
         photiViewModel.resetApiResponseValue()
+        photiViewModel.resetHashResponseValue()
         setObserver()
+
+        if (photiViewModel.hashtag != "전체")
+            clickOneChip()
+
+        nestedScrollView = binding.scrollView
+        nestedScrollView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
+            if (scrollY == nestedScrollView.getChildAt(0).measuredHeight - v.measuredHeight){
+                photiViewModel.getChallengeHashtag()
+            }
+        }
 
         return binding.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
     private fun setObserver() {
-        photiViewModel.hotItemsListData.observe(viewLifecycleOwner) { // 데이터에 변화가 있을 때 어댑터에게 변경을 알림
+        photiViewModel.hotItemsListData.observe(viewLifecycleOwner) {
             hotCardAdapter.notifyDataSetChanged()
+        }
+
+        photiViewModel.hashItemsListData.observe(viewLifecycleOwner) {
+            hashCardAdapter.notifyDataSetChanged()
+        }
+
+        photiViewModel.hashChipsListData.observe(viewLifecycleOwner) {
+            hashTagAdapter.notifyDataSetChanged()
+        }
+
+        photiViewModel.hashResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    photiViewModel.hashPage += 10
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
         }
 
         photiViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
@@ -89,6 +131,17 @@ class ChallengeCommendFragment : Fragment() {
 
     fun setOnclick() {
         photiViewModel.getChallengeInfo()
+    }
+
+    fun clickAllChip() {
+        photiViewModel.clickAllChip()
+        binding.allChipBtn.setBackgroundResource(R.drawable.chip_blue)
+        binding.allChipBtn.setTextColor(mContext.getColor(R.color.blue500))
+    }
+
+    fun clickOneChip() {
+        binding.allChipBtn.setBackgroundResource(R.drawable.chip_gray_line)
+        binding.allChipBtn.setTextColor(mContext.getColor(R.color.gray800))
     }
 
     private fun startChallenge() {

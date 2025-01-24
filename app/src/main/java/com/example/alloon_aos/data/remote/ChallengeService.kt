@@ -6,7 +6,7 @@ import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.ExamImgResponse
-import com.example.alloon_aos.data.model.response.LatestListResponse
+import com.example.alloon_aos.data.model.response.PagingListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -32,7 +32,7 @@ interface ChallengeService {
     fun get_challengeLatest( //최신순-모든 챌린지 조회
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): Call<LatestListResponse>
+    ): Call<PagingListResponse>
 
     @GET("/api/challenges/{challengeId}/invitation-code")
     fun get_challengeCode( //챌린지 초대코드 조회
@@ -58,7 +58,12 @@ interface ChallengeService {
     fun get_exampleImg( //예시 이미지 리스트 조회
     ): Call<ExamImgResponse>
 
-    //해시태그 모아보기 조회
+    @GET("/api/challenges/by-hashtags")
+    fun get_challengeHashtag( //해시태그 모아보기 조회
+        @Query("hashtag") hashtag: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<PagingListResponse>
 
     //PATCH
     @Multipart

@@ -15,45 +15,51 @@ class HashCardAdapter(private val fragment: ChallengeCommendFragment, private va
         RecyclerView.ViewHolder(binding.root) {
         fun setContents(holder: HashCardAdapter.ViewHolder, pos: Int) {
             with (photiViewModel.hashItems[pos]) {
-                binding.titleTextView.text = title
-                binding.dateTextView.text = date
+                binding.titleTextView.text = name
+                binding.dateTextView.text = endDate
 
-                binding.chip1Btn.text = hashtag[0]
-                binding.chip1Btn.visibility = View.VISIBLE
-                if(hashtag.size == 2){
-                    binding.chip2Btn.text = hashtag[1]
-                    binding.chip2Btn.visibility = View.VISIBLE
+                if(hashtags.isNotEmpty()) {
+                    hashtags.forEachIndexed { index, hashtag ->
+                        when (index) {
+                            0 -> {
+                                binding.chip1Btn.text = hashtag.hashtag
+                                binding.chip1Btn.visibility = View.VISIBLE
+                                binding.chip2Btn.visibility = View.GONE
+                                binding.chip3Btn.visibility = View.GONE
+                            }
+                            1 -> {
+                                binding.chip2Btn.text = hashtag.hashtag
+                                binding.chip2Btn.visibility = View.VISIBLE
+                                binding.chip3Btn.visibility = View.GONE
+                            }
+                            2 -> {
+                                binding.chip3Btn.text = hashtag.hashtag
+                                binding.chip3Btn.visibility = View.VISIBLE
+                            }
+                        }
+                    }
                 }
 
                 Glide
                     .with(holder.itemView.context)
-                    .load(url)
+                    .load(imageUrl)
                     .into(binding.imgView)
 
                 binding.root.setOnClickListener {
+                    photiViewModel.id = id
                     fragment.setOnclick()
                 }
             }
-//            binding.root.setOnClickListener { // itemClickEvent는 MutableLiveData
-//                viewModel.itemClickEvent.value = pos // itemClickEvent 옵저버에게 항목 번호와 클릭되었음을 알림
-//            }
-//            binding.root.setOnLongClickListener { // 뒤에 컨텍스트 메뉴를 위해 필요
-//                viewModel.itemLongClick = pos // 롱클릭한 항목을 저장해 둠
-//                false // for context menu
-//            }
         }
     }
 
-    // ViewHolder 생성, ViewHolder 는 View 를담는상자
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HashCardAdapter.ViewHolder {
         val binding = ItemCardMissionLargeRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    // ViewHolder에데이터연결
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.setContents(viewHolder,position)
-
     }
 
     override fun getItemCount() = photiViewModel.hashItems.size

@@ -45,15 +45,15 @@ data class ChallengeData(
     @field:Json(name = "memberImages")
     val memberImages: List<MemberImg>
 )
-data class LatestListResponse(
+data class PagingListResponse(
     @field:Json(name = "code")
     val code: String,
     @field:Json(name = "message")
     val message: String,
     @field:Json(name = "data")
-    val data: LatestData
+    val data: PagingData
 )
-data class LatestData(
+data class PagingData(
     @field:Json(name = "content")
     val content: List<ChallengeData>,
     @field:Json(name = "page")
@@ -104,4 +104,16 @@ data class CodeData(
     val name: String,
     @field:Json(name = "invitationCode")
     val invitationCode: String
+)
+data class ChipListResponse(
+    @field:Json(name = "code")
+    val code: String,
+    @field:Json(name = "message")
+    val message: String,
+    @field:Json(name = "data")
+    val data: ChipListData
+)
+data class ChipListData(
+    @field:Json(name = "hashtag")
+    val hashtag: List<String>
 )

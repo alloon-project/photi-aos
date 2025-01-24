@@ -66,7 +66,8 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         photiViewModel.resetAllResponseValue()
         photiViewModel.getChallengePopular()
         photiViewModel.getChallengeLatest()
-        photiViewModel.getChallengeHash()
+        photiViewModel.getChallengeHashtag()
+        //photiViewModel.getHashList()
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -97,6 +98,20 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         photiViewModel.popularResponse.observe(this) { response ->
             when (response.code) {
                 "200 OK" -> {
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(this@PhotiActivity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
+
+        photiViewModel.hashListResponse.observe(this) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    photiViewModel.getChallengeHashtag()
                 }
                 "IO_Exception" -> {
                     CustomToast.createToast(this@PhotiActivity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()

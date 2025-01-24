@@ -8,9 +8,11 @@
             type="com.example.alloon_aos.view.fragment.photi.ChallengeCommendFragment" />
     </data>
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -86,6 +88,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/commend_textview2">
 
                     <Button
+                        android:id="@+id/all_chip_btn"
                         android:layout_width="49dp"
                         android:layout_height="30dp"
                         android:background="@drawable/chip_blue"
@@ -93,7 +96,8 @@
                         android:stateListAnimator="@null"
                         android:text="전체"
                         android:textColor="@color/blue500"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:onClick="@{() ->fragment.clickAllChip()}"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
