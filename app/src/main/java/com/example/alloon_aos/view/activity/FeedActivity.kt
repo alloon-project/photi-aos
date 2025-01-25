@@ -17,6 +17,8 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.MyData
 import com.example.alloon_aos.databinding.ActivityFeedBinding
@@ -27,6 +29,7 @@ import com.example.alloon_aos.view.fragment.feed.FeedFragment
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
+import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
 import com.example.alloon_aos.viewmodel.FeedViewModel
 import com.google.android.material.tabs.TabLayout
 
@@ -48,7 +51,13 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 .commit()
         }
 
-        val challengeId = intent.getIntExtra("ID",-1)
+        val challengeId = intent.getIntExtra("CHALLENGE_ID", -1)
+        if(challengeId != -1){
+            feedViewModel.fetchChallengeInfo()
+        }
+        feedViewModel.challengeId = challengeId
+
+
         val challengeData = intent.getParcelableExtra<MyData>("data")
         val imageFile = intent.getStringExtra("image")
 
@@ -208,44 +217,64 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         feedViewModel.deleteChallenge()
     }
 
-    fun setObserve() {
-        feedViewModel.apiResponse.observe(this) { response ->
-            when (response.code) {
+    private fun setObserve() {
+        feedViewModel.code.observe(this) { code ->
+            when (code) {
                 "200 OK" -> {
-                    finishAffinity()
-                    val intent = Intent(this, PhotiActivity::class.java).apply {
-                        putExtra("IS_FROM","UNSUBSCRIBE")
-                    }
-                    startActivity(intent)
+
                 }
-                "TOKEN_UNAUTHENTICATED" -> {
-                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
-                }
-                "TOKEN_UNAUTHORIZED" -> {
-                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
-                }
-                "CHALLENGE_MEMBER_NOT_FOUND" -> {
-                    CustomToast.createToast(this, "존재하지 않는 챌린지 파티원입니다.")?.show()
-                }
+
                 "CHALLENGE_NOT_FOUND" -> {
-                    CustomToast.createToast(this, "존재하지 않는 챌린지입니다.")?.show()
+                    Log.e("FeedActivity", "Error: CHALLENGE_NOT_FOUND - 존재하지 않는 챌린지입니다.")
                 }
-                "IO_Exception" -> {
-                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
-                }
+
                 else -> {
-                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                    Log.e("FeedActivity", "Error: $code - 예기치 않은 오류가 발생했습니다.")
                 }
             }
         }
+
+        feedViewModel.challengeInfo.observe(this) { data ->
+            if (data != null) {
+                Glide.with(binding.feedImgView.context)
+                    .load(data.imageUrl)
+                    .transform(CenterCrop())
+                    .into(binding.feedImgView)
+
+
+                binding.feedNameTextView.text = data.name
+
+
+                val hashtags = data.hashtags.map { hashtag -> hashtag.hashtag } // Hashtag 이름 리스트 추출
+                when (hashtags.size) {
+                    1 -> {
+                        binding.chip1Btn.text = hashtags[0]
+                        binding.chip1Btn.visibility = View.VISIBLE
+                        binding.chip2Btn.visibility = View.GONE
+                    }
+
+                    2 -> {
+                        binding.chip1Btn.text = hashtags[0]
+                        binding.chip2Btn.text = hashtags[1]
+                        binding.chip1Btn.visibility = View.VISIBLE
+                        binding.chip2Btn.visibility = View.VISIBLE
+                    }
+
+                    else -> {
+                        binding.chip1Btn.visibility = View.GONE
+                        binding.chip2Btn.visibility = View.GONE
+                    }
+                }
+            }
+
+        }
     }
 
-    fun finishActivity(){
+    fun finishActivity() {
         if (isTaskRoot) { // 최상위 스택에 있으면 홈으로
             val intent = Intent(this, PhotiActivity::class.java)
             startActivity(intent)
         }
         finish()
     }
-
 }

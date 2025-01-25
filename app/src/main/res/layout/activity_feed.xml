@@ -17,7 +17,7 @@
         tools:context=".view.activity.FeedActivity">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/feed_imgView"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:src="@drawable/dog"

@@ -23,7 +23,7 @@ object ApiConfig {
 
         // user
         "/api/my-challenges" to "GET",
-        "/api/feeds" to "GET",
+        "/api/users/feeds" to "GET",
         "/api/users/feeds-by-date" to "GET",
         "/api/users/feed-history" to "GET",
         "/api/users/ended-challenges" to "GET",

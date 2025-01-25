@@ -23,16 +23,24 @@ data class Feed(
 )
 
 data class ChallengeInfoData(
-    val rules: List<ChallengeRule>, // 규칙 목록
-    val proveTime: String, // 인증 시간, 예: "13:00"
-    val goal: String, // 목표
-    val startDate: String, // 시작 날짜, 예: "2024-01-01"
-    val endDate: String // 종료 날짜, 예: "2024-12-01"
+    val name: String, // 챌린지 이름
+    val goal: String, // 챌린지 목표
+    val imageUrl: String, // 챌린지 이미지 URL
+    val currentMemberCnt: Int, // 현재 참여 멤버 수
+    val isPublic: Boolean, // 공개 여부
+    val proveTime: String, // 인증 시간
+    val endDate: String, // 종료 날짜
+    val rules: List<ChallengeRule>, // 규칙 리스트
+    val hashtags: List<ChallengeHashtag>, // 해시태그 리스트
+    val memberImages: List<MemberImage> // 멤버 이미지 리스트
 )
 
-// Challenge 규칙 구조
 data class ChallengeRule(
     val rule: String // 규칙 설명
+)
+
+data class ChallengeHashtag(
+    val hashtag: String
 )
 
 //개별조회

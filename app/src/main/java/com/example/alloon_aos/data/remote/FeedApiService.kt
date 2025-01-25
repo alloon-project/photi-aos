@@ -25,7 +25,7 @@ interface FeedApiService {
 
     //피드 조회
     suspend fun get_challengeFeeds(
-        @Path("challengeId") challengeId: Long,
+        @Path("challengeId") challengeId: Int,
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 10,
         @Query("sort") sort: String = "LATEST"
@@ -34,26 +34,26 @@ interface FeedApiService {
     //피드 챌린지 소개
     @GET("/api/challenges/{challengeId}/info")
     suspend fun get_challengeInfo(
-        @Path("challengeId") challengeId: Long
+        @Path("challengeId") challengeId: Int
     ): Response<ApiResponse<ChallengeInfoData>>
 
     //피드 개별 조회
     @GET("/api/challenges/{challengeId}/feeds/{feedId}")
     suspend fun get_challengeFeedDetail(
-        @Path("challengeId") challengeId: Long,
-        @Path("feedId") feedId: Long
+        @Path("challengeId") challengeId: Int,
+        @Path("feedId") feedId: Int
     ): Response<ApiResponse<FeedDetailData>>
 
     @GET("/api/challenges/{challengeId}/challenge-members")
     suspend fun get_challengeMembers(
-        @Path("challengeId") challengeId: Long
+        @Path("challengeId") challengeId: Int
     ): Response<ApiResponse<List<ChallengeMember>>>
 
 
     //댓글리스트 조회
     @GET("/api/challenges/feeds/{feedId}/comments")
     suspend fun get_feedComments(
-        @Path("feedId") feedId: Long,
+        @Path("feedId") feedId: Int,
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 10
     ): Response<ApiResponse<FeedCommentsData>>
@@ -61,7 +61,7 @@ interface FeedApiService {
     // 챌린지 개인 목표 업데이트
     @PATCH("/api/challenges/{challengeId}/challenge-members/goal")
     suspend fun updateGoal(
-        @Path("challengeId") challengeId: Long, // 챌린지 ID
+        @Path("challengeId") challengeId: Int, // 챌린지 ID
         @Body goal: Map<String, String>
     ): ApiResponse<SuccessMessageReponse>
 
@@ -69,7 +69,7 @@ interface FeedApiService {
     @Multipart
     @POST("/api/challenges/{challengeId}/feeds")
     suspend fun postChallengeFeed(
-        @Path("challengeId") challengeId: Long, // 챌린지 ID
+        @Path("challengeId") challengeId: Int, // 챌린지 ID
         @Part image: MultipartBody.Part, // 이미지 파일
         @Part("description") description: String // 피드 설명
     ): ApiResponse<SuccessMessageReponse>
@@ -77,8 +77,8 @@ interface FeedApiService {
     //댓글 등록
     @POST("/api/challenges/{challengeId}/feeds/{feedId}/comments")
     suspend fun postComment(
-        @Path("challengeId") challengeId: Long, // 챌린지 ID
-        @Path("feedId") feedId: Long, // 피드 ID
+        @Path("challengeId") challengeId: Int, // 챌린지 ID
+        @Path("feedId") feedId: Int, // 피드 ID
         @Body comment: Map<String, String> // 댓글 등록 요청 데이터
     ): ApiResponse<SuccessMessageReponse>
 }

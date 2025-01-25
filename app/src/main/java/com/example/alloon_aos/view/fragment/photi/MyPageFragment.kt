@@ -25,6 +25,7 @@ import com.example.alloon_aos.view.ui.util.TodayDecorator
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import java.util.Locale
 
 
 class MyPageFragment : Fragment() {
@@ -33,6 +34,10 @@ class MyPageFragment : Fragment() {
     private lateinit var materialCalendarView: MaterialCalendarView
     private lateinit var eventDecorator: EventDecorator
     private lateinit var todayDecorator: TodayDecorator
+    private lateinit var calendarList : List<CalendarDay>
+    private var year : Int = 0
+    private var month : Int = 0
+
     var calendarYearMonth = ObservableField<String>("")
 
     override fun onCreateView(
@@ -46,13 +51,14 @@ class MyPageFragment : Fragment() {
 
         setCalendarView()
         setLisetener()
-        upDateCalendar()
+        initCalendar()
 
         //observeUserProfile()
         //observeChallenges()
         //observeChallengeRecordData()
         setObserve()
-        photiViewModel.fetchChallengeHistory()
+        //photiViewModel.fetchChallengeHistory()
+        photiViewModel.fetchCalendarData()
         return binding.root
     }
 
@@ -75,32 +81,23 @@ class MyPageFragment : Fragment() {
         photiViewModel.code.observe(viewLifecycleOwner) { code ->
             when (code) {
                 "200 OK" -> {
-                    val data = photiViewModel.challengeRecodData.value!!
-                    binding.idTextView.text = data.username
 
-                    Glide.with(binding.userImgImageView.context)
-                        .load(data.imageUrl)
-                        .transform(CircleCrop())
-                        .into(binding.userImgImageView)
-
-                    binding.verifyCountTextView.text = data.feedCnt.toString()
-                    binding.challengeEndedTextView.text = data.endedChallengeCnt.toString()
                 }
 
                 "USER_NOT_FOUND" -> {
-                    Log.e("ChallengeFragment", "Error: USER_NOT_FOUND - 존재하지 않는 회원입니다.")
+                    Log.e("MyPageFragment", "Error: USER_NOT_FOUND - 존재하지 않는 회원입니다.")
                 }
 
                 "TOKEN_UNAUTHENTICATED" -> {
                     Log.e(
-                        "ChallengeFragment",
+                        "MyPageFragment",
                         "Error: TOKEN_UNAUTHENTICATED - 승인되지 않은 요청입니다. 다시 로그인 해주세요."
                     )
                 }
 
                 "TOKEN_UNAUTHORIZED" -> {
                     Log.e(
-                        "ChallengeFragment",
+                        "MyPageFragment",
                         "Error: TOKEN_UNAUTHORIZED - 권한이 없는 요청입니다. 로그인 후 다시 시도해주세요."
                     )
                 }
@@ -111,13 +108,45 @@ class MyPageFragment : Fragment() {
                 }
 
                 "UNKNOWN_ERROR" -> {
-                    Log.e("ChallengeFragment", "Error: UNKNOWN_ERROR - 알 수 없는 오류가 발생했습니다.")
+                    Log.e("MyPageFragment", "Error: UNKNOWN_ERROR - 알 수 없는 오류가 발생했습니다.")
                 }
 
                 else -> {
-                    Log.e("ChallengeFragment", "Error: $code - 예기치 않은 오류가 발생했습니다.")
+                    Log.e("MyPageFragment", "Error: $code - 예기치 않은 오류가 발생했습니다.")
                 }
             }
+        }
+
+
+
+        photiViewModel.feedCalendarData.observe(viewLifecycleOwner) {
+                feedDate ->
+             calendarList = feedDate ?: emptyList()
+            eventDecorator = EventDecorator(requireContext(), month, calendarList)
+            materialCalendarView.addDecorators(todayDecorator,eventDecorator)
+        }
+
+        photiViewModel.challengeRecodData.observe(viewLifecycleOwner) {
+                data ->
+           if(data != null){
+               binding.idTextView.text = data.username
+
+               Glide.with(binding.userImgImageView.context)
+                   .load(data.imageUrl)
+                   .transform(CircleCrop())
+                   .into(binding.userImgImageView)
+
+               binding.verifyCountTextView.text = data.feedCnt.toString()
+               binding.challengeEndedTextView.text = data.endedChallengeCnt.toString()
+           }
+
+        }
+        photiViewModel.feedsByDateData.observe(viewLifecycleOwner) {
+                data ->
+                    if(data != null)
+                            ProofShotByDateDialog(data)
+                    .show(parentFragmentManager, "ProofShotByDateDialog")
+
         }
     }
 
@@ -147,7 +176,7 @@ class MyPageFragment : Fragment() {
             koWeekDays[dayOfWeek.ordinal]
         }
         materialCalendarView.state().edit()
-            //필요시최대최소날짜설정
+            // 필요 시 최대 최소 날짜 설정
 //            .setMinimumDate(CalendarDay.from(2024, 7, 3))
 //            .setMaximumDate(CalendarDay.from(2024, 9, 30))
             .commit()
@@ -155,29 +184,32 @@ class MyPageFragment : Fragment() {
 
     private fun setLisetener() {
         materialCalendarView.setOnMonthChangedListener { widget, date ->
-            upDateCalendar()
+            initCalendar()
         }
 
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
 
             if (materialCalendarView.currentDate.month == date.month && calendarList.contains(date)) {
-                ProofShotByDateDialog(photiViewModel)
-                    .show(parentFragmentManager, "CustomDialog")
+
+
+                val formattedDate = String.format(Locale.US,"%04d-%02d-%02d", date.year, date.month, date.day)
+                Log.d("calendar","클릭!! $formattedDate")
+                photiViewModel.fetchFeedsByDate(formattedDate)
+
             }
         }
 
     }
 
-    private fun upDateCalendar() {
+    private fun initCalendar() {
         materialCalendarView.removeDecorators()
 
-        val year = materialCalendarView.currentDate.year
-        val month = materialCalendarView.currentDate.month
+         year = materialCalendarView.currentDate.year
+         month = materialCalendarView.currentDate.month
 
-        eventDecorator = EventDecorator(requireContext(), month, calendarList)
         todayDecorator = TodayDecorator(requireContext(), month)
 
-        materialCalendarView.addDecorators(todayDecorator, eventDecorator)
+        materialCalendarView.addDecorators(todayDecorator)
         calendarYearMonth.set("${year}년 ${month}월")
     }
 
@@ -209,18 +241,5 @@ class MyPageFragment : Fragment() {
 
     fun moveToSettingsActivity() {
         startActivity(Intent(activity, SettingsActivity::class.java))
-    }
-
-    companion object {
-        // 사용자 피드 정보
-        // 해당 날짜 미리 선택되있음
-        val calendarList: HashSet<CalendarDay> = HashSet(
-            listOf(
-                CalendarDay.from(2024, 8, 14),
-                CalendarDay.from(2024, 9, 1),
-                CalendarDay.from(2024, 9, 11),
-                CalendarDay.from(2024, 9, 12)
-            )
-        )
     }
 }

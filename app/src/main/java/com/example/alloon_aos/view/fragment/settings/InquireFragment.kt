@@ -101,19 +101,19 @@ class InquireFragment : Fragment() {
                 }
 
                 "USER_NOT_FOUND" -> {
-                    Log.e("ChallengeFragment", "Error: USER_NOT_FOUND - 존재하지 않는 회원입니다.")
+                    Log.e("InquireFragment", "Error: USER_NOT_FOUND - 존재하지 않는 회원입니다.")
                 }
 
                 "TOKEN_UNAUTHENTICATED" -> {
                     Log.e(
-                        "ChallengeFragment",
+                        "InquireFragment",
                         "Error: TOKEN_UNAUTHENTICATED - 승인되지 않은 요청입니다. 다시 로그인 해주세요."
                     )
                 }
 
                 "TOKEN_UNAUTHORIZED" -> {
                     Log.e(
-                        "ChallengeFragment",
+                        "InquireFragment",
                         "Error: TOKEN_UNAUTHORIZED - 권한이 없는 요청입니다. 로그인 후 다시 시도해주세요." //TODO 로그아웃
                     )
                 }
@@ -124,11 +124,11 @@ class InquireFragment : Fragment() {
                 }
 
                 "UNKNOWN_ERROR" -> {
-                    Log.e("ChallengeFragment", "Error: UNKNOWN_ERROR - 알 수 없는 오류가 발생했습니다.")
+                    Log.e("InquireFragment", "Error: UNKNOWN_ERROR - 알 수 없는 오류가 발생했습니다.")
                 }
 
                 else -> {
-                    Log.e("ChallengeFragment", "Error: $code - 예기치 않은 오류가 발생했습니다.")
+                    Log.e("InquireFragment", "Error: $code - 예기치 않은 오류가 발생했습니다.")
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.example.alloon_aos.view.ui.component.dialog
 
 import ProofShotHomeTransformer
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,13 +13,17 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.alloon_aos.data.model.response.FeedByDate
 import com.example.alloon_aos.databinding.DialogProofshotByDateBinding
 import com.example.alloon_aos.databinding.ItemProofshotCompleteViewpagerBinding
+import com.example.alloon_aos.view.activity.FeedActivity
+import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
-class ProofShotByDateDialog(val photiViewModel: PhotiViewModel) : DialogFragment()  {
+class ProofShotByDateDialog(val feedList:
+                            List<FeedByDate>) : DialogFragment()  {
     private var _binding: DialogProofshotByDateBinding? = null
     private val binding get() = _binding!!
 
@@ -59,20 +64,23 @@ class ProofShotByDateDialog(val photiViewModel: PhotiViewModel) : DialogFragment
     inner class ViewHolder(private val binding: ItemProofshotCompleteViewpagerBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setContents(pos: Int) {
-            with (photiViewModel.dateProofItems[pos]) {
-                binding.bannerTextview.setText(title)
-                binding.doneTextview.setText(time)
+            with (feedList[pos]) {
+                binding.bannerTextview.setText(name)
+                binding.doneTextview.setText(proveTime)
 
-                if(pos == photiViewModel.dateProofItems.size-1) {
+                if(pos == feedList.size-1) {
                     binding.dividerGreen.visibility = View.GONE
                 }
 
                 binding.root.setOnClickListener {
-                    CustomToast.createToast(activity,"피드로 ㄱㄱ")?.show()
+                    val intent = Intent(activity, FeedActivity::class.java)
+                    intent.putExtra("CHALLENGE_ID", id)
+                    //사용자 ID도 전달해줘야할지 고민 + 액티비티 실행해야함
+                   // startActivity(intent)
                 }
 
                 Glide.with(binding.proofshotImageview.context)
-                    .load(url)
+                    .load(imageUrl)
                     .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))
                     .into(binding.proofshotImageview)
             }
@@ -90,7 +98,7 @@ class ProofShotByDateDialog(val photiViewModel: PhotiViewModel) : DialogFragment
             viewHolder.setContents(position)
         }
 
-        override fun getItemCount() = photiViewModel.dateProofItems.size
+        override fun getItemCount() = feedList.size
 
     }
 }

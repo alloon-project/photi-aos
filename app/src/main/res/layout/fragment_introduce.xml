@@ -125,7 +125,7 @@
                 app:tint="@color/blue400" />
 
             <TextView
-                android:id="@+id/textView17"
+                android:id="@+id/prove_time_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -146,7 +146,7 @@
                 android:textColor="@color/blue500"
                 android:textSize="14dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView17"
+                app:layout_constraintStart_toEndOf="@+id/prove_time_textView"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -174,7 +174,7 @@
             app:layout_constraintTop_toBottomOf="@+id/divider" />
 
         <TextView
-            android:id="@+id/textView19"
+            android:id="@+id/goalTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/suit_medium"
@@ -194,7 +194,7 @@
             android:src="@drawable/divider_line_gray100"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView19"
+            app:layout_constraintTop_toBottomOf="@+id/goalTextView"
             android:layout_marginTop="26dp"/>
 
         <TextView
@@ -210,7 +210,7 @@
             android:layout_marginTop="32dp"/>
 
         <TextView
-            android:id="@+id/textView21"
+            android:id="@+id/dateTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/suit_medium"

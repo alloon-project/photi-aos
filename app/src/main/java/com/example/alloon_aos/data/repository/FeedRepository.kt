@@ -15,7 +15,7 @@ class FeedRepository(private val apiService: FeedApiService) {
 
     // 챌린지 피드 조회
     suspend fun getChallengeFeeds(
-        challengeId: Long,
+        challengeId: Int,
         page: Int = 0,
         size: Int = 10,
         sort: String = "LATEST"
@@ -24,26 +24,26 @@ class FeedRepository(private val apiService: FeedApiService) {
     }
 
     // 챌린지 정보 조회
-    suspend fun getChallengeInfo(challengeId: Long): Response<ApiResponse<ChallengeInfoData>> {
+    suspend fun getChallengeInfo(challengeId: Int): Response<ApiResponse<ChallengeInfoData>> {
         return apiService.get_challengeInfo(challengeId)
     }
 
     // 챌린지 개별 피드 조회
     suspend fun getChallengeFeedDetail(
-        challengeId: Long,
-        feedId: Long
+        challengeId: Int,
+        feedId: Int
     ): Response<ApiResponse<FeedDetailData>> {
         return apiService.get_challengeFeedDetail(challengeId, feedId)
     }
 
     // 챌린지 멤버 조회
-    suspend fun getChallengeMembers(challengeId: Long): Response<ApiResponse<List<ChallengeMember>>> {
+    suspend fun getChallengeMembers(challengeId: Int): Response<ApiResponse<List<ChallengeMember>>> {
         return apiService.get_challengeMembers(challengeId)
     }
 
     // 피드 댓글 리스트 조회
     suspend fun getFeedComments(
-        feedId: Long,
+        feedId: Int,
         page: Int = 0,
         size: Int = 10
     ): Response<ApiResponse<FeedCommentsData>> {
@@ -52,7 +52,7 @@ class FeedRepository(private val apiService: FeedApiService) {
 
     // 챌린지 개인 목표 업데이트
     suspend fun updateGoal(
-        challengeId: Long,
+        challengeId: Int,
         goal: Map<String, String>
     ): ApiResponse<SuccessMessageReponse> {
         return apiService.updateGoal(challengeId, goal)
@@ -60,7 +60,7 @@ class FeedRepository(private val apiService: FeedApiService) {
 
     // 챌린지 인증 등록
     suspend fun postChallengeFeed(
-        challengeId: Long,
+        challengeId: Int,
         image: MultipartBody.Part,
         description: String
     ): ApiResponse<SuccessMessageReponse> {
@@ -69,8 +69,8 @@ class FeedRepository(private val apiService: FeedApiService) {
 
     // 댓글 등록
     suspend fun postComment(
-        challengeId: Long,
-        feedId: Long,
+        challengeId: Int,
+        feedId: Int,
         comment: Map<String, String>
     ): ApiResponse<SuccessMessageReponse> {
         return apiService.postComment(challengeId, feedId, comment)

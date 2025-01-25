@@ -42,24 +42,35 @@ suspend fun <T> handleApiCall(
 ) {
     try {
         val response = withContext(Dispatchers.IO) { call() }
-
         if (response.isSuccessful) {
-            onSuccess(response.body()?.data)
-        } else {
-            val errorCode = response.errorBody()?.let { errorBody ->
-                try {
-                    val errorJson = JSONObject(errorBody.string())
-                    errorJson.getString("code")
-                } catch (e: Exception) {
-                    "UNKNOWN_ERROR"
+            val body = response.body()
+            Log.d("handleApiCall", "Response body: $body")
+
+            if (body != null) {
+                if (body.code.trim().equals("200 OK", ignoreCase = true)) {
+                    Log.d("handleApiCall", "Success: ${body.data}")
+                    onSuccess(body.data)
+                } else {
+                    Log.e("handleApiCall", "Unexpected code: ${body.code}")
+                    onFailure(body.code)
                 }
-            } ?: "UNKNOWN_ERROR"
-            onFailure(errorCode)
+            } else {
+                Log.e("handleApiCall", "Response body is null!")
+                onFailure("UNKNOWN_ERROR")
+            }
+        } else {
+            Log.e("handleApiCall", "HTTP Error: ${response.code()}")
+            onFailure("HTTP_${response.code()}")
         }
+
     } catch (e: IOException) {
+        Log.e("handleApiCall", "IO Exception: ${e.message}")
         onFailure("IO_Exception")
     } catch (e: Exception) {
+        Log.e("handleApiCall", "Exception: ${e.message}")
         onFailure("UNKNOWN_ERROR")
     }
 }
+
+
 

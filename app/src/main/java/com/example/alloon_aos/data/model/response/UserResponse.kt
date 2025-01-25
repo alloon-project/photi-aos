@@ -1,5 +1,7 @@
 package com.example.alloon_aos.data.model.response
 
+import com.prolificinteractive.materialcalendarview.CalendarDay
+
 data class UserProfile(
     val imageUrl: String,
     val username: String,
@@ -29,7 +31,7 @@ data class Hashtag(
 )
 
 data class FeedDate(
-    val list: List<String>
+    val list:  List<String>
 )
 
 

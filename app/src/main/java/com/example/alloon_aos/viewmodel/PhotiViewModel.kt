@@ -18,7 +18,6 @@ import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeRecordData
 import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.FeedByDate
-import com.example.alloon_aos.data.model.response.FeedDate
 import com.example.alloon_aos.data.model.response.PagingListResponse
 import com.example.alloon_aos.data.model.response.MyChallenges
 import com.example.alloon_aos.data.model.response.ProfileImageData
@@ -29,8 +28,10 @@ import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
 import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.UserRepository
 import com.example.alloon_aos.data.repository.handleApiCall
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import org.threeten.bp.LocalDate
 
 data class Item(
     val title: String,
@@ -49,6 +50,7 @@ data class ChallengeItem(
     var hashtag: MutableList<String>,
     val member: String
 )
+
 data class ProofShotItem(
     val title: String,
     val date: String,
@@ -94,12 +96,15 @@ class PhotiViewModel : ViewModel() {
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
     }
+
     fun resetLatestResponseValue() {
         latestResponse.value = ActionApiResponse()
     }
+
     fun resetHashResponseValue() {
         hashResponse.value = ActionApiResponse()
     }
+
     fun resetAllResponseValue() {
         apiResponse.value = ActionApiResponse()
         popularResponse.value = ActionApiResponse()
@@ -108,6 +113,7 @@ class PhotiViewModel : ViewModel() {
         hashListResponse.value = ActionApiResponse()
         resetPaging()
     }
+
     fun resetPaging() {
         latestPage = 0
         latestItems = arrayListOf()
@@ -123,9 +129,6 @@ class PhotiViewModel : ViewModel() {
     private val _userProfile = MutableLiveData<ApiResponse<UserProfile>?>(null)
     val userProfile: LiveData<ApiResponse<UserProfile>?> = _userProfile
 
-    private val _challenges = MutableLiveData<ApiResponse<MyChallenges>?>(null)
-    val challenges: LiveData<ApiResponse<MyChallenges>?> = _challenges
-
 
     //사용 o
     private val _code = MutableLiveData<String>()
@@ -137,17 +140,19 @@ class PhotiViewModel : ViewModel() {
     private val _challengeRecodData = MutableLiveData<ChallengeRecordData?>(null)
     val challengeRecodData: LiveData<ChallengeRecordData?> = _challengeRecodData
 
-    private val _feedCalendarData = MutableLiveData<FeedDate?>()
-    val feedCalendarData: LiveData<FeedDate?> get() = _feedCalendarData
+    private val _feedCalendarData = MutableLiveData<List<CalendarDay>?>()
+    val feedCalendarData: LiveData<List<CalendarDay>?> get() = _feedCalendarData
 
     private val _feedsByDateData = MutableLiveData<List<FeedByDate>?>()
     val feedsByDateData: LiveData<List<FeedByDate>?> get() = _feedsByDateData
 
 
     fun getData(): MyData {
-        var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags, memberCnt, memberImg)
+        var data =
+            MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags, memberCnt, memberImg)
         return data
     }
+
     fun setChallengeData(data: ChallengeData) {
         name = data.name
         isPublic = data.isPublic
@@ -163,17 +168,26 @@ class PhotiViewModel : ViewModel() {
 
     fun changeToCommendData(data: List<ChallengeData>): ArrayList<CommendData> {
         var listData: ArrayList<CommendData> = arrayListOf()
-        for(item in data) {
-            val newData = CommendData(item.id, item.name, item.imageUrl, item.goal, item.currentMemberCnt,
-                item.proveTime, item.endDate, item.hashtags, item.memberImages)
+        for (item in data) {
+            val newData = CommendData(
+                item.id, item.name, item.imageUrl, item.goal, item.currentMemberCnt,
+                item.proveTime, item.endDate, item.hashtags, item.memberImages
+            )
             listData.add(newData)
         }
         return listData
     }
+
     fun changeToCommendDataLast(data: List<ChallengeData>): ArrayList<CommendData> {
         var listData: ArrayList<CommendData> = arrayListOf()
-        for(item in data) {
-            val newData = CommendData(id = item.id, name = item.name, imageUrl = item.imageUrl, endDate = item.endDate, hashtags = item.hashtags)
+        for (item in data) {
+            val newData = CommendData(
+                id = item.id,
+                name = item.name,
+                imageUrl = item.imageUrl,
+                endDate = item.endDate,
+                hashtags = item.hashtags
+            )
             listData.add(newData)
         }
         return listData
@@ -181,24 +195,29 @@ class PhotiViewModel : ViewModel() {
 
 
     fun getChallengeLatest() {
-        challenge_repository.getChallengeLatest(latestPage, 10, object : ChallengeRepositoryCallback<PagingListResponse> {
-            override fun onSuccess(data: PagingListResponse) {
-                val result = data.code
-                val mes = data.message
-                val data = data.data
-                addLatestItem(changeToCommendDataLast(data.content))
-                latestResponse.value = ActionApiResponse(result)
-                Log.d(TAG, "getChallengeLatest: $mes $result")
-            }
+        challenge_repository.getChallengeLatest(
+            latestPage,
+            10,
+            object : ChallengeRepositoryCallback<PagingListResponse> {
+                override fun onSuccess(data: PagingListResponse) {
+                    val result = data.code
+                    val mes = data.message
+                    val data = data.data
+                    addLatestItem(changeToCommendDataLast(data.content))
+                    latestResponse.value = ActionApiResponse(result)
+                    Log.d(TAG, "getChallengeLatest: $mes $result")
+                }
 
-            override fun onFailure(error: Throwable) {
-                handleFailure(error)
-            }
-        })
+                override fun onFailure(error: Throwable) {
+                    handleFailure(error)
+                }
+            })
     }
 
     fun getChallengeInfo() {
-        challenge_repository.getChallengeInfo(id, object : ChallengeRepositoryCallback<ChallengeResponse> {
+        challenge_repository.getChallengeInfo(
+            id,
+            object : ChallengeRepositoryCallback<ChallengeResponse> {
                 override fun onSuccess(data: ChallengeResponse) {
                     val result = data.code
                     val mes = data.message
@@ -215,7 +234,8 @@ class PhotiViewModel : ViewModel() {
     }
 
     fun getChallengePopular() {
-        challenge_repository.getChallengePopular(object : ChallengeRepositoryCallback<ChallengeListResponse> {
+        challenge_repository.getChallengePopular(object :
+            ChallengeRepositoryCallback<ChallengeListResponse> {
             override fun onSuccess(data: ChallengeListResponse) {
                 val result = data.code
                 val mes = data.message
@@ -236,20 +256,24 @@ class PhotiViewModel : ViewModel() {
     }
 
     fun getChallengeHashtag() {
-        challenge_repository.getChallengeHashtag("러닝", hashPage, 10, object : ChallengeRepositoryCallback<PagingListResponse> {
-            override fun onSuccess(data: PagingListResponse) {
-                val result = data.code
-                val mes = data.message
-                val data = data.data
-                addHashItem(changeToCommendDataLast(data.content))
-                hashResponse.value = ActionApiResponse(result)
-                Log.d(TAG, "getChallengeHashtag: $mes $result")
-            }
+        challenge_repository.getChallengeHashtag(
+            "러닝",
+            hashPage,
+            10,
+            object : ChallengeRepositoryCallback<PagingListResponse> {
+                override fun onSuccess(data: PagingListResponse) {
+                    val result = data.code
+                    val mes = data.message
+                    val data = data.data
+                    addHashItem(changeToCommendDataLast(data.content))
+                    hashResponse.value = ActionApiResponse(result)
+                    Log.d(TAG, "getChallengeHashtag: $mes $result")
+                }
 
-            override fun onFailure(error: Throwable) {
-                handleFailure(error)
-            }
-        })
+                override fun onFailure(error: Throwable) {
+                    handleFailure(error)
+                }
+            })
     }
 
     fun handleFailure(error: Throwable) {
@@ -258,10 +282,9 @@ class PhotiViewModel : ViewModel() {
     }
 
 
-
     //인기있는 챌린지
     val hotItemsListData = MutableLiveData<ArrayList<CommendData>>()
-    var hotItems : ArrayList<CommendData> = arrayListOf()
+    var hotItems: ArrayList<CommendData> = arrayListOf()
 
     fun addHotItem(list: ArrayList<CommendData>) {
         hotItems = list
@@ -271,7 +294,7 @@ class PhotiViewModel : ViewModel() {
 
     //최신순 챌린지
     val latestItemsListData = MutableLiveData<ArrayList<CommendData>>()
-    var latestItems : ArrayList<CommendData> = arrayListOf()
+    var latestItems: ArrayList<CommendData> = arrayListOf()
 
     fun addLatestItem(list: ArrayList<CommendData>) {
         latestItems.addAll(list)
@@ -281,7 +304,7 @@ class PhotiViewModel : ViewModel() {
 
     //해시태그별 챌린지
     val hashItemsListData = MutableLiveData<ArrayList<CommendData>>()
-    var hashItems : ArrayList<CommendData> = arrayListOf()
+    var hashItems: ArrayList<CommendData> = arrayListOf()
 
     fun addHashItem(list: ArrayList<CommendData>) {
         hashItems.addAll(list)
@@ -292,7 +315,11 @@ class PhotiViewModel : ViewModel() {
     //해시태그 칩 목록
     val hashChipsListData = MutableLiveData<ArrayList<ChipItem>>()
     var hashChips = arrayListOf<ChipItem>(
-        ChipItem("러닝", false), ChipItem("취뽀", false), ChipItem("독서", false), ChipItem("맛집",false), ChipItem("안드로이드",false)
+        ChipItem("러닝", false),
+        ChipItem("취뽀", false),
+        ChipItem("독서", false),
+        ChipItem("맛집", false),
+        ChipItem("안드로이드", false)
     )
 
     fun clickAllChip() {
@@ -452,9 +479,16 @@ class PhotiViewModel : ViewModel() {
             handleApiCall(
                 call = { user_repository.getFeeds() },
                 onSuccess = { data ->
-                    _feedCalendarData.value = data
-                    _code.value = "200 OK"
-                },
+                    val calendarDayList = data?.list?.mapNotNull { dateString ->
+                        try {
+                            val localDate = LocalDate.parse(dateString)
+                            CalendarDay.from(localDate)
+                        } catch (e: Exception) {
+                            null
+                        }
+                    } ?: emptyList()
+                _feedCalendarData.value = calendarDayList
+                            },
                 onFailure = { errorCode ->
                     _feedCalendarData.value = null
                     _code.value = errorCode
@@ -463,13 +497,21 @@ class PhotiViewModel : ViewModel() {
         }
     }
 
+
+
     fun fetchFeedsByDate(date: String) {
         viewModelScope.launch {
             handleApiCall(
-                call = { user_repository.getFeedsByDate(date) },
-                onSuccess = { data ->
-                    _feedsByDateData.value = data
-                    _code.value = "200 OK"
+                call = { user_repository.getFeedsByDate(date)},
+                onSuccess = { data: List<FeedByDate>? ->
+                    if (data != null) {
+                        _feedsByDateData.value = data
+                        _code.value = "200 OK"
+                    } else {
+                        Log.e("fetchFeedsByDate", "Data is null!")
+                        _feedsByDateData.value = emptyList()
+                        _code.value = "NO_DATA"
+                    }
                 },
                 onFailure = { errorCode ->
                     _feedsByDateData.value = null

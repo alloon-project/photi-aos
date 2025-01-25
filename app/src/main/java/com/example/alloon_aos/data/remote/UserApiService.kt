@@ -26,8 +26,8 @@ interface UserApiService {
         @Query("size") size: Int,
     ): Response<ApiResponse<MyChallenges>>
 
-    @GET("/api/feeds")
-    suspend fun get_feeds(): Response<ApiResponse<FeedDate>>
+    @GET("/api/users/feeds")
+    suspend fun get_feed_date(): Response<ApiResponse<FeedDate>>
 
     @GET("/api/users/feeds-by-date")
     suspend fun get_feeds_by_date(

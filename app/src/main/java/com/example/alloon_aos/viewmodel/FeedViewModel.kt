@@ -24,9 +24,12 @@ import com.example.alloon_aos.data.repository.ChallengeRepository
 import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
 import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.FeedRepository
+import com.example.alloon_aos.data.repository.handleApiCall
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import org.threeten.bp.LocalDate
 
 data class FeedOutItem(
     val daysAgo: Int,
@@ -175,134 +178,154 @@ class FeedViewModel : ViewModel() {
     private val feedService = RetrofitClient.feedService
     private val feedRepository = FeedRepository(feedService)
 
-    // LiveData 변수들
-    private val _challengeFeeds = MutableLiveData<ApiResponse<ChallengeFeedsData>>()
-    val challengeFeeds: LiveData<ApiResponse<ChallengeFeedsData>> get() = _challengeFeeds
+    private val _code = MutableLiveData<String>()
+    val code: LiveData<String> get() = _code
 
-    private val _challengeInfo = MutableLiveData<ApiResponse<ChallengeInfoData>>()
-    val challengeInfo: LiveData<ApiResponse<ChallengeInfoData>> get() = _challengeInfo
+    private val _challengeFeeds = MutableLiveData<ChallengeFeedsData?>()
+    val challengeFeeds: MutableLiveData<ChallengeFeedsData?> get() = _challengeFeeds
 
-    private val _challengeFeedDetail = MutableLiveData<ApiResponse<FeedDetailData>>()
-    val challengeFeedDetail: LiveData<ApiResponse<FeedDetailData>> get() = _challengeFeedDetail
+    private val _challengeInfo = MutableLiveData<ChallengeInfoData?>()
+    val challengeInfo: LiveData<ChallengeInfoData?> get() = _challengeInfo
 
-    private val _challengeMembers = MutableLiveData<ApiResponse<List<ChallengeMember>>>()
-    val challengeMembers: LiveData<ApiResponse<List<ChallengeMember>>> get() = _challengeMembers
+    private val _challengeFeedDetail = MutableLiveData<FeedDetailData?>()
+    val challengeFeedDetail: LiveData<FeedDetailData?> get() = _challengeFeedDetail
 
-    private val _feedComments = MutableLiveData<ApiResponse<FeedCommentsData>>()
-    val feedComments: LiveData<ApiResponse<FeedCommentsData>> get() = _feedComments
+    private val _challengeMembers = MutableLiveData<List<ChallengeMember>?>()
+    val challengeMembers: LiveData<List<ChallengeMember>?> get() = _challengeMembers
 
-    private val _updateGoalResponse = MutableLiveData<ApiResponse<SuccessMessageReponse>>()
-    val updateGoalResponse: LiveData<ApiResponse<SuccessMessageReponse>> get() = _updateGoalResponse
+    private val _feedComments = MutableLiveData<FeedCommentsData?>()
+    val feedComments: LiveData<FeedCommentsData?> get() = _feedComments
 
-    private val _postChallengeFeedResponse = MutableLiveData<ApiResponse<SuccessMessageReponse>>()
-    val postChallengeFeedResponse: LiveData<ApiResponse<SuccessMessageReponse>> get() = _postChallengeFeedResponse
+    private val _updateGoalResponse = MutableLiveData<SuccessMessageReponse?>()
+    val updateGoalResponse: LiveData<SuccessMessageReponse?> get() = _updateGoalResponse
 
-    private val _postCommentResponse = MutableLiveData<ApiResponse<SuccessMessageReponse>>()
-    val postCommentResponse: LiveData<ApiResponse<SuccessMessageReponse>> get() = _postCommentResponse
+    private val _postChallengeFeedResponse = MutableLiveData<SuccessMessageReponse?>()
+    val postChallengeFeedResponse: LiveData<SuccessMessageReponse?> get() = _postChallengeFeedResponse
 
+    private val _postCommentResponse = MutableLiveData<SuccessMessageReponse?>()
+    val postCommentResponse: LiveData<SuccessMessageReponse?> get() = _postCommentResponse
 
-    // Fetch functions
+    fun fetchChallengeInfo() {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleApiCall(
+                call = { feedRepository.getChallengeInfo(challengeId) },
+                onSuccess = { data ->
+                    _challengeInfo.value = data
+                },
+                onFailure = { errorCode ->
+                    _challengeInfo.value = null
+                    _code.value =errorCode
+                }
+            )
+        }
+    }
 
     fun fetchChallengeFeeds(
-        challengeId: Long,
         page: Int = 0,
         size: Int = 10,
         sort: String = "LATEST"
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = feedRepository.getChallengeFeeds(challengeId, page, size, sort)
-                if (response.isSuccessful) {
-                    _challengeFeeds.postValue(response.body())
+            handleApiCall(
+                call = { feedRepository.getChallengeFeeds(challengeId, page, size, sort) },
+                onSuccess = { data ->
+                    _challengeFeeds.value = data
+                },
+                onFailure = { errorCode ->
+                    _challengeFeeds.value  = null
+                    _code.value = errorCode
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            )
         }
     }
 
-    fun fetchChallengeInfo(challengeId: Long) {
+    fun fetchChallengeFeedDetail(feedId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = feedRepository.getChallengeInfo(challengeId)
-                if (response.isSuccessful) {
-                    _challengeInfo.postValue(response.body())
+            handleApiCall(
+                call = { feedRepository.getChallengeFeedDetail(challengeId, feedId) },
+                onSuccess = { data ->
+                    _challengeFeedDetail.value = data
+                },
+                onFailure = { errorCode ->
+                    _challengeFeedDetail.value = null
+                    _code.value = errorCode
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            )
         }
     }
 
-    fun fetchChallengeFeedDetail(challengeId: Long, feedId: Long) {
+    fun fetchChallengeMembers() {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = feedRepository.getChallengeFeedDetail(challengeId, feedId)
-                if (response.isSuccessful) {
-                    _challengeFeedDetail.postValue(response.body())
+            handleApiCall(
+                call = { feedRepository.getChallengeMembers(challengeId) },
+                onSuccess = { data ->
+                    _challengeMembers.value = data
+                },
+                onFailure = { errorCode ->
+                    _challengeMembers.value = null
+                    _code.value = errorCode
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            )
         }
     }
 
-    fun fetchChallengeMembers(challengeId: Long) {
+    fun fetchFeedComments(feedId: Int, page: Int = 0, size: Int = 10) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = feedRepository.getChallengeMembers(challengeId)
-                if (response.isSuccessful) {
-                    _challengeMembers.postValue(response.body())
+            handleApiCall(
+                call = { feedRepository.getFeedComments(feedId, page, size) },
+                onSuccess = { data ->
+                    _feedComments.value = data
+                },
+                onFailure = { errorCode ->
+                    _feedComments.value = null
+                    _code.value = errorCode
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            )
         }
     }
 
-    fun fetchFeedComments(feedId: Long, page: Int = 0, size: Int = 10) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = feedRepository.getFeedComments(feedId, page, size)
-                if (response.isSuccessful) {
-                    _feedComments.postValue(response.body())
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
+//    fun updateGoal( goal: Map<String, String>) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            handleApiCall(
+//                call = { feedRepository.updateGoal(challengeId, goal) },
+//                onSuccess = { data ->
+//                    _updateGoalResponse.value = data
+//                },
+//                onFailure = { errorCode ->
+//                    _updateGoalResponse.value = null
+//                    _code.value = errorCode
+//                }
+//            )
+//        }
+//    }
 
-    fun updateGoal(challengeId: Long, goal: Map<String, String>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = feedRepository.updateGoal(challengeId, goal)
-                _updateGoalResponse.postValue(response)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    fun postChallengeFeed(challengeId: Long, image: MultipartBody.Part, description: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = feedRepository.postChallengeFeed(challengeId, image, description)
-                _postChallengeFeedResponse.postValue(response)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    fun postComment(challengeId: Long, feedId: Long, comment: Map<String, String>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = feedRepository.postComment(challengeId, feedId, comment)
-                _postCommentResponse.postValue(response)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
+//    fun postChallengeFeed(challengeId: Long, image: MultipartBody.Part, description: String) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            handleApiCall(
+//                call = { feedRepository.postChallengeFeed(challengeId, image, description) },
+//                onSuccess = { data ->
+//                    _postChallengeFeedResponse.value = data
+//                },
+//                onFailure = { errorCode ->
+//                    _postChallengeFeedResponse.value = null
+//                    _code.value = errorCode
+//                }
+//            )
+//        }
+//    }
+//
+//    fun postComment(feedId: Int, comment: Map<String, String>) {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            handleApiCall(
+//                call = { feedRepository.postComment(challengeId, feedId, comment) },
+//                onSuccess = { data ->
+//                    _postCommentResponse.value = data
+//                },
+//                onFailure = { errorCode ->
+//                    _postCommentResponse.value = null
+//                    _code.value = errorCode
+//                }
+//            )
+//        }
+//    }
 }
