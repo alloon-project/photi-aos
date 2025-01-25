@@ -57,7 +57,7 @@ class MyPageFragment : Fragment() {
         //observeChallenges()
         //observeChallengeRecordData()
         setObserve()
-        //photiViewModel.fetchChallengeHistory()
+        photiViewModel.fetchChallengeHistory()
         photiViewModel.fetchCalendarData()
         return binding.root
     }
