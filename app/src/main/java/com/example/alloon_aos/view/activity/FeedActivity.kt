@@ -53,7 +53,7 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
 
         val challengeId = intent.getIntExtra("CHALLENGE_ID", -1)
         if(challengeId != -1){
-            feedViewModel.fetchChallengeInfo()
+            feedViewModel.fetchChallenge()
         }
         feedViewModel.challengeId = challengeId
 
@@ -234,7 +234,7 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             }
         }
 
-        feedViewModel.challengeInfo.observe(this) { data ->
+        feedViewModel.challenge.observe(this) { data ->
             if (data != null) {
                 Glide.with(binding.feedImgView.context)
                     .load(data.imageUrl)

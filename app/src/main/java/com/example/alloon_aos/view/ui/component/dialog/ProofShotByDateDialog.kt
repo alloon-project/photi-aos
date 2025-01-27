@@ -75,8 +75,7 @@ class ProofShotByDateDialog(val feedList:
                 binding.root.setOnClickListener {
                     val intent = Intent(activity, FeedActivity::class.java)
                     intent.putExtra("CHALLENGE_ID", id)
-                    //사용자 ID도 전달해줘야할지 고민 + 액티비티 실행해야함
-                   // startActivity(intent)
+                    startActivity(intent)
                 }
 
                 Glide.with(binding.proofshotImageview.context)

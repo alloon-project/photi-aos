@@ -130,7 +130,7 @@ class ChallengeCommendFragment : Fragment() {
     }
 
     fun setOnclick() {
-        photiViewModel.getChallengeInfo()
+        photiViewModel.getChallenge()
     }
 
     fun clickAllChip() {

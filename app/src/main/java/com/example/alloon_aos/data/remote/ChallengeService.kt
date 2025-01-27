@@ -40,7 +40,7 @@ interface ChallengeService {
     ): Call<CodeResponse>
 
     @GET("/api/challenges/{challengeId}")
-    fun get_challengeInfo( //챌린지 소개 조회
+    fun get_challenge( //챌린지 소개 조회
         @Path("challengeId") challengeId: Int
     ): Call<ChallengeResponse>
 

@@ -22,7 +22,7 @@ data class Feed(
     val proveTime: String // "13:00"
 )
 
-data class ChallengeInfoData(
+data class FeedChallengeData(
     val name: String, // 챌린지 이름
     val goal: String, // 챌린지 목표
     val imageUrl: String, // 챌린지 이미지 URL
@@ -35,8 +35,16 @@ data class ChallengeInfoData(
     val memberImages: List<MemberImage> // 멤버 이미지 리스트
 )
 
+data class ChallengeInfoData(
+    val goal: String,
+    val proveTime: String,
+    val startDate: String,
+    val endDate: String,
+    val rules: List<ChallengeRule>
+)
+
 data class ChallengeRule(
-    val rule: String // 규칙 설명
+    val rule: String // 개별 규칙
 )
 
 data class ChallengeHashtag(

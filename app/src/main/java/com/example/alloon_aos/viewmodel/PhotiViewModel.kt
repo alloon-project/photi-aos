@@ -19,7 +19,6 @@ import com.example.alloon_aos.data.model.response.ChallengeRecordData
 import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.FeedByDate
 import com.example.alloon_aos.data.model.response.PagingListResponse
-import com.example.alloon_aos.data.model.response.MyChallenges
 import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.UserProfile
 import com.example.alloon_aos.data.remote.RetrofitClient
@@ -214,8 +213,8 @@ class PhotiViewModel : ViewModel() {
             })
     }
 
-    fun getChallengeInfo() {
-        challenge_repository.getChallengeInfo(
+    fun getChallenge() {
+        challenge_repository.getChallenge(
             id,
             object : ChallengeRepositoryCallback<ChallengeResponse> {
                 override fun onSuccess(data: ChallengeResponse) {
@@ -450,12 +449,12 @@ class PhotiViewModel : ViewModel() {
             handleApiCall(
                 call = { user_repository.getChallengeHistory() },
                 onSuccess = { data ->
-                    _challengeRecodData.value = data
-                    _code.value = "200 OK"
+                    _challengeRecodData.postValue(data)
+                    _code.postValue("200 OK")
                 },
                 onFailure = { errorCode ->
-                    _challengeRecodData.value = null
-                    _code.value = errorCode
+                    _challengeRecodData.postValue(null)
+                    _code.postValue(errorCode)
                 }
             )
         }
@@ -465,10 +464,10 @@ class PhotiViewModel : ViewModel() {
 //        viewModelScope.launch {
 //            handleApiCall(
 //                call = { user_repository.getMyChallenges(page, size) },
-//                onSuccess = { data -> _challenges.value = data },
+//                onSuccess = { data -> _challenges.postValue(data) },
 //                onFailure = { errorCode ->
-//                    _challenges.value = null
-//                    _code.value = errorCode
+//                    _challenges.postValue(null)
+//                    _code.postValue(errorCode)
 //                }
 //            )
 //        }
@@ -487,11 +486,11 @@ class PhotiViewModel : ViewModel() {
                             null
                         }
                     } ?: emptyList()
-                _feedCalendarData.value = calendarDayList
+                _feedCalendarData.postValue(calendarDayList)
                             },
                 onFailure = { errorCode ->
-                    _feedCalendarData.value = null
-                    _code.value = errorCode
+                    _feedCalendarData.postValue(null)
+                    _code.postValue(errorCode)
                 }
             )
         }
@@ -505,17 +504,17 @@ class PhotiViewModel : ViewModel() {
                 call = { user_repository.getFeedsByDate(date)},
                 onSuccess = { data: List<FeedByDate>? ->
                     if (data != null) {
-                        _feedsByDateData.value = data
-                        _code.value = "200 OK"
+                        _feedsByDateData.postValue(data)
+                        _code.postValue("200 OK")
                     } else {
                         Log.e("fetchFeedsByDate", "Data is null!")
-                        _feedsByDateData.value = emptyList()
-                        _code.value = "NO_DATA"
+                        _feedsByDateData.postValue(emptyList())
+                        _code.postValue("NO_DATA")
                     }
                 },
                 onFailure = { errorCode ->
-                    _feedsByDateData.value = null
-                    _code.value = errorCode
+                    _feedsByDateData.postValue(null)
+                    _code.postValue(errorCode)
                 }
             )
         }
@@ -526,12 +525,12 @@ class PhotiViewModel : ViewModel() {
             handleApiCall(
                 call = { user_repository.postImage(imageFile) },
                 onSuccess = { data ->
-                    _profileImage.value = data
-                    _code.value = "200 OK"
+                    _profileImage.postValue(data)
+                    _code.postValue("200 OK")
                 },
                 onFailure = { errorCode ->
-                    _profileImage.value = null
-                    _code.value = errorCode
+                    _profileImage.postValue(null)
+                    _code.postValue(errorCode)
                 }
             )
         }

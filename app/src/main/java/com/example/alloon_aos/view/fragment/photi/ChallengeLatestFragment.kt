@@ -139,7 +139,7 @@ class ChallengeLatestFragment : Fragment() {
 
                 binding.root.setOnClickListener {
                     photiViewModel.id = id
-                    photiViewModel.getChallengeInfo()
+                    photiViewModel.getChallenge()
                 }
             }
         }

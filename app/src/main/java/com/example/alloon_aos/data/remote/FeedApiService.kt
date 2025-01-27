@@ -1,13 +1,17 @@
 package com.example.alloon_aos.data.remote
 
 import com.example.alloon_aos.data.model.response.ApiResponse
+import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
+import com.example.alloon_aos.data.model.response.ChallengeResponse
+import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
 import okhttp3.MultipartBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -21,9 +25,13 @@ import retrofit2.http.Query
 
 interface FeedApiService {
     @Headers("Content-Type: application/json")
-    @GET("/api/challenges/{challengeId}/feeds")
 
-    //피드 조회
+    @GET("/api/challenges/{challengeId}")
+    suspend fun get_challenge( //챌린지 소개 조회
+        @Path("challengeId") challengeId: Int
+    ): Response<ApiResponse<FeedChallengeData>>
+
+    @GET("/api/challenges/{challengeId}/feeds")
     suspend fun get_challengeFeeds(
         @Path("challengeId") challengeId: Int,
         @Query("page") page: Int = 0,

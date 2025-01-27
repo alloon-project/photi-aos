@@ -11,10 +11,12 @@ import com.example.alloon_aos.data.model.request.HashTag
 import com.example.alloon_aos.data.model.request.MemberImg
 import com.example.alloon_aos.data.model.request.Rule
 import com.example.alloon_aos.data.model.response.ApiResponse
+import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
 import com.example.alloon_aos.data.model.response.CodeResponse
+import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.MessageResponse
@@ -184,6 +186,9 @@ class FeedViewModel : ViewModel() {
     private val _challengeFeeds = MutableLiveData<ChallengeFeedsData?>()
     val challengeFeeds: MutableLiveData<ChallengeFeedsData?> get() = _challengeFeeds
 
+    private val _challenge = MutableLiveData<FeedChallengeData?>()
+    val challenge: LiveData<FeedChallengeData?> get() = _challenge
+
     private val _challengeInfo = MutableLiveData<ChallengeInfoData?>()
     val challengeInfo: LiveData<ChallengeInfoData?> get() = _challengeInfo
 
@@ -205,15 +210,30 @@ class FeedViewModel : ViewModel() {
     private val _postCommentResponse = MutableLiveData<SuccessMessageReponse?>()
     val postCommentResponse: LiveData<SuccessMessageReponse?> get() = _postCommentResponse
 
+    fun fetchChallenge() {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleApiCall(
+                call = { feedRepository.getChallenge(challengeId) },
+                onSuccess = { data ->
+                    _challenge.postValue(data)
+                },
+                onFailure = { errorCode ->
+                    _challenge.postValue(null)
+                    _code.postValue(errorCode)
+                }
+            )
+        }
+    }
+
     fun fetchChallengeInfo() {
         viewModelScope.launch(Dispatchers.IO) {
             handleApiCall(
                 call = { feedRepository.getChallengeInfo(challengeId) },
                 onSuccess = { data ->
-                    _challengeInfo.value = data
+                    _challengeInfo.postValue(data)
                 },
                 onFailure = { errorCode ->
-                    _challengeInfo.value = null
+                    _challengeInfo.postValue(null)
                     _code.value =errorCode
                 }
             )
@@ -229,11 +249,11 @@ class FeedViewModel : ViewModel() {
             handleApiCall(
                 call = { feedRepository.getChallengeFeeds(challengeId, page, size, sort) },
                 onSuccess = { data ->
-                    _challengeFeeds.value = data
+                    _challengeFeeds.postValue(data)
                 },
                 onFailure = { errorCode ->
                     _challengeFeeds.value  = null
-                    _code.value = errorCode
+                    _code.postValue(errorCode)
                 }
             )
         }
@@ -244,11 +264,11 @@ class FeedViewModel : ViewModel() {
             handleApiCall(
                 call = { feedRepository.getChallengeFeedDetail(challengeId, feedId) },
                 onSuccess = { data ->
-                    _challengeFeedDetail.value = data
+                    _challengeFeedDetail.postValue(data)
                 },
                 onFailure = { errorCode ->
-                    _challengeFeedDetail.value = null
-                    _code.value = errorCode
+                    _challengeFeedDetail.postValue(null)
+                    _code.postValue(errorCode)
                 }
             )
         }
@@ -259,11 +279,11 @@ class FeedViewModel : ViewModel() {
             handleApiCall(
                 call = { feedRepository.getChallengeMembers(challengeId) },
                 onSuccess = { data ->
-                    _challengeMembers.value = data
+                    _challengeMembers.postValue(data)
                 },
                 onFailure = { errorCode ->
-                    _challengeMembers.value = null
-                    _code.value = errorCode
+                    _challengeMembers.postValue(null)
+                    _code.postValue(errorCode)
                 }
             )
         }
@@ -274,11 +294,11 @@ class FeedViewModel : ViewModel() {
             handleApiCall(
                 call = { feedRepository.getFeedComments(feedId, page, size) },
                 onSuccess = { data ->
-                    _feedComments.value = data
+                    _feedComments.postValue(data)
                 },
                 onFailure = { errorCode ->
-                    _feedComments.value = null
-                    _code.value = errorCode
+                    _feedComments.postValue(null)
+                    _code.postValue(errorCode)
                 }
             )
         }
@@ -289,11 +309,11 @@ class FeedViewModel : ViewModel() {
 //            handleApiCall(
 //                call = { feedRepository.updateGoal(challengeId, goal) },
 //                onSuccess = { data ->
-//                    _updateGoalResponse.value = data
+//                    _updateGoalResponse.postValue(data)
 //                },
 //                onFailure = { errorCode ->
-//                    _updateGoalResponse.value = null
-//                    _code.value = errorCode
+//                    _updateGoalResponse.postValue(null)
+//                    _code.postValue(errorCode)
 //                }
 //            )
 //        }
@@ -304,11 +324,11 @@ class FeedViewModel : ViewModel() {
 //            handleApiCall(
 //                call = { feedRepository.postChallengeFeed(challengeId, image, description) },
 //                onSuccess = { data ->
-//                    _postChallengeFeedResponse.value = data
+//                    _postChallengeFeedResponse.postValue(data)
 //                },
 //                onFailure = { errorCode ->
-//                    _postChallengeFeedResponse.value = null
-//                    _code.value = errorCode
+//                    _postChallengeFeedResponse.postValue(null)
+//                    _code.postValue(errorCode)
 //                }
 //            )
 //        }
@@ -319,11 +339,11 @@ class FeedViewModel : ViewModel() {
 //            handleApiCall(
 //                call = { feedRepository.postComment(challengeId, feedId, comment) },
 //                onSuccess = { data ->
-//                    _postCommentResponse.value = data
+//                    _postCommentResponse.postValue(data)
 //                },
 //                onFailure = { errorCode ->
-//                    _postCommentResponse.value = null
-//                    _code.value = errorCode
+//                    _postCommentResponse.postValue(null)
+//                    _code.postValue(errorCode)
 //                }
 //            )
 //        }

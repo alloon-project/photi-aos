@@ -29,7 +29,11 @@ object ApiConfig {
         "/api/users/ended-challenges" to "GET",
         "/api/users/challenges" to "GET", // 챌린지 카운트 조회
         "/api/users/challenge-history" to "GET", // 챌린지 기록 조회
-        "/api/users/image" to "POST" // 이미지 업로드
+        "/api/users/image" to "POST", // 이미지 업로드
+
+        //feed
+        "/api/challenges/{challengeId}" to "GET",
+        "/api/challenges/{challengeId}/info" to "GET"
     )
 
 

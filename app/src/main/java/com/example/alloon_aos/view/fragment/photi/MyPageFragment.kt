@@ -32,9 +32,8 @@ class MyPageFragment : Fragment() {
     private lateinit var binding: FragmentMyPageBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var materialCalendarView: MaterialCalendarView
-    private lateinit var eventDecorator: EventDecorator
     private lateinit var todayDecorator: TodayDecorator
-    private lateinit var calendarList : List<CalendarDay>
+    private var calendarList : List<CalendarDay> = emptyList()
     private var year : Int = 0
     private var month : Int = 0
 
@@ -50,80 +49,27 @@ class MyPageFragment : Fragment() {
         val mActivity = activity as PhotiActivity
 
         setCalendarView()
+        setCalendarDecorator()
         setLisetener()
-        initCalendar()
 
-        //observeUserProfile()
-        //observeChallenges()
-        //observeChallengeRecordData()
+
         setObserve()
         photiViewModel.fetchChallengeHistory()
         photiViewModel.fetchCalendarData()
         return binding.root
     }
 
-    private fun observeUserProfile() {
-        photiViewModel.userProfile.observe(viewLifecycleOwner) { profile ->
-            profile?.let {
-                it.data.let { userData ->
-                    binding.idTextView.text = userData.username
-                    Glide.with(binding.userImgImageView.context)
-                        .load(userData.imageUrl)
-                        .transform(CircleCrop())
-                        .into(binding.userImgImageView)
-                }
-            }
-        }
-    }
 
     private fun setObserve() {
         // API 응답 코드 관찰
         photiViewModel.code.observe(viewLifecycleOwner) { code ->
-            when (code) {
-                "200 OK" -> {
-
-                }
-
-                "USER_NOT_FOUND" -> {
-                    Log.e("MyPageFragment", "Error: USER_NOT_FOUND - 존재하지 않는 회원입니다.")
-                }
-
-                "TOKEN_UNAUTHENTICATED" -> {
-                    Log.e(
-                        "MyPageFragment",
-                        "Error: TOKEN_UNAUTHENTICATED - 승인되지 않은 요청입니다. 다시 로그인 해주세요."
-                    )
-                }
-
-                "TOKEN_UNAUTHORIZED" -> {
-                    Log.e(
-                        "MyPageFragment",
-                        "Error: TOKEN_UNAUTHORIZED - 권한이 없는 요청입니다. 로그인 후 다시 시도해주세요."
-                    )
-                }
-
-
-                "IO_Exception" -> {
-                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
-                }
-
-                "UNKNOWN_ERROR" -> {
-                    Log.e("MyPageFragment", "Error: UNKNOWN_ERROR - 알 수 없는 오류가 발생했습니다.")
-                }
-
-                else -> {
-                    Log.e("MyPageFragment", "Error: $code - 예기치 않은 오류가 발생했습니다.")
-                }
-            }
+            handleApiError(code)
         }
-
-
 
         photiViewModel.feedCalendarData.observe(viewLifecycleOwner) {
                 feedDate ->
-             calendarList = feedDate ?: emptyList()
-            eventDecorator = EventDecorator(requireContext(), month, calendarList)
-            materialCalendarView.addDecorators(todayDecorator,eventDecorator)
+            calendarList =  feedDate ?: emptyList()
+            setupCalendarDecorators()
         }
 
         photiViewModel.challengeRecodData.observe(viewLifecycleOwner) {
@@ -150,22 +96,29 @@ class MyPageFragment : Fragment() {
         }
     }
 
+    private fun handleApiError(code: String) {
+        val errorMessages = mapOf(
+            "USER_NOT_FOUND" to "존재하지 않는 회원입니다.",
+            "TOKEN_UNAUTHENTICATED" to "승인되지 않은 요청입니다. 다시 로그인 해주세요.",
+            "TOKEN_UNAUTHORIZED" to "권한이 없는 요청입니다. 로그인 후 다시 시도해주세요.",
+            "UNKNOWN_ERROR" to "알 수 없는 오류가 발생했습니다."
+        )
 
-//    private fun observeChallenges() {
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                photiViewModel.challenges.collectLatest { challenges ->
-//                    challenges?.let {
-//
-//                        it.data.let { challengeList ->
-//                            binding.challengeCountTextView.text =
-//                                "Challenges: ${challengeList.size}"
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+        if (code == "200 OK")   return
+
+        if (code == "IO_Exception") {
+            CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+        } else {
+            val message = errorMessages[code] ?: "예기치 않은 오류가 발생했습니다. ($code)"
+            Log.e("MyPageFragment", "Error: $message")
+        }
+    }
+
+    private fun setupCalendarDecorators() {
+        val eventDecorator = EventDecorator(requireContext(), month, calendarList)
+        materialCalendarView.addDecorators(todayDecorator, eventDecorator)
+    }
+
 
     private fun setCalendarView() {
         materialCalendarView = binding.calendarview
@@ -184,14 +137,12 @@ class MyPageFragment : Fragment() {
 
     private fun setLisetener() {
         materialCalendarView.setOnMonthChangedListener { widget, date ->
-            initCalendar()
+            setCalendarDecorator()
         }
 
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
 
             if (materialCalendarView.currentDate.month == date.month && calendarList.contains(date)) {
-
-
                 val formattedDate = String.format(Locale.US,"%04d-%02d-%02d", date.year, date.month, date.day)
                 Log.d("calendar","클릭!! $formattedDate")
                 photiViewModel.fetchFeedsByDate(formattedDate)
@@ -201,7 +152,7 @@ class MyPageFragment : Fragment() {
 
     }
 
-    private fun initCalendar() {
+    private fun setCalendarDecorator() {
         materialCalendarView.removeDecorators()
 
          year = materialCalendarView.currentDate.year
@@ -224,6 +175,7 @@ class MyPageFragment : Fragment() {
             currentDate = currentDate.plusMonths(1)
 
         materialCalendarView.setCurrentDate(currentDate)
+        setupCalendarDecorators()
     }
 
     fun showProofShotsDialog() {

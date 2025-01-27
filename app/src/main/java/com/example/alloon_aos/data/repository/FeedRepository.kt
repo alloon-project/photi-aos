@@ -1,9 +1,11 @@
 package com.example.alloon_aos.data.repository
 
 import com.example.alloon_aos.data.model.response.ApiResponse
+import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
+import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
@@ -21,6 +23,11 @@ class FeedRepository(private val apiService: FeedApiService) {
         sort: String = "LATEST"
     ): Response<ApiResponse<ChallengeFeedsData>> {
         return apiService.get_challengeFeeds(challengeId, page, size, sort)
+    }
+
+    // 챌린지 조회
+    suspend fun getChallenge(challengeId: Int): Response<ApiResponse<FeedChallengeData>> {
+        return apiService.get_challenge(challengeId)
     }
 
     // 챌린지 정보 조회

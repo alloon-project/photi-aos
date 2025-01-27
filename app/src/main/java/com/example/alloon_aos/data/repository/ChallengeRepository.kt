@@ -90,8 +90,8 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
         })
     }
 
-    fun getChallengeInfo(id: Int, callback: ChallengeRepositoryCallback<ChallengeResponse>) {
-        challengeService.get_challengeInfo(id).enqueue(object : Callback<ChallengeResponse> {
+    fun getChallenge(id: Int, callback: ChallengeRepositoryCallback<ChallengeResponse>) {
+        challengeService.get_challenge(id).enqueue(object : Callback<ChallengeResponse> {
             override fun onResponse(call: Call<ChallengeResponse>, response: Response<ChallengeResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)

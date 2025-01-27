@@ -15,8 +15,8 @@ object RetrofitClient {
     //private const val BASE_
     // URL = "http://10.0.2.2:8080" //에뮬레이
    // private const val BASE_URL = "http://172.30.1.76:8080" //스라
-    private const val BASE_URL = "http://172.30.1.22:8080"
-    //private const val BASE_URL = "http://172.16.100.34:8080" //신촌 커피빈
+    //private const val BASE_URL = "http://172.30.1.22:8080"
+    private const val BASE_URL = "http://172.16.101.61:8080" //신촌 커피빈
     //private const val BASE_URL = "http://192.168.219.101:8080" //별 핫스팟
 
 
