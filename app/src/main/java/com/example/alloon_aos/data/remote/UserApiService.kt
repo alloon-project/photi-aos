@@ -52,9 +52,4 @@ interface UserApiService {
     @GET("/api/users/challenge-history")
     suspend fun get_challenge_history(): Response<ApiResponse<ChallengeRecordData>>
 
-    @POST("/api/users/image")
-    suspend fun post_image(
-        @Part imageFile: MultipartBody.Part
-    ): Response<ApiResponse<ProfileImageData>>
-
 }

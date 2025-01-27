@@ -8,15 +8,19 @@ import com.example.alloon_aos.data.model.request.UserData
 import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.AuthResponse
 import com.example.alloon_aos.data.model.response.InquiryResponse
+import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.RefreshTokenResponse
 import com.example.alloon_aos.data.model.response.UserProfile
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ApiService {
@@ -81,5 +85,12 @@ interface ApiService {
     suspend fun post_inquiries(
         @Body params: InquiryRequest
     ): Response<ApiResponse<InquiryResponse>>
+
+    @Multipart
+    @POST("/api/users/image")
+    suspend fun post_image(
+        @Part imageFile: MultipartBody.Part
+    ): Response<ApiResponse<ProfileImageData>>
+
 }
 

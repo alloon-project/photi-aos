@@ -50,7 +50,4 @@ class UserRepository(private val apiService: UserApiService) {
         return apiService.get_challenge_history()
     }
 
-    suspend fun postImage(imageFile: MultipartBody.Part): Response<ApiResponse<ProfileImageData>> {
-        return apiService.post_image(imageFile)
-    }
 }

@@ -519,21 +519,4 @@ class PhotiViewModel : ViewModel() {
             )
         }
     }
-
-    fun uploadProfileImage(imageFile: MultipartBody.Part) {
-        viewModelScope.launch {
-            handleApiCall(
-                call = { user_repository.postImage(imageFile) },
-                onSuccess = { data ->
-                    _profileImage.postValue(data)
-                    _code.postValue("200 OK")
-                },
-                onFailure = { errorCode ->
-                    _profileImage.postValue(null)
-                    _code.postValue(errorCode)
-                }
-            )
-        }
-    }
-
 }

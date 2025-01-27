@@ -21,6 +21,7 @@
 
         <ImageButton
             android:id="@+id/userImg_imageView"
+            android:onClick="@{() -> fragment.openGallery()}"
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_marginVertical="32dp"

@@ -16,6 +16,7 @@ import com.example.alloon_aos.data.repository.SettingsRepository
 import com.example.alloon_aos.data.repository.handleApiCall
 import com.example.alloon_aos.view.ui.util.StringUtil
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
 class SettingsViewModel : ViewModel() {
     companion object {
@@ -103,6 +104,23 @@ class SettingsViewModel : ViewModel() {
             )
         }
     }
+
+    fun sendProfileImage(imageFile : MultipartBody.Part) {
+        viewModelScope.launch {
+            handleApiCall(
+                call = {
+                    settingsRepository.postImage(imageFile)
+                },
+                onSuccess = { data ->
+                    _code.value = "200 OK"
+                },
+                onFailure = { errorCode ->
+                    _code.value = errorCode
+                }
+            )
+        }
+    }
+
 
 
     fun handleFailure(error: Throwable) {

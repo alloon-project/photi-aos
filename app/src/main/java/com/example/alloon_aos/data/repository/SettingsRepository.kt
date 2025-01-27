@@ -4,8 +4,10 @@ import com.example.alloon_aos.data.model.request.InquiryRequest
 import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.AuthResponse
 import com.example.alloon_aos.data.model.response.InquiryResponse
+import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.UserProfile
 import com.example.alloon_aos.data.remote.ApiService
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,6 +15,10 @@ import retrofit2.Response
 class SettingsRepository(private val apiService: ApiService) {
     suspend fun getUsers(): Response<ApiResponse<UserProfile>> {
         return apiService.get_users()
+    }
+
+    suspend fun postImage(imageFile: MultipartBody.Part): Response<ApiResponse<ProfileImageData>> {
+        return apiService.post_image(imageFile)
     }
 
     suspend fun postInquiries(inquiryRequest: InquiryRequest): Response<ApiResponse<InquiryResponse>> {
