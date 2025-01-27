@@ -17,7 +17,11 @@ import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeRecordData
 import com.example.alloon_aos.data.model.response.ChallengeResponse
+import com.example.alloon_aos.data.model.response.EndedChallengeContent
+import com.example.alloon_aos.data.model.response.EndedChallengeData
 import com.example.alloon_aos.data.model.response.FeedByDate
+import com.example.alloon_aos.data.model.response.FeedHistoryContent
+import com.example.alloon_aos.data.model.response.FeedHistoryData
 import com.example.alloon_aos.data.model.response.PagingListResponse
 import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.UserProfile
@@ -144,6 +148,13 @@ class PhotiViewModel : ViewModel() {
 
     private val _feedsByDateData = MutableLiveData<List<FeedByDate>?>()
     val feedsByDateData: LiveData<List<FeedByDate>?> get() = _feedsByDateData
+
+    private val _endedChallenges = MutableLiveData<MutableList<EndedChallengeContent>>()
+    val endedChallenges: LiveData<MutableList<EndedChallengeContent>> get() = _endedChallenges
+
+    private val _feedHistoryData = MutableLiveData<MutableList<FeedHistoryContent>>()
+    val feedHistoryData: LiveData<MutableList<FeedHistoryContent>> get() = _feedHistoryData
+
 
 
     fun getData(): MyData {
@@ -519,4 +530,70 @@ class PhotiViewModel : ViewModel() {
             )
         }
     }
+
+    // 페이징 상태
+    private var currentPage = 0
+    var isLoading = false
+    var isLastPage = false
+
+    fun resetPagingParam() {
+        currentPage = 0
+        isLastPage = false
+        _endedChallenges.postValue(mutableListOf())
+        _feedHistoryData.postValue(mutableListOf())
+    }
+
+    fun fetchEndedChallenge() {
+        if (isLoading || isLastPage) return // 이미 로드 중이거나 마지막 페이지라면 호출 안 함
+        isLoading = true
+
+        viewModelScope.launch {
+            handleApiCall(
+                call = { user_repository.getEndedChallenges(currentPage, 10) }, // 페이지당 10개
+                onSuccess = { data: EndedChallengeData? ->
+                    if (data!!.content.isEmpty()) {
+                        isLastPage = true
+                    } else {
+                        val currentList = _endedChallenges.value ?: mutableListOf()
+                        currentList.addAll(data.content)
+                        _endedChallenges.postValue(currentList) // 기존 데이터에 추가
+                        currentPage += 10 // 다음 페이지로 이동
+                    }
+                    isLoading = false
+                },
+                onFailure = { errorCode ->
+                    isLoading = false
+                    Log.e("fetchEndedChallenge", "Error: $errorCode")
+                }
+            )
+        }
+    }
+
+    fun fetchFeedHistory() {
+        if (isLoading || isLastPage) return
+        isLoading = true
+
+        viewModelScope.launch {
+            handleApiCall(
+                call = { user_repository.getFeedHistory(currentPage, 10) },
+                onSuccess = { data: FeedHistoryData? ->
+                    if (data!!.content.isEmpty()) {
+                        isLastPage = true
+                    } else {
+                        val currentList = _feedHistoryData.value ?: mutableListOf()
+                        currentList.addAll(data.content)
+                        _feedHistoryData.postValue(currentList)
+                        currentPage += 10
+                    }
+                    isLoading = false
+                },
+                onFailure = { errorCode ->
+                    isLoading = false
+                    Log.e("fetchEndedChallenge", "Error: $errorCode")
+                }
+            )
+        }
+    }
+
+
 }

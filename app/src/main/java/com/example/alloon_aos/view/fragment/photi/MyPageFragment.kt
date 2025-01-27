@@ -36,6 +36,9 @@ class MyPageFragment : Fragment() {
     private var calendarList : List<CalendarDay> = emptyList()
     private var year : Int = 0
     private var month : Int = 0
+    private var feedCnt : Int = 0
+    private var endedChallengeCnt : Int = 0
+
 
     var calendarYearMonth = ObservableField<String>("")
 
@@ -82,8 +85,11 @@ class MyPageFragment : Fragment() {
                    .transform(CircleCrop())
                    .into(binding.userImgImageView)
 
-               binding.verifyCountTextView.text = data.feedCnt.toString()
-               binding.challengeEndedTextView.text = data.endedChallengeCnt.toString()
+               endedChallengeCnt = data.endedChallengeCnt
+               feedCnt = data.feedCnt
+
+               binding.verifyCountTextView.text = feedCnt.toString()
+               binding.challengeEndedTextView.text = endedChallengeCnt.toString()
            }
 
         }
@@ -179,15 +185,16 @@ class MyPageFragment : Fragment() {
     }
 
     fun showProofShotsDialog() {
-        //if(인증 횟수가 0이 아니면)
-        //총 인증 횟수와 챌린지 Id 넘겨줌
-        val dialog = ProofShotsGalleryDialog(5, 1)
+        if(feedCnt == 0)    return
+
+        val dialog = ProofShotsGalleryDialog(feedCnt)
         dialog.show(activity?.supportFragmentManager!!, "ChallengeCheckInDialog")
     }
 
     fun showEndedChallengesDialog() {
-        //if(종료 횟수가 0이 아니면)
-        val dialog = EndedChallengesDialog(5, 1)
+        if(endedChallengeCnt == 0) return
+
+        val dialog = EndedChallengesDialog(endedChallengeCnt)
         dialog.show(activity?.supportFragmentManager!!, "ChallengeCheckInDialog")
     }
 

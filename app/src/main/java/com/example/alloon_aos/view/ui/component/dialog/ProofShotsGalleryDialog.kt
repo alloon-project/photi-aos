@@ -14,7 +14,7 @@ import com.example.alloon_aos.databinding.DialogProofShotsGalleryBinding
 import com.example.alloon_aos.databinding.ItemProofShotsGalleryBinding
 import com.example.alloon_aos.viewmodel.FeedInItem
 
-class ProofShotsGalleryDialog(val count : Int, val challenge_id : Int): DialogFragment() {
+class ProofShotsGalleryDialog(val count : Int): DialogFragment() {
     private var _binding: DialogProofShotsGalleryBinding? = null
     private val binding get() = _binding!!
     val feedInItems = arrayListOf<FeedInItem>(

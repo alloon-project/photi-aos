@@ -44,10 +44,15 @@
                 android:text="챌린지 제목 챌린지 제목 챌린지 제목 챌린 ..."
                 android:textColor="@color/white"
                 android:textSize="16dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:lines="2"
+                android:gravity="center"
                 app:layout_constraintBottom_toTopOf="@+id/date_textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp" />
+
 
             <TextView
                 android:id="@+id/date_textView"
@@ -85,7 +90,7 @@
                     >
 
                     <ImageView
-                        android:id="@+id/image8"
+                        android:id="@+id/one_user1_ImageView"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:scaleType="centerCrop"
@@ -106,7 +111,7 @@
                     android:visibility="gone">
 
                     <ImageView
-                        android:id="@+id/image41"
+                        android:id="@+id/two_user1_ImageView"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:scaleType="centerCrop"
@@ -115,8 +120,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>
 
-                    <ImageView
-                        android:id="@+id/image51"
+                    threeUser2ImageView<ImageView
+                        android:id="@+id/two_user2_ImageView"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="18dp"
@@ -124,7 +129,7 @@
                         android:src="@drawable/ic_avatar_part_line_xsmall"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/image41"/>
+                        app:layout_constraintStart_toStartOf="@id/two_user1_ImageView"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -139,7 +144,7 @@
                     android:visibility="gone">
 
                     <ImageView
-                        android:id="@+id/image4"
+                        android:id="@+id/three_user1_ImageView"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:scaleType="centerCrop"
@@ -149,7 +154,7 @@
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <ImageView
-                        android:id="@+id/image5"
+                        android:id="@+id/three_user2_ImageView"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="18dp"
@@ -157,10 +162,10 @@
                         android:src="@drawable/ic_avatar_part_line_xsmall"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/image4"/>
+                        app:layout_constraintStart_toStartOf="@id/three_user1_ImageView"/>
 
                     <ImageView
-                        android:id="@+id/image6"
+                        android:id="@+id/three_user3_ImageView"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="18dp"
@@ -168,7 +173,7 @@
                         android:src="@drawable/ic_avatar_part_line_xsmall"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/image5"
+                        app:layout_constraintStart_toStartOf="@id/three_user2_ImageView"
                         app:layout_constraintEnd_toEndOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -183,7 +188,7 @@
                     android:visibility="gone">
 
                     <ImageView
-                        android:id="@+id/image1"
+                        android:id="@+id/multiple_user1_ImageView"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:scaleType="centerCrop"
@@ -193,7 +198,7 @@
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <ImageView
-                        android:id="@+id/image2"
+                        android:id="@+id/multiple_user2_ImageView"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="18dp"
@@ -201,7 +206,7 @@
                         android:src="@drawable/ic_avatar_part_line_xsmall"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/image1"/>
+                        app:layout_constraintStart_toStartOf="@id/multiple_user1_ImageView"/>
 
                     <ImageView
                         android:id="@+id/image3"
@@ -212,7 +217,7 @@
                         android:scaleType="centerCrop"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/image2"
+                        app:layout_constraintStart_toStartOf="@id/multiple_user2_ImageView"
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView

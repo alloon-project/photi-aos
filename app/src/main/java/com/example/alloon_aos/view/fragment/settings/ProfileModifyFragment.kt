@@ -71,10 +71,10 @@ class ProfileModifyFragment : Fragment() {
 
     private fun handleApiError(code: String) {
         val errorMessages = mapOf(
-            "USER_NOT_FOUND" to "존재하지 않는 회원입니다.",
-            "TOKEN_UNAUTHENTICATED" to "승인되지 않은 요청입니다. 다시 로그인 해주세요.",
+            "USER_NOT_FOUND" to "존재 하지 않는 회원입니다.",
+            "TOKEN_UNAUTHENTICATED" to "승인 되지 않은 요청입니다. 다시 로그인 해주세요.",
             "TOKEN_UNAUTHORIZED" to "권한이 없는 요청입니다. 로그인 후 다시 시도해주세요.",
-            "UNKNOWN_ERROR" to "알 수 없는 오류가 발생했습니다."
+            "UNKNOWN_ERROR" to "알 수 없는 오류가 발생 했습니다."
         )
 
         if (code == "200 OK")   return
