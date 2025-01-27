@@ -33,7 +33,8 @@ object ApiConfig {
 
         //feed
         "/api/challenges/{challengeId}" to "GET",
-        "/api/challenges/{challengeId}/info" to "GET"
+        "/api/challenges/{challengeId}/info" to "GET",
+        "/api/challenges/{challengeId}/challenge-members" to "GET",
     )
 
 

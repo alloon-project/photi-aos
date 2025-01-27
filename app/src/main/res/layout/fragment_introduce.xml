@@ -11,7 +11,7 @@
             name="viewModel"
             type="com.example.alloon_aos.viewmodel.FeedViewModel" />
     </data>
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,6 @@
         android:background="@color/white"
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="40dp">
-
         <TextView
             android:id="@+id/textView14"
             android:layout_width="wrap_content"
@@ -125,7 +124,7 @@
                 app:tint="@color/blue400" />
 
             <TextView
-                android:id="@+id/prove_time_textView"
+                android:id="@+id/prove_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -138,6 +137,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/prove_time_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -146,7 +146,7 @@
                 android:textColor="@color/blue500"
                 android:textSize="14dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/prove_time_textView"
+                app:layout_constraintStart_toEndOf="@+id/prove_textView"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -223,5 +223,5 @@
             app:layout_constraintTop_toBottomOf="@+id/textView20"
             android:layout_marginTop="20dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>

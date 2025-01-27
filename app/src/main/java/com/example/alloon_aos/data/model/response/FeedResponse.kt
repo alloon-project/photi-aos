@@ -67,7 +67,7 @@ data class ChallengeMember(
     val imageUrl: String,   // "https://url.kr/5MhHhD"
     val isCreator: Boolean, // true (파티장 여부)
     val duration: Int,      // 10 (참여 일수)
-    val goal: String        // "열심히 운동하기!!"
+    var goal: String?       // "열심히 운동하기!!"
 )
 
 //댓글조회

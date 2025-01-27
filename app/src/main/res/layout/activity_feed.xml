@@ -124,7 +124,8 @@
                             android:text="책친자"
                             android:textAllCaps="false"
                             android:textColor="@color/white"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:visibility="gone"/>
 
                         <Button
                             android:id="@+id/chip2_btn"
@@ -140,7 +141,24 @@
                             android:textAllCaps="false"
                             android:textColor="@color/white"
                             android:textSize="12sp"
-                            android:layout_marginLeft="8dp" />
+                            android:layout_marginLeft="8dp"
+                            android:visibility="gone"/>
+                        <Button
+                            android:id="@+id/chip3_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="27dp"
+                            android:background="@drawable/chip_white"
+                            android:fontFamily="@font/suit_medium"
+                            android:minWidth="41dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:stateListAnimator="@null"
+                            android:text="고능해지자"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:layout_marginLeft="8dp"
+                            android:visibility="gone"/>
 
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>

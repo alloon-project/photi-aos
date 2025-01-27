@@ -52,10 +52,12 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         }
 
         val challengeId = intent.getIntExtra("CHALLENGE_ID", -1)
+        feedViewModel.challengeId = challengeId
+
         if(challengeId != -1){
             feedViewModel.fetchChallenge()
         }
-        feedViewModel.challengeId = challengeId
+
 
 
         val challengeData = intent.getParcelableExtra<MyData>("data")
@@ -260,9 +262,13 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                         binding.chip2Btn.visibility = View.VISIBLE
                     }
 
-                    else -> {
-                        binding.chip1Btn.visibility = View.GONE
-                        binding.chip2Btn.visibility = View.GONE
+                    3 -> {
+                        binding.chip1Btn.text = hashtags[0]
+                        binding.chip2Btn.text = hashtags[1]
+                        binding.chip3Btn.text = hashtags[2]
+                        binding.chip1Btn.visibility = View.VISIBLE
+                        binding.chip2Btn.visibility = View.VISIBLE
+                        binding.chip3Btn.visibility = View.VISIBLE
                     }
                 }
             }

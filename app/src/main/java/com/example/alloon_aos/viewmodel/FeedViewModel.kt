@@ -177,6 +177,12 @@ class FeedViewModel : ViewModel() {
         PartyItem("photi_3", "11223"),
         PartyItem("photi_4", "2", "내용")
     )
+
+    fun updateGoal(newGoal: String) {
+        _challengeMembers.value = _challengeMembers.value?.map {
+            if (it.isCreator) it.copy(goal = newGoal) else it
+        }
+    }
     private val feedService = RetrofitClient.feedService
     private val feedRepository = FeedRepository(feedService)
 
