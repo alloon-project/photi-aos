@@ -12,11 +12,11 @@ import java.util.concurrent.TimeUnit
 
 
 object RetrofitClient {
-    //private const val BASE_
-    // URL = "http://10.0.2.2:8080" //에뮬레이
-   // private const val BASE_URL = "http://172.30.1.76:8080" //스라
-    private const val BASE_URL = "http://172.30.1.40:8080"
+    private const val BASE_URL = "http://10.0.2.2:8080" //에뮬레이
+    //private const val BASE_URL = "http://169.254.8.198:8080" //스라
+    //private const val BASE_URL = "http://172.30.1.40:8080" //신촌 나무
     //private const val BASE_URL = "http://172.16.101.61:8080" //신촌 커피빈
+
     //private const val BASE_URL = "http://192.168.219.101:8080" //별 핫스팟
 
 

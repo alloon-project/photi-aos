@@ -444,17 +444,6 @@ class PhotiViewModel : ViewModel() {
         currentItem = item
     }
 
-
-    //마이페이지 날짜별 인증보기
-    val dateProofItems = arrayListOf(
-        ProofShotItem("영화 챌린지", "~ 2024. 12. 1", "10시까지", null, mutableListOf("영화관람")),
-        ProofShotItem("면접 연습하기", "~ 2024. 8. 22", "8시까지", null, mutableListOf("취뽀", "스피치")),
-        ProofShotItem("헬스 챌린지", "~ 2024. 12. 1", "7시까지", null, mutableListOf("헬스", "요가")),
-        ProofShotItem("요리 챌린지", "~ 2024. 12. 1", "2시까찌", null, mutableListOf("요리")),
-        ProofShotItem("스터디 챌린지", "~ 2024. 12. 1", "8시까지", null, mutableListOf("어학", "자격증")),
-        ProofShotItem("소설 필사하기", "~ 2024. 9. 1", "12시까지", null, mutableListOf("고능해지자", "독서"))
-    )
-
     fun fetchChallengeHistory() {
         viewModelScope.launch {
             handleApiCall(
@@ -470,19 +459,6 @@ class PhotiViewModel : ViewModel() {
             )
         }
     }
-//
-//    fun fetchMyChallenges(page: Int, size: Int) {
-//        viewModelScope.launch {
-//            handleApiCall(
-//                call = { user_repository.getMyChallenges(page, size) },
-//                onSuccess = { data -> _challenges.postValue(data) },
-//                onFailure = { errorCode ->
-//                    _challenges.postValue(null)
-//                    _code.postValue(errorCode)
-//                }
-//            )
-//        }
-//    }
 
     fun fetchCalendarData() {
         viewModelScope.launch {
@@ -557,7 +533,7 @@ class PhotiViewModel : ViewModel() {
                         val currentList = _endedChallenges.value ?: mutableListOf()
                         currentList.addAll(data.content)
                         _endedChallenges.postValue(currentList) // 기존 데이터에 추가
-                        currentPage += 10 // 다음 페이지로 이동
+                        currentPage ++ // 다음 페이지로 이동
                     }
                     isLoading = false
                 },
@@ -583,7 +559,7 @@ class PhotiViewModel : ViewModel() {
                         val currentList = _feedHistoryData.value ?: mutableListOf()
                         currentList.addAll(data.content)
                         _feedHistoryData.postValue(currentList)
-                        currentPage += 10
+                        currentPage ++
                     }
                     isLoading = false
                 },

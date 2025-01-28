@@ -18,7 +18,7 @@ import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.ui.component.dialog.EndedChallengesDialog
 import com.example.alloon_aos.view.ui.component.dialog.ProofShotByDateDialog
-import com.example.alloon_aos.view.ui.component.dialog.ProofShotsGalleryDialog
+import com.example.alloon_aos.view.ui.component.dialog.FeedHistoryDialog
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.EventDecorator
 import com.example.alloon_aos.view.ui.util.TodayDecorator
@@ -187,7 +187,7 @@ class MyPageFragment : Fragment() {
     fun showProofShotsDialog() {
         if(feedCnt == 0)    return
 
-        val dialog = ProofShotsGalleryDialog(feedCnt)
+        val dialog = FeedHistoryDialog(feedCnt)
         dialog.show(activity?.supportFragmentManager!!, "ChallengeCheckInDialog")
     }
 

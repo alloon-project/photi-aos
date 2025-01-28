@@ -7,7 +7,7 @@
     android:layout_marginTop="16dp">
 
     <ImageView
-        android:id="@+id/imgView"
+        android:id="@+id/challenge_imgView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -18,7 +18,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="152dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
         android:background="@drawable/shape_feed_card"
         android:layout_marginBottom="31dp">
 
@@ -60,10 +64,10 @@
         android:textAllCaps="false"
         android:textColor="@color/gray800"
         android:textSize="10dp"
-        android:layout_marginTop="8dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgView" />
+ />
 
 
     <ImageButton
@@ -73,7 +77,8 @@
         android:background="@null"
         android:src="@drawable/ic_shortcut"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imgView"
+        app:layout_constraintEnd_toEndOf="@+id/challenge_imgView"
+
         android:layout_marginRight="2dp"
         app:tint="@color/gray400" />
 </androidx.constraintlayout.widget.ConstraintLayout>

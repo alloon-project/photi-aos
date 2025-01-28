@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -16,26 +15,21 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.alloon_aos.data.model.response.EndedChallengeContent
-import com.example.alloon_aos.data.model.response.MemberImage
-import com.example.alloon_aos.databinding.DialogEndedChallengesBinding
-import com.example.alloon_aos.databinding.ItemEndedChallengesBinding
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.alloon_aos.data.model.response.FeedHistoryContent
+import com.example.alloon_aos.databinding.DialogFeedHistoryBinding
 import com.example.alloon_aos.databinding.ItemProofShotsGalleryBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
-class EndedChallengesDialog(val count: Int) : DialogFragment() {
-    private var _binding: DialogEndedChallengesBinding? = null
+class FeedHistoryDialog(val count : Int): DialogFragment() {
+    private var _binding: DialogFeedHistoryBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapter: EndedChallengesAdpater
+    private lateinit var adapter:FeedHistoryAdapter
     private val photiViewModel by activityViewModels<PhotiViewModel>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = DialogEndedChallengesBinding.inflate(inflater, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = DialogFeedHistoryBinding.inflate(inflater, container, false)
         val view = binding.root
 
         setupRecyclerView()
@@ -46,7 +40,7 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
             dismiss()
         }
 
-        photiViewModel.fetchEndedChallenge()
+        photiViewModel.fetchFeedHistory()
 
         return view
     }
@@ -54,6 +48,7 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
     override fun onResume() {
         super.onResume()
 
+        // 전체화면 설정
         dialog?.window?.apply {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -62,12 +57,13 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         photiViewModel.resetPagingParam()
         _binding = null
     }
 
     private fun setupRecyclerView() {
-        adapter = EndedChallengesAdpater()
+        adapter = FeedHistoryAdapter()
         binding.challengeRecyclerview.adapter = adapter
         binding.challengeRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
 
@@ -82,16 +78,17 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
 
                 if (!photiViewModel.isLoading && !photiViewModel.isLastPage) {
                     if (lastVisibleItemPosition == totalItemCount - 1) {
-                        photiViewModel.fetchEndedChallenge()
+                        photiViewModel.fetchFeedHistory()
                     }
                 }
             }
         }
 
+
     }
 
     private fun observeLiveData() {
-        photiViewModel.endedChallenges.observe(viewLifecycleOwner) { data ->
+        photiViewModel.feedHistoryData.observe(viewLifecycleOwner) { data ->
             adapter.submitList(data.toList())
         }
 
@@ -115,74 +112,27 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
             CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
         } else {
             val message = errorMessages[code] ?: "예기치 않은 오류가 발생했습니다. ($code)"
-            Log.e("EndedChallengesDialog", "Error: $message")
+            Log.e("FeedCountDialog", "Error: $message")
         }
     }
 
-    class EndedChallengesAdpater :
-        ListAdapter<EndedChallengeContent, EndedChallengesAdpater.ViewHolder>(DiffCallback()) {
+    class FeedHistoryAdapter(): ListAdapter<FeedHistoryContent,FeedHistoryAdapter.ViewHolder>(DiffCallback()) {
+        inner class ViewHolder(var binding: ItemProofShotsGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
+            fun bind(data:FeedHistoryContent) {
 
-        inner class ViewHolder(private val binding: ItemEndedChallengesBinding) :
-            RecyclerView.ViewHolder(binding.root) {
-
-            fun bind(data: EndedChallengeContent) {
-                binding.titleTextView.text = data.name
-                binding.dateTextView.text = data.endDate.replace("-", ".") + " 종료"
-                Glide.with(binding.imgView.context)
+                Glide.with(binding.challengeImgView.context)
                     .load(data.imageUrl)
-                    .into(binding.imgView)
+                    .transform(CenterCrop())
+                    .into(binding.challengeImgView)
 
-                setupAvatar(data.currentMemberCnt, data.memberImages, binding)
+                binding.chipBtn.text = data.name
+                binding.dateTextView.text = data.createdDate.replace("-", ".") + " 인증"
 
-            }
-        }
-
-        private fun setupAvatar(
-            currentMemberCnt: Int,
-            memberImages: List<MemberImage>,
-            binding: ItemEndedChallengesBinding
-        ) {
-            when (currentMemberCnt) {
-                1 -> {
-                    binding.avatarOneLayout.visibility = View.VISIBLE
-                    loadImage(binding.oneUser1ImageView, memberImages.getOrNull(0)?.memberImage)
-                }
-                2 -> {
-                    binding.avatarTwoLayout.visibility = View.VISIBLE
-                    loadImage(binding.twoUser1ImageView, memberImages.getOrNull(0)?.memberImage)
-                    loadImage(binding.twoUser2ImageView, memberImages.getOrNull(1)?.memberImage)
-                }
-                3 -> {
-                    binding.avatarThreeLayout.visibility = View.VISIBLE
-                    loadImage(binding.threeUser1ImageView, memberImages.getOrNull(0)?.memberImage)
-                    loadImage(binding.threeUser2ImageView, memberImages.getOrNull(1)?.memberImage)
-                    loadImage(binding.threeUser3ImageView, memberImages.getOrNull(2)?.memberImage)
-                }
-                else -> {
-                    binding.avatarMultipleLayout.visibility = View.VISIBLE
-                    binding.avatarThreeLayout.visibility = View.VISIBLE
-                    loadImage(binding.multipleUser1ImageView, memberImages.getOrNull(0)?.memberImage)
-                    loadImage(binding.multipleUser2ImageView, memberImages.getOrNull(1)?.memberImage)
-                    binding.countTextView.text = "+${(currentMemberCnt - 2).coerceAtLeast(0)}"
-                }
-            }
-        }
-
-        private fun loadImage(imageView: ImageView, url: String?) {
-            if (!url.isNullOrEmpty()) {
-                Glide.with(imageView.context)
-                    .load(url)
-                    .circleCrop()
-                    .into(imageView)
             }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val binding = ItemEndedChallengesBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+            val binding = ItemProofShotsGalleryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return ViewHolder(binding)
         }
 
@@ -190,21 +140,21 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
             holder.bind(getItem(position))
         }
 
-        class DiffCallback : DiffUtil.ItemCallback<EndedChallengeContent>() {
+        class DiffCallback : DiffUtil.ItemCallback<FeedHistoryContent>() {
             override fun areItemsTheSame(
-                oldItem: EndedChallengeContent,
-                newItem: EndedChallengeContent
+                oldItem: FeedHistoryContent,
+                newItem: FeedHistoryContent
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: EndedChallengeContent,
-                newItem: EndedChallengeContent
+                oldItem: FeedHistoryContent,
+                newItem: FeedHistoryContent
             ): Boolean {
                 return oldItem == newItem
             }
         }
-    }
 
+    }
 }
