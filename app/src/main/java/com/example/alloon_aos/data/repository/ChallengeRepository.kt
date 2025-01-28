@@ -3,6 +3,7 @@ package com.example.alloon_aos.data.repository
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.data.model.request.CreateData
 import com.example.alloon_aos.data.model.request.Goal
+import com.example.alloon_aos.data.model.request.JoinData
 import com.example.alloon_aos.data.model.request.ModifyData
 import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeResponse
@@ -229,7 +230,37 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
         })
     }
 
-    //공개 챌린지 참여
+    fun joinPublicChallenge(id: Int, goal: Goal, callback: ChallengeRepositoryCallback<MessageResponse>) {
+        challengeService.post_joinPublicChallenge(id, goal).enqueue(object : Callback<MessageResponse> {
+            override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(response.body()!!)
+                } else {
+                    val error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
+                }
+            }
 
-    //비공개 챌린지 참여
+            override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
+
+    fun joinPrivateChallenge(id: Int, joinData: JoinData, callback: ChallengeRepositoryCallback<MessageResponse>) {
+        challengeService.post_joinPrivateChallenge(id, joinData).enqueue(object : Callback<MessageResponse> {
+            override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(response.body()!!)
+                } else {
+                    val error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
+                }
+            }
+
+            override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
 }

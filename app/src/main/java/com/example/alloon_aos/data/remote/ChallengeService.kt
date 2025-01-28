@@ -1,6 +1,7 @@
 package com.example.alloon_aos.data.remote
 
 import com.example.alloon_aos.data.model.request.Goal
+import com.example.alloon_aos.data.model.request.JoinData
 import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
@@ -88,7 +89,15 @@ interface ChallengeService {
         @Part imageFile: MultipartBody.Part
     ): Call<ChallengeResponse>
 
-    //공개 챌린지 참여하기
+    @POST("/api/challenges/{challengeId}/join/public")
+    fun post_joinPublicChallenge( //공개 챌린지 참여하기
+        @Path("challengeId") challengeId: Int,
+        @Body params: Goal
+    ): Call<MessageResponse>
 
-    //비공개 챌린지 참여하기
+    @POST("/api/challenges/{challengeId}/join/private")
+    fun post_joinPrivateChallenge( //비공개 챌린지 참여하기
+        @Path("challengeId") challengeId: Int,
+        @Body params: JoinData
+    ): Call<MessageResponse>
 }

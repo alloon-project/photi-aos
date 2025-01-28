@@ -3,26 +3,31 @@ package com.example.alloon_aos.data.model
 object ApiConfig {
     // 토큰을 추가할 API 목록을 Map으로 관리 (URL, Method) :: 하나씩 추가
     val tokenRequiredApis = mapOf(
-        // auth
+        // same
         "/api/users" to mapOf(
             "PATCH" to "회원 탈퇴", // 회원 탈퇴
             "GET" to "사용자 정보 조회" // 사용자 정보 조회
         ),
+        "/api/challenges/{challengeId}" to mapOf(
+            "DELETE" to "챌린지 탈퇴", // 챌린지 탈퇴
+            "PATCH" to "챌린지 수정", // 챌린지 수정
+            "GET" to "챌린지 개별 조회" // 챌린지 개별 조회
+        ),
+
+        // auth
         "/api/users/password" to "PATCH", // 비밀번호 변경
         "/api/users/token" to "POST", // 토큰 재발급
         "/api/inquiries" to "POST",
 
         // challenge
-        "/api/challenges/{challengeId}" to mapOf(
-            "DELETE" to "챌린지 탈퇴", // DELETE 메소드에 대한 구분
-            "PATCH" to "챌린지 수정"   // PATCH 메소드에 대한 구분
-        ),
         "/api/challenges/{challengeId}/invitation-code" to "GET", // 챌린지 초대 코드 조회
         "/api/challenges/{challengeId}/challenge-members/goal" to "PATCH", // 챌린지 개인 목표 작성
         "/api/challenges" to "POST", // 챌린지 생성
+        "/api/challenges/{challengeId}/join/public" to "POST", // 공개 챌린지 참여하기
+        "/api/challenges/{challengeId}/join/private" to "POST", // 비공개 챌린지 참여하기
 
         // user
-        "/api/my-challenges" to "GET",
+        "/api/my-challenges" to "GET", // 사용자 참여중인 챌린지 조회
         "/api/users/feeds" to "GET",
         "/api/users/feeds-by-date" to "GET",
         "/api/users/feed-history" to "GET",
@@ -32,7 +37,6 @@ object ApiConfig {
         "/api/users/image" to "POST", // 이미지 업로드
 
         //feed
-        "/api/challenges/{challengeId}" to "GET",
         "/api/challenges/{challengeId}/info" to "GET",
         "/api/challenges/{challengeId}/challenge-members" to "GET",
     )

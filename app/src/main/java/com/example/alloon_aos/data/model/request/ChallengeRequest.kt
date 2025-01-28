@@ -14,7 +14,6 @@ data class CreateData(
     var hashtags: List<HashTag> = emptyList(),
     var imageFile: MultipartBody.Part? = null
 )
-
 data class ModifyData(
     var name: String? = null,
     var goal: String? = null,
@@ -23,6 +22,10 @@ data class ModifyData(
     var rules: List<Rule> = emptyList(),
     var hashtags: List<HashTag> = emptyList(),
     var imageFile: MultipartBody.Part? = null
+)
+data class JoinData(
+    var invitationCode: String? = null,
+    var goal: String? = null
 )
 
 @Parcelize

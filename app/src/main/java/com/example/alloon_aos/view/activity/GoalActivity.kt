@@ -30,6 +30,8 @@ class GoalActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_goal)
 
+        goalViewModel.resetApiResponseValue()
+
         val isFromFeedActivity = intent.getBooleanExtra("IS_FROM_FEED_ACTIVITY", false)
         if (isFromFeedActivity)
             isFrom = "feed"
@@ -47,6 +49,10 @@ class GoalActivity : AppCompatActivity() {
         val title = intent.getStringExtra("TITLE")
         title?.let {
             binding.title.setText(it)
+        }
+        val code = intent.getStringExtra("Code")
+        code?.let {
+            goalViewModel.code = it
         }
 
         binding.actionBar.setNavigationIcon(R.drawable.ic_back)
@@ -97,7 +103,14 @@ class GoalActivity : AppCompatActivity() {
         })
 
         binding.nextBtn.setOnClickListener {
-            goalViewModel.setGoal()
+            if (isFrom == "feed")
+                goalViewModel.setGoal()
+            else {
+                if (goalViewModel.code.isEmpty())
+                    goalViewModel.joinPublicChallenge()
+                else
+                    goalViewModel.joinPrivateChallenge()
+            }
         }
     }
 
@@ -115,6 +128,38 @@ class GoalActivity : AppCompatActivity() {
                 }
                 "TOKEN_UNAUTHORIZED" -> {
                     CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
+
+        goalViewModel.joinResponse.observe(this) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    returnResultToActivity()
+                }
+                "CHALLENGE_INVITATION_CODE_INVALID" -> {
+                    CustomToast.createToast(this, "챌린지 초대 코드가 일치하지 않습니다.")?.show()
+                }
+                "TOKEN_UNAUTHENTICATED" -> {
+                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                }
+                "TOKEN_UNAUTHORIZED" -> {
+                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+                "USER_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 회원입니다.")?.show()
+                }
+                "CHALLENGE_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 챌린지입니다.")?.show()
+                }
+                "EXISTING_CHALLENGE_MEMBER" -> {
+                    CustomToast.createToast(this, "이미 챌린지에 참여한 회원입니다.")?.show()
                 }
                 "IO_Exception" -> {
                     CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()

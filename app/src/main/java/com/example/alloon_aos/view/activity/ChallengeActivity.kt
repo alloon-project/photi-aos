@@ -145,8 +145,6 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
                 if (!challengeViewModel.isPublic)
                     challengeViewModel.getInviteCode()
-
-                setJoinObserve()
             }
             "create" -> {
                 CustomToast.createToast(this,"완성된 챌린지를 확인해볼까요? 찰칵~")?.show()
@@ -228,7 +226,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                     .show(this.supportFragmentManager!!, "CustomDialog")
             } else {
                 if (challengeViewModel.isPublic)
-                    startGoal() //목표설정
+                    startGoal()
                 else
                     PrivateCodeDialog(this, challengeViewModel)
                         .show(this.supportFragmentManager!!, "CustomDialog")
@@ -241,25 +239,6 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
         binding.modifyBtn.setOnClickListener {
             challengeViewModel.modifyChallenge(this)
-        }
-    }
-
-    fun setJoinObserve() {
-        //참여하기 api
-        challengeViewModel.apiResponse.observe(this) { response ->
-            when (response.code) {
-                "200 OK" -> {
-                    CustomToast.createToast(this, "뭔가를 성공했어요.")?.show()
-                }
-
-                "IO_Exception" -> {
-                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
-                }
-
-                else -> {
-                    Log.d("Observer", "Unhandled response code: ${response.code}")
-                }
-            }
         }
     }
 
@@ -367,6 +346,8 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         val intent = Intent(this, GoalActivity::class.java)
         intent.putExtra("ID",challengeViewModel.id)
         intent.putExtra("TITLE",challengeViewModel.name)
+        if (challengeViewModel.isPublic)
+            intent.putExtra("Code",challengeViewModel.invitecode)
         startActivity(intent)
     }
 

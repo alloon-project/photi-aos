@@ -66,7 +66,7 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         photiViewModel.resetAllResponseValue()
         photiViewModel.getChallengePopular()
         photiViewModel.getChallengeLatest()
-        photiViewModel.getChallengeHashtag()
+        //photiViewModel.getChallengeHashtag()
         //photiViewModel.getHashList()
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

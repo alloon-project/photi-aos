@@ -66,9 +66,6 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         val challengeData = intent.getParcelableExtra<MyData>("data")
         val imageFile = intent.getStringExtra("image")
 
-        challengeId?.let {
-            feedViewModel.challengeId = it
-        }
         challengeData?.let {
             feedViewModel.setChallengeData(it)
         }
