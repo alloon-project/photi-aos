@@ -1,5 +1,7 @@
 package com.example.alloon_aos.view.fragment.feed
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -10,6 +12,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -55,6 +59,14 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         binding.feedOutRecyclerView.setHasFixedSize(true)
 
         setObserver()
+        val progressBar = binding.feedProgress
+
+        progressBar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                progressBar.viewTreeObserver.removeOnGlobalLayoutListener(this) // 리스너 제거 (중복 실행 방지)
+                animateProgressBar(progressBar, 10, 5)
+            }
+        })
 
         return binding.root
     }
@@ -90,23 +102,29 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         }
     }
 
-    fun setObserver(){
+    private fun animateProgressBar(progressBar: ProgressBar, max: Int, progress: Int) {
+        val scaleFactor = if (max >= 100) 1 else (100 / max)
+
+        progressBar.max = max * scaleFactor
+        progressBar.progress = 0
+
+        val animator = ValueAnimator.ofInt(0, progress * scaleFactor)
+        animator.duration = 1000
+        animator.addUpdateListener { animation ->
+            val animatedValue = animation.animatedValue as Int
+            progressBar.progress = animatedValue
+        }
+        animator.start()
+    }
+
+
+    private fun setObserver(){
         feedViewModel.isMissionClear.observe(viewLifecycleOwner) { isClear ->
             if (isClear) {
                 binding.fixedImageButton.visibility = View.GONE
             }
             else
                 showToastAbove("오늘의 인증이 완료되지 않았어요!")
-        }
-    }
-    fun showBottomList(){
-        AlignBottomSheet(mContext,this,"최신순","인기순",selected_order)
-            .show(activity?.supportFragmentManager!!, "bottomList")
-    }
-
-    fun doTodayCertify(){
-        CameraHelper.checkPermissions(this) {
-            CameraHelper.takePicture(this, takePictureLauncher)
         }
     }
 
@@ -125,8 +143,21 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         toast.show()
     }
 
+    fun showBottomList(){
+        AlignBottomSheet(mContext,this,"최신순","인기순",selected_order)
+            .show(activity?.supportFragmentManager!!, "bottomList")
+    }
+
+    fun doTodayCertify(){
+        CameraHelper.checkPermissions(this) {
+            CameraHelper.takePicture(this, takePictureLauncher)
+        }
+    }
+
     override fun onClickFirstButton() {
         selected_order = "first"
+
+        //TODO api 호출시 정렬 기준 ui에 적용
         //최신순으로 정렬
     }
 

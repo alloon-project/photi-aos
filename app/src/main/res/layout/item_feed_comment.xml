@@ -8,28 +8,38 @@
     android:layout_marginTop="12dp">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/id_textView"
+        android:layout_width="51dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/suit_bold"
         android:text="id"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="@color/gray400"
         android:textSize="14dp"
+        android:lineSpacingExtra="5sp"
+        android:translationY="-2.26sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@id/id_textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/comment_textView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/suit_medium"
-        android:text="댓글 내용"
+        android:text="완전 부지런하시당 2줄 이상 2줄 이상 2줄 이상 2줄 이상"
         android:textColor="@color/gray200"
         android:textSize="14dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:lineSpacingExtra="4sp"
+        android:translationY="-1.76sp"
         android:layout_marginLeft="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/id_textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap"
+        app:layout_constraintWidth_max="250dp" />/>
 </androidx.constraintlayout.widget.ConstraintLayout>

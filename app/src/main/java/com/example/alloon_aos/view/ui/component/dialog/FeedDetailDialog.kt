@@ -263,8 +263,8 @@ class FeedDetailDialog(val index: Int,private val listener: OnFeedDeletedListene
         inner class ViewHolder(var binding: ItemFeedCommentBinding) : RecyclerView.ViewHolder(binding.root) {
             fun setContents(holder: ViewHolder, pos: Int) {
                 with(comments[pos]) {
-                    binding.textView.text = id
-                    binding.idTextView.text = text
+                    binding.idTextView.text = id
+                    binding.commentTextView.text = text
 
                     holder.itemView.setOnLongClickListener {
                         removeComment(pos)

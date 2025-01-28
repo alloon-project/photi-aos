@@ -18,28 +18,20 @@
         android:layout_height="match_parent"
         android:theme="@style/Theme.Photi"
         android:background="@color/white">
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scrollview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:fillViewport="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:scrollbars="vertical">
-
             <androidx.constraintlayout.widget.ConstraintLayout
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <ProgressBar
-                    android:id="@+id/auth_progress"
+                    android:id="@+id/feed_progress"
                     android:max="100"
                     android:progress="55"
                     android:progressTint="@color/green400"
                     android:layout_width="0dp"
                     android:layout_height="6dp"
-                    android:progressDrawable="@drawable/signup_progress"
+                    android:progressDrawable="@drawable/progress_bar_radius"
                     style="@android:style/Widget.ProgressBar.Horizontal"
                     android:layout_marginTop="22dp"
                     android:layout_marginRight="8dp"
@@ -57,7 +49,7 @@
                     android:text="최신순"
                     android:textColor="@color/textcolor_textbtn_gray"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/auth_progress"
+                    app:layout_constraintStart_toEndOf="@+id/feed_progress"
                     app:layout_constraintTop_toTopOf="parent"
                     android:drawableRight="@drawable/ic_down12"
                     android:drawableTint="@color/gray700"
@@ -72,7 +64,7 @@
                     android:background="@drawable/tag_dafault"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/auth_progress">
+                    app:layout_constraintTop_toBottomOf="@+id/feed_progress">
 
                     <ImageView
                         android:layout_width="16dp"
@@ -80,13 +72,13 @@
                         android:layout_marginRight="4dp"
                         android:src="@drawable/ic_people"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/textView6"
+                        app:layout_constraintEnd_toStartOf="@id/memberCnt_textView"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/white" />
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/memberCnt_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/suit_bold"
@@ -113,8 +105,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.core.widget.NestedScrollView>
-
         <ImageButton
             android:id="@+id/fixed_imageButton"
             android:layout_width="64dp"
@@ -122,6 +112,7 @@
             android:background="@null"
             android:onClick="@{() -> fragment.doTodayCertify()}"
             android:src="@drawable/btn_shuttter"
+            android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

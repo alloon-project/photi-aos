@@ -8,6 +8,9 @@
         <variable
             name="activity"
             type="com.example.alloon_aos.view.activity.FeedActivity" />
+        <variable
+            name="fragment"
+            type="com.example.alloon_aos.view.fragment.feed.FeedFragment" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -27,6 +30,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:elevation="0dp"
             android:background="@android:color/transparent">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -125,7 +129,7 @@
                             android:textAllCaps="false"
                             android:textColor="@color/white"
                             android:textSize="12sp"
-                            android:visibility="gone"/>
+                            android:visibility="visible"/>
 
                         <Button
                             android:id="@+id/chip2_btn"
@@ -142,7 +146,7 @@
                             android:textColor="@color/white"
                             android:textSize="12sp"
                             android:layout_marginLeft="8dp"
-                            android:visibility="gone"/>
+                            android:visibility="visible"/>
                         <Button
                             android:id="@+id/chip3_btn"
                             android:layout_width="wrap_content"
@@ -226,6 +230,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tab_layout"
                 app:layout_constraintBottom_toBottomOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

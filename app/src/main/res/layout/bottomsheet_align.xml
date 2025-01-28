@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="312dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginHorizontal="24dp"
@@ -24,7 +24,7 @@
         <Button
             android:id="@+id/firstBtn"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
             android:background="@drawable/btn_bottomlist_align"
             android:stateListAnimator="@null"
             android:fontFamily="@font/suit_bold"

@@ -151,7 +151,9 @@ class FeedViewModel : ViewModel() {
         Comment("aaa", "엄청긴댓글입니다아홉열열하나다여"),
         Comment("aaa", "이 책 좋네요"),
         Comment("abc", "멋져요"),
-        Comment("aaa", "엄청긴댓글입니다아홉열열하나다여")
+        Comment("aaa", "엄청긴댓글입니다아홉열열하나다여"),
+        Comment("긴아이디입니다아아앙아앙", "오늘은 정말 기분 좋은 날이야."),
+        Comment("긴아이디입니다아아앙아앙", "행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.")
     )
 
     val feedInItems = arrayListOf<FeedInItem>(
@@ -240,7 +242,7 @@ class FeedViewModel : ViewModel() {
                 },
                 onFailure = { errorCode ->
                     _challengeInfo.postValue(null)
-                    _code.value =errorCode
+                    _code.postValue(errorCode)
                 }
             )
         }
@@ -258,7 +260,7 @@ class FeedViewModel : ViewModel() {
                     _challengeFeeds.postValue(data)
                 },
                 onFailure = { errorCode ->
-                    _challengeFeeds.value  = null
+                    _challengeFeeds.postValue(null)
                     _code.postValue(errorCode)
                 }
             )

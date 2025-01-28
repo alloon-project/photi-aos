@@ -8,14 +8,18 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -30,6 +34,7 @@ import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
+import com.example.alloon_aos.view.ui.util.dpToPx
 import com.example.alloon_aos.viewmodel.FeedViewModel
 import com.google.android.material.tabs.TabLayout
 
