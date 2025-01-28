@@ -117,7 +117,7 @@
                     android:layout_weight="5"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/photo_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -129,75 +129,188 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
 
-                        <LinearLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/memberImg_layout"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="10dp"
                             android:visibility="gone"
-                            android:layout_marginTop="14dp"
-                            android:layout_marginLeft="14dp"
-                            android:layout_marginRight="14dp">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent">
 
-                            <FrameLayout
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/avatar_one_layout"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="6dp"
+                                app:layout_constraintEnd_toStartOf="@+id/membernum_textview"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:visibility="gone">
 
                                 <ImageView
-                                    android:id="@+id/image1"
+                                    android:id="@+id/one_user1_ImageView"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
-                                    android:background="@drawable/line_user_photo"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/ic_user" />
+                                    android:src="@drawable/ic_avatar_part_line_xsmall"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/avatar_two_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="6dp"
+                                app:layout_constraintEnd_toStartOf="@+id/membernum_textview"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:visibility="gone">
 
                                 <ImageView
-                                    android:id="@+id/image2"
+                                    android:id="@+id/two_user1_ImageView"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_avatar_part_line_xsmall"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"/>
+
+                                <ImageView
+                                    android:id="@+id/two_user2_ImageView"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:layout_marginLeft="18dp"
-                                    android:background="@drawable/line_user_photo"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/ic_user" />
+                                    android:src="@drawable/ic_avatar_part_line_xsmall"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="@id/two_user1_ImageView"/>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/avatar_three_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="6dp"
+                                app:layout_constraintEnd_toStartOf="@+id/membernum_textview"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:id="@+id/three_user1_ImageView"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_avatar_part_line_xsmall"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"/>
+
+                                <ImageView
+                                    android:id="@+id/three_user2_ImageView"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="18dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_avatar_part_line_xsmall"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="@id/three_user1_ImageView"/>
+
+                                <ImageView
+                                    android:id="@+id/three_user3_ImageView"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="18dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_avatar_part_line_xsmall"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="@id/three_user2_ImageView"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/avatar_multiple_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="6dp"
+                                app:layout_constraintEnd_toStartOf="@+id/membernum_textview"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:id="@+id/multiple_user1_ImageView"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_avatar_part_line_xsmall"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"/>
+
+                                <ImageView
+                                    android:id="@+id/multiple_user2_ImageView"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_marginLeft="18dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/ic_avatar_part_line_xsmall"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="@id/multiple_user1_ImageView"/>
 
                                 <ImageView
                                     android:id="@+id/image3"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="36dp"
-                                    android:background="@drawable/line_user_photo"
+                                    android:layout_marginLeft="18dp"
+                                    android:background="@drawable/circle_line_gray500"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/ic_user" />
-                            </FrameLayout>
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="@id/multiple_user2_ImageView"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/count_textView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="+16"
+                                    app:layout_constraintBottom_toBottomOf="@+id/image3"
+                                    app:layout_constraintEnd_toEndOf="@+id/image3"
+                                    app:layout_constraintTop_toTopOf="@+id/image3"
+                                    app:layout_constraintStart_toStartOf="@id/image3"
+                                    android:fontFamily="@font/suit_bold"
+                                    android:textSize="10dp"
+                                    android:textColor="@color/white"/>
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <TextView
                                 android:id="@+id/membernum_textview"
-                                android:layout_width="28dp"
-                                android:layout_height="13dp"
-                                android:layout_marginLeft="6dp"
-                                android:fontFamily="@font/suit_medium"
-                                android:letterSpacing="-0.03"
-                                android:text="n명"
-                                android:textColor="@color/gray200"
-                                android:textSize="12dp"
-                                android:layout_gravity="center"/>
-
-                            <TextView
-                                android:layout_width="40dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="13dp"
                                 android:fontFamily="@font/suit_medium"
                                 android:letterSpacing="-0.03"
-                                android:text="합류"
+                                android:text="n명 합류"
                                 android:textColor="@color/gray200"
                                 android:textSize="12dp"
-                                android:layout_gravity="center"/>
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                        </LinearLayout>
-                    </LinearLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
-
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

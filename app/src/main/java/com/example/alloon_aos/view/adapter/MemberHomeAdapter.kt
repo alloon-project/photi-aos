@@ -11,7 +11,7 @@ import com.example.alloon_aos.databinding.ItemPhotoViewpagerBinding
 import com.example.alloon_aos.viewmodel.ChallengeItem
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
-class MemberHomeAdapter( private val photiViewModel: PhotiViewModel, private var challengeItems: List<ChallengeItem>) :
+class MemberHomeAdapter( private val photiViewModel: PhotiViewModel) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         private const val VIEW_TYPE_PHOTO = 0
@@ -22,9 +22,9 @@ class MemberHomeAdapter( private val photiViewModel: PhotiViewModel, private var
         RecyclerView.ViewHolder(binding.root) {
 
         fun setContents(pos: Int) {
-            with (photiViewModel.photoItems[pos]) {
+            with (photiViewModel.hotItems[pos]) {
                 Glide.with(binding.imageView.context)
-                    .load(url)
+                    .load(imageUrl)
                     .into(binding.imageView)
             }
         }
@@ -35,7 +35,7 @@ class MemberHomeAdapter( private val photiViewModel: PhotiViewModel, private var
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == photiViewModel.photoItems.size) VIEW_TYPE_GRAPHIC else VIEW_TYPE_PHOTO
+        return if (position == photiViewModel.hotItems.size) VIEW_TYPE_GRAPHIC else VIEW_TYPE_PHOTO
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -57,10 +57,6 @@ class MemberHomeAdapter( private val photiViewModel: PhotiViewModel, private var
         }
     }
 
-    override fun getItemCount() = photiViewModel.photoItems.size + 1 // +1 for the graphic item
+    override fun getItemCount() = photiViewModel.hotItems.size + 1 // +1 for the graphic item
 
-    fun updatePhotoItems(newPhotoItems: List<ChallengeItem>) {
-        challengeItems = newPhotoItems
-        notifyDataSetChanged()
-    }
 }

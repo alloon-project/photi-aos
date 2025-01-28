@@ -120,7 +120,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>
 
-                    threeUser2ImageView<ImageView
+                    <ImageView
                         android:id="@+id/two_user2_ImageView"
                         android:layout_width="30dp"
                         android:layout_height="30dp"

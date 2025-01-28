@@ -60,7 +60,7 @@ class ChallengeLatestFragment : Fragment() {
         photiViewModel.latestResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    photiViewModel.latestPage += 10
+                    photiViewModel.latestPage += 1
                 }
                 "IO_Exception" -> {
                     CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()

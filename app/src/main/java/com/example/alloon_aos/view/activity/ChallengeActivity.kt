@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -139,6 +140,8 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                 binding.title.setText(challengeViewModel.name)
 
                 binding.memberImgLayout.visibility = View.VISIBLE
+                setMemberImg()
+
                 binding.joinBtn.visibility = View.VISIBLE
                 binding.createBtn.visibility = View.GONE
                 binding.modifyBtn.visibility = View.GONE
@@ -167,6 +170,48 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
             }
         }
         setRuleLayout()
+    }
+
+    private fun setMemberImg() {
+        val cnt = challengeViewModel.currentMemberCnt
+        val imgs = challengeViewModel.memberImages
+
+        when (cnt) {
+            1 -> {
+                binding.avatarOneLayout.visibility = View.VISIBLE
+                binding.membernumTextview.text = "1명 합류"
+                loadImage(binding.oneUser1ImageView, imgs.getOrNull(0)?.memberImage)
+            }
+            2 -> {
+                binding.avatarTwoLayout.visibility = View.VISIBLE
+                binding.membernumTextview.text = "2명 합류"
+                loadImage(binding.twoUser1ImageView, imgs.getOrNull(0)?.memberImage)
+                loadImage(binding.twoUser2ImageView, imgs.getOrNull(1)?.memberImage)
+            }
+            3 -> {
+                binding.avatarThreeLayout.visibility = View.VISIBLE
+                binding.membernumTextview.text = "3명 합류"
+                loadImage(binding.threeUser1ImageView, imgs.getOrNull(0)?.memberImage)
+                loadImage(binding.threeUser2ImageView, imgs.getOrNull(1)?.memberImage)
+                loadImage(binding.threeUser3ImageView, imgs.getOrNull(2)?.memberImage)
+            }
+            else -> {
+                binding.avatarMultipleLayout.visibility = View.VISIBLE
+                //binding.avatarThreeLayout.visibility = View.VISIBLE
+                binding.membernumTextview.text = "${cnt}명 합류"
+                loadImage(binding.multipleUser1ImageView, imgs.getOrNull(0)?.memberImage)
+                loadImage(binding.multipleUser2ImageView, imgs.getOrNull(1)?.memberImage)
+                binding.countTextView.text = "+${(cnt - 2).coerceAtLeast(0)}"
+            }
+        }
+    }
+    private fun loadImage(imageView: ImageView, url: String?) {
+        if (!url.isNullOrEmpty()) {
+            Glide.with(imageView.context)
+                .load(url)
+                .circleCrop()
+                .into(imageView)
+        }
     }
 
     private fun setRuleLayout() {

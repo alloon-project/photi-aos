@@ -94,7 +94,7 @@ class ChallengeCommendFragment : Fragment() {
         photiViewModel.hashResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    photiViewModel.hashPage += 10
+                    photiViewModel.hashPage += 1
                 }
                 "IO_Exception" -> {
                     CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
