@@ -20,7 +20,6 @@ import com.example.alloon_aos.data.model.response.EndedChallengeContent
 import com.example.alloon_aos.data.model.response.MemberImage
 import com.example.alloon_aos.databinding.DialogEndedChallengesBinding
 import com.example.alloon_aos.databinding.ItemEndedChallengesBinding
-import com.example.alloon_aos.databinding.ItemProofShotsGalleryBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 

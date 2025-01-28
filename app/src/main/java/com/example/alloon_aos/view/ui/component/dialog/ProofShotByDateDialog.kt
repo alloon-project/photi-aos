@@ -17,13 +17,10 @@ import com.example.alloon_aos.data.model.response.FeedByDate
 import com.example.alloon_aos.databinding.DialogProofshotByDateBinding
 import com.example.alloon_aos.databinding.ItemProofshotCompleteViewpagerBinding
 import com.example.alloon_aos.view.activity.FeedActivity
-import com.example.alloon_aos.view.activity.SettingsActivity
-import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
-import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class ProofShotByDateDialog(val feedList:
-                            List<FeedByDate>) : DialogFragment()  {
+                            List<FeedByDate>, val dateStr : String) : DialogFragment()  {
     private var _binding: DialogProofshotByDateBinding? = null
     private val binding get() = _binding!!
 
@@ -39,6 +36,7 @@ class ProofShotByDateDialog(val feedList:
         binding.viewPager2.offscreenPageLimit = 2
         binding.viewPager2.setPageTransformer(ProofShotHomeTransformer())
 
+        binding.dateTextView.text = dateStr
         binding.backImgBtn.setOnClickListener {
             dismiss()
         }
@@ -74,9 +72,8 @@ class ProofShotByDateDialog(val feedList:
 
                 binding.root.setOnClickListener {
                     val intent = Intent(activity, FeedActivity::class.java)
+                    intent.putExtra("CHALLENGE_ID", challengeId)
 
-                    //TODO challengeId 넣어
-                    intent.putExtra("CHALLENGE_ID", 1)
                     startActivity(intent)
                 }
 

@@ -16,7 +16,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.response.ChallengeMember
@@ -24,7 +23,6 @@ import com.example.alloon_aos.databinding.FragmentPartyMemberBinding
 import com.example.alloon_aos.databinding.ItemFeedPartyBinding
 import com.example.alloon_aos.view.activity.GoalActivity
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
-import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
 import com.example.alloon_aos.viewmodel.FeedViewModel
 
 class PartyMemberFragment : Fragment() {
@@ -33,7 +31,6 @@ class PartyMemberFragment : Fragment() {
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var partyCardAdapter: PartyCardAdapter
     private val feedViewModel by activityViewModels<FeedViewModel>()
-    private var currentMembers: List<ChallengeMember> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,8 +63,7 @@ class PartyMemberFragment : Fragment() {
         }
 
         feedViewModel.challengeMembers.observe(viewLifecycleOwner) { data ->
-            if (data != null && data != currentMembers) {
-                currentMembers = data
+            if (data != null ) {
                 binding.totalCountTextView.text = "파티원 ${data.size}명"
                 partyCardAdapter.updateMembers(data)
             }

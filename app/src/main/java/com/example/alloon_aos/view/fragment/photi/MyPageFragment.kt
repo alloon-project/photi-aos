@@ -36,6 +36,7 @@ class MyPageFragment : Fragment() {
     private var calendarList : List<CalendarDay> = emptyList()
     private var year : Int = 0
     private var month : Int = 0
+    private var day : Int = 0
     private var feedCnt : Int = 0
     private var endedChallengeCnt : Int = 0
 
@@ -96,7 +97,7 @@ class MyPageFragment : Fragment() {
         photiViewModel.feedsByDateData.observe(viewLifecycleOwner) {
                 data ->
                     if(data != null)
-                            ProofShotByDateDialog(data)
+                            ProofShotByDateDialog(data,"${year}년 ${month}월 ${day}일")
                     .show(parentFragmentManager, "ProofShotByDateDialog")
 
         }
@@ -151,6 +152,7 @@ class MyPageFragment : Fragment() {
             if (materialCalendarView.currentDate.month == date.month && calendarList.contains(date)) {
                 val formattedDate = String.format(Locale.US,"%04d-%02d-%02d", date.year, date.month, date.day)
                 Log.d("calendar","클릭!! $formattedDate")
+                day = date.day
                 photiViewModel.fetchFeedsByDate(formattedDate)
 
             }

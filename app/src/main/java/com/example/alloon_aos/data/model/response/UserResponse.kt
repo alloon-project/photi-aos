@@ -36,7 +36,8 @@ data class FeedDate(
 
 
 data class FeedByDate(
-    val id: Int,
+    val id: Int, //feedId
+    val challengeId : Int,
     val imageUrl: String,
     val name: String,
     val proveTime: String

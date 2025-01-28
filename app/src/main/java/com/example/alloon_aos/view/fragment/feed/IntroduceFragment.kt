@@ -70,6 +70,7 @@ class IntroduceFragment : Fragment() {
 
                 binding.goalTextView.text = data.goal
                 binding.proveTimeTextView.text = data.proveTime.replace(":", " : ")
+                binding.dateTextView.text = data.startDate.replace("-",". ") + " ~ " + data.endDate.replace("-",". ")
             }
 
         }
