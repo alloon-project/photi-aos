@@ -23,7 +23,7 @@
                 android:layout_height="6dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginLeft="24dp"
-                android:progressDrawable="@drawable/signup_progress"
+                android:progressDrawable="@drawable/progress_blue"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
