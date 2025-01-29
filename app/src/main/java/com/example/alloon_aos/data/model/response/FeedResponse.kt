@@ -1,5 +1,8 @@
 package com.example.alloon_aos.data.model.response
 
+import com.example.alloon_aos.data.model.request.HashTag
+import com.example.alloon_aos.data.model.request.Rule
+
 data class ChallengeFeedsData(
     val content: List<FeedContent>,
     val page: Int,
@@ -30,8 +33,8 @@ data class FeedChallengeData(
     val isPublic: Boolean, // 공개 여부
     val proveTime: String, // 인증 시간
     val endDate: String, // 종료 날짜
-    val rules: List<ChallengeRule>, // 규칙 리스트
-    val hashtags: List<ChallengeHashtag>, // 해시태그 리스트
+    val rules: List<Rule>, // 규칙 리스트
+    val hashtags: List<HashTag>, // 해시태그 리스트
     val memberImages: List<MemberImage> // 멤버 이미지 리스트
 )
 
@@ -40,16 +43,9 @@ data class ChallengeInfoData(
     val proveTime: String,
     val startDate: String,
     val endDate: String,
-    val rules: List<ChallengeRule>
+    val rules: List<Rule>
 )
 
-data class ChallengeRule(
-    val rule: String // 개별 규칙
-)
-
-data class ChallengeHashtag(
-    val hashtag: String
-)
 
 //개별조회
 data class FeedDetailData(

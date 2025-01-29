@@ -10,8 +10,7 @@ object ApiConfig {
         ),
         "/api/challenges/{challengeId}" to mapOf(
             "DELETE" to "챌린지 탈퇴", // 챌린지 탈퇴
-            "PATCH" to "챌린지 수정", // 챌린지 수정
-            "GET" to "챌린지 개별 조회" // 챌린지 개별 조회
+            "PATCH" to "챌린지 수정" // 챌린지 수정
         ),
 
         // auth

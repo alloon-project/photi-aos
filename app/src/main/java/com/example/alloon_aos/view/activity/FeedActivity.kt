@@ -23,8 +23,12 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.MyData
+import com.example.alloon_aos.data.model.response.ChallengeMember
+import com.example.alloon_aos.data.model.response.FeedChallengeData
+import com.example.alloon_aos.data.storage.SharedPreferencesManager
 import com.example.alloon_aos.databinding.ActivityFeedBinding
 import com.example.alloon_aos.databinding.CustomPopupMenuBinding
 import com.example.alloon_aos.view.fragment.feed.IntroduceFragment
@@ -42,6 +46,9 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     lateinit var binding : ActivityFeedBinding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private val feedViewModel : FeedViewModel by viewModels()
+    private lateinit var feedChallengeData : FeedChallengeData
+    private var isLeader = false
+    private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,45 +63,23 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 .commit()
         }
 
+        feedViewModel.resetResponse()
+
         val challengeId = intent.getIntExtra("CHALLENGE_ID", -1)
         feedViewModel.challengeId = challengeId
 
         if(challengeId != -1){
             feedViewModel.fetchChallenge()
+            feedViewModel.fetchChallengeMembers()
         }
-
-        val challengeData = intent.getParcelableExtra<MyData>("data")
-        val imageFile = intent.getStringExtra("image")
-
-        challengeData?.let {
-            feedViewModel.setChallengeData(it)
-        }
-        imageFile?.let {
-            feedViewModel.imgFile = it
-        }
-
-        if(!feedViewModel.isPublic)
-            feedViewModel.getInviteCode()
 
         setObserve()
 
         binding.shareImgBtn.setOnClickListener {
-            val inviteCode = feedViewModel.invitecode
-            val appLink = "https://photi.com/challenge/$inviteCode"
-            val chooserTitle = "소설 필사하기"
-            var message = ""
-
-            if (!feedViewModel.isPublic)
-                message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* 초대코드 : $inviteCode \n\n$appLink"
+            if(!feedChallengeData.isPublic)
+                feedViewModel.getInviteCode()
             else
-                message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* \n\n$appLink"
-
-            val sendIntent = Intent(Intent.ACTION_SEND)
-            sendIntent.type = "text/plain"
-            sendIntent.putExtra(Intent.EXTRA_TEXT, message)
-
-            val chooser = Intent.createChooser(sendIntent, chooserTitle)
-            startActivity(chooser)
+                sendInviteMsg()
         }
 
         binding.ellipsisImgBtn.setOnClickListener { view ->
@@ -147,6 +132,25 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         }
     }
 
+    private fun sendInviteMsg() {
+        val inviteCode = feedViewModel.invitecode
+        val appLink = "https://photi.com/challenge/$inviteCode"
+        val chooserTitle = "소설 필사하기"
+        var message = ""
+
+        if (!feedChallengeData.isPublic)
+            message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* 초대코드 : $inviteCode \n\n$appLink"
+        else
+            message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* \n\n$appLink"
+
+        val sendIntent = Intent(Intent.ACTION_SEND)
+        sendIntent.type = "text/plain"
+        sendIntent.putExtra(Intent.EXTRA_TEXT, message)
+
+        val chooser = Intent.createChooser(sendIntent, chooserTitle)
+        startActivity(chooser)
+    }
+
     @RequiresApi(Build.VERSION_CODES.S)
     private fun applyBlurEffect(view: View?) {
         val blurEffect = RenderEffect.createBlurEffect(10f, 10f, Shader.TileMode.CLAMP)
@@ -175,28 +179,30 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         val popupWindow = PopupWindow(popupViewBinding.root, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
 
         with(popupViewBinding){
-            //if(파티장)
+            if (isLeader)
                 optionOne.text = "챌린지 수정하기"
-            //else(파티원
-                //optionOne.text = "챌린지 신고하기"
+            else
+                optionOne.text = "챌린지 신고하기"
+
             optionTwo.text = "챌린지 탈퇴하기"
 
             optionOne.setOnClickListener {
-                //if(파티장)
+                if (isLeader) {
                     val intent = Intent(this@FeedActivity, ChallengeActivity::class.java)
                     intent.putExtra("IS_FROM_FEED",true)
                     intent.putExtra("ID", feedViewModel.challengeId)
-                    intent.putExtra("data", feedViewModel.getData())
-                    intent.putExtra("image", feedViewModel.imgFile)
+                    intent.putExtra("data", MyData(feedChallengeData.name, feedChallengeData.isPublic, feedChallengeData.goal, feedChallengeData.proveTime, feedChallengeData.endDate, feedChallengeData.rules, feedChallengeData.hashtags))
+                    intent.putExtra("image", feedChallengeData.imageUrl)
                     activityResultLauncher.launch(intent)
-                //else (파티원
+                } else {
                     //챌린지 신고하기
+                }
 
                 popupWindow.dismiss()
             }
 
             optionTwo.setOnClickListener {
-                if (feedViewModel.currentMemberCnt <= 1) {
+                if (feedChallengeData.currentMemberCnt <= 1) {
                     CustomTwoButtonDialog(this@FeedActivity,"챌린지를 탈퇴할까요?","회원님은 이 챌린지의 마지막 파티원이에요.\n" +
                             "지금 탈퇴하면 챌린지가 삭제돼요.\n" +
                             "삭제된 챌린지는 복구할 수 없어요.\n" +
@@ -220,6 +226,44 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     }
 
     private fun setObserve() {
+        feedViewModel.codeResponse.observe(this) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    sendInviteMsg()
+                }
+                "CHALLENGE_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 챌린지입니다.")?.show()
+                }
+                "CHALLENGE_MEMBER_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 챌린지 파티원입니다.")?.show()
+                }
+                "TOKEN_UNAUTHENTICATED" -> {
+                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                }
+                "TOKEN_UNAUTHORIZED" -> {
+                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
+
+        feedViewModel.challengeMembers.observe(this) { data ->
+            if (data != null) {
+                val myName = sharedPreferencesManager.getUserName() ?: ""
+                val creator : ChallengeMember? = data.find { it.isCreator }
+
+                if (myName.equals(creator!!.username))
+                    isLeader = true
+                else
+                    isLeader = false
+            }
+        }
+
         feedViewModel.code.observe(this) { code ->
             when (code) {
                 "200 OK" -> {
@@ -238,11 +282,12 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
 
         feedViewModel.challenge.observe(this) { data ->
             if (data != null) {
+                feedChallengeData = data
+
                 Glide.with(binding.feedImgView.context)
                     .load(data.imageUrl)
                     .transform(CenterCrop())
                     .into(binding.feedImgView)
-
 
                 binding.feedNameTextView.text = data.name
 

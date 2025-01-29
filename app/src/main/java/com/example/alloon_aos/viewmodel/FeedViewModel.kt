@@ -6,12 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alloon_aos.data.model.ActionApiResponse
-import com.example.alloon_aos.data.model.MyData
-import com.example.alloon_aos.data.model.request.HashTag
-import com.example.alloon_aos.data.model.request.MemberImg
-import com.example.alloon_aos.data.model.request.Rule
-import com.example.alloon_aos.data.model.response.ApiResponse
-import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
@@ -68,36 +62,17 @@ class FeedViewModel : ViewModel() {
     private val repository = ChallengeRepository(challengeService)
 
     val apiResponse = MutableLiveData<ActionApiResponse>()
+    val codeResponse = MutableLiveData<ActionApiResponse>()
 
+    fun resetResponse() {
+        apiResponse.value = ActionApiResponse()
+        codeResponse.value = ActionApiResponse()
+    }
 
     var challengeId = -1
-    var name = ""
-    var isPublic = false
-    var goal = ""
-    var proveTime = ""
-    var endDate = ""
-    var rules: List<Rule> = listOf()
-    var hashtags: List<HashTag> = listOf()
-    var imgFile = ""
-    var currentMemberCnt = 0
-    var memberImages: List<MemberImg> = listOf()
     var invitecode = ""
 
-    fun getData(): MyData {
-        var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashtags)
-        return data
-    }
 
-    fun setChallengeData(data: MyData) {
-        name = data.name
-        isPublic = data.isPublic
-        goal = data.goal
-        proveTime = data.proveTime
-        endDate = data.endDate
-        rules = data.rules
-        hashtags = data.hashtags
-        imgFile = data.imageUrl.toString()
-    }
 
     fun deleteChallenge() {
         repository.deleteChallenge(challengeId, object : ChallengeRepositoryCallback<MessageResponse> {
@@ -107,9 +82,8 @@ class FeedViewModel : ViewModel() {
                 apiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "deleteChallenge: $mes $result")
             }
-
             override fun onFailure(error: Throwable) {
-                handleFailure(error)
+                apiResponse.value = ActionApiResponse(ErrorHandler.handle(error))
             }
         })
     }
@@ -120,19 +94,13 @@ class FeedViewModel : ViewModel() {
                 val result = data.code
                 val mes = data.message
                 invitecode = data.data.invitationCode
-                //apiResponse.value = ActionApiResponse(result)
+                codeResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "getInviteCode: $mes $result $invitecode")
             }
-
             override fun onFailure(error: Throwable) {
-                handleFailure(error)
+                codeResponse.value = ActionApiResponse(ErrorHandler.handle(error))
             }
         })
-    }
-
-    fun handleFailure(error: Throwable) {
-        val errorCode = ErrorHandler.handle(error)
-        apiResponse.value = ActionApiResponse(errorCode)
     }
 
     /////////////////////////////////////////////////////////

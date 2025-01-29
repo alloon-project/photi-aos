@@ -398,9 +398,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
     fun startFeed() { //create
         val intent = Intent(this, FeedActivity::class.java)
-        intent.putExtra("ID",challengeViewModel.id)
-        intent.putExtra("data",challengeViewModel.getData())
-        intent.putExtra("image",challengeViewModel.imageFile)
+        intent.putExtra("CHALLENGE_ID",challengeViewModel.id)
         startActivity(intent)
         finishAffinity()
     }

@@ -103,9 +103,9 @@ class GoalActivity : AppCompatActivity() {
         })
 
         binding.nextBtn.setOnClickListener {
-            if (isFrom == "feed")
+            if (isFrom == "feed") {
                 goalViewModel.setGoal()
-            else {
+            } else {
                 if (goalViewModel.code.isEmpty())
                     goalViewModel.joinPublicChallenge()
                 else
@@ -141,7 +141,7 @@ class GoalActivity : AppCompatActivity() {
         goalViewModel.joinResponse.observe(this) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    returnResultToActivity()
+                    startToActivity()
                 }
                 "CHALLENGE_INVITATION_CODE_INVALID" -> {
                     CustomToast.createToast(this, "챌린지 초대 코드가 일치하지 않습니다.")?.show()
@@ -171,15 +171,17 @@ class GoalActivity : AppCompatActivity() {
         }
     }
 
-    fun returnResultToActivity() {
-        if (isFrom == "feed"){
-            val resultIntent = Intent()
-            resultIntent.putExtra("myGoal", goalViewModel.goal)
-            setResult(Activity.RESULT_OK, resultIntent)
-            finish()
-        } else {
-            startActivity(Intent(this,FeedActivity::class.java))
-            finishAffinity()
-        }
+    private fun returnResultToActivity() {
+        val resultIntent = Intent()
+        resultIntent.putExtra("myGoal", goalViewModel.goal)
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+    }
+
+    private fun startToActivity() {
+        val intent = Intent(this, FeedActivity::class.java)
+        intent.putExtra("CHALLENGE_ID", goalViewModel.id)
+        startActivity(intent)
+        finishAffinity()
     }
 }

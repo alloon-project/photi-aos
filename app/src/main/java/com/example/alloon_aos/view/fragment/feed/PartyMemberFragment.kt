@@ -51,7 +51,6 @@ class PartyMemberFragment : Fragment() {
         binding.partyRecyclerView.setHasFixedSize(true)
 
         setObserve()
-        feedViewModel.fetchChallengeMembers()
 
         myName = sharedPreferencesManager.getUserName() ?: ""
         return binding.root
@@ -111,7 +110,7 @@ class PartyMemberFragment : Fragment() {
         val intent = Intent(requireContext(), GoalActivity::class.java)
         intent.putExtra("IS_FROM_FEED_ACTIVITY", true)
         intent.putExtra("ID", feedViewModel.challengeId)
-        intent.putExtra("TITLE", feedViewModel.name)
+        intent.putExtra("TITLE", feedViewModel.challenge.value!!.name)
         intent.putExtra("GOAL", goal)
         activityResultLauncher.launch(intent)
     }
