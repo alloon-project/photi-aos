@@ -117,10 +117,15 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
         }
 
         binding.nextBtn.setOnClickListener {
-            if (mActivity.isFromChallenge)
-                mActivity.modifyContent()
-            else
-                createViewModel.getExamImg()
+            if (binding.contentEdittext.text.length < 10) {
+                CustomToast.createToast(activity, "목표는 10자 이상 적어주세요!", "circle")?.show()
+                binding.nextBtn.isEnabled = false
+            } else {
+                if (mActivity.isFromChallenge)
+                    mActivity.modifyContent()
+                else
+                    createViewModel.getExamImg()
+            }
         }
 
         binding.root.setOnClickListener {
@@ -153,7 +158,7 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
     private fun checkData() {
         if (binding.timeEdittext.text.isNotEmpty()
             && binding.selectedDateEdittext.text.isNotEmpty()
-            && binding.contentEdittext.text.length > 10)
+            && binding.contentEdittext.text.isNotEmpty())
             binding.nextBtn.isEnabled = true
         else
             binding.nextBtn.isEnabled = false
