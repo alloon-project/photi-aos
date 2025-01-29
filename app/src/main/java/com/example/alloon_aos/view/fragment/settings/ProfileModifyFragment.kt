@@ -35,6 +35,7 @@ class ProfileModifyFragment : Fragment() {
     private lateinit var mContext: Context
     private val settingsViewModel by activityViewModels<SettingsViewModel>()
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
+    private var isModified = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +49,8 @@ class ProfileModifyFragment : Fragment() {
         val mActivity = activity as SettingsActivity
         mActivity.setAppBar("프로필 수정")
 
-        settingsViewModel.fetchUserProfile()
         setObserve()
+        settingsViewModel.fetchUserProfile()
 
         initGalleryLauncher()
 
@@ -77,7 +78,13 @@ class ProfileModifyFragment : Fragment() {
             "UNKNOWN_ERROR" to "알 수 없는 오류가 발생 했습니다."
         )
 
-        if (code == "200 OK")   return
+        if (code == "200 OK" && isModified)  {
+            settingsViewModel.fetchUserProfile()
+            isModified = false
+            return
+        }
+
+        if(code == "200 OK") return
 
         if (code == "IO_Exception") {
             CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
@@ -96,6 +103,7 @@ class ProfileModifyFragment : Fragment() {
                 selectedImageUri?.let {
                     val imageFile = createMultipartFromUri(it)
                     settingsViewModel.sendProfileImage(imageFile)
+                    isModified = true
                 } ?: run {
                     Log.e("Gallery", "이미지 선택에 실패했습니다.")
                 }

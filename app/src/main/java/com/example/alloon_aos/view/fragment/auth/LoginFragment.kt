@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.storage.MySharedPreferences
 import com.example.alloon_aos.databinding.FragmentLoginBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.activity.AuthActivity

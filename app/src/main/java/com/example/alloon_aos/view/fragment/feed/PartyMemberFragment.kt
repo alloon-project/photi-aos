@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.response.ChallengeMember
+import com.example.alloon_aos.data.storage.SharedPreferencesManager
 import com.example.alloon_aos.databinding.FragmentPartyMemberBinding
 import com.example.alloon_aos.databinding.ItemFeedPartyBinding
 import com.example.alloon_aos.view.activity.GoalActivity
@@ -30,6 +32,8 @@ class PartyMemberFragment : Fragment() {
     private lateinit var mContext: Context
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var partyCardAdapter: PartyCardAdapter
+    private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
+    private lateinit var myName : String
     private val feedViewModel by activityViewModels<FeedViewModel>()
 
     override fun onCreateView(
@@ -49,6 +53,7 @@ class PartyMemberFragment : Fragment() {
         setObserve()
         feedViewModel.fetchChallengeMembers()
 
+        myName = sharedPreferencesManager.getUserName() ?: ""
         return binding.root
     }
 
@@ -144,11 +149,13 @@ class PartyMemberFragment : Fragment() {
                     binding.divider.visibility = View.GONE
                 }
 
-                //TODO : isMe visible editImgBtn
-//                if(isCreator){
-//                    binding.editImgBtn.visibility = View.VISIBLE
-//                    binding.editImgBtn.setOnClickListener { changeMyGoal(goal) }
-//                }
+
+                if(username == myName){
+                    binding.editImgBtn.visibility = View.VISIBLE
+                    binding.editImgBtn.setOnClickListener { changeMyGoal(goal ?: "") }
+                }
+
+
             }
         }
     }

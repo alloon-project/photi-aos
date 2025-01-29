@@ -56,13 +56,15 @@ class MyPageFragment : Fragment() {
         setCalendarDecorator()
         setLisetener()
 
-
         setObserve()
-        photiViewModel.fetchChallengeHistory()
-        photiViewModel.fetchCalendarData()
         return binding.root
     }
 
+    override fun onResume() {
+        photiViewModel.fetchChallengeHistory()
+        photiViewModel.fetchCalendarData()
+        super.onResume()
+    }
 
     private fun setObserve() {
         // API 응답 코드 관찰

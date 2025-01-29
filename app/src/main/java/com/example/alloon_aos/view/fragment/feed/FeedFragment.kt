@@ -60,11 +60,12 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
 
         setObserver()
         val progressBar = binding.feedProgress
+        val tag = binding.constraintLayout7
 
         progressBar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 progressBar.viewTreeObserver.removeOnGlobalLayoutListener(this) // 리스너 제거 (중복 실행 방지)
-                animateProgressBar(progressBar, 10, 5)
+                animateProgressBar(progressBar, tag, 100, 55)
             }
         })
 
@@ -102,20 +103,33 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         }
     }
 
-    private fun animateProgressBar(progressBar: ProgressBar, max: Int, progress: Int) {
+    private fun animateProgressBar(progressBar: ProgressBar, layout: View, max: Int, progress: Int) {
         val scaleFactor = if (max >= 100) 1 else (100 / max)
 
         progressBar.max = max * scaleFactor
         progressBar.progress = 0
+
+        val startX = progressBar.left.toFloat()
 
         val animator = ValueAnimator.ofInt(0, progress * scaleFactor)
         animator.duration = 1000
         animator.addUpdateListener { animation ->
             val animatedValue = animation.animatedValue as Int
             progressBar.progress = animatedValue
+
+            val progressRatio = animatedValue.toFloat() / progressBar.max
+            val progressBarWidth = progressBar.width
+
+            val progressX = startX + (progressRatio * progressBarWidth)
+
+            val layoutCenterOffset = layout.width / 2
+
+            layout.translationX = progressX - layoutCenterOffset
         }
         animator.start()
     }
+
+
 
 
     private fun setObserver(){

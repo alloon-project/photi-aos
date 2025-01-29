@@ -20,6 +20,7 @@ import com.example.alloon_aos.data.model.response.FeedHistoryContent
 import com.example.alloon_aos.databinding.DialogFeedHistoryBinding
 import com.example.alloon_aos.databinding.ItemProofShotsGalleryBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
+import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class FeedHistoryDialog(val count : Int): DialogFragment() {
@@ -122,7 +123,7 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
 
                 Glide.with(binding.challengeImgView.context)
                     .load(data.imageUrl)
-                    .transform(CenterCrop())
+                    .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))
                     .into(binding.challengeImgView)
 
                 binding.chipBtn.text = data.name

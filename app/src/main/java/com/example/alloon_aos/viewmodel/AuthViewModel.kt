@@ -3,6 +3,7 @@ package com.example.alloon_aos.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.request.EmailCode
 import com.example.alloon_aos.data.model.request.NewPwd
@@ -12,6 +13,8 @@ import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.AuthRepository
 import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.MainRepositoryCallback
+import com.example.alloon_aos.data.storage.SharedPreferencesManager
+import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.view.ui.util.StringUtil
 
 class AuthViewModel : ViewModel() {
@@ -22,6 +25,8 @@ class AuthViewModel : ViewModel() {
 
     private val apiService = RetrofitClient.apiService
     private val repository = AuthRepository(apiService)
+
+    private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
 
     val actionApiResponse = MutableLiveData<ActionApiResponse>()
     var email = ""
@@ -138,6 +143,10 @@ class AuthViewModel : ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
+
+                val username = data.data.username
+                sharedPreferencesManager.saveUserName(username)
+
                 actionApiResponse.value = ActionApiResponse(result, "login")
                 Log.d(TAG, "login: $id $result")
             }
