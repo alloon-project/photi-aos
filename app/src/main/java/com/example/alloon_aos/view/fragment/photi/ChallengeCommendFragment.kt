@@ -57,20 +57,25 @@ class ChallengeCommendFragment : Fragment() {
         binding.chipRecyclerview.setHasFixedSize(true)
 
         photiViewModel.resetApiResponseValue()
+        photiViewModel.resetPopularResponseValue()
         photiViewModel.resetHashResponseValue()
         setObserver()
-
-        if (photiViewModel.hashtag != "전체")
-            clickOneChip()
 
         nestedScrollView = binding.scrollView
         nestedScrollView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
             if (scrollY == nestedScrollView.getChildAt(0).measuredHeight - v.measuredHeight){
-                photiViewModel.getChallengeHashtag()
+                if (!photiViewModel.lastHashPage)
+                    photiViewModel.getChallengeHashtag()
             }
         }
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        photiViewModel.getChallengePopular()
+        //photiViewModel.getHashList()
     }
 
     override fun onAttach(context: Context) {
@@ -89,6 +94,33 @@ class ChallengeCommendFragment : Fragment() {
 
         photiViewModel.hashChipsListData.observe(viewLifecycleOwner) {
             hashTagAdapter.notifyDataSetChanged()
+        }
+
+        photiViewModel.popularResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
+
+        photiViewModel.hashListResponse.observe(viewLifecycleOwner) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    photiViewModel.getChallengeHashtag()
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
         }
 
         photiViewModel.hashResponse.observe(viewLifecycleOwner) { response ->

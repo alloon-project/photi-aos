@@ -125,6 +125,10 @@ class AuthViewModel : ViewModel() {
             override fun onSuccess(data: AuthResponse) {
                 val result = data.code
                 val mes = data.message
+
+                val username = data.data.username
+                sharedPreferencesManager.saveUserName(username)
+
                 actionApiResponse.value = ActionApiResponse(result)
                 Log.d(TAG, "signUp: $id $mes $result")
             }

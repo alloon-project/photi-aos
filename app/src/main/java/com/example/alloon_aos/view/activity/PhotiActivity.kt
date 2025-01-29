@@ -44,7 +44,6 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         setBottomNavigation(TAG_HOME)
         setListener()
         setDeepLink()
-        setObserver()
 
         val isFrom = intent.getStringExtra("IS_FROM")
         when(isFrom){
@@ -64,10 +63,6 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         }
 
         photiViewModel.resetAllResponseValue()
-        photiViewModel.getChallengePopular()
-        photiViewModel.getChallengeLatest()
-        //photiViewModel.getChallengeHashtag()
-        //photiViewModel.getHashList()
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -93,36 +88,6 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
             }
         }
     }
-
-    private fun setObserver() {
-        photiViewModel.popularResponse.observe(this) { response ->
-            when (response.code) {
-                "200 OK" -> {
-                }
-                "IO_Exception" -> {
-                    CustomToast.createToast(this@PhotiActivity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
-                }
-                else -> {
-                    Log.d("Observer", "Unhandled response code: ${response.code}")
-                }
-            }
-        }
-
-        photiViewModel.hashListResponse.observe(this) { response ->
-            when (response.code) {
-                "200 OK" -> {
-                    photiViewModel.getChallengeHashtag()
-                }
-                "IO_Exception" -> {
-                    CustomToast.createToast(this@PhotiActivity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
-                }
-                else -> {
-                    Log.d("Observer", "Unhandled response code: ${response.code}")
-                }
-            }
-        }
-    }
-
 
     private fun setListener(){
         binding.homeIcon.setOnClickListener {

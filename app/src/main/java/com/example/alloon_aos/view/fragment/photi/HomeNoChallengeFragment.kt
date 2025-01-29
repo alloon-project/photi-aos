@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.storage.SharedPreferencesManager
 import com.example.alloon_aos.databinding.FragmentHomeNochallengeBinding
 import com.example.alloon_aos.view.activity.ChallengeActivity
 import com.example.alloon_aos.view.activity.CreateActivity
@@ -25,6 +27,7 @@ class HomeNoChallengeFragment : Fragment() {
     private lateinit var binding : FragmentHomeNochallengeBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var memberHomeAdapter: MemberHomeAdapter
+    private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,17 +38,22 @@ class HomeNoChallengeFragment : Fragment() {
         binding.viewModel = photiViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        //binding.membernumTextview.text = ""
+        binding.memberTextview.text = "${sharedPreferencesManager.getUserName() ?: ""}님의 \n열정을 보여주세요!"
 
         memberHomeAdapter = MemberHomeAdapter(photiViewModel)
         binding.viewPager.adapter = memberHomeAdapter
         binding.viewPager.offscreenPageLimit = 2
         binding.viewPager.setPageTransformer(MemberHomeTransformer())
 
-        photiViewModel.resetApiResponseValue()
+        photiViewModel.resetHomeResponseValue()
         setObserver()
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        photiViewModel.getChallengePopular()
     }
 
     private fun setObserver() {
@@ -130,7 +138,7 @@ class HomeNoChallengeFragment : Fragment() {
             }
         })
 
-        photiViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+        photiViewModel.homeResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
                     startChallenge()
@@ -164,7 +172,7 @@ class HomeNoChallengeFragment : Fragment() {
     }
 
     fun joinChallenge() {
-        photiViewModel.getChallenge()
+        photiViewModel.getChallengeHome()
     }
 
     fun createChallenge() {

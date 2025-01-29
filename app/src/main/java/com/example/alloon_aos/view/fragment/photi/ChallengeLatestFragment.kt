@@ -45,11 +45,17 @@ class ChallengeLatestFragment : Fragment() {
         nestedScrollView = binding.scrollView
         nestedScrollView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
             if (scrollY == nestedScrollView.getChildAt(0).measuredHeight - v.measuredHeight){
-                photiViewModel.getChallengeLatest()
+                if (!photiViewModel.lastLatestPage)
+                    photiViewModel.getChallengeLatest()
             }
         }
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        photiViewModel.getChallengeLatest()
     }
 
     private fun setObserver() {

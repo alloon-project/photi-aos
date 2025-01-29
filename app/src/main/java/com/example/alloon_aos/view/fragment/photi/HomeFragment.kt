@@ -49,9 +49,9 @@ class HomeFragment : Fragment() {
             childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
         } else {
             //회원 챌린지 있음
-            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
+            //childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
             //회원 챌린지 없음
-            // childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
+             childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
         }
     }
 }

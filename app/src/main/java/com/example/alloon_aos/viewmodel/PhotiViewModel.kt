@@ -63,7 +63,6 @@ data class ProofShotItem(
 )
 
 class PhotiViewModel : ViewModel() {
-
     companion object {
         private const val TAG = "PHOTI"
     }
@@ -79,6 +78,7 @@ class PhotiViewModel : ViewModel() {
     val latestResponse = MutableLiveData<ActionApiResponse>()
     val hashResponse = MutableLiveData<ActionApiResponse>()
     val hashListResponse = MutableLiveData<ActionApiResponse>()
+    val homeResponse = MutableLiveData<ActionApiResponse>()
 
     var id = -1
     var name = ""
@@ -93,19 +93,33 @@ class PhotiViewModel : ViewModel() {
     var imgFile = ""
 
     var latestPage = 0
+    var lastLatestPage = false
     var hashPage = 0
+    var lastHashPage = false
     var hashtag = "전체"
 
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
     }
-
+    fun resetHomeResponseValue() {
+        homeResponse.value = ActionApiResponse()
+    }
+    fun resetPopularResponseValue() {
+        popularResponse.value = ActionApiResponse()
+    }
     fun resetLatestResponseValue() {
         latestResponse.value = ActionApiResponse()
+        latestPage = 0
+        latestItems = arrayListOf()
+        lastLatestPage = false
     }
-
     fun resetHashResponseValue() {
+        hashListResponse.value = ActionApiResponse()
         hashResponse.value = ActionApiResponse()
+        hashPage = 0
+        hashItems = arrayListOf()
+        hashtag = "전체"
+        lastHashPage = false
     }
 
     fun resetAllResponseValue() {
@@ -114,6 +128,7 @@ class PhotiViewModel : ViewModel() {
         latestResponse.value = ActionApiResponse()
         hashResponse.value = ActionApiResponse()
         hashListResponse.value = ActionApiResponse()
+        homeResponse.value = ActionApiResponse()
         resetPaging()
     }
 
@@ -123,6 +138,8 @@ class PhotiViewModel : ViewModel() {
         hashPage = 0
         hashItems = arrayListOf()
         hashtag = "전체"
+        lastLatestPage = false
+        lastHashPage = false
     }
 
 
@@ -219,7 +236,7 @@ class PhotiViewModel : ViewModel() {
                 }
 
                 override fun onFailure(error: Throwable) {
-                    handleFailure(error)
+                    latestResponse.value = ActionApiResponse(ErrorHandler.handle(error))
                 }
             })
     }
@@ -234,11 +251,30 @@ class PhotiViewModel : ViewModel() {
                     val data = data.data
                     setChallengeData(data)
                     apiResponse.value = ActionApiResponse(result)
-                    Log.d(TAG, "getChallengeInfo: $mes $result")
+                    Log.d(TAG, "getChallenge: $mes $result")
                 }
 
                 override fun onFailure(error: Throwable) {
-                    handleFailure(error)
+                    apiResponse.value = ActionApiResponse(ErrorHandler.handle(error))
+                }
+            })
+    }
+
+    fun getChallengeHome() {
+        challenge_repository.getChallenge(
+            id,
+            object : ChallengeRepositoryCallback<ChallengeResponse> {
+                override fun onSuccess(data: ChallengeResponse) {
+                    val result = data.code
+                    val mes = data.message
+                    val data = data.data
+                    setChallengeData(data)
+                    homeResponse.value = ActionApiResponse(result)
+                    Log.d(TAG, "getChallengeHome: $mes $result")
+                }
+
+                override fun onFailure(error: Throwable) {
+                    homeResponse.value = ActionApiResponse(ErrorHandler.handle(error))
                 }
             })
     }
@@ -256,7 +292,7 @@ class PhotiViewModel : ViewModel() {
             }
 
             override fun onFailure(error: Throwable) {
-                handleFailure(error)
+                popularResponse.value = ActionApiResponse(ErrorHandler.handle(error))
             }
         })
     }
@@ -267,7 +303,7 @@ class PhotiViewModel : ViewModel() {
 
     fun getChallengeHashtag() {
         challenge_repository.getChallengeHashtag(
-            "러닝",
+            hashtag,
             hashPage,
             10,
             object : ChallengeRepositoryCallback<PagingListResponse> {
@@ -281,14 +317,9 @@ class PhotiViewModel : ViewModel() {
                 }
 
                 override fun onFailure(error: Throwable) {
-                    handleFailure(error)
+                    hashResponse.value = ActionApiResponse(ErrorHandler.handle(error))
                 }
             })
-    }
-
-    fun handleFailure(error: Throwable) {
-        val errorCode = ErrorHandler.handle(error)
-        apiResponse.value = ActionApiResponse(errorCode)
     }
 
 
@@ -317,6 +348,8 @@ class PhotiViewModel : ViewModel() {
     fun addLatestItem(list: ArrayList<CommendData>) {
         latestItems.addAll(list)
         latestItemsListData.value = latestItems
+        if (list.size < 10)
+            lastLatestPage = true
     }
 
 
@@ -327,6 +360,8 @@ class PhotiViewModel : ViewModel() {
     fun addHashItem(list: ArrayList<CommendData>) {
         hashItems.addAll(list)
         hashItemsListData.value = hashItems
+        if (list.size < 10)
+            lastHashPage = true
     }
 
 
@@ -339,6 +374,12 @@ class PhotiViewModel : ViewModel() {
         ChipItem("맛집", false),
         ChipItem("안드로이드", false)
     )
+
+    fun addHashList(list: ArrayList<HashTag>) {
+        hashChips = arrayListOf()
+        list.forEach { hashChips.add(ChipItem(it.hashtag, false)) }
+        hashChipsListData.value = hashChips
+    }
 
     fun clickAllChip() {
         hashChips.forEach { it.select = false }
