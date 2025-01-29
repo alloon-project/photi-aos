@@ -8,19 +8,15 @@ import com.example.alloon_aos.data.model.response.FeedDate
 import com.example.alloon_aos.data.model.response.FeedHistoryData
 import com.example.alloon_aos.data.model.response.MyChallengeCount
 import com.example.alloon_aos.data.model.response.MyChallenges
-import com.example.alloon_aos.data.model.response.ProfileImageData
-import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
-import retrofit2.http.POST
-import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface UserApiService {
     @Headers("Content-Type: application/json")
 
-    @GET("/api/my-challenges")
+    @GET("/api/users/my-challenges")
     suspend fun get_my_challenges(
         @Query("page") page: Int,
         @Query("size") size: Int,
@@ -47,7 +43,7 @@ interface UserApiService {
     ): Response<ApiResponse<EndedChallengeData>>
 
     @GET("/api/users/challenges")
-    suspend fun get_challenges(): Response<ApiResponse<MyChallengeCount>>
+    suspend fun get_challenges_count(): Response<ApiResponse<MyChallengeCount>>
 
     @GET("/api/users/challenge-history")
     suspend fun get_challenge_history(): Response<ApiResponse<ChallengeRecordData>>

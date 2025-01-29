@@ -22,6 +22,7 @@ import com.example.alloon_aos.data.model.response.EndedChallengeData
 import com.example.alloon_aos.data.model.response.FeedByDate
 import com.example.alloon_aos.data.model.response.FeedHistoryContent
 import com.example.alloon_aos.data.model.response.FeedHistoryData
+import com.example.alloon_aos.data.model.response.MyChallengeCount
 import com.example.alloon_aos.data.model.response.PagingListResponse
 import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.UserProfile
@@ -171,6 +172,9 @@ class PhotiViewModel : ViewModel() {
 
     private val _feedHistoryData = MutableLiveData<MutableList<FeedHistoryContent>>()
     val feedHistoryData: LiveData<MutableList<FeedHistoryContent>> get() = _feedHistoryData
+
+    private val _challengeCount = MutableLiveData<MyChallengeCount?>(null)
+    val challengeCount: LiveData<MyChallengeCount?> get() = _challengeCount
 
 
 
@@ -425,6 +429,24 @@ class PhotiViewModel : ViewModel() {
 
     fun updateCurrentItem(item: ProofShotItem) {
         currentItem = item
+    }
+
+
+    // 내 챌린지 갯수 조회
+    fun fetchChallengeCount() {
+        viewModelScope.launch {
+            handleApiCall(
+                call = { user_repository.getChallengesCount() },
+                onSuccess = { data ->
+                    _challengeCount.postValue(data)
+                    _code.postValue("200 OK")
+                },
+                onFailure = { errorCode ->
+                    _challengeCount.postValue(null)
+                    _code.postValue(errorCode)
+                }
+            )
+        }
     }
 
     fun fetchChallengeHistory() {

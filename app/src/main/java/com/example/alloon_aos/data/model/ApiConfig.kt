@@ -26,12 +26,12 @@ object ApiConfig {
         "/api/challenges/{challengeId}/join/private" to "POST", // 비공개 챌린지 참여하기
 
         // user
-        "/api/my-challenges" to "GET", // 사용자 참여중인 챌린지 조회
+        "/api/users/my-challenges" to "GET", // 사용자 참여중인 챌린지 조회
         "/api/users/feeds" to "GET",
         "/api/users/feeds-by-date" to "GET",
         "/api/users/feed-history" to "GET",
         "/api/users/ended-challenges" to "GET",
-        "/api/users/challenges" to "GET", // 챌린지 카운트 조회
+        "/api/users/challenges" to "GET", // 사용자 참여중인 챌린지 갯수 조회
         "/api/users/challenge-history" to "GET", // 챌린지 기록 조회
         "/api/users/image" to "POST", // 이미지 업로드
 

@@ -8,14 +8,12 @@ import com.example.alloon_aos.data.model.response.FeedDate
 import com.example.alloon_aos.data.model.response.FeedHistoryData
 import com.example.alloon_aos.data.model.response.MyChallengeCount
 import com.example.alloon_aos.data.model.response.MyChallenges
-import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.remote.UserApiService
-import okhttp3.MultipartBody
 import retrofit2.Response
 
 class UserRepository(private val apiService: UserApiService) {
 
-    //사용자 참옂 중인 챌린지 조회
+    //사용자 참여 중인 챌린지 조회
     suspend fun getMyChallenges(page: Int, size: Int): Response<ApiResponse<MyChallenges>> {
         return apiService.get_my_challenges(page, size)
     }
@@ -41,9 +39,8 @@ class UserRepository(private val apiService: UserApiService) {
         return apiService.get_ended_challenges(page, size)
     }
 
-    //참여중인 챌린지 갯수(어디서 사용?)
-    suspend fun getChallenges(): Response<ApiResponse<MyChallengeCount>> {
-        return apiService.get_challenges()
+    suspend fun getChallengesCount(): Response<ApiResponse<MyChallengeCount>> {
+        return apiService.get_challenges_count()
     }
 
     suspend fun getChallengeHistory(): Response<ApiResponse<ChallengeRecordData>> {

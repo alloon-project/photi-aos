@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
         noChallengeHome = HomeNoChallengeFragment()
         challengHome = HomeChallengeFragment()
 
-        val mActivity = activity as PhotiActivity
+        setObserve()
 
         return binding.root
     }
@@ -45,13 +45,20 @@ class HomeFragment : Fragment() {
         super.onStart()
 
         if (tokenManager.hasNoTokens()) {
-            //비회원
             childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
         } else {
-            //회원 챌린지 있음
-            //childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
-            //회원 챌린지 없음
-             childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
+            photiViewModel.fetchChallengeCount()
+        }
+    }
+
+    private fun setObserve() {
+        photiViewModel.challengeCount.observe(viewLifecycleOwner) { data ->
+            if(data != null) {
+                if (data.challengeCnt == 0)
+                    childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
+                else if (data.challengeCnt > 0)
+                    childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
+            }
         }
     }
 }
