@@ -10,8 +10,10 @@ import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
 import com.example.alloon_aos.data.model.response.CodeResponse
+import com.example.alloon_aos.data.model.response.Comment
 import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
+import com.example.alloon_aos.data.model.response.FeedContent
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
@@ -38,10 +40,10 @@ data class FeedInItem(
     var url: String? = null,
     var isClick: Boolean, //본인이 하트를 눌렀는지
     var heartCnt: Int = 0, //다른 사용자들이 누른 하트 수
-    val comments: ArrayList<Comment> = ArrayList()
+    val comments: ArrayList<Comments> = ArrayList()
 )
 
-data class Comment(
+data class Comments(
     val id: String,
     val text: String
 )
@@ -110,18 +112,18 @@ class FeedViewModel : ViewModel() {
     val isMissionClear = MutableLiveData(false) //api에서 받아올 오늘 미션관련 플래그
 
     //피드뷰
-    val comments = arrayListOf<Comment>(
-        Comment("aaa", "이 책 좋네요"),
-        Comment("abc", "멋져요"),
-        Comment("baa", "와우"),
-        Comment("Seul", "우왕굳 ㅋㅋ"),
-        Comment("HB", "짱~!"),
-        Comment("aaa", "엄청긴댓글입니다아홉열열하나다여"),
-        Comment("aaa", "이 책 좋네요"),
-        Comment("abc", "멋져요"),
-        Comment("aaa", "엄청긴댓글입니다아홉열열하나다여"),
-        Comment("긴아이디입니다아아앙아앙", "오늘은 정말 기분 좋은 날이야."),
-        Comment("긴아이디입니다아아앙아앙", "행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.")
+    val comments = arrayListOf<Comments>(
+        Comments("aaa", "이 책 좋네요"),
+        Comments("abc", "멋져요"),
+        Comments("baa", "와우"),
+        Comments("Seul", "우왕굳 ㅋㅋ"),
+        Comments("HB", "짱~!"),
+        Comments("aaa", "엄청긴댓글입니다아홉열열하나다여"),
+        Comments("aaa", "이 책 좋네요"),
+        Comments("abc", "멋져요"),
+        Comments("aaa", "엄청긴댓글입니다아홉열열하나다여"),
+        Comments("긴아이디입니다아아앙아앙", "오늘은 정말 기분 좋은 날이야."),
+        Comments("긴아이디입니다아아앙아앙", "행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.")
     )
 
     val feedInItems = arrayListOf<FeedInItem>(
@@ -159,8 +161,8 @@ class FeedViewModel : ViewModel() {
     private val _code = MutableLiveData<String>()
     val code: LiveData<String> get() = _code
 
-    private val _challengeFeeds = MutableLiveData<ChallengeFeedsData?>()
-    val challengeFeeds: MutableLiveData<ChallengeFeedsData?> get() = _challengeFeeds
+    private val _challengeFeeds = MutableLiveData<List<FeedContent>?>()
+    val challengeFeeds: MutableLiveData<List<FeedContent>?> get() = _challengeFeeds
 
     private val _challenge = MutableLiveData<FeedChallengeData?>()
     val challenge: LiveData<FeedChallengeData?> get() = _challenge
@@ -174,8 +176,8 @@ class FeedViewModel : ViewModel() {
     private val _challengeMembers = MutableLiveData<List<ChallengeMember>?>()
     val challengeMembers: LiveData<List<ChallengeMember>?> get() = _challengeMembers
 
-    private val _feedComments = MutableLiveData<FeedCommentsData?>()
-    val feedComments: LiveData<FeedCommentsData?> get() = _feedComments
+    private val _feedComments = MutableLiveData<List<Comment>?>()
+    val feedComments: LiveData<List<Comment>?> get() = _feedComments
 
     private val _updateGoalResponse = MutableLiveData<SuccessMessageReponse?>()
     val updateGoalResponse: LiveData<SuccessMessageReponse?> get() = _updateGoalResponse
@@ -218,14 +220,16 @@ class FeedViewModel : ViewModel() {
 
     fun fetchChallengeFeeds(
         page: Int = 0,
-        size: Int = 10,
+        size: Int = 30,
         sort: String = "LATEST"
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             handleApiCall(
                 call = { feedRepository.getChallengeFeeds(challengeId, page, size, sort) },
                 onSuccess = { data ->
-                    _challengeFeeds.postValue(data)
+                    if (data != null) {
+                        _challengeFeeds.postValue(data.content)
+                    }
                 },
                 onFailure = { errorCode ->
                     _challengeFeeds.postValue(null)
@@ -270,7 +274,8 @@ class FeedViewModel : ViewModel() {
             handleApiCall(
                 call = { feedRepository.getFeedComments(feedId, page, size) },
                 onSuccess = { data ->
-                    _feedComments.postValue(data)
+                    if(data != null)
+                     _feedComments.postValue(data.content)
                 },
                 onFailure = { errorCode ->
                     _feedComments.postValue(null)
@@ -280,20 +285,6 @@ class FeedViewModel : ViewModel() {
         }
     }
 
-//    fun updateGoal( goal: Map<String, String>) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            handleApiCall(
-//                call = { feedRepository.updateGoal(challengeId, goal) },
-//                onSuccess = { data ->
-//                    _updateGoalResponse.postValue(data)
-//                },
-//                onFailure = { errorCode ->
-//                    _updateGoalResponse.postValue(null)
-//                    _code.postValue(errorCode)
-//                }
-//            )
-//        }
-//    }
 
 //    fun postChallengeFeed(challengeId: Long, image: MultipartBody.Part, description: String) {
 //        viewModelScope.launch(Dispatchers.IO) {

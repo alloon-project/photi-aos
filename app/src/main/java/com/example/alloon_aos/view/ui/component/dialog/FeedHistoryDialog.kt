@@ -84,8 +84,6 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
                 }
             }
         }
-
-
     }
 
     private fun observeLiveData() {
@@ -120,7 +118,6 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
     class FeedHistoryAdapter(): ListAdapter<FeedHistoryContent,FeedHistoryAdapter.ViewHolder>(DiffCallback()) {
         inner class ViewHolder(var binding: ItemProofShotsGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(data:FeedHistoryContent) {
-
                 Glide.with(binding.challengeImgView.context)
                     .load(data.imageUrl)
                     .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))

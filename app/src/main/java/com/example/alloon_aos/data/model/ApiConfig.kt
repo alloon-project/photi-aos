@@ -38,6 +38,10 @@ object ApiConfig {
         //feed
         "/api/challenges/{challengeId}/info" to "GET",
         "/api/challenges/{challengeId}/challenge-members" to "GET",
+        "/api/challenges/{challengeId}/feeds" to mapOf(
+            "POST" to "챌린지 피드 인증", // 챌린지 탈퇴
+            "GET" to "챌린지 피드 조회" // 챌린지 개별 조회
+        ),
     )
 
 

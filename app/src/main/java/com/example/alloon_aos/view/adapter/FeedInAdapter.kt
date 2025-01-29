@@ -3,59 +3,58 @@ package com.example.alloon_aos.view.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.ItemFeedCommentBinding
+import com.example.alloon_aos.data.model.response.Feed
 import com.example.alloon_aos.databinding.ItemFeedDefaultInBinding
 import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog
 import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
-import com.example.alloon_aos.viewmodel.Comment
-import com.example.alloon_aos.viewmodel.FeedInItem
+
 interface OnFeedDeletedListener {
     fun onFeedDeleted(position: Int)
 }
 
-class FeedInAdapter(
-    private val fragmentManager: FragmentManager,
-    private val feedInItems: ArrayList<FeedInItem>
-) : RecyclerView.Adapter<FeedInAdapter.ViewHolder>(), OnFeedDeletedListener {
+class FeedInAdapter(private val fragmentManager: FragmentManager):
+    ListAdapter<Feed, FeedInAdapter.ViewHolder>(DiffCallback()), OnFeedDeletedListener {
     inner class ViewHolder(var binding: ItemFeedDefaultInBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun setContents(holder: ViewHolder, pos: Int) {
-            with(feedInItems[pos]) {
-                binding.idTextView.text = id
-                binding.timeTextView.text = time
+        fun bind(data : Feed) {
+            with(data) {
+                binding.idTextView.text = username
+                binding.timeTextView.text = createdDateTime
 
-                if (isClick) {
-                    binding.heartButton.setImageResource(R.drawable.ic_heart_filled)
-                    binding.heartButton.setColorFilter(R.color.gray700)
-                } else {
-                    binding.heartButton.setImageResource(R.drawable.ic_heart_empty)
-                    binding.heartButton.setColorFilter(R.color.gray700)
-                }
+                //heart 여부
+//                if (isClick) {
+//                    binding.heartButton.setImageResource(R.drawable.ic_heart_filled)
+//                    binding.heartButton.setColorFilter(R.color.gray700)
+//                } else {
+//                    binding.heartButton.setImageResource(R.drawable.ic_heart_empty)
+//                    binding.heartButton.setColorFilter(R.color.gray700)
+//                }
 
                 Glide
-                    .with(holder.itemView.context)
-                    .load(url)
+                    .with(binding.imgView.context)
+                    .load(imageUrl)
                     .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))
                     .into(binding.imgView)
 
                 binding.feed.setOnClickListener {
-                    FeedDetailDialog(pos,this@FeedInAdapter)
-                        .show(fragmentManager,"tag")
+                    FeedDetailDialog(data.id,this@FeedInAdapter)
+                        .show(fragmentManager,"FeedDetailDialog")
                 }
 
-                binding.heartButton.setOnClickListener {
-                    isClick = !isClick
-                    if (isClick) {
-                        binding.heartButton.setImageResource(R.drawable.ic_heart_filled)
-                        binding.heartButton.setColorFilter(R.color.gray700)
-                    } else {
-                        binding.heartButton.setImageResource(R.drawable.ic_heart_empty)
-                        binding.heartButton.setColorFilter(R.color.gray700)
-                    }
-                }
+//                binding.heartButton.setOnClickListener {
+//                    isClick = !isClick
+//                    if (isClick) {
+//                        binding.heartButton.setImageResource(R.drawable.ic_heart_filled)
+//                        binding.heartButton.setColorFilter(R.color.gray700)
+//                    } else {
+//                        binding.heartButton.setImageResource(R.drawable.ic_heart_empty)
+//                        binding.heartButton.setColorFilter(R.color.gray700)
+//                    }
+//                }
             }
         }
     }
@@ -65,14 +64,29 @@ class FeedInAdapter(
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.setContents(viewHolder, position)
+    override fun onBindViewHolder(holder: FeedInAdapter.ViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount() = feedInItems.size
+    class DiffCallback : DiffUtil.ItemCallback<Feed>() {
+        override fun areItemsTheSame(
+            oldItem: Feed,
+            newItem: Feed
+        ): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(
+            oldItem: Feed,
+            newItem: Feed
+        ): Boolean {
+            return oldItem == newItem
+        }
+    }
+
     override fun onFeedDeleted(position: Int) {
-        feedInItems.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, feedInItems.size - position)
+        val currentList = currentList.toMutableList() // 현재 리스트를 변경 가능한 MutableList로 변환
+        currentList.removeAt(position) // 해당 위치의 아이템 삭제
+        submitList(currentList) // 새로운 리스트를 적용 (DiffUtil 자동 반영)
     }
 }

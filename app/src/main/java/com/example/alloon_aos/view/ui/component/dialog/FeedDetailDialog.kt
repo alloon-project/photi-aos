@@ -23,25 +23,29 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.model.response.Comment
 import com.example.alloon_aos.databinding.CustomPopupMenuBinding
 import com.example.alloon_aos.databinding.DialogFeedDetailBinding
 import com.example.alloon_aos.databinding.ItemFeedCommentBinding
 import com.example.alloon_aos.view.adapter.OnFeedDeletedListener
-import com.example.alloon_aos.viewmodel.Comment
+import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.FeedInItem
 import com.example.alloon_aos.viewmodel.FeedViewModel
 
-class FeedDetailDialog(val index: Int,private val listener: OnFeedDeletedListener) : DialogFragment(),CustomTwoButtonDialogInterface  {
+class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListener) : DialogFragment(),CustomTwoButtonDialogInterface  {
     private var _binding: DialogFeedDetailBinding? = null
     private val binding get() = _binding!!
     private val feedViewModel by activityViewModels<FeedViewModel>()
+    private lateinit var adapter:CommentsAdapter
     private var isFirstInput = true
     private var isFirstAdd = true
 
@@ -49,64 +53,119 @@ class FeedDetailDialog(val index: Int,private val listener: OnFeedDeletedListene
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = DialogFeedDetailBinding.inflate(inflater, container, false)
         val view = binding.root
-        val feed = feedViewModel.feedInItems[index]
 
-        with(binding) {
-            idTextView.text = feed.id
-            heartCntTextView.text = if (feed.heartCnt == 0) "" else feed.heartCnt.toString()
-            heartBtn.setImageResource(if (feed.isClick) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
+        setupRecyclerView()
+        observeLiveData()
 
-            Glide.with(root)
-                .load(feed.url)
-                .into(feedImgView)
+        binding.backImgBtn.setOnClickListener {
+            dismiss()
+        }
 
-            commentsRecyclerView.adapter = CommentsAdapter(feed.comments)
-            commentsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            commentsRecyclerView.setHasFixedSize(true)
+        binding.ellipsisImgBtn.setOnClickListener { view ->
+            setCustomPopUp(view)
+        }
 
-            backImgBtn.setOnClickListener {
-                dismiss()
-            }
+        feedViewModel.fetchChallengeFeedDetail(feedId)
+        feedViewModel.fetchFeedComments(feedId)
 
-            ellipsisImgBtn.setOnClickListener { view ->
-                setCustomPopUp(view)
-            }
+        return view
+    }
 
-            heartBtn.setOnClickListener {
-                updateHeartCountView(heartBtn, heartCntTextView, feed)
-            }
+    private fun setupRecyclerView() {
+        adapter = CommentsAdapter()
+        binding.commentsRecyclerView.adapter = adapter
+        binding.commentsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        //TODO 댓글 페이징
+//        binding.scrollView.setOnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
+//            val nestedScrollView = v as NestedScrollView
+//
+//            // NestedScrollView의 총 높이와 현재 스크롤 위치 확인
+//            if (scrollY == (nestedScrollView.getChildAt(0).measuredHeight - nestedScrollView.measuredHeight)) {
+//                val layoutManager = binding.challengeRecyclerview.layoutManager as GridLayoutManager
+//                val totalItemCount = layoutManager.itemCount
+//                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+//
+//                if (!photiViewModel.isLoading && !photiViewModel.isLastPage) {
+//                    if (lastVisibleItemPosition == totalItemCount - 1) {
+//                        photiViewModel.fetchFeedHistory()
+//                    }
+//                }
+//            }
+//        }
+    }
 
 
-            commentEditText.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {}
+    private fun observeLiveData() {
+        feedViewModel.code.observe(viewLifecycleOwner) { code ->
+            handleApiError(code)
+        }
 
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        feedViewModel.challengeFeedDetail.observe(viewLifecycleOwner) { data ->
+            with(binding) {
+                if (data != null) {
+                    idTextView.text = data.username
+                    heartCntTextView.text = if (data.likeCnt == 0) "" else data.likeCnt.toString()
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s == null)
-                        textLengthTextView.text = "0/16"
-                    else{
-                        textLengthTextView.text = s.length.toString()+"/16"
+                    //TODO 사용자가 heart click 여부
+                    // heartBtn.setImageResource(if (feed.isClick) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
 
-                        if(isFirstInput){
-                            showCustomToast(addCommentToastLayout)
-                            isFirstInput = false
-                        }
+//                    heartBtn.setOnClickListener {
+//                        updateHeartCountView(heartBtn, heartCntTextView, feed)
+//                    }
 
+                    Glide.with(feedImgView)
+                        .load(data.feedImageUrl)
+                        .into(feedImgView)
+
+                    if(data.userImageUrl != ""){
+                        Glide.with(profileImageView)
+                            .load(data.userImageUrl)
+                            .transform(CenterCrop())
+                            .into(profileImageView)
                     }
 
-                }
-            })
+                    commentEditText.addTextChangedListener(object : TextWatcher {
+                        override fun afterTextChanged(s: Editable?) {}
 
-            commentEditText.setOnEditorActionListener { view, i, event ->
-                if(i == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
-                    val newCommentText = commentEditText.text.toString()
+                        override fun beforeTextChanged(
+                            s: CharSequence?,
+                            start: Int,
+                            count: Int,
+                            after: Int
+                        ) {
+                        }
 
-                    if(newCommentText.isNotEmpty()){
-                        addComment(feed,newCommentText,commentsRecyclerView)
-                        commentEditText.setText("")
+                        override fun onTextChanged(
+                            s: CharSequence?,
+                            start: Int,
+                            before: Int,
+                            count: Int
+                        ) {
+                            if (s == null)
+                                textLengthTextView.text = "0/16"
+                            else {
+                                textLengthTextView.text = s.length.toString() + "/16"
 
-                        if(isFirstAdd){
+                                if (isFirstInput) {
+                                    showCustomToast(addCommentToastLayout)
+                                    isFirstInput = false
+                                }
+
+                            }
+
+                        }
+                    })
+
+                    commentEditText.setOnEditorActionListener { view, i, event ->
+                        if (i == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
+                            val newCommentText = commentEditText.text.toString()
+
+                            if (newCommentText.isNotEmpty()) {
+                                addComment(newCommentText)
+                                commentEditText.setText("")
+
+                                if (isFirstAdd) {
 //                            commentsRecyclerView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
 //                                override fun onLayoutChange(
 //                                    v: View?,
@@ -127,22 +186,43 @@ class FeedDetailDialog(val index: Int,private val listener: OnFeedDeletedListene
 //                                }
 //                            })
 
-                            isFirstAdd = false
-                        }
+                                    isFirstAdd = false
+                                }
+                            }
+                            true
+                        } else false
                     }
-                    true
-                } else false
+                }
             }
         }
 
-        return view
+        feedViewModel.feedComments.observe(viewLifecycleOwner){
+            data ->
+            adapter.submitList(data?.toList() ?: emptyList())
+        }
     }
 
-    private fun addComment(feed: FeedInItem, commentText: String, recyclerView: RecyclerView) {
-        val newComment = Comment(id = feedViewModel.id, text = commentText)
-        feed.comments.add(newComment)
-        recyclerView.adapter?.notifyItemInserted(feed.comments.size - 1)
-        recyclerView.scrollToPosition(feed.comments.size - 1)
+    private fun handleApiError(code: String) {
+        val errorMessages = mapOf(
+            "TOKEN_UNAUTHENTICATED" to "승인 되지 않은 요청입니다. 다시 로그인 해주세요.",
+            "TOKEN_UNAUTHORIZED" to "권한이 없는 요청입니다. 로그인 후 다시 시도해주세요.",
+            "UNKNOWN_ERROR" to "알 수 없는 오류가 발생 했습니다."
+        )
+
+        if (code == "200 OK") {
+            return
+        }
+
+        if (code == "IO_Exception") {
+            CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+        } else {
+            val message = errorMessages[code] ?: "예기치 않은 오류가 발생했습니다. ($code)"
+            Log.e("FeedCountDialog", "Error: $message")
+        }
+    }
+
+    private fun addComment(commentText: String, ) {
+        //댓글 추가 api
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -259,15 +339,18 @@ class FeedDetailDialog(val index: Int,private val listener: OnFeedDeletedListene
         popupWindow.showAsDropDown(view, 0, 0, Gravity.CENTER)
     }
 
-    class CommentsAdapter(val comments: ArrayList<Comment>): RecyclerView.Adapter<CommentsAdapter.ViewHolder>() {
+    class CommentsAdapter: ListAdapter<Comment, CommentsAdapter.ViewHolder>(
+        DiffCallback()
+    ) {
         inner class ViewHolder(var binding: ItemFeedCommentBinding) : RecyclerView.ViewHolder(binding.root) {
-            fun setContents(holder: ViewHolder, pos: Int) {
-                with(comments[pos]) {
-                    binding.idTextView.text = id
-                    binding.commentTextView.text = text
+            fun bind(data : Comment) {
+                with(data) {
+                    binding.idTextView.text = username
+                    binding.commentTextView.text = comment
 
-                    holder.itemView.setOnLongClickListener {
-                        removeComment(pos)
+                    //TODO 내 인증인 경우만 삭제되게
+                    binding.commentLayout.setOnLongClickListener {
+                        //댓글 삭제 api
                         true
                     }
                 }
@@ -279,22 +362,31 @@ class FeedDetailDialog(val index: Int,private val listener: OnFeedDeletedListene
             return ViewHolder(view)
         }
 
-        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-            viewHolder.setContents(viewHolder, position)
+        override fun onBindViewHolder(holder: ViewHolder,  position: Int) {
+            holder.bind(getItem(position))
         }
 
-        override fun getItemCount() = comments.size
+        class DiffCallback : DiffUtil.ItemCallback<Comment>() {
+            override fun areItemsTheSame(
+                oldItem: Comment,
+                newItem: Comment
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
 
-        private fun removeComment(position: Int) {
-            comments.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, comments.size)
+            override fun areContentsTheSame(
+                oldItem: Comment,
+                newItem: Comment
+            ): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 
     override fun onClickFisrtButton() {}
 
     override fun onClickSecondButton() {
-        listener.onFeedDeleted(index)
+        //TODO 삭제
+        //listener.onFeedDeleted(index)
     }
 }

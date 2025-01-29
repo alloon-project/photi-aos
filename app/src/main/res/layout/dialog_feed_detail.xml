@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView8"
+                android:id="@+id/profile_imageView"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginLeft="18dp"
@@ -78,9 +78,9 @@
                 android:textColor="@color/white"
                 android:textSize="14dp"
                 android:layout_marginLeft="6dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView8"
-                app:layout_constraintStart_toEndOf="@+id/imageView8"
-                app:layout_constraintTop_toTopOf="@+id/imageView8" />
+                app:layout_constraintBottom_toBottomOf="@+id/profile_imageView"
+                app:layout_constraintStart_toEndOf="@+id/profile_imageView"
+                app:layout_constraintTop_toTopOf="@+id/profile_imageView" />
 
             <ImageButton
                 android:id="@+id/heart_btn"

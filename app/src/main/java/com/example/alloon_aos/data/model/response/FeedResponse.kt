@@ -18,7 +18,7 @@ data class FeedContent(
 )
 
 data class Feed(
-    val id: Long, // 1
+    val id: Int, // 1
     val username: String, // "photi"
     val imageUrl: String, // "https://url.kr/5MhHhD"
     val createdDateTime: String, // "2024-12-08T07:44:51.349Z"
