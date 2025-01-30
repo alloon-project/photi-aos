@@ -34,6 +34,7 @@ class ChallengeViewModel : ViewModel() {
     private val repository = ChallengeRepository(challengeService)
 
     val apiResponse = MutableLiveData<ActionApiResponse>()
+    val joinResponse = MutableLiveData<ActionApiResponse>()
 
     var id = -1
     var name = ""
@@ -53,6 +54,7 @@ class ChallengeViewModel : ViewModel() {
 
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
+        joinResponse.value = ActionApiResponse()
     }
 
     fun setChallengeId(id: Int) {
@@ -187,7 +189,6 @@ class ChallengeViewModel : ViewModel() {
         }
     }
 
-
     fun createChallenge(context : Context) {
         makeFile(context) { file ->
             if (file != null) {
@@ -212,18 +213,34 @@ class ChallengeViewModel : ViewModel() {
         }
     }
 
-    fun getInviteCode() {
-        repository.getChallengeCode(id, object : ChallengeRepositoryCallback<CodeResponse> {
-            override fun onSuccess(data: CodeResponse) {
+    fun joinPublicChallenge() {
+        repository.joinPublicChallenge(id, object  : ChallengeRepositoryCallback<MessageResponse> {
+            override fun onSuccess(data: MessageResponse) {
                 val result = data.code
                 val mes = data.message
-                setInviteCode(data.data.invitationCode)
-                //apiResponse.value = ActionApiResponse(result)
-                Log.d(TAG, "getInviteCode: $mes $result $invitecode")
+                joinResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "joinPublicChallenge: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {
-                handleFailure(error)
+                val errorCode = ErrorHandler.handle(error)
+                joinResponse.value = ActionApiResponse(errorCode)
+            }
+        })
+    }
+
+    fun joinPrivateChallenge() {
+        repository.joinPrivateChallenge(id, invitecode, object  : ChallengeRepositoryCallback<MessageResponse> {
+            override fun onSuccess(data: MessageResponse) {
+                val result = data.code
+                val mes = data.message
+                joinResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "joinPrivateChallenge: $mes $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                val errorCode = ErrorHandler.handle(error)
+                joinResponse.value = ActionApiResponse(errorCode)
             }
         })
     }

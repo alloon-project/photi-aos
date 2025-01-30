@@ -22,9 +22,8 @@ import com.example.alloon_aos.viewmodel.GoalViewModel
 
 class GoalActivity : AppCompatActivity() {
     lateinit var binding : ActivityGoalBinding
-    lateinit var isFrom : String
     private val goalViewModel : GoalViewModel by viewModels()
-    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
+    private var isFromFeed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +31,7 @@ class GoalActivity : AppCompatActivity() {
 
         goalViewModel.resetApiResponseValue()
 
-        val isFromFeedActivity = intent.getBooleanExtra("IS_FROM_FEED_ACTIVITY", false)
-        if (isFromFeedActivity)
-            isFrom = "feed"
-        else
-            isFrom = "join"
+        isFromFeed = intent.getBooleanExtra("IS_FROM_FEED_ACTIVITY", false)
 
         val id = intent.getIntExtra("ID", -1)
         id.let {
@@ -45,18 +40,21 @@ class GoalActivity : AppCompatActivity() {
         val goal = intent.getStringExtra("GOAL")
         goal?.let {
             goalViewModel.goal = it
+            binding.goalEdittext.setText(it)
+            binding.numTextview.setText("${it.length}/16")
         }
         val title = intent.getStringExtra("TITLE")
         title?.let {
             binding.title.setText(it)
         }
-        val code = intent.getStringExtra("Code")
-        code?.let {
-            goalViewModel.code = it
-        }
 
         binding.actionBar.setNavigationIcon(R.drawable.ic_back)
 
+        if (isFromFeed) {
+            if (goalViewModel.goal.isEmpty())
+                binding.nextBtn.isEnabled = false
+            setBtnBlue()
+        }
         setListener()
         setObserver()
     }
@@ -89,36 +87,48 @@ class GoalActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.numTextview.setText("${s!!.length}/16")
                 if (s!!.isEmpty()) {
-                    binding.nextBtn.setBackgroundResource(R.drawable.btn_round_quaternary)
-                    binding.nextBtn.setText(R.string.skip)
-                    binding.nextBtn.setTextColor(this@GoalActivity.getColor(R.color.gray600))
-                    goalViewModel.goal = ""
+                    if (isFromFeed) {
+                        binding.nextBtn.isEnabled = false
+                        setBtnBlue()
+                    } else {
+                        goalViewModel.goal = ""
+                        setBtnGray()
+                    }
                 } else {
-                    binding.nextBtn.setBackgroundResource(R.drawable.btn_round_primary)
-                    binding.nextBtn.setText(R.string.save)
-                    binding.nextBtn.setTextColor(this@GoalActivity.getColor(R.color.white))
+                    binding.nextBtn.isEnabled = true
                     goalViewModel.goal = s!!.toString()
+                    setBtnBlue()
                 }
             }
         })
 
         binding.nextBtn.setOnClickListener {
-            if (isFrom == "feed") {
+            if (goalViewModel.goal.isEmpty())
+                startToActivity()
+            else
                 goalViewModel.setGoal()
-            } else {
-                if (goalViewModel.code.isEmpty())
-                    goalViewModel.joinPublicChallenge()
-                else
-                    goalViewModel.joinPrivateChallenge()
-            }
         }
+    }
+
+    fun setBtnBlue() {
+        binding.nextBtn.setBackgroundResource(R.drawable.btn_round_primary)
+        binding.nextBtn.setText(R.string.save)
+        binding.nextBtn.setTextColor(this@GoalActivity.getColor(R.color.white))
+    }
+    fun setBtnGray() {
+        binding.nextBtn.setBackgroundResource(R.drawable.btn_round_quaternary)
+        binding.nextBtn.setText(R.string.skip)
+        binding.nextBtn.setTextColor(this@GoalActivity.getColor(R.color.gray600))
     }
 
     fun setObserver() {
         goalViewModel.apiResponse.observe(this) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    returnResultToActivity()
+                    if (isFromFeed)
+                        returnResultToActivity()
+                    else
+                        startToActivity()
                 }
                 "CHALLENGE_MEMBER_NOT_FOUND" -> {
                     CustomToast.createToast(this, "존재하지 않는 챌린지 파티원입니다.")?.show()
@@ -128,38 +138,6 @@ class GoalActivity : AppCompatActivity() {
                 }
                 "TOKEN_UNAUTHORIZED" -> {
                     CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
-                }
-                "IO_Exception" -> {
-                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
-                }
-                else -> {
-                    Log.d("Observer", "Unhandled response code: ${response.code}")
-                }
-            }
-        }
-
-        goalViewModel.joinResponse.observe(this) { response ->
-            when (response.code) {
-                "200 OK" -> {
-                    startToActivity()
-                }
-                "CHALLENGE_INVITATION_CODE_INVALID" -> {
-                    CustomToast.createToast(this, "챌린지 초대 코드가 일치하지 않습니다.")?.show()
-                }
-                "TOKEN_UNAUTHENTICATED" -> {
-                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
-                }
-                "TOKEN_UNAUTHORIZED" -> {
-                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
-                }
-                "USER_NOT_FOUND" -> {
-                    CustomToast.createToast(this, "존재하지 않는 회원입니다.")?.show()
-                }
-                "CHALLENGE_NOT_FOUND" -> {
-                    CustomToast.createToast(this, "존재하지 않는 챌린지입니다.")?.show()
-                }
-                "EXISTING_CHALLENGE_MEMBER" -> {
-                    CustomToast.createToast(this, "이미 챌린지에 참여한 회원입니다.")?.show()
                 }
                 "IO_Exception" -> {
                     CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()

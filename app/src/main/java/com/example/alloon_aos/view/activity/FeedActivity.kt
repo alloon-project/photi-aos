@@ -126,6 +126,9 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 val resultValue = data?.getIntExtra("ID", -1)
                 resultValue?.let {
                     feedViewModel.challengeId = it
+                    //수정 result 이짝
+//                    feedViewModel.fetchChallenge()
+//                    feedViewModel.fetchChallengeMembers()
                     CustomToast.createToast(this,"챌린지 수정이 완료됐어요.")?.show()
                 }
             }

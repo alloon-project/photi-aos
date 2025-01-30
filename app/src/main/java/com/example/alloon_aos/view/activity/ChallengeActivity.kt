@@ -39,6 +39,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
     lateinit var id : String
     lateinit var isFrom : String
     lateinit var hashAdapter: RuleHashAdapter
+    private lateinit var privateCodeDialog: PrivateCodeDialog
     private val challengeViewModel : ChallengeViewModel by viewModels()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
@@ -87,6 +88,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         setLayout()
         setListener()
 
+        privateCodeDialog = PrivateCodeDialog(this, challengeViewModel)
         binding.actionBar.setNavigationIcon(R.drawable.ic_back)
 
         activityResultLauncher = registerForActivityResult(
@@ -146,8 +148,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                 binding.createBtn.visibility = View.GONE
                 binding.modifyBtn.visibility = View.GONE
 
-                if (!challengeViewModel.isPublic)
-                    challengeViewModel.getInviteCode()
+                setJoinObserve()
             }
             "create" -> {
                 CustomToast.createToast(this,"완성된 챌린지를 확인해볼까요? 찰칵~")?.show()
@@ -271,10 +272,10 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                     .show(this.supportFragmentManager!!, "CustomDialog")
             } else {
                 if (challengeViewModel.isPublic)
-                    startGoal()
-                else
-                    PrivateCodeDialog(this, challengeViewModel)
-                        .show(this.supportFragmentManager!!, "CustomDialog")
+                    challengeViewModel.joinPublicChallenge()
+                else {
+                    privateCodeDialog.show(this.supportFragmentManager!!, "CustomDialog")
+                }
             }
         }
 
@@ -287,41 +288,83 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         }
     }
 
+    fun setJoinObserve() {
+        challengeViewModel.joinResponse.observe(this) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    if (!challengeViewModel.isPublic)
+                        privateCodeDialog.returnSuccess()
+                    startGoal()
+                }
+                "CHALLENGE_INVITATION_CODE_INVALID" -> {
+                    if (!challengeViewModel.isPublic)
+                        privateCodeDialog.returnFail()
+                    CustomToast.createToast(this, "초대코드가 일치하지 않아요")?.show()
+                }
+                "TOKEN_UNAUTHENTICATED" -> {
+                    if (!challengeViewModel.isPublic)
+                        privateCodeDialog.returnFail()
+                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                }
+                "TOKEN_UNAUTHORIZED" -> {
+                    if (!challengeViewModel.isPublic)
+                        privateCodeDialog.returnFail()
+                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+                "USER_NOT_FOUND" -> {
+                    if (!challengeViewModel.isPublic)
+                        privateCodeDialog.returnFail()
+                    CustomToast.createToast(this, "존재하지 않는 회원입니다.")?.show()
+                }
+                "CHALLENGE_NOT_FOUND" -> {
+                    if (!challengeViewModel.isPublic)
+                        privateCodeDialog.returnFail()
+                    CustomToast.createToast(this, "존재하지 않는 챌린지입니다.")?.show()
+                }
+                "EXISTING_CHALLENGE_MEMBER" -> {
+                    if (!challengeViewModel.isPublic)
+                        privateCodeDialog.returnFail()
+                    CustomToast.createToast(this, "이미 챌린지에 참여한 회원입니다.")?.show()
+                }
+                "IO_Exception" -> {
+                    if (!challengeViewModel.isPublic)
+                        privateCodeDialog.returnFail()
+                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
+        }
+    }
+
     fun setCreateObserve() {
         challengeViewModel.apiResponse.observe(this) { response ->
             when (response.code) {
                 "201 CREATED" -> {
                     startFeed()
                 }
-
                 "EMPTY_FILE_INVALID" -> {
                     CustomToast.createToast(this, "비어있는 파일은 저장할 수 없습니다.")?.show()
                 }
-
                 "TOKEN_UNAUTHENTICATED" -> {
                     CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
                 }
-
                 "TOKEN_UNAUTHORIZED" -> {
                     CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
                 }
-
                 "USER_NOT_FOUND" -> {
                     CustomToast.createToast(this, "존재하지 않는 회원입니다.")?.show()
                 }
-
                 "FILE_SIZE_EXCEED" -> {
                     CustomToast.createToast(this, "파일 사이즈는 8MB 이하만 가능합니다.")?.show()
                 }
-
                 "IMAGE_TYPE_UNSUPPORTED" -> {
                     CustomToast.createToast(this, "이미지는 '.jpeg', '.jpg', '.png', '.gif' 타입만 가능합니다.")?.show()
                 }
-
                 "IO_Exception" -> {
                     CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
                 }
-
                 else -> {
                     Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
@@ -335,39 +378,30 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                 "200 OK" -> {
                     returnFeed()
                 }
-
                 "TOKEN_UNAUTHENTICATED" -> {
                     CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
                 }
-
                 "TOKEN_UNAUTHORIZED" -> {
                     CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
                 }
-
                 "CHALLENGE_CREATOR_FORBIDDEN" -> {
                     CustomToast.createToast(this, "챌린지 파티장 권한이 없습니다.")?.show()
                 }
-
                 "CHALLENGE_MEMBER_NOT_FOUND" -> {
                     CustomToast.createToast(this, "존재하지 않는 챌린지 파티원입니다.")?.show()
                 }
-
                 "CHALLENGE_NOT_FOUND" -> {
                     CustomToast.createToast(this, "존재하지 않는 챌린지입니다.")?.show()
                 }
-
                 "FILE_SIZE_EXCEED" -> {
                     CustomToast.createToast(this, "파일 사이즈는 8MB 이하만 가능합니다.")?.show()
                 }
-
                 "IMAGE_TYPE_UNSUPPORTED" -> {
                     CustomToast.createToast(this, "이미지는 '.jpeg', '.jpg', '.png', '.gif' 타입만 가능합니다.")?.show()
                 }
-
                 "IO_Exception" -> {
                     CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
                 }
-
                 else -> {
                     Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
@@ -375,11 +409,8 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         }
     }
 
-    override fun onResultSuccess() {
-        startGoal()
-    }
-    override fun onResultFail() {
-        CustomToast.createToast(this, "초대코드가 일치하지 않아요")?.show()
+    override fun onClickJoinBtn() {
+        challengeViewModel.joinPrivateChallenge()
     }
 
     override fun onClickLoginButton() {
@@ -391,8 +422,6 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         val intent = Intent(this, GoalActivity::class.java)
         intent.putExtra("ID",challengeViewModel.id)
         intent.putExtra("TITLE",challengeViewModel.name)
-        if (challengeViewModel.isPublic)
-            intent.putExtra("Code",challengeViewModel.invitecode)
         startActivity(intent)
     }
 

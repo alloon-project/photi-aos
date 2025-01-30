@@ -23,10 +23,6 @@ data class ModifyData(
     var hashtags: List<HashTag> = emptyList(),
     var imageFile: MultipartBody.Part? = null
 )
-data class JoinData(
-    var invitationCode: String? = null,
-    var goal: String? = null
-)
 
 @Parcelize
 data class Rule(
@@ -42,6 +38,9 @@ data class MemberImg(
 ): Parcelable
 data class Goal(
     val goal: String
+)
+data class InviteCode(
+    val invitationCode: String
 )
 
 

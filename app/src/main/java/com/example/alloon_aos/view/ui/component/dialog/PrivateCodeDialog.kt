@@ -15,8 +15,7 @@ import com.example.alloon_aos.databinding.DialogPrivateCodeBinding
 import com.example.alloon_aos.viewmodel.ChallengeViewModel
 
 interface PrivateCodeDialogInterface {
-    fun onResultSuccess()
-    fun onResultFail()
+    fun onClickJoinBtn()
 }
 
 class PrivateCodeDialog(val privateCodeDialogInterface: PrivateCodeDialogInterface,
@@ -36,7 +35,7 @@ class PrivateCodeDialog(val privateCodeDialogInterface: PrivateCodeDialogInterfa
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s!!.isEmpty())
+                if (s!!.length < 5)
                     binding.codeBtn.isEnabled = false
                 else
                     binding.codeBtn.isEnabled = true
@@ -44,21 +43,26 @@ class PrivateCodeDialog(val privateCodeDialogInterface: PrivateCodeDialogInterfa
         })
 
         binding.codeBtn.setOnClickListener {
-            val code = binding.codeEdittext.text.toString()
-            if (code == challengeViewModel.invitecode) {
-                binding.codeBtn.setBackgroundResource(R.drawable.btn_icon_secondary)
-                binding.codeBtn.setImageResource(R.drawable.ic_lock_open)
-                privateCodeDialogInterface.onResultSuccess()
-                dismiss()
-            } else {
-                privateCodeDialogInterface.onResultFail()
-            }
+            challengeViewModel.invitecode = binding.codeEdittext.text.toString()
+            privateCodeDialogInterface.onClickJoinBtn()
         }
 
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         return view
+    }
+
+    fun returnSuccess() {
+        if (binding != null) {
+            binding.codeBtn.setBackgroundResource(R.drawable.btn_icon_secondary)
+            binding.codeBtn.setImageResource(R.drawable.ic_lock_open)
+            dismiss()
+        }
+    }
+    fun returnFail() {
+        if (binding != null)
+            binding.codeBtn.isEnabled = false
     }
 
     override fun onStart() {
