@@ -13,7 +13,6 @@ import com.example.alloon_aos.data.model.request.MemberImg
 import com.example.alloon_aos.data.model.request.ModifyData
 import com.example.alloon_aos.data.model.request.Rule
 import com.example.alloon_aos.data.model.response.ChallengeResponse
-import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
@@ -74,11 +73,6 @@ class ChallengeViewModel : ViewModel() {
         memberImages = data.memberImages
     }
 
-    fun getData() : MyData { //테스트용
-        var data = MyData(name, isPublic, goal, proveTime, endDate, rules, hashs)
-        return data
-    }
-
     fun setTitleData(title: String) { name = title }
     fun setTimeData(time: String) { proveTime = time }
     fun setGoalData(goal: String) { this.goal = goal }
@@ -91,9 +85,6 @@ class ChallengeViewModel : ViewModel() {
     }
     fun setIsUri(boolean: Boolean) {
         isUri = boolean
-    }
-    fun setInviteCode(code: String) {
-        invitecode = code
     }
 
 

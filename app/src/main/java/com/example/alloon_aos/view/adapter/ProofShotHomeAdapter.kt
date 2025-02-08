@@ -6,18 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.alloon_aos.R
-import com.example.alloon_aos.databinding.ItemCreateImageRecyclerviewBinding
 import com.example.alloon_aos.databinding.ItemProofshotCompleteViewpagerBinding
 import com.example.alloon_aos.databinding.ItemProofshotViewpagerBinding
-import com.example.alloon_aos.databinding.ItemSelectImageRecyclerviewBinding
 import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
-import com.example.alloon_aos.viewmodel.ProofShotItem
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel,
-                           private val onItemClickListener: (Int) -> Unit) :
+                           private val onProofItemClickListener: (Int) -> Unit,
+                           private val onCompleteClickListener: (Int) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -30,11 +26,11 @@ class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel,
 
         fun setContents(pos: Int) {
             with (photiViewModel.proofItems[pos]) {
-                binding.bannerTextview.setText(title)
-                binding.timeTextview.setText(time)
+                binding.bannerTextview.setText(name)
+                binding.timeTextview.setText(proveTime)
                 binding.proofshotButton.setOnClickListener {
                     photiViewModel.updateCurrentItem(this)
-                    onItemClickListener(pos)
+                    onProofItemClickListener(pos)
                 }
             }
         }
@@ -45,15 +41,19 @@ class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel,
 
         fun setContents(pos: Int) {
             with (photiViewModel.completeItems[pos]) {
-                binding.bannerTextview.setText(title)
+                binding.bannerTextview.setText(name)
                 if(pos == photiViewModel.completeItems.size-1) {
                     binding.dividerGreen.visibility = View.GONE
                 }
 
                 Glide.with(binding.proofshotImageview.context)
-                    .load(url)
+                    .load(feedImageUrl)
                     .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))
                     .into(binding.proofshotImageview)
+
+                binding.root.setOnClickListener {
+                    onCompleteClickListener(id)
+                }
             }
         }
     }

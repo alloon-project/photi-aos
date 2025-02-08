@@ -17,32 +17,33 @@ import com.example.alloon_aos.view.ui.util.CustomRotationTransformation
 import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
-class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel) :
+class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel,
+                           private val onCardClickListener: (Int) -> Unit) :
     RecyclerView.Adapter<ChallengeCardAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: ItemHomeChallengeRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setContents(holder: ChallengeCardAdapter.ViewHolder, pos: Int) {
-            with (photiViewModel.proofItems[pos]) {
-                binding.titleTextView.text = title
-                binding.dateTextView.text = date
-                binding.timeTextView.text = time
+            with (photiViewModel.allItems[pos]) {
+                binding.titleTextView.text = name
+                binding.dateTextView.text = endDate
+                binding.timeTextView.text = proveTime
 
                 binding.chip1Btn.visibility = View.GONE
                 binding.chip2Btn.visibility = View.GONE
                 binding.chip3Btn.visibility = View.GONE
 
-                hashtag.forEachIndexed { index, hashtag ->
+                hashtags.forEachIndexed { index, hashtag ->
                     when (index) {
                         0 -> {
-                            binding.chip1Btn.text = hashtag
+                            binding.chip1Btn.text = hashtag.hashtag
                             binding.chip1Btn.visibility = View.VISIBLE
                         }
                         1 -> {
-                            binding.chip2Btn.text = hashtag
+                            binding.chip2Btn.text = hashtag.hashtag
                             binding.chip2Btn.visibility = View.VISIBLE
                         }
                         2 -> {
-                            binding.chip3Btn.text = hashtag
+                            binding.chip3Btn.text = hashtag.hashtag
                             binding.chip3Btn.visibility = View.VISIBLE
                         }
                     }
@@ -50,12 +51,12 @@ class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel) :
 
                 val multiOption = MultiTransformation(
                     CenterCrop(),
-                    RoundedCorners(6),
+                    RoundedCorners(8),
                 )
 
                 Glide
                     .with(holder.itemView.context)
-                    .load(url)
+                    .load(challengeImageUrl)
                     .apply(RequestOptions.bitmapTransform(multiOption))
                     .into(object : CustomTarget<Drawable>() {
                         override fun onResourceReady(a_resource: Drawable, a_transition: Transition<in Drawable>?) {
@@ -65,6 +66,10 @@ class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel) :
                         override fun onLoadCleared(placeholder: Drawable?) {
                         }
                     })
+
+                binding.root.setOnClickListener {
+                    onCardClickListener(id)
+                }
             }
         }
     }
@@ -79,6 +84,6 @@ class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel) :
 
     }
 
-    override fun getItemCount() = photiViewModel.proofItems.size
+    override fun getItemCount() = photiViewModel.allItems.size
 
 }

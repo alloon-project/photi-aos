@@ -23,7 +23,8 @@ data class ChallengeContent(
     val proveTime: String,
     val endDate: String,
     val hashtags: List<Hashtag>,
-    val feedImageUrl: String
+    val feedImageUrl: String,
+    val isProve: Boolean
 )
 
 data class Hashtag(

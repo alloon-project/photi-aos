@@ -1,6 +1,7 @@
 package com.example.alloon_aos.view.fragment.photi
 
 import ProofShotHomeTransformer
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -15,10 +16,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
-import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeChallengeBinding
+import com.example.alloon_aos.view.activity.FeedActivity
 import com.example.alloon_aos.view.adapter.ChallengeCardAdapter
 import com.example.alloon_aos.view.adapter.ProofShotHomeAdapter
 import com.example.alloon_aos.view.ui.component.dialog.UploadCardDialog
@@ -31,7 +31,7 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
     private lateinit var binding : FragmentHomeChallengeBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var proofShotHomeAdapter: ProofShotHomeAdapter
-    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
+    private lateinit var challengeCardAdapter: ChallengeCardAdapter
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private lateinit var photoUri: Uri
 
@@ -44,17 +44,19 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
         binding.viewModel = photiViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        proofShotHomeAdapter = ProofShotHomeAdapter(photiViewModel, onItemClickListener = { position ->
+        proofShotHomeAdapter = ProofShotHomeAdapter(photiViewModel, onProofItemClickListener = { position ->
             CameraHelper.checkPermissions(this) {
                 CameraHelper.takePicture(this, takePictureLauncher)
             }
-        })
+        }, onCompleteClickListener = { startFeedDetail(id) })
+
+        challengeCardAdapter = ChallengeCardAdapter(photiViewModel, onCardClickListener = { startFeedPage(it) })
 
         binding.viewPager2.adapter = proofShotHomeAdapter
         binding.viewPager2.offscreenPageLimit = 2
         binding.viewPager2.setPageTransformer(ProofShotHomeTransformer())
 
-        binding.myChallengeRecyclerview.adapter = ChallengeCardAdapter(photiViewModel)
+        binding.myChallengeRecyclerview.adapter = challengeCardAdapter
         binding.myChallengeRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.myChallengeRecyclerview.setHasFixedSize(true)
 
@@ -77,15 +79,38 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        photiViewModel.fetchMyChallenges()
+    }
+
     private fun setObserver() {
+        photiViewModel._allItems.observe(viewLifecycleOwner) {
+            proofShotHomeAdapter.notifyDataSetChanged()
+            challengeCardAdapter.notifyDataSetChanged()
+        }
         photiViewModel.proofPos.observe(viewLifecycleOwner) {
             binding.viewPager2.setCurrentItem(photiViewModel.proofItems.size + it, true)
             proofShotHomeAdapter.notifyDataSetChanged()
         }
     }
 
+    private fun startFeedPage(id: Int) {
+        val intent = Intent(requireContext(), FeedActivity::class.java)
+        intent.putExtra("CHALLENGE_ID", id)
+        startActivity(intent)
+    }
+
+    private fun startFeedDetail(id: Int) { //피드개별조회로 이동
+
+    }
+
     override fun onClickUploadButton() {
-        photiViewModel.completeProofShot(photoUri)
+        //여기에는 인증 api를 호출하고
+
+        //아래는 api 응답 성공하면 사용하는 아이들
+        photiViewModel.completeProof = true
+        photiViewModel.fetchMyChallenges()
         CustomToast.createToast(activity,"인증 완료! 오늘도 수고했어요!")?.show()
     }
 

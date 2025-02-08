@@ -1,6 +1,5 @@
 package com.example.alloon_aos.viewmodel
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,10 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.MyData
 import com.example.alloon_aos.data.model.CommendData
+import com.example.alloon_aos.data.model.MyChallengeData
 import com.example.alloon_aos.data.model.request.HashTag
 import com.example.alloon_aos.data.model.request.MemberImg
 import com.example.alloon_aos.data.model.request.Rule
 import com.example.alloon_aos.data.model.response.ApiResponse
+import com.example.alloon_aos.data.model.response.ChallengeContent
 import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeRecordData
@@ -34,7 +35,6 @@ import com.example.alloon_aos.data.repository.UserRepository
 import com.example.alloon_aos.data.repository.handleApiCall
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
 import org.threeten.bp.LocalDate
 
 data class Item(
@@ -45,23 +45,6 @@ data class Item(
 )
 
 data class ChipItem(val hash: String, var select: Boolean)
-data class ChallengeItem(
-    val title: String,
-    val data: String,
-    val time: String,
-    val content: String,
-    val url: String? = null,
-    var hashtag: MutableList<String>,
-    val member: String
-)
-
-data class ProofShotItem(
-    val title: String,
-    val date: String,
-    val time: String,
-    var url: Uri? = null,
-    var hashtag: MutableList<String>
-)
 
 class PhotiViewModel : ViewModel() {
     companion object {
@@ -92,6 +75,7 @@ class PhotiViewModel : ViewModel() {
     var memberImg: List<MemberImg> = listOf()
     var memberCnt = -1
     var imgFile = ""
+    var challengeCnt = 0
 
     var latestPage = 0
     var lastLatestPage = false
@@ -301,7 +285,7 @@ class PhotiViewModel : ViewModel() {
         })
     }
 
-    fun getHashList() {
+    fun getHashList() { //해시 리스트 조회
 
     }
 
@@ -407,28 +391,61 @@ class PhotiViewModel : ViewModel() {
 
 
     // 내 챌린지 조회
+    val _proofItems = MutableLiveData<ArrayList<MyChallengeData>>()
+    var proofItems = arrayListOf<MyChallengeData>()
+    val _completeItems = MutableLiveData<ArrayList<MyChallengeData>>()
+    var completeItems = arrayListOf<MyChallengeData>()
+    val _allItems = MutableLiveData<ArrayList<MyChallengeData>>()
+    var allItems = arrayListOf<MyChallengeData>()
+
     val proofPos = MutableLiveData<Int>() //현재 item
-    val proofItems = arrayListOf(
-        ProofShotItem("영화 챌린지", "~ 2024. 12. 1", "10시까지", null, mutableListOf("영화관람")),
-        ProofShotItem("면접 연습하기", "~ 2024. 8. 22", "8시까지", null, mutableListOf("취뽀", "스피치")),
-        ProofShotItem("헬스 챌린지", "~ 2024. 12. 1", "7시까지", null, mutableListOf("헬스", "요가")),
-        ProofShotItem("요리 챌린지", "~ 2024. 12. 1", "2시까찌", null, mutableListOf("요리")),
-        ProofShotItem("스터디 챌린지", "~ 2024. 12. 1", "8시까지", null, mutableListOf("어학", "자격증")),
-        ProofShotItem("소설 필사하기", "~ 2024. 9. 1", "12시까지", null, mutableListOf("고능해지자", "독서"))
-    )
+    var currentItem: MyChallengeData? = null
+    var completeProof = false
 
-    val completeItems = arrayListOf<ProofShotItem>()
-    lateinit var currentItem: ProofShotItem
-
-    fun completeProofShot(url: Uri) {
-        proofItems.remove(currentItem)
-        currentItem.url = url
-        completeItems.add(currentItem)
-        proofPos.value = completeItems.indexOf(currentItem)
+    fun updateCurrentItem(item: MyChallengeData) {
+        currentItem = item
     }
 
-    fun updateCurrentItem(item: ProofShotItem) {
-        currentItem = item
+    fun resetMyItems() {
+        proofItems = arrayListOf()
+        completeItems = arrayListOf()
+        allItems = arrayListOf()
+    }
+
+    fun setMyChallenge(list: List<ChallengeContent>) {
+        for (item in list) {
+            val newItem = MyChallengeData(item.id, item.name, item.challengeImageUrl, item.proveTime,
+                item.endDate, item.hashtags, item.feedImageUrl, item.isProve)
+            if (item.isProve)
+                completeItems.add(newItem)
+            else
+                proofItems.add(newItem)
+            allItems.add(newItem)
+        }
+        _proofItems.value = proofItems
+        _completeItems.value = completeItems
+        _allItems.value = allItems
+
+        if (completeProof) {
+            proofPos.value = completeItems.indexOf(currentItem)
+            completeProof = false
+        }
+    }
+
+    fun fetchMyChallenges() {
+        resetMyItems()
+        viewModelScope.launch {
+            handleApiCall(
+                call = { user_repository.getMyChallenges(0, challengeCnt) },
+                onSuccess = { data ->
+                    setMyChallenge(data!!.content)
+                    _code.postValue("200 OK")
+                },
+                onFailure = { errorCode ->
+                    _code.postValue(errorCode)
+                }
+            )
+        }
     }
 
 
@@ -438,6 +455,7 @@ class PhotiViewModel : ViewModel() {
             handleApiCall(
                 call = { user_repository.getChallengesCount() },
                 onSuccess = { data ->
+                    challengeCnt = data!!.challengeCnt
                     _challengeCount.postValue(data)
                     _code.postValue("200 OK")
                 },
@@ -448,6 +466,7 @@ class PhotiViewModel : ViewModel() {
             )
         }
     }
+
 
     fun fetchChallengeHistory() {
         viewModelScope.launch {
