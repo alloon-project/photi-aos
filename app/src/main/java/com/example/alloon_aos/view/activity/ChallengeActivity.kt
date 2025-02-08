@@ -198,7 +198,6 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
             }
             else -> {
                 binding.avatarMultipleLayout.visibility = View.VISIBLE
-                //binding.avatarThreeLayout.visibility = View.VISIBLE
                 binding.membernumTextview.text = "${cnt}명 합류"
                 loadImage(binding.multipleUser1ImageView, imgs.getOrNull(0)?.memberImage)
                 loadImage(binding.multipleUser2ImageView, imgs.getOrNull(1)?.memberImage)

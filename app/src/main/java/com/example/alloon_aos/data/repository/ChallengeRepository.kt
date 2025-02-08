@@ -109,8 +109,40 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
     }
 
     // 챌린지 이름 검색
+    fun getSearchName(name: String, page: Int, size: Int, callback: ChallengeRepositoryCallback<PagingListResponse>) {
+        challengeService.get_searchName(name, page, size).enqueue(object : Callback<PagingListResponse> {
+            override fun onResponse(call: Call<PagingListResponse>, response: Response<PagingListResponse>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(response.body()!!)
+                } else {
+                    val error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
+                }
+            }
+
+            override fun onFailure(call: Call<PagingListResponse>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
 
     // 챌린지 해시태그 검색
+    fun getSearchHashtag(hash: String, page: Int, size: Int, callback: ChallengeRepositoryCallback<PagingListResponse>) {
+        challengeService.get_searchHashtag(hash, page, size).enqueue(object : Callback<PagingListResponse> {
+            override fun onResponse(call: Call<PagingListResponse>, response: Response<PagingListResponse>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(response.body()!!)
+                } else {
+                    val error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
+                }
+            }
+
+            override fun onFailure(call: Call<PagingListResponse>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
 
     fun getChallengePopular(callback: ChallengeRepositoryCallback<ChallengeListResponse>) {
         challengeService.get_challengePopular().enqueue(object : Callback<ChallengeListResponse> {

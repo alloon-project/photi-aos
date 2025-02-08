@@ -17,6 +17,7 @@ object ApiConfig {
         "/api/users/password" to "PATCH", // 비밀번호 변경
         "/api/users/token" to "POST", // 토큰 재발급
         "/api/inquiries" to "POST",
+        "/api/reports/{targetId}" to "POST", // 신고 등록
 
         // challenge
         "/api/challenges/{challengeId}/invitation-code" to "GET", // 챌린지 초대 코드 조회

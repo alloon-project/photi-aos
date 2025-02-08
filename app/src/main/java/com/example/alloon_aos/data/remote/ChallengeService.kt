@@ -14,6 +14,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -22,6 +23,8 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ChallengeService {
+    @Headers("Content-Type: application/json")
+
     //DELETE
     @DELETE("/api/challenges/{challengeId}")
     fun delete_exitChallenge( //챌린지 탈퇴
@@ -45,9 +48,19 @@ interface ChallengeService {
         @Path("challengeId") challengeId: Int
     ): Call<ChallengeResponse>
 
-    // 챌린지 이름 검색
+    @GET("/api/challenges/search/name")
+    fun get_searchName( //챌린지 이름 검색
+        @Query("challengeName") challengeName: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<PagingListResponse>
 
-    // 챌린지 해시태그 검색
+    @GET("/api/challenges/search/hashtag")
+    fun get_searchHashtag( //챌린지 해시태그 검색
+        @Query("hashtag") hashtag: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): Call<PagingListResponse>
 
     @GET("/api/challenges/popular")
     fun get_challengePopular( //추천순-인기있는 챌린지 조회

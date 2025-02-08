@@ -1,7 +1,7 @@
 package com.example.alloon_aos.data.repository
 
+import com.example.alloon_aos.data.model.request.ReportRequest
 import com.example.alloon_aos.data.model.response.ApiResponse
-import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
@@ -82,4 +82,13 @@ class FeedRepository(private val apiService: FeedApiService) {
     ): ApiResponse<SuccessMessageReponse> {
         return apiService.postComment(challengeId, feedId, comment)
     }
+
+    // 신고 등록
+    suspend fun postReport(
+        targetId: Int,
+        reportRequest: ReportRequest
+    ): Response<ApiResponse<SuccessMessageReponse>> {
+        return apiService.post_reports(targetId, reportRequest)
+    }
+
 }

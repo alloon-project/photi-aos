@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alloon_aos.data.model.ActionApiResponse
+import com.example.alloon_aos.data.model.request.ReportRequest
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
@@ -73,6 +74,11 @@ class FeedViewModel : ViewModel() {
 
     var challengeId = -1
     var invitecode = ""
+
+    var targetId = -1
+    var category = ""
+    var reason = ""
+    var content = ""
 
 
 
@@ -279,6 +285,20 @@ class FeedViewModel : ViewModel() {
                 },
                 onFailure = { errorCode ->
                     _feedComments.postValue(null)
+                    _code.postValue(errorCode)
+                }
+            )
+        }
+    }
+
+    fun sendReport(id: Int) {
+        viewModelScope.launch {
+            handleApiCall(
+                call = { feedRepository.postReport(id, ReportRequest(category, reason, content)) },
+                onSuccess = { data ->
+                    //_code.value = "201 CREATED"
+                },
+                onFailure = { errorCode ->
                     _code.postValue(errorCode)
                 }
             )

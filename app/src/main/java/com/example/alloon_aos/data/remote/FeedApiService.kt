@@ -1,17 +1,15 @@
 package com.example.alloon_aos.data.remote
 
+import com.example.alloon_aos.data.model.request.ReportRequest
 import com.example.alloon_aos.data.model.response.ApiResponse
-import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
-import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
 import okhttp3.MultipartBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -89,4 +87,11 @@ interface FeedApiService {
         @Path("feedId") feedId: Int, // 피드 ID
         @Body comment: Map<String, String> // 댓글 등록 요청 데이터
     ): ApiResponse<SuccessMessageReponse>
+
+    //신고 등록
+    @POST("/api/reports/{targetId}")
+    suspend fun post_reports(
+        @Path("targetId") targetId: Int,
+        @Body params: ReportRequest
+    ): Response<ApiResponse<SuccessMessageReponse>>
 }

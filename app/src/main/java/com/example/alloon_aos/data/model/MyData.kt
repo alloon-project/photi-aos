@@ -33,6 +33,16 @@ data class CommendData(
     val memberImages: List<MemberImg> = emptyList()
 )
 
+data class SearchData(
+    val id: Int,
+    val name: String,
+    val imageUrl: String,
+    val currentMemberCnt: Int,
+    val endDate: String,
+    val memberImages: List<MemberImg>,
+    val hashtags: List<HashTag> = emptyList()
+)
+
 data class MyChallengeData(
     val id: Int,
     val name: String,
