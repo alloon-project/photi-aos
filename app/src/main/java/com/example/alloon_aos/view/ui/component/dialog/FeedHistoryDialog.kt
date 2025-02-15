@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -68,28 +69,33 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
         binding.challengeRecyclerview.adapter = adapter
         binding.challengeRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        binding.scrollView.setOnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
-            val nestedScrollView = v as NestedScrollView
-
-            // NestedScrollView의 총 높이와 현재 스크롤 위치 확인
-            if (scrollY == (nestedScrollView.getChildAt(0).measuredHeight - nestedScrollView.measuredHeight)) {
-                val layoutManager = binding.challengeRecyclerview.layoutManager as GridLayoutManager
-                val totalItemCount = layoutManager.itemCount
-                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-
-                if (!photiViewModel.isLoading && !photiViewModel.isLastPage) {
-                    if (lastVisibleItemPosition == totalItemCount - 1) {
-                        photiViewModel.fetchFeedHistory()
-                    }
-                }
-            }
-        }
+//        binding.scrollView.setOnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
+//            val nestedScrollView = v as NestedScrollView
+//
+//            // NestedScrollView의 총 높이와 현재 스크롤 위치 확인
+//            if (scrollY == (nestedScrollView.getChildAt(0).measuredHeight - nestedScrollView.measuredHeight)) {
+//                val layoutManager = binding.challengeRecyclerview.layoutManager as GridLayoutManager
+//                val totalItemCount = layoutManager.itemCount
+//                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+//
+//                if (!photiViewModel.isLoading && !photiViewModel.isLastPage) {
+//                    if (lastVisibleItemPosition == totalItemCount - 1) {
+//                        photiViewModel.fetchFeedHistory()
+//                    }
+//                }
+//            }
+//        }
     }
 
     private fun observeLiveData() {
-        photiViewModel.feedHistoryData.observe(viewLifecycleOwner) { data ->
-            adapter.submitList(data.toList())
+//        photiViewModel.feedHistoryData.observe(viewLifecycleOwner) { data ->
+//            //adapter.submitList(data.toList())
+//            adapter.addItems(data)
+//        }
+        photiViewModel.feedHistoryData2.observe(viewLifecycleOwner) { pagingData ->
+            adapter.submitData(lifecycle, pagingData)  // PagingData를 RecyclerView에 제출
         }
+
 
         photiViewModel.code.observe(viewLifecycleOwner) { code ->
             handleApiError(code)
@@ -115,17 +121,16 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
         }
     }
 
-    class FeedHistoryAdapter(): ListAdapter<FeedHistoryContent,FeedHistoryAdapter.ViewHolder>(DiffCallback()) {
-        inner class ViewHolder(var binding: ItemProofShotsGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
-            fun bind(data:FeedHistoryContent) {
+
+    class FeedHistoryAdapter : PagingDataAdapter<FeedHistoryContent, FeedHistoryAdapter.ViewHolder>(DiffCallback()) {
+
+        inner class ViewHolder(val binding: ItemProofShotsGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
+            fun bind(data: FeedHistoryContent) {
                 Glide.with(binding.challengeImgView.context)
                     .load(data.imageUrl)
-                    .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))
                     .into(binding.challengeImgView)
-
                 binding.chipBtn.text = data.name
                 binding.dateTextView.text = data.createdDate.replace("-", ".") + " 인증"
-
             }
         }
 
@@ -135,24 +140,18 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(getItem(position))
+            getItem(position)?.let { holder.bind(it) }
         }
 
         class DiffCallback : DiffUtil.ItemCallback<FeedHistoryContent>() {
-            override fun areItemsTheSame(
-                oldItem: FeedHistoryContent,
-                newItem: FeedHistoryContent
-            ): Boolean {
+            override fun areItemsTheSame(oldItem: FeedHistoryContent, newItem: FeedHistoryContent): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(
-                oldItem: FeedHistoryContent,
-                newItem: FeedHistoryContent
-            ): Boolean {
+            override fun areContentsTheSame(oldItem: FeedHistoryContent, newItem: FeedHistoryContent): Boolean {
                 return oldItem == newItem
             }
         }
-
     }
+
 }

@@ -22,7 +22,8 @@ data class Feed(
     val username: String, // "photi"
     val imageUrl: String, // "https://url.kr/5MhHhD"
     val createdDateTime: String, // "2024-12-08T07:44:51.349Z"
-    val proveTime: String // "13:00"
+    val proveTime: String, // "13:00"
+    val isLike : Boolean,
 )
 
 data class FeedChallengeData(

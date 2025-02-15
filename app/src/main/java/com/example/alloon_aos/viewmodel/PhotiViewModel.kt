@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.liveData
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.MyData
 import com.example.alloon_aos.data.model.CommendData
@@ -27,6 +30,7 @@ import com.example.alloon_aos.data.model.response.MyChallengeCount
 import com.example.alloon_aos.data.model.response.PagingListResponse
 import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.UserProfile
+import com.example.alloon_aos.data.paging.FeedHistoryPagingSource
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
 import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
@@ -569,6 +573,12 @@ class PhotiViewModel : ViewModel() {
         }
     }
 
+    val feedHistoryData2 = Pager(
+        PagingConfig(pageSize = 20)  // 페이지 크기 설정
+    ) {
+        FeedHistoryPagingSource(user_repository)
+    }.liveData
+
     fun fetchFeedHistory() {
         if (isLoading || isLastPage) return
         isLoading = true
@@ -578,11 +588,12 @@ class PhotiViewModel : ViewModel() {
                 call = { user_repository.getFeedHistory(currentPage, 10) },
                 onSuccess = { data: FeedHistoryData? ->
                     if (data!!.content.isEmpty()) {
+                        Log.d("getFeedHistory","isEmpty , currentPage : $currentPage")
                         isLastPage = true
                     } else {
-                        val currentList = _feedHistoryData.value ?: mutableListOf()
-                        currentList.addAll(data.content)
-                        _feedHistoryData.postValue(currentList)
+//                        val currentList = _feedHistoryData.value ?: mutableListOf()
+//                        currentList.addAll(data.content)
+                        _feedHistoryData.postValue(data.content.toMutableList())
                         currentPage ++
                     }
                     isLoading = false

@@ -41,6 +41,8 @@ android {
 }
 
 dependencies {
+    //paging
+    implementation ("androidx.paging:paging-runtime:3.1.1")
 
     //zigzag
     implementation("ir.beigirad:ZigzagView:1.2.1")
