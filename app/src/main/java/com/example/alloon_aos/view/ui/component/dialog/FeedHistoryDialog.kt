@@ -39,7 +39,10 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
 
         setupRecyclerView()
         observeLiveData()
-
+        binding.backImgBtn.setOnClickListener{
+            dismiss()
+        }
+        binding.countTextView.text = count.toString()
 
 
         return view
@@ -64,28 +67,8 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
 
     private fun setupRecyclerView() {
         adapter = FeedHistoryAdapter()
-//        val headerAdapter = FeedHistoryHeaderAdapter(count){dismiss()}
-//        binding.challengeRecyclerview.adapter =  ConcatAdapter(headerAdapter, adapter)
-//                val layoutManager = GridLayoutManager(requireContext(), 2) // 기존 spanCount 유지
-//        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-//            override fun getSpanSize(position: Int): Int {
-//                return if (position == 0) 2 else 1 // 첫 번째 아이템(HeaderItem)만 전체 너비 차지
-//            }
-//        }
         binding.challengeRecyclerview.adapter = adapter
         binding.challengeRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
-
-        //이거해보긔
-//
-//        val headerAdapter = FeedHistoryHeaderAdapter(count) { dismiss() }
-//
-//        val layoutManager = GridLayoutManager(requireContext(), 2) // 기존 spanCount 유지
-//        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-//            override fun getSpanSize(position: Int): Int {
-//                return if (position == 0) 2 else 1 // 첫 번째 아이템(HeaderItem)만 전체 너비 차지
-//            }
-//        }
-
     }
 
     private fun observeLiveData() {
@@ -152,30 +135,6 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
                 return oldItem == newItem
             }
         }
-    }
-
-    class FeedHistoryHeaderAdapter(private val count: Int,private val onDismiss: () -> Unit, ) : RecyclerView.Adapter<FeedHistoryHeaderAdapter.HeaderViewHolder>() {
-
-        inner class HeaderViewHolder(private val binding: ItemFeedHistoryHeaderBinding) :
-            RecyclerView.ViewHolder(binding.root) {
-            fun bind() {
-                binding.countTextView.text = count.toString()
-                binding.backImgBtn.setOnClickListener {
-                    onDismiss
-                }
-            }
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
-            val binding = ItemFeedHistoryHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return HeaderViewHolder(binding)
-        }
-
-        override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
-            holder.bind()
-        }
-
-        override fun getItemCount() = 1 // 헤더는 1개만 존재
     }
 
 }

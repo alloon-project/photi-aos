@@ -5,15 +5,42 @@
     <data>
 
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray100">
+        android:background="@color/white"
+      >
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:elevation="20dp">
+
+            <ImageButton
+                android:id="@+id/back_imgBtn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@null"
+                android:src="@drawable/ic_back"
+                android:layout_marginStart="17dp"
+                android:layout_gravity="start|center_vertical"
+                app:tint="@color/gray700" />
+        </androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="169dp"
+            android:background="@color/gray100"
+
+            android:outlineProvider="none"
+            >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|enterAlways"
+               >
                 <LinearLayout
                     android:id="@+id/linearLayout9"
                     android:layout_width="wrap_content"
@@ -52,6 +79,7 @@
                 </LinearLayout>
 
                 <ImageView
+
                     android:id="@+id/divider"
                     android:layout_width="match_parent"
                     android:layout_height="12dp"
@@ -62,46 +90,26 @@
                     app:tint="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout9" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout9"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:background="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/challenge_recyclerview"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginLeft="24dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginBottom="40dp"
-                        android:nestedScrollingEnabled="false" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
+                    app:layout_constraintBottom_toBottomOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <ImageButton
-            android:id="@+id/back_imgBtn"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@null"
-            android:src="@drawable/ic_back"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="17dp"
-            android:layout_marginTop="16dp" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+
+            android:background="@color/white"
+            android:id="@+id/challenge_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="40dp"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
