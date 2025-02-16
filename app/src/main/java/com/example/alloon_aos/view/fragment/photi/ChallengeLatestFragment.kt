@@ -10,15 +10,25 @@ import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.model.response.ChallengeData
+import com.example.alloon_aos.data.model.response.FeedHistoryContent
 import com.example.alloon_aos.databinding.FragmentChallengeLatestBinding
 import com.example.alloon_aos.databinding.ItemCardMissionSmallRecyclerviewBinding
 import com.example.alloon_aos.view.activity.ChallengeActivity
+import com.example.alloon_aos.view.ui.component.dialog.FeedHistoryDialog
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class ChallengeLatestFragment : Fragment() {
     private lateinit var binding : FragmentChallengeLatestBinding
@@ -42,32 +52,47 @@ class ChallengeLatestFragment : Fragment() {
         photiViewModel.resetLatestResponseValue()
         setObserver()
 
-        nestedScrollView = binding.scrollView
-        nestedScrollView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
-            if (scrollY == nestedScrollView.getChildAt(0).measuredHeight - v.measuredHeight){
-                if (!photiViewModel.lastLatestPage)
-                    photiViewModel.getChallengeLatest()
-            }
-        }
+//        nestedScrollView = binding.scrollView
+//        nestedScrollView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
+//            if (scrollY == nestedScrollView.getChildAt(0).measuredHeight - v.measuredHeight){
+//                //if (!photiViewModel.lastLatestPage)
+//                    //photiViewModel.getChallengeLatest()
+//            }
+//        }
 
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        photiViewModel.getChallengeLatest()
+        //photiViewModel.getChallengeLatest()
+        photiViewModel.fetchLatestChallenge()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        photiViewModel.clearLatestChallengeData()
     }
 
     private fun setObserver() {
-        photiViewModel.latestItemsListData.observe(viewLifecycleOwner) { // 데이터에 변화가 있을 때 어댑터에게 변경을 알림
-            latestCardAdapter.notifyDataSetChanged()
+//        photiViewModel.latestItemsListData.observe(viewLifecycleOwner) { // 데이터에 변화가 있을 때 어댑터에게 변경을 알림
+//            latestCardAdapter.notifyDataSetChanged()
+//        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                photiViewModel.latestChallengeData.collectLatest { pagingData ->
+                    Log.d("PagingSource","$pagingData")
+                    latestCardAdapter.submitData(pagingData)
+                }
+            }
         }
 
         photiViewModel.latestResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
-                "200 OK" -> {
-                    photiViewModel.latestPage += 1
-                }
+//                "200 OK" -> {
+//                    photiViewModel.latestPage += 1
+//                }
                 "IO_Exception" -> {
                     CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
                 }
@@ -110,14 +135,17 @@ class ChallengeLatestFragment : Fragment() {
         startActivity(intent)
     }
 
-    inner class ViewHolder(var binding : ItemCardMissionSmallRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root){
-        fun setContents(holder: ViewHolder ,pos: Int) {
-            with (photiViewModel.latestItems[pos]) {
-                binding.titleTextView.text = name
-                binding.dateTextView.text = endDate
 
-                if(hashtags.isNotEmpty()) {
-                    hashtags.forEachIndexed { index, hashtag ->
+    class LatestCardAdapter : PagingDataAdapter<ChallengeData, LatestCardAdapter.ViewHolder>(DiffCallback()){
+
+        inner class ViewHolder(var binding : ItemCardMissionSmallRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root){
+            fun bind(data: ChallengeData) {
+
+                binding.titleTextView.text = data.name
+                binding.dateTextView.text = data.endDate
+
+                if(data.hashtags.isNotEmpty()) {
+                    data.hashtags.forEachIndexed { index, hashtag ->
                         when (index) {
                             0 -> {
                                 binding.chip1Btn.text = hashtag.hashtag
@@ -139,30 +167,35 @@ class ChallengeLatestFragment : Fragment() {
                 }
 
                 Glide
-                    .with(holder.itemView.context)
-                    .load(imageUrl)
+                    .with(binding.imgView.context)
+                    .load(data.imageUrl)
                     .into(binding.imgView)
 
-                binding.root.setOnClickListener {
-                    photiViewModel.id = id
-                    photiViewModel.getChallenge()
-                }
+//                binding.root.setOnClickListener {
+//                    photiViewModel.id = data.id
+//                    photiViewModel.getChallenge()
+//                }
             }
         }
-    }
-
-    inner class LatestCardAdapter() : RecyclerView.Adapter<ViewHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             var view = ItemCardMissionSmallRecyclerviewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
             return ViewHolder(view)
         }
 
-
         override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-            viewHolder.setContents(viewHolder,position)
+            getItem(position)?.let { viewHolder.bind(it) }
         }
 
-        override fun getItemCount() = photiViewModel.latestItems.size
+        //override fun getItemCount() = photiViewModel.latestItems.size
+
+        class DiffCallback : DiffUtil.ItemCallback<ChallengeData>() {
+            override fun areItemsTheSame(oldItem: ChallengeData, newItem: ChallengeData): Boolean {
+                return oldItem.id == newItem.id
+            }
+            override fun areContentsTheSame(oldItem: ChallengeData, newItem: ChallengeData): Boolean {
+                return oldItem == newItem
+            }
+        }
 
     }
 }

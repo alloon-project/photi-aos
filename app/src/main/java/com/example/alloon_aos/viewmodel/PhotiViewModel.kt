@@ -29,6 +29,7 @@ import com.example.alloon_aos.data.model.response.MyChallengeCount
 import com.example.alloon_aos.data.model.response.PagingListResponse
 import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.UserProfile
+import com.example.alloon_aos.data.paging.AllChallengesPagingSource
 import com.example.alloon_aos.data.paging.EndedChallengePagingSource
 import com.example.alloon_aos.data.paging.FeedHistoryPagingSource
 import com.example.alloon_aos.data.remote.RetrofitClient
@@ -535,16 +536,35 @@ class PhotiViewModel : ViewModel() {
     private val _feedHistoryData = MutableStateFlow<PagingData<FeedHistoryContent>>(PagingData.empty())
     val feedHistoryData: StateFlow<PagingData<FeedHistoryContent>> = _feedHistoryData
 
-private val _endedChallengeData = MutableStateFlow<PagingData<EndedChallengeContent>>(PagingData.empty())
+    private val _endedChallengeData = MutableStateFlow<PagingData<EndedChallengeContent>>(PagingData.empty())
     val endedChallengeData: StateFlow<PagingData<EndedChallengeContent>> = _endedChallengeData
+
+    private val _latestChallengeData = MutableStateFlow<PagingData<ChallengeData>>(PagingData.empty())
+    val latestChallengeData: StateFlow<PagingData<ChallengeData>> = _latestChallengeData
 
     fun clearEndedChallengeData() {
         _endedChallengeData.value = PagingData.empty()
     }
 
-
     fun clearFeedHistoryData() {
         _feedHistoryData.value = PagingData.empty()
+    }
+
+    fun clearLatestChallengeData() {
+        _latestChallengeData.value = PagingData.empty()
+    }
+
+    fun fetchLatestChallenge() {
+        viewModelScope.launch {
+            Pager(
+                PagingConfig(initialLoadSize = 40, pageSize = 20,enablePlaceholders = false ),
+            ) {
+                AllChallengesPagingSource(challenge_repository, this@PhotiViewModel)
+            }.flow.cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _latestChallengeData.value = pagingData
+                }
+        }
     }
 
     fun fetchFeedHistory() {
