@@ -45,7 +45,7 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
             dismiss()
         }
 
-        photiViewModel.fetchEndedChallenge()
+      //  photiViewModel.fetchEndedChallenge()
 
         return view
     }
@@ -61,7 +61,7 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        photiViewModel.resetPagingParam()
+      //  photiViewModel.resetPagingParam()
         _binding = null
     }
 
@@ -74,25 +74,25 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
             val nestedScrollView = v as NestedScrollView
 
             // NestedScrollView의 총 높이와 현재 스크롤 위치 확인
-            if (scrollY == (nestedScrollView.getChildAt(0).measuredHeight - nestedScrollView.measuredHeight)) {
-                val layoutManager = binding.challengeRecyclerview.layoutManager as GridLayoutManager
-                val totalItemCount = layoutManager.itemCount
-                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-
-                if (!photiViewModel.isLoading && !photiViewModel.isLastPage) {
-                    if (lastVisibleItemPosition == totalItemCount - 1) {
-                        photiViewModel.fetchEndedChallenge()
-                    }
-                }
-            }
+//            if (scrollY == (nestedScrollView.getChildAt(0).measuredHeight - nestedScrollView.measuredHeight)) {
+//                val layoutManager = binding.challengeRecyclerview.layoutManager as GridLayoutManager
+//                val totalItemCount = layoutManager.itemCount
+//                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+//
+//                if (!photiViewModel.isLoading && !photiViewModel.isLastPage) {
+//                    if (lastVisibleItemPosition == totalItemCount - 1) {
+//                        photiViewModel.fetchEndedChallenge()
+//                    }
+//                }
+//            }
         }
 
     }
 
     private fun observeLiveData() {
-        photiViewModel.endedChallenges.observe(viewLifecycleOwner) { data ->
-            adapter.submitList(data.toList())
-        }
+//        photiViewModel.endedChallenges.observe(viewLifecycleOwner) { data ->
+//            adapter.submitList(data.toList())
+//        }
 
         photiViewModel.code.observe(viewLifecycleOwner) { code ->
             handleApiError(code)

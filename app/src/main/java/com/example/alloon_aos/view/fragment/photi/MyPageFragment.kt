@@ -189,6 +189,7 @@ class MyPageFragment : Fragment() {
     }
 
     fun showProofShotsDialog() {
+    //   Log.d("showProofShotsDialog","feedCnt : $feedCnt")
         if(feedCnt == 0)    return
 
         val dialog = FeedHistoryDialog(feedCnt)

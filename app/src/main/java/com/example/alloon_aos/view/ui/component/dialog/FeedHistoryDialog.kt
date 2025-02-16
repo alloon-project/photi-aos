@@ -7,22 +7,25 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.alloon_aos.data.model.response.FeedHistoryContent
 import com.example.alloon_aos.databinding.DialogFeedHistoryBinding
+import com.example.alloon_aos.databinding.ItemFeedHistoryHeaderBinding
 import com.example.alloon_aos.databinding.ItemProofShotsGalleryBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
-import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
 import com.example.alloon_aos.viewmodel.PhotiViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class FeedHistoryDialog(val count : Int): DialogFragment() {
     private var _binding: DialogFeedHistoryBinding? = null
@@ -37,12 +40,7 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
         setupRecyclerView()
         observeLiveData()
 
-        binding.countTextView.text = count.toString()
-        binding.backImgBtn.setOnClickListener {
-            dismiss()
-        }
 
-        photiViewModel.fetchFeedHistory()
 
         return view
     }
@@ -60,42 +58,44 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        photiViewModel.resetPagingParam()
+       // photiViewModel.resetPagingParam()
         _binding = null
     }
 
     private fun setupRecyclerView() {
         adapter = FeedHistoryAdapter()
+//        val headerAdapter = FeedHistoryHeaderAdapter(count){dismiss()}
+//        binding.challengeRecyclerview.adapter =  ConcatAdapter(headerAdapter, adapter)
+//                val layoutManager = GridLayoutManager(requireContext(), 2) // 기존 spanCount 유지
+//        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+//            override fun getSpanSize(position: Int): Int {
+//                return if (position == 0) 2 else 1 // 첫 번째 아이템(HeaderItem)만 전체 너비 차지
+//            }
+//        }
         binding.challengeRecyclerview.adapter = adapter
         binding.challengeRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
 
-//        binding.scrollView.setOnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
-//            val nestedScrollView = v as NestedScrollView
+        //이거해보긔
 //
-//            // NestedScrollView의 총 높이와 현재 스크롤 위치 확인
-//            if (scrollY == (nestedScrollView.getChildAt(0).measuredHeight - nestedScrollView.measuredHeight)) {
-//                val layoutManager = binding.challengeRecyclerview.layoutManager as GridLayoutManager
-//                val totalItemCount = layoutManager.itemCount
-//                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+//        val headerAdapter = FeedHistoryHeaderAdapter(count) { dismiss() }
 //
-//                if (!photiViewModel.isLoading && !photiViewModel.isLastPage) {
-//                    if (lastVisibleItemPosition == totalItemCount - 1) {
-//                        photiViewModel.fetchFeedHistory()
-//                    }
-//                }
+//        val layoutManager = GridLayoutManager(requireContext(), 2) // 기존 spanCount 유지
+//        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+//            override fun getSpanSize(position: Int): Int {
+//                return if (position == 0) 2 else 1 // 첫 번째 아이템(HeaderItem)만 전체 너비 차지
 //            }
 //        }
+
     }
 
     private fun observeLiveData() {
-//        photiViewModel.feedHistoryData.observe(viewLifecycleOwner) { data ->
-//            //adapter.submitList(data.toList())
-//            adapter.addItems(data)
-//        }
-        photiViewModel.feedHistoryData2.observe(viewLifecycleOwner) { pagingData ->
-            adapter.submitData(lifecycle, pagingData)  // PagingData를 RecyclerView에 제출
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                photiViewModel.feedHistoryData.collectLatest { pagingData ->
+                    adapter.submitData(pagingData)
+                }
+            }
         }
-
 
         photiViewModel.code.observe(viewLifecycleOwner) { code ->
             handleApiError(code)
@@ -152,6 +152,30 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
                 return oldItem == newItem
             }
         }
+    }
+
+    class FeedHistoryHeaderAdapter(private val count: Int,private val onDismiss: () -> Unit, ) : RecyclerView.Adapter<FeedHistoryHeaderAdapter.HeaderViewHolder>() {
+
+        inner class HeaderViewHolder(private val binding: ItemFeedHistoryHeaderBinding) :
+            RecyclerView.ViewHolder(binding.root) {
+            fun bind() {
+                binding.countTextView.text = count.toString()
+                binding.backImgBtn.setOnClickListener {
+                    onDismiss
+                }
+            }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeaderViewHolder {
+            val binding = ItemFeedHistoryHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return HeaderViewHolder(binding)
+        }
+
+        override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
+            holder.bind()
+        }
+
+        override fun getItemCount() = 1 // 헤더는 1개만 존재
     }
 
 }

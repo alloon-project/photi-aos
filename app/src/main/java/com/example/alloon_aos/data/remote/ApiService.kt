@@ -12,10 +12,12 @@ import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.TokenResponse
 import com.example.alloon_aos.data.model.response.UserProfile
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
@@ -75,7 +77,8 @@ interface ApiService {
 
     @POST("/api/users/token")
     fun post_token(
-        @Body refreshToken: RefreshTokenRequest
+        @Header("Refresh-Token") token: String,
+        @Body emptyBody: RequestBody
     ): Call<TokenResponse>
 
     @GET("/api/users")

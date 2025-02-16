@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import androidx.paging.liveData
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.MyData
@@ -155,11 +156,11 @@ class PhotiViewModel : ViewModel() {
     private val _feedsByDateData = MutableLiveData<List<FeedByDate>?>()
     val feedsByDateData: LiveData<List<FeedByDate>?> get() = _feedsByDateData
 
-    private val _endedChallenges = MutableLiveData<MutableList<EndedChallengeContent>>()
-    val endedChallenges: LiveData<MutableList<EndedChallengeContent>> get() = _endedChallenges
-
-    private val _feedHistoryData = MutableLiveData<MutableList<FeedHistoryContent>>()
-    val feedHistoryData: LiveData<MutableList<FeedHistoryContent>> get() = _feedHistoryData
+//    private val _endedChallenges = MutableLiveData<MutableList<EndedChallengeContent>>()
+//    val endedChallenges: LiveData<MutableList<EndedChallengeContent>> get() = _endedChallenges
+//
+//    private val _feedHistoryData = MutableLiveData<MutableList<FeedHistoryContent>>()
+//    val feedHistoryData: LiveData<MutableList<FeedHistoryContent>> get() = _feedHistoryData
 
     private val _challengeCount = MutableLiveData<MyChallengeCount?>(null)
     val challengeCount: LiveData<MyChallengeCount?> get() = _challengeCount
@@ -535,76 +536,77 @@ class PhotiViewModel : ViewModel() {
         }
     }
 
-    // 페이징 상태
-    private var currentPage = 0
-    var isLoading = false
-    var isLastPage = false
+//    // 페이징 상태
+//    private var currentPage = 0
+//    var isLoading = false
+//    var isLastPage = false
+//
+//    fun resetPagingParam() {
+//        currentPage = 0
+//        isLastPage = false
+//        _endedChallenges.postValue(mutableListOf())
+//        _feedHistoryData.postValue(mutableListOf())
+//    }
 
-    fun resetPagingParam() {
-        currentPage = 0
-        isLastPage = false
-        _endedChallenges.postValue(mutableListOf())
-        _feedHistoryData.postValue(mutableListOf())
-    }
-
-    fun fetchEndedChallenge() {
-        if (isLoading || isLastPage) return // 이미 로드 중이거나 마지막 페이지라면 호출 안 함
-        isLoading = true
-
-        viewModelScope.launch {
-            handleApiCall(
-                call = { user_repository.getEndedChallenges(currentPage, 10) }, // 페이지당 10개
-                onSuccess = { data: EndedChallengeData? ->
-                    if (data!!.content.isEmpty()) {
-                        isLastPage = true
-                    } else {
-                        val currentList = _endedChallenges.value ?: mutableListOf()
-                        currentList.addAll(data.content)
-                        _endedChallenges.postValue(currentList) // 기존 데이터에 추가
-                        currentPage ++ // 다음 페이지로 이동
-                    }
-                    isLoading = false
-                },
-                onFailure = { errorCode ->
-                    isLoading = false
-                    Log.e("fetchEndedChallenge", "Error: $errorCode")
-                }
-            )
-        }
-    }
-
-    val feedHistoryData2 = Pager(
-        PagingConfig(pageSize = 20)  // 페이지 크기 설정
-    ) {
-        FeedHistoryPagingSource(user_repository)
-    }.liveData
-
-    fun fetchFeedHistory() {
-        if (isLoading || isLastPage) return
-        isLoading = true
-
-        viewModelScope.launch {
-            handleApiCall(
-                call = { user_repository.getFeedHistory(currentPage, 10) },
-                onSuccess = { data: FeedHistoryData? ->
-                    if (data!!.content.isEmpty()) {
-                        Log.d("getFeedHistory","isEmpty , currentPage : $currentPage")
-                        isLastPage = true
-                    } else {
-//                        val currentList = _feedHistoryData.value ?: mutableListOf()
+//    fun fetchEndedChallenge() {
+//        if (isLoading || isLastPage) return // 이미 로드 중이거나 마지막 페이지라면 호출 안 함
+//        isLoading = true
+//
+//        viewModelScope.launch {
+//            handleApiCall(
+//                call = { user_repository.getEndedChallenges(currentPage, 10) }, // 페이지당 10개
+//                onSuccess = { data: EndedChallengeData? ->
+//                    if (data!!.content.isEmpty()) {
+//                        isLastPage = true
+//                    } else {
+//                        val currentList = _endedChallenges.value ?: mutableListOf()
 //                        currentList.addAll(data.content)
-                        _feedHistoryData.postValue(data.content.toMutableList())
-                        currentPage ++
-                    }
-                    isLoading = false
-                },
-                onFailure = { errorCode ->
-                    isLoading = false
-                    Log.e("fetchEndedChallenge", "Error: $errorCode")
-                }
-            )
-        }
-    }
+//                        _endedChallenges.postValue(currentList) // 기존 데이터에 추가
+//                        currentPage ++ // 다음 페이지로 이동
+//                    }
+//                    isLoading = false
+//                },
+//                onFailure = { errorCode ->
+//                    isLoading = false
+//                    Log.e("fetchEndedChallenge", "Error: $errorCode")
+//                }
+//            )
+//        }
+//    }
+val feedHistoryData = Pager(
+    PagingConfig(pageSize = 20,enablePlaceholders = false ),
+
+
+) {
+    FeedHistoryPagingSource(user_repository)
+}.flow.cachedIn(viewModelScope)
+
+//    fun fetchFeedHistory() {
+//        if (isLoading || isLastPage) return
+//        isLoading = true
+//
+//        viewModelScope.launch {
+//            handleApiCall(
+//                call = { user_repository.getFeedHistory(currentPage, 10) },
+//                onSuccess = { data: FeedHistoryData? ->
+//                    if (data!!.content.isEmpty()) {
+//                        Log.d("getFeedHistory","isEmpty , currentPage : $currentPage")
+//                        isLastPage = true
+//                    } else {
+////                        val currentList = _feedHistoryData.value ?: mutableListOf()
+////                        currentList.addAll(data.content)
+//                        _feedHistoryData.postValue(data.content.toMutableList())
+//                        currentPage ++
+//                    }
+//                    isLoading = false
+//                },
+//                onFailure = { errorCode ->
+//                    isLoading = false
+//                    Log.e("fetchEndedChallenge", "Error: $errorCode")
+//                }
+//            )
+//        }
+//    }
 
 
 }

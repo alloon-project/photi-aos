@@ -41,6 +41,8 @@ android {
 }
 
 dependencies {
+    implementation ("androidx.recyclerview:recyclerview:1.3.1")
+
     //paging
     implementation ("androidx.paging:paging-runtime:3.1.1")
 
