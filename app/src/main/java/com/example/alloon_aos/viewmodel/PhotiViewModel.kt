@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.liveData
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.MyData
 import com.example.alloon_aos.data.model.CommendData
@@ -23,14 +23,13 @@ import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeRecordData
 import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.EndedChallengeContent
-import com.example.alloon_aos.data.model.response.EndedChallengeData
 import com.example.alloon_aos.data.model.response.FeedByDate
 import com.example.alloon_aos.data.model.response.FeedHistoryContent
-import com.example.alloon_aos.data.model.response.FeedHistoryData
 import com.example.alloon_aos.data.model.response.MyChallengeCount
 import com.example.alloon_aos.data.model.response.PagingListResponse
 import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.UserProfile
+import com.example.alloon_aos.data.paging.EndedChallengePagingSource
 import com.example.alloon_aos.data.paging.FeedHistoryPagingSource
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
@@ -39,6 +38,9 @@ import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.UserRepository
 import com.example.alloon_aos.data.repository.handleApiCall
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 
@@ -155,12 +157,6 @@ class PhotiViewModel : ViewModel() {
 
     private val _feedsByDateData = MutableLiveData<List<FeedByDate>?>()
     val feedsByDateData: LiveData<List<FeedByDate>?> get() = _feedsByDateData
-
-//    private val _endedChallenges = MutableLiveData<MutableList<EndedChallengeContent>>()
-//    val endedChallenges: LiveData<MutableList<EndedChallengeContent>> get() = _endedChallenges
-//
-//    private val _feedHistoryData = MutableLiveData<MutableList<FeedHistoryContent>>()
-//    val feedHistoryData: LiveData<MutableList<FeedHistoryContent>> get() = _feedHistoryData
 
     private val _challengeCount = MutableLiveData<MyChallengeCount?>(null)
     val challengeCount: LiveData<MyChallengeCount?> get() = _challengeCount
@@ -536,77 +532,44 @@ class PhotiViewModel : ViewModel() {
         }
     }
 
-//    // 페이징 상태
-//    private var currentPage = 0
-//    var isLoading = false
-//    var isLastPage = false
-//
-//    fun resetPagingParam() {
-//        currentPage = 0
-//        isLastPage = false
-//        _endedChallenges.postValue(mutableListOf())
-//        _feedHistoryData.postValue(mutableListOf())
-//    }
+    private val _feedHistoryData = MutableStateFlow<PagingData<FeedHistoryContent>>(PagingData.empty())
+    val feedHistoryData: StateFlow<PagingData<FeedHistoryContent>> = _feedHistoryData
 
-//    fun fetchEndedChallenge() {
-//        if (isLoading || isLastPage) return // 이미 로드 중이거나 마지막 페이지라면 호출 안 함
-//        isLoading = true
-//
-//        viewModelScope.launch {
-//            handleApiCall(
-//                call = { user_repository.getEndedChallenges(currentPage, 10) }, // 페이지당 10개
-//                onSuccess = { data: EndedChallengeData? ->
-//                    if (data!!.content.isEmpty()) {
-//                        isLastPage = true
-//                    } else {
-//                        val currentList = _endedChallenges.value ?: mutableListOf()
-//                        currentList.addAll(data.content)
-//                        _endedChallenges.postValue(currentList) // 기존 데이터에 추가
-//                        currentPage ++ // 다음 페이지로 이동
-//                    }
-//                    isLoading = false
-//                },
-//                onFailure = { errorCode ->
-//                    isLoading = false
-//                    Log.e("fetchEndedChallenge", "Error: $errorCode")
-//                }
-//            )
-//        }
-//    }
-val feedHistoryData = Pager(
-    PagingConfig(pageSize = 20,enablePlaceholders = false ),
+private val _endedChallengeData = MutableStateFlow<PagingData<EndedChallengeContent>>(PagingData.empty())
+    val endedChallengeData: StateFlow<PagingData<EndedChallengeContent>> = _endedChallengeData
+
+    fun clearEndedChallengeData() {
+        _endedChallengeData.value = PagingData.empty()
+    }
 
 
-) {
-    FeedHistoryPagingSource(user_repository)
-}.flow.cachedIn(viewModelScope)
+    fun clearFeedHistoryData() {
+        _feedHistoryData.value = PagingData.empty()
+    }
 
-//    fun fetchFeedHistory() {
-//        if (isLoading || isLastPage) return
-//        isLoading = true
-//
-//        viewModelScope.launch {
-//            handleApiCall(
-//                call = { user_repository.getFeedHistory(currentPage, 10) },
-//                onSuccess = { data: FeedHistoryData? ->
-//                    if (data!!.content.isEmpty()) {
-//                        Log.d("getFeedHistory","isEmpty , currentPage : $currentPage")
-//                        isLastPage = true
-//                    } else {
-////                        val currentList = _feedHistoryData.value ?: mutableListOf()
-////                        currentList.addAll(data.content)
-//                        _feedHistoryData.postValue(data.content.toMutableList())
-//                        currentPage ++
-//                    }
-//                    isLoading = false
-//                },
-//                onFailure = { errorCode ->
-//                    isLoading = false
-//                    Log.e("fetchEndedChallenge", "Error: $errorCode")
-//                }
-//            )
-//        }
-//    }
+    fun fetchFeedHistory() {
+        viewModelScope.launch {
+            Pager(
+                PagingConfig(initialLoadSize = 40, pageSize = 20, enablePlaceholders = false)
+            ) {
+                FeedHistoryPagingSource(user_repository)
+            }.flow.cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _feedHistoryData.value = pagingData
+                }
+        }
+    }
 
-
+    fun fetchEndedChallenges() {
+        viewModelScope.launch {
+            Pager(
+                PagingConfig(initialLoadSize = 40, pageSize = 20, enablePlaceholders = false,)
+            ) {
+                EndedChallengePagingSource(user_repository)
+            }.flow.cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _endedChallengeData.value = pagingData
+                }
+        }
+    }
 }

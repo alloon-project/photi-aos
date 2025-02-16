@@ -44,7 +44,7 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
         }
         binding.countTextView.text = count.toString()
 
-
+        photiViewModel.fetchFeedHistory()
         return view
     }
 
@@ -60,7 +60,7 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        photiViewModel.clearFeedHistoryData()
        // photiViewModel.resetPagingParam()
         _binding = null
     }
@@ -72,6 +72,7 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
     }
 
     private fun observeLiveData() {
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 photiViewModel.feedHistoryData.collectLatest { pagingData ->

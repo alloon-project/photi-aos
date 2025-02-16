@@ -1,5 +1,6 @@
 package com.example.alloon_aos.data.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.alloon_aos.data.model.response.FeedHistoryContent
@@ -9,7 +10,10 @@ class FeedHistoryPagingSource(private val userRepository: UserRepository) : Pagi
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FeedHistoryContent> {
         val page = params.key ?: 0 // 첫 페이지는 0부터 시작
+
         return try {
+            Log.d("PagingSource", "Feed History Loading page: $page, pageSize: ${params.loadSize}")
+
             val response = userRepository.getFeedHistory(page, params.loadSize)
             val data = response.body()?.data?.content ?: emptyList() // 데이터 로딩
             LoadResult.Page(

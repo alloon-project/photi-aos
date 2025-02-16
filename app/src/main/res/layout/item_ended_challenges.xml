@@ -46,14 +46,11 @@
                 android:textSize="16dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:lines="2"
                 android:gravity="center"
                 app:layout_constraintBottom_toTopOf="@+id/date_textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="10dp" />
-
-
+                android:layout_marginBottom="8dp" />
             <TextView
                 android:id="@+id/date_textView"
                 android:layout_width="wrap_content"

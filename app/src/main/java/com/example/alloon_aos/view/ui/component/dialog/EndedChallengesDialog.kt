@@ -8,12 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alloon_aos.data.model.response.EndedChallengeContent
@@ -22,6 +24,8 @@ import com.example.alloon_aos.databinding.DialogEndedChallengesBinding
 import com.example.alloon_aos.databinding.ItemEndedChallengesBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class EndedChallengesDialog(val count: Int) : DialogFragment() {
     private var _binding: DialogEndedChallengesBinding? = null
@@ -40,12 +44,12 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
         setupRecyclerView()
         observeLiveData()
 
+        photiViewModel.fetchEndedChallenges()
+
         binding.countTextView.text = count.toString()
         binding.backImgBtn.setOnClickListener {
             dismiss()
         }
-
-      //  photiViewModel.fetchEndedChallenge()
 
         return view
     }
@@ -61,7 +65,7 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-      //  photiViewModel.resetPagingParam()
+        photiViewModel.clearEndedChallengeData()
         _binding = null
     }
 
@@ -70,30 +74,16 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
         binding.challengeRecyclerview.adapter = adapter
         binding.challengeRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        binding.scrollView.setOnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
-            val nestedScrollView = v as NestedScrollView
-
-            // NestedScrollView의 총 높이와 현재 스크롤 위치 확인
-//            if (scrollY == (nestedScrollView.getChildAt(0).measuredHeight - nestedScrollView.measuredHeight)) {
-//                val layoutManager = binding.challengeRecyclerview.layoutManager as GridLayoutManager
-//                val totalItemCount = layoutManager.itemCount
-//                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-//
-//                if (!photiViewModel.isLoading && !photiViewModel.isLastPage) {
-//                    if (lastVisibleItemPosition == totalItemCount - 1) {
-//                        photiViewModel.fetchEndedChallenge()
-//                    }
-//                }
-//            }
-        }
-
     }
 
     private fun observeLiveData() {
-//        photiViewModel.endedChallenges.observe(viewLifecycleOwner) { data ->
-//            adapter.submitList(data.toList())
-//        }
-
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                photiViewModel.endedChallengeData.collectLatest { pagingData ->
+                    adapter.submitData(pagingData)
+                }
+            }
+        }
         photiViewModel.code.observe(viewLifecycleOwner) { code ->
             handleApiError(code)
         }
@@ -119,11 +109,10 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
     }
 
     class EndedChallengesAdpater :
-        ListAdapter<EndedChallengeContent, EndedChallengesAdpater.ViewHolder>(DiffCallback()) {
+        PagingDataAdapter<EndedChallengeContent, EndedChallengesAdpater.ViewHolder>(DiffCallback()) {
 
         inner class ViewHolder(private val binding: ItemEndedChallengesBinding) :
             RecyclerView.ViewHolder(binding.root) {
-
             fun bind(data: EndedChallengeContent) {
                 binding.titleTextView.text = data.name
                 binding.dateTextView.text = data.endDate.replace("-", ".") + " 종료"
@@ -186,7 +175,7 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.bind(getItem(position))
+            getItem(position)?.let { holder.bind(it) }
         }
 
         class DiffCallback : DiffUtil.ItemCallback<EndedChallengeContent>() {
