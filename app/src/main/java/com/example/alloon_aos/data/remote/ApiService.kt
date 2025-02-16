@@ -9,7 +9,7 @@ import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.AuthResponse
 import com.example.alloon_aos.data.model.response.InquiryResponse
 import com.example.alloon_aos.data.model.response.ProfileImageData
-import com.example.alloon_aos.data.model.response.RefreshTokenResponse
+import com.example.alloon_aos.data.model.response.TokenResponse
 import com.example.alloon_aos.data.model.response.UserProfile
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -76,7 +76,7 @@ interface ApiService {
     @POST("/api/users/token")
     fun post_token(
         @Body refreshToken: RefreshTokenRequest
-    ): Call<RefreshTokenResponse>
+    ): Call<TokenResponse>
 
     @GET("/api/users")
     suspend fun get_users(): Response<ApiResponse<UserProfile>>

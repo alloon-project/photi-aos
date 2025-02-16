@@ -22,9 +22,20 @@ data class AuthData(
     val temporaryPasswordYn: Boolean
 )
 
-data class RefreshTokenResponse(
-    val accessToken: String
+data class TokenResponse(
+    @field:Json(name = "code")
+    val code: String,
+    @field:Json(name = "message")
+    val message: String,
+    @field:Json(name = "data")
+    val data: TokenData
 )
+
+data class TokenData(
+    @field:Json(name = "successMessage")
+    val successMessage: String
+)
+
 
 data class InquiryResponse(
     val successMessage: String

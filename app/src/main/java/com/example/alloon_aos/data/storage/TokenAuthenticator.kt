@@ -37,16 +37,15 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
             try {
                 val response = apiService.post_token(RefreshTokenRequest(refreshToken)).execute()
                 if (response.isSuccessful) {
-                    response.body()?.accessToken
+                    val accessToken = response.headers()["authorization"]?.replace("Bearer ", "")
+                    accessToken
                 } else {
-                    if (response.code() == 401) {
+                    if (response.code() == 401)
                         doTokenExired()
-                    }
                     Log.d("token","code: ${response.code()}")
                     null
                 }
             } catch (e: Exception) {
-                doTokenExired()
                 null
             }
         }
