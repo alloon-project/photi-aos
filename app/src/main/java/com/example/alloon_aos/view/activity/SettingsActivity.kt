@@ -1,6 +1,5 @@
 package com.example.alloon_aos.view.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,11 +9,14 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
     lateinit var binding : ActivitySettingsBinding
+    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_settings)
@@ -52,6 +54,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun logout(){
+        tokenManager.deleteAllToken()
         finishAffinity()
         val intent = Intent(this, PhotiActivity::class.java).apply {
             putExtra("IS_FROM","LOGOUT")
@@ -60,7 +63,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun unsubscribe(){
-        finish()
+        tokenManager.deleteAllToken()
+        finishAffinity()
         val intent = Intent(this, PhotiActivity::class.java).apply {
             putExtra("IS_FROM","UNSUBSCRIBE")
         }

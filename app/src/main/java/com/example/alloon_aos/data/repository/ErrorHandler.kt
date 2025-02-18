@@ -47,7 +47,8 @@ suspend fun <T> handleApiCall(
             Log.d("handleApiCall", "Response body: $body")
 
             if (body != null) {
-                if (body.code.trim().equals("200 OK", ignoreCase = true)) {
+                if (body.code.trim().equals("200 OK", ignoreCase = true) ||
+                    body.code.trim().equals("201 CREATED", ignoreCase = true)) {
                     Log.d("handleApiCall", "Success: ${body.data}")
                     onSuccess(body.data)
                 } else {

@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
-import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.FragmentMainSettingsBinding
 import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
@@ -19,7 +17,6 @@ class MainSettingsFragment : Fragment(), CustomTwoButtonDialogInterface {
     private lateinit var binding: FragmentMainSettingsBinding
 
     // private val authViewModel by activityViewModels<AuthViewModel>()
-    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,7 +68,6 @@ class MainSettingsFragment : Fragment(), CustomTwoButtonDialogInterface {
     override fun onClickFisrtButton() {}
 
     override fun onClickSecondButton() {
-        tokenManager.deleteAllToken()
         val mActivity = activity as SettingsActivity
         mActivity.logout()
     }

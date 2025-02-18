@@ -26,10 +26,15 @@ class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel,
 
         fun setContents(pos: Int) {
             with (photiViewModel.proofItems[pos]) {
+                if(pos == photiViewModel.proofItems.size-1 && photiViewModel.completeItems.size == 0)
+                    binding.dividerBlue.visibility = View.GONE
+                else
+                    binding.dividerBlue.visibility = View.VISIBLE
                 binding.bannerTextview.setText(name)
                 binding.timeTextview.setText(proveTime)
                 binding.proofshotButton.setOnClickListener {
                     photiViewModel.updateCurrentItem(this)
+                    photiViewModel.id = id
                     onProofItemClickListener(pos)
                 }
             }
@@ -42,9 +47,10 @@ class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel,
         fun setContents(pos: Int) {
             with (photiViewModel.completeItems[pos]) {
                 binding.bannerTextview.setText(name)
-                if(pos == photiViewModel.completeItems.size-1) {
+                if(pos == photiViewModel.completeItems.size-1)
                     binding.dividerGreen.visibility = View.GONE
-                }
+                else
+                    binding.dividerGreen.visibility = View.VISIBLE
 
                 Glide.with(binding.proofshotImageview.context)
                     .load(feedImageUrl)

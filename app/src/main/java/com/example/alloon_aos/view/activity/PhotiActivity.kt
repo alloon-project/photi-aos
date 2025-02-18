@@ -55,7 +55,6 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
             }
             "LEAVE" -> {
                 CustomToast.createToast(this, "챌린지 탈퇴가 완료됐어요.")?.show()
-                setBottomNavigation(TAG_PROFILE)
             }
             "LOGIN" -> {
                 CustomToast.createToast(this, "photi님 환영합니다!")?.show()

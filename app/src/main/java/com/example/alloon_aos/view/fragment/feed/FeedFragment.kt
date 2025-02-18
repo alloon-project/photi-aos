@@ -87,10 +87,9 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
                 photoUri = CameraHelper.getPhotoUri()
-                Log.d("CameraHelper", "사진 촬영 성공: $photoUri")
-                UploadCardDialog(this, photoUri.toString()).show(parentFragmentManager, "CustomDialog")
+                UploadCardDialog(this, photoUri).show(parentFragmentManager, "CustomDialog")
             } else {
-                Log.e("CameraHelper", "사진 촬영 실패")
+                CustomToast.createToast(activity, "사진 촬영 실패")?.show()
             }
         }
     }

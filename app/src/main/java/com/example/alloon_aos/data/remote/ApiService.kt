@@ -77,8 +77,7 @@ interface ApiService {
 
     @POST("/api/users/token")
     fun post_token(
-        @Header("Refresh-Token") token: String,
-        @Body emptyBody: RequestBody
+        @Header("Refresh-Token") token: String
     ): Call<TokenResponse>
 
     @GET("/api/users")

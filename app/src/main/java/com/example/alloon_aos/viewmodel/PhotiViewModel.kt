@@ -36,13 +36,16 @@ import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
 import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
 import com.example.alloon_aos.data.repository.ErrorHandler
+import com.example.alloon_aos.data.repository.FeedRepository
 import com.example.alloon_aos.data.repository.UserRepository
 import com.example.alloon_aos.data.repository.handleApiCall
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import org.threeten.bp.LocalDate
 
 data class Item(
@@ -61,6 +64,9 @@ class PhotiViewModel : ViewModel() {
 
     private val challengeService = RetrofitClient.challengeService
     private val challenge_repository = ChallengeRepository(challengeService)
+
+    private val feedService = RetrofitClient.feedService
+    private val feed_repository = FeedRepository(feedService)
 
     private val userService = RetrofitClient.userService
     private val user_repository = UserRepository(userService)
@@ -161,6 +167,9 @@ class PhotiViewModel : ViewModel() {
 
     private val _challengeCount = MutableLiveData<MyChallengeCount?>(null)
     val challengeCount: LiveData<MyChallengeCount?> get() = _challengeCount
+
+    private val _feedUploadPhoto = MutableLiveData<Boolean>()
+    val feedUploadPhoto: LiveData<Boolean> get() = _feedUploadPhoto
 
 
 
@@ -463,6 +472,23 @@ class PhotiViewModel : ViewModel() {
                 },
                 onFailure = { errorCode ->
                     _challengeCount.postValue(null)
+                    _code.postValue(errorCode)
+                }
+            )
+        }
+    }
+
+
+    //피드 인증
+    fun fetchChallengeFeed(image: MultipartBody.Part) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleApiCall(
+                call = { feed_repository.postChallengeFeed(id, image) },
+                onSuccess = { data ->
+                    _feedUploadPhoto.postValue(true)
+                },
+                onFailure = { errorCode ->
+                    _feedUploadPhoto.postValue(false)
                     _code.postValue(errorCode)
                 }
             )

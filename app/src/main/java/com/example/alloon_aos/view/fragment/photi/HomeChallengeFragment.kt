@@ -26,6 +26,10 @@ import com.example.alloon_aos.view.ui.component.dialog.UploadCardDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.CameraHelper
 import com.example.alloon_aos.viewmodel.PhotiViewModel
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
     private lateinit var binding : FragmentHomeChallengeBinding
@@ -72,7 +76,7 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
             if (success) {
                 photoUri = CameraHelper.getPhotoUri()
                 Log.d("CameraHelper", "사진 촬영 성공: $photoUri")
-                UploadCardDialog(this, photoUri.toString()).show(parentFragmentManager, "CustomDialog")
+                UploadCardDialog(this, photoUri).show(parentFragmentManager, "CustomDialog")
             } else {
                 Log.e("CameraHelper", "사진 촬영 실패")
             }
@@ -93,6 +97,16 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
             binding.viewPager2.setCurrentItem(photiViewModel.proofItems.size + it, true)
             proofShotHomeAdapter.notifyDataSetChanged()
         }
+        photiViewModel.feedUploadPhoto.observe(viewLifecycleOwner) {
+            if (it) {
+                photiViewModel.completeProof = true
+                photiViewModel.fetchMyChallenges()
+                CustomToast.createToast(activity,"인증 완료! 오늘도 수고했어요!")?.show()
+            }
+        }
+        photiViewModel.code.observe(viewLifecycleOwner) { code ->
+            handleApiError(code)
+        }
     }
 
     private fun startFeedPage(id: Int) {
@@ -106,14 +120,40 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
     }
 
     override fun onClickUploadButton() {
-        //여기에는 인증 api를 호출하고
-
-        //아래는 api 응답 성공하면 사용하는 아이들
-        photiViewModel.completeProof = true
-        photiViewModel.fetchMyChallenges()
-        CustomToast.createToast(activity,"인증 완료! 오늘도 수고했어요!")?.show()
+        val imageFile = createMultipartFromUri(photoUri)
+        photiViewModel.fetchChallengeFeed(imageFile)
     }
 
+    private fun createMultipartFromUri(uri: Uri): MultipartBody.Part {
+        val contentResolver = requireContext().contentResolver
+        val inputStream = contentResolver.openInputStream(uri) ?: throw IllegalArgumentException("Invalid URI")
+        val fileName = System.currentTimeMillis().toString() + ".jpg"
+        val tempFile = File(requireContext().cacheDir, fileName)
+
+        tempFile.outputStream().use { outputStream ->
+            inputStream.copyTo(outputStream)
+        }
+
+        val requestBody = tempFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("imageFile", tempFile.name, requestBody)
+    }
+
+    private fun handleApiError(code: String) {
+        val errorMessages = mapOf(
+            "TOKEN_UNAUTHENTICATED" to "승인되지 않은 요청입니다. 다시 로그인 해주세요.",
+            "TOKEN_UNAUTHORIZED" to "권한이 없는 요청입니다. 로그인 후 다시 시도해주세요.",
+            "UNKNOWN_ERROR" to "알 수 없는 오류가 발생했습니다."
+        )
+
+        if (code == "200 OK" || code == "201 CREATED")   return
+
+        if (code == "IO_Exception") {
+            CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+        } else {
+            val message = errorMessages[code] ?: "예기치 않은 오류가 발생했습니다. ($code)"
+            Log.e("HomeFragment", "Error: $message")
+        }
+    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

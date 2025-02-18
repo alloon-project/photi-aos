@@ -76,9 +76,8 @@ interface FeedApiService {
     @POST("/api/challenges/{challengeId}/feeds")
     suspend fun postChallengeFeed(
         @Path("challengeId") challengeId: Int, // 챌린지 ID
-        @Part image: MultipartBody.Part, // 이미지 파일
-        @Part("description") description: String // 피드 설명
-    ): ApiResponse<SuccessMessageReponse>
+        @Part image: MultipartBody.Part // 이미지 파일
+    ): Response<ApiResponse<SuccessMessageReponse>>
 
     //댓글 등록
     @POST("/api/challenges/{challengeId}/feeds/{feedId}/comments")

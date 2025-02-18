@@ -68,10 +68,9 @@ class FeedRepository(private val apiService: FeedApiService) {
     // 챌린지 인증 등록
     suspend fun postChallengeFeed(
         challengeId: Int,
-        image: MultipartBody.Part,
-        description: String
-    ): ApiResponse<SuccessMessageReponse> {
-        return apiService.postChallengeFeed(challengeId, image, description)
+        image: MultipartBody.Part
+    ): Response<ApiResponse<SuccessMessageReponse>> {
+        return apiService.postChallengeFeed(challengeId, image)
     }
 
     // 댓글 등록

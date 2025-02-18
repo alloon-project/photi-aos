@@ -51,10 +51,9 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
         val newAccessToken = runBlocking {
             try {
                 Log.d("TokenAuthenticator", "Making API request to refresh token...")
-                val emptyRequestBody = RequestBody.create("application/json".toMediaTypeOrNull(), "")
-                val tokenResponse = apiService.post_token(refreshToken,emptyRequestBody).execute()
+                val tokenResponse = apiService.post_token(refreshToken).execute()
 
-                Log.d("TokenAuthenticator", "API request executed. Response received.")
+                Log.d("TokenAuthenticator", "API request executed. Response received. ($tokenResponse)")
 
                 if (tokenResponse.isSuccessful) {
                     Log.d("TokenAuthenticator", "Response is successful. Extracting new access token...")

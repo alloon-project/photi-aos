@@ -3,6 +3,7 @@ package com.example.alloon_aos.view.ui.component.dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,14 +17,13 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.alloon_aos.databinding.DialogOneBtnBinding
 import com.example.alloon_aos.databinding.DialogUploadCardBinding
 
 interface UploadCardDialogInterface {
     fun onClickUploadButton()
 }
 
-class UploadCardDialog(val uploadCardDialogInterface: UploadCardDialogInterface, val url: String) : DialogFragment() {
+class UploadCardDialog(val uploadCardDialogInterface: UploadCardDialogInterface, val url: Uri) : DialogFragment() {
     private var _binding: DialogUploadCardBinding? = null
     private val binding get() = _binding!!
 
