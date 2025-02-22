@@ -18,34 +18,35 @@ class AllChallengesPagingSource(private val challengeRepository: ChallengeReposi
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ChallengeData> {
         val page = params.key ?: 0 // 첫 페이지는 0부터 시작
+
         return try {
-            Log.d("PagingSource", "All Challenges Loading page: $page, pageSize: ${params.loadSize}")
+            Log.d("AllChallengesPagingSource", "Feed History Loading page: $page, pageSize: ${params.loadSize}")
 
-            var content : List<ChallengeData> = emptyList()
-            challengeRepository.getChallengeLatest(page, params.loadSize, object :
-                ChallengeRepositoryCallback<PagingListResponse> {
-                override fun onSuccess(data: PagingListResponse) {
-                    val data = data.data
-//                    addLatestItem(changeToCommendDataLast(data.content))
-//                    latestResponse.value = ActionApiResponse(result)
-                    content = data.content
-                }
+            val response = challengeRepository.getChallengeLatest(page, params.loadSize)
+            val data = response.body()?.data
 
-                override fun onFailure(error: Throwable) {
-                    photiViewModel.latestResponse.value = ActionApiResponse(ErrorHandler.handle(error))
-                }
-            })
-            //val data = response.body()?.data?.content ?: emptyList() // 데이터 로딩
+            if (data == null) {
+                Log.e("AllChallengesPagingSource", "API 응답 데이터가 null입니다.")
+                return LoadResult.Page(
+                    data = emptyList(),
+                    prevKey = null,
+                    nextKey = null
+                )
+            }
+
+            val content = data.content
+            Log.d("AllChallengesPagingSource", "Loaded ${content.size} items")
+
             LoadResult.Page(
                 data = content,
-                prevKey = if (page == 0) null else page - 1,  // 첫 페이지는 prevKey가 null
-                nextKey = if (content.isEmpty()) null else page + 1  // 다음 페이지가 없으면 null
+                prevKey = if (data.first) null else page - 1,  // 첫 페이지는 prevKey가 null
+                nextKey = if (data.last || data.size == 0) null else page + 1  // 다음 페이지가 없으면 null
             )
         } catch (exception: Exception) {
+            Log.e("AllChallengesPagingSource", "Error: ${exception.message}")
             LoadResult.Error(exception)
         }
     }
-
 
 
     override fun getRefreshKey(state: PagingState<Int, ChallengeData>): Int? {

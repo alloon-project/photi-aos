@@ -220,26 +220,6 @@ class PhotiViewModel : ViewModel() {
     }
 
 
-    fun getChallengeLatest() {
-        challenge_repository.getChallengeLatest(
-            latestPage,
-            10,
-            object : ChallengeRepositoryCallback<PagingListResponse> {
-                override fun onSuccess(data: PagingListResponse) {
-                    val result = data.code
-                    val mes = data.message
-                    val data = data.data
-                    addLatestItem(changeToCommendDataLast(data.content))
-                    latestResponse.value = ActionApiResponse(result)
-                    Log.d(TAG, "getChallengeLatest: $mes $result")
-                }
-
-                override fun onFailure(error: Throwable) {
-                    latestResponse.value = ActionApiResponse(ErrorHandler.handle(error))
-                }
-            })
-    }
-
     fun getChallenge() {
         challenge_repository.getChallenge(
             id,

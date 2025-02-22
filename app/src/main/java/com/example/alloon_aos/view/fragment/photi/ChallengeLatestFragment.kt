@@ -34,7 +34,6 @@ class ChallengeLatestFragment : Fragment() {
     private lateinit var binding : FragmentChallengeLatestBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var latestCardAdapter: LatestCardAdapter
-    private lateinit var nestedScrollView: NestedScrollView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,11 +81,19 @@ class ChallengeLatestFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 photiViewModel.latestChallengeData.collectLatest { pagingData ->
-                    Log.d("PagingSource","$pagingData")
+                  //  Log.d("PagingSource","${pagingData}")
                     latestCardAdapter.submitData(pagingData)
+                    Log.d("PagingSource", "Adapter item count: ${latestCardAdapter.snapshot().items.size}")
                 }
             }
         }
+
+//        lifecycleScope.launch {
+//            latestCardAdapter.loadStateFlow.collectLatest { loadStates ->
+//                Log.d("PagingSource", "Refresh: ${loadStates.refresh}")
+//                Log.d("PagingSource", "Append: ${loadStates.append}")
+//            }
+//        }
 
         photiViewModel.latestResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
@@ -140,7 +147,7 @@ class ChallengeLatestFragment : Fragment() {
 
         inner class ViewHolder(var binding : ItemCardMissionSmallRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root){
             fun bind(data: ChallengeData) {
-
+                Log.d("ChallengeLatestFragment" ," 생성 : ${data.name}")
                 binding.titleTextView.text = data.name
                 binding.dateTextView.text = data.endDate
 

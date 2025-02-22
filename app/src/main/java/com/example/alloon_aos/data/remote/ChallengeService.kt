@@ -11,6 +11,7 @@ import com.example.alloon_aos.data.model.response.PagingListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -33,10 +34,10 @@ interface ChallengeService {
 
     //GET
     @GET("/api/challenges")
-    fun get_challengeLatest( //최신순-모든 챌린지 조회
+    suspend fun get_challengeLatest( //최신순-모든 챌린지 조회
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): Call<PagingListResponse>
+    ): Response<PagingListResponse>
 
     @GET("/api/challenges/{challengeId}/invitation-code")
     fun get_challengeCode( //챌린지 초대코드 조회

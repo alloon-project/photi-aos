@@ -12,14 +12,25 @@ class FeedHistoryPagingSource(private val userRepository: UserRepository) : Pagi
         val page = params.key ?: 0 // 첫 페이지는 0부터 시작
 
         return try {
-            Log.d("PagingSource", "Feed History Loading page: $page, pageSize: ${params.loadSize}")
+            Log.d("FeedHistoryPagingSource", "Feed History Loading page: $page, pageSize: ${params.loadSize}")
 
             val response = userRepository.getFeedHistory(page, params.loadSize)
-            val data = response.body()?.data?.content ?: emptyList() // 데이터 로딩
+            val data = response.body()?.data
+            if (data == null) {
+                Log.e("FeedHistoryPagingSource", "API 응답 데이터가 null입니다.")
+                return LoadResult.Page(
+                    data = emptyList(),
+                    prevKey = null,
+                    nextKey = null
+                )
+            }
+            val content = data.content
+            Log.d("FeedHistoryPagingSource", "Loaded ${content.size} items")
+
             LoadResult.Page(
-                data = data,
-                prevKey = if (page == 0) null else page - 1,  // 첫 페이지는 prevKey가 null
-                nextKey = if (data.isEmpty()) null else page + 1  // 다음 페이지가 없으면 null
+                data = content,
+                prevKey = if (data.first) null else page - 1,
+                nextKey = if (data.last || data.size == 0) null else page + 1
             )
         } catch (exception: Exception) {
             LoadResult.Error(exception)

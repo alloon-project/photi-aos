@@ -12,13 +12,22 @@ class EndedChallengePagingSource(private val userRepository: UserRepository) : P
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, EndedChallengeContent> {
         val page = params.key ?: 0
         return try {
-            Log.d("PagingSource", "Ended Challenge Loading page: $page, pageSize: ${params.loadSize}")
+            Log.d("EndedChallengePagingSource", "Ended Challenge Loading page: $page, pageSize: ${params.loadSize}")
             val response = userRepository.getEndedChallenges(page, params.loadSize)
-            val data = response.body()?.data?.content ?: emptyList()
+            val data = response.body()?.data
+            if (data == null) {
+                Log.e("EndedChallengePagingSource", "API 응답 데이터가 null입니다.")
+                return LoadResult.Page(
+                    data = emptyList(),
+                    prevKey = null,
+                    nextKey = null
+                )
+            }
+            val content = data.content
             LoadResult.Page(
-                data = data,
-                prevKey = if (page == 0) null else page - 1,
-                nextKey = if (data.isEmpty()) null else page + 1
+                data = content,
+                prevKey = if (data.first) null else page - 1,
+                nextKey = if (data.last || data.size == 0) null else page + 1
             )
         } catch (exception: Exception) {
             LoadResult.Error(exception)
