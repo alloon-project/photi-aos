@@ -73,7 +73,6 @@ class PhotiViewModel : ViewModel() {
 
     val apiResponse = MutableLiveData<ActionApiResponse>()
     val popularResponse = MutableLiveData<ActionApiResponse>()
-    val latestResponse = MutableLiveData<ActionApiResponse>()
     val hashResponse = MutableLiveData<ActionApiResponse>()
     val hashListResponse = MutableLiveData<ActionApiResponse>()
     val homeResponse = MutableLiveData<ActionApiResponse>()
@@ -89,10 +88,7 @@ class PhotiViewModel : ViewModel() {
     var memberImg: List<MemberImg> = listOf()
     var memberCnt = -1
     var imgFile = ""
-    var challengeCnt = 0
 
-    var latestPage = 0
-    var lastLatestPage = false
     var hashPage = 0
     var lastHashPage = false
     var hashtag = "전체"
@@ -106,12 +102,6 @@ class PhotiViewModel : ViewModel() {
     fun resetPopularResponseValue() {
         popularResponse.value = ActionApiResponse()
     }
-    fun resetLatestResponseValue() {
-        latestResponse.value = ActionApiResponse()
-        latestPage = 0
-        latestItems = arrayListOf()
-        lastLatestPage = false
-    }
     fun resetHashResponseValue() {
         hashListResponse.value = ActionApiResponse()
         hashResponse.value = ActionApiResponse()
@@ -124,7 +114,6 @@ class PhotiViewModel : ViewModel() {
     fun resetAllResponseValue() {
         apiResponse.value = ActionApiResponse()
         popularResponse.value = ActionApiResponse()
-        latestResponse.value = ActionApiResponse()
         hashResponse.value = ActionApiResponse()
         hashListResponse.value = ActionApiResponse()
         homeResponse.value = ActionApiResponse()
@@ -132,12 +121,9 @@ class PhotiViewModel : ViewModel() {
     }
 
     fun resetPaging() {
-        latestPage = 0
-        latestItems = arrayListOf()
         hashPage = 0
         hashItems = arrayListOf()
         hashtag = "전체"
-        lastLatestPage = false
         lastHashPage = false
     }
 
@@ -220,6 +206,29 @@ class PhotiViewModel : ViewModel() {
     }
 
 
+    //최신순 챌린지
+    private val _latestChallengeData = MutableStateFlow<PagingData<ChallengeData>>(PagingData.empty())
+    val latestChallengeData: StateFlow<PagingData<ChallengeData>> = _latestChallengeData
+
+    fun clearLatestChallengeData() {
+        _latestChallengeData.value = PagingData.empty()
+    }
+
+    fun fetchLatestChallenge() {
+        viewModelScope.launch {
+            Pager(
+                PagingConfig(initialLoadSize = 40, pageSize = 20,enablePlaceholders = false ),
+            ) {
+                AllChallengesPagingSource(challenge_repository)
+            }.flow.cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _latestChallengeData.value = pagingData
+                }
+        }
+    }
+
+
+    //API
     fun getChallenge() {
         challenge_repository.getChallenge(
             id,
@@ -320,18 +329,6 @@ class PhotiViewModel : ViewModel() {
     }
 
 
-    //최신순 챌린지
-    val latestItemsListData = MutableLiveData<ArrayList<CommendData>>()
-    var latestItems: ArrayList<CommendData> = arrayListOf()
-
-    fun addLatestItem(list: ArrayList<CommendData>) {
-        latestItems.addAll(list)
-        latestItemsListData.value = latestItems
-        if (list.size < 10)
-            lastLatestPage = true
-    }
-
-
     //해시태그별 챌린지
     val hashItemsListData = MutableLiveData<ArrayList<CommendData>>()
     var hashItems: ArrayList<CommendData> = arrayListOf()
@@ -347,8 +344,8 @@ class PhotiViewModel : ViewModel() {
     //해시태그 칩 목록
     val hashChipsListData = MutableLiveData<ArrayList<ChipItem>>()
     var hashChips = arrayListOf<ChipItem>(
-        ChipItem("러닝", false),
-        ChipItem("취뽀", false),
+        ChipItem("챌린지", false),
+        ChipItem("개발", false),
         ChipItem("독서", false),
         ChipItem("맛집", false),
         ChipItem("안드로이드", false)
@@ -427,7 +424,7 @@ class PhotiViewModel : ViewModel() {
         resetMyItems()
         viewModelScope.launch {
             handleApiCall(
-                call = { user_repository.getMyChallenges(0, challengeCnt) },
+                call = { user_repository.getMyChallenges(0, 20) },
                 onSuccess = { data ->
                     setMyChallenge(data!!.content)
                     _code.postValue("200 OK")
@@ -446,7 +443,6 @@ class PhotiViewModel : ViewModel() {
             handleApiCall(
                 call = { user_repository.getChallengesCount() },
                 onSuccess = { data ->
-                    challengeCnt = data!!.challengeCnt
                     _challengeCount.postValue(data)
                     _code.postValue("200 OK")
                 },
@@ -474,6 +470,7 @@ class PhotiViewModel : ViewModel() {
             )
         }
     }
+
 
 
     fun fetchChallengeHistory() {
@@ -545,32 +542,12 @@ class PhotiViewModel : ViewModel() {
     private val _endedChallengeData = MutableStateFlow<PagingData<EndedChallengeContent>>(PagingData.empty())
     val endedChallengeData: StateFlow<PagingData<EndedChallengeContent>> = _endedChallengeData
 
-    private val _latestChallengeData = MutableStateFlow<PagingData<ChallengeData>>(PagingData.empty())
-    val latestChallengeData: StateFlow<PagingData<ChallengeData>> = _latestChallengeData
-
     fun clearEndedChallengeData() {
         _endedChallengeData.value = PagingData.empty()
     }
 
     fun clearFeedHistoryData() {
         _feedHistoryData.value = PagingData.empty()
-    }
-
-    fun clearLatestChallengeData() {
-        _latestChallengeData.value = PagingData.empty()
-    }
-
-    fun fetchLatestChallenge() {
-        viewModelScope.launch {
-            Pager(
-                PagingConfig(initialLoadSize = 40, pageSize = 20,enablePlaceholders = false ),
-            ) {
-                AllChallengesPagingSource(challenge_repository, this@PhotiViewModel)
-            }.flow.cachedIn(viewModelScope)
-                .collectLatest { pagingData ->
-                    _latestChallengeData.value = pagingData
-                }
-        }
     }
 
     fun fetchFeedHistory() {

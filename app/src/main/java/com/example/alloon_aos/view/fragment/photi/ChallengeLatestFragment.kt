@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -20,11 +19,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.response.ChallengeData
-import com.example.alloon_aos.data.model.response.FeedHistoryContent
 import com.example.alloon_aos.databinding.FragmentChallengeLatestBinding
 import com.example.alloon_aos.databinding.ItemCardMissionSmallRecyclerviewBinding
 import com.example.alloon_aos.view.activity.ChallengeActivity
-import com.example.alloon_aos.view.ui.component.dialog.FeedHistoryDialog
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -42,29 +39,19 @@ class ChallengeLatestFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_challenge_latest, container, false)
         binding.fragment = this
 
-        latestCardAdapter = LatestCardAdapter()
+        latestCardAdapter = LatestCardAdapter(photiViewModel)
         binding.latestRecyclerView.adapter = latestCardAdapter
         binding.latestRecyclerView.layoutManager = GridLayoutManager(context, 2)
         binding.latestRecyclerView.setHasFixedSize(true)
 
         photiViewModel.resetApiResponseValue()
-        photiViewModel.resetLatestResponseValue()
         setObserver()
-
-//        nestedScrollView = binding.scrollView
-//        nestedScrollView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
-//            if (scrollY == nestedScrollView.getChildAt(0).measuredHeight - v.measuredHeight){
-//                //if (!photiViewModel.lastLatestPage)
-//                    //photiViewModel.getChallengeLatest()
-//            }
-//        }
 
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        //photiViewModel.getChallengeLatest()
         photiViewModel.fetchLatestChallenge()
     }
 
@@ -74,37 +61,11 @@ class ChallengeLatestFragment : Fragment() {
     }
 
     private fun setObserver() {
-//        photiViewModel.latestItemsListData.observe(viewLifecycleOwner) { // 데이터에 변화가 있을 때 어댑터에게 변경을 알림
-//            latestCardAdapter.notifyDataSetChanged()
-//        }
-
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 photiViewModel.latestChallengeData.collectLatest { pagingData ->
-                  //  Log.d("PagingSource","${pagingData}")
                     latestCardAdapter.submitData(pagingData)
                     Log.d("PagingSource", "Adapter item count: ${latestCardAdapter.snapshot().items.size}")
-                }
-            }
-        }
-
-//        lifecycleScope.launch {
-//            latestCardAdapter.loadStateFlow.collectLatest { loadStates ->
-//                Log.d("PagingSource", "Refresh: ${loadStates.refresh}")
-//                Log.d("PagingSource", "Append: ${loadStates.append}")
-//            }
-//        }
-
-        photiViewModel.latestResponse.observe(viewLifecycleOwner) { response ->
-            when (response.code) {
-//                "200 OK" -> {
-//                    photiViewModel.latestPage += 1
-//                }
-                "IO_Exception" -> {
-                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
-                }
-                else -> {
-                    Log.d("Observer", "Unhandled response code: ${response.code}")
                 }
             }
         }
@@ -143,11 +104,10 @@ class ChallengeLatestFragment : Fragment() {
     }
 
 
-    class LatestCardAdapter : PagingDataAdapter<ChallengeData, LatestCardAdapter.ViewHolder>(DiffCallback()){
+    class LatestCardAdapter(private val photiViewModel: PhotiViewModel) : PagingDataAdapter<ChallengeData, LatestCardAdapter.ViewHolder>(DiffCallback()){
 
         inner class ViewHolder(var binding : ItemCardMissionSmallRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root){
             fun bind(data: ChallengeData) {
-                Log.d("ChallengeLatestFragment" ," 생성 : ${data.name}")
                 binding.titleTextView.text = data.name
                 binding.dateTextView.text = data.endDate
 
@@ -178,10 +138,10 @@ class ChallengeLatestFragment : Fragment() {
                     .load(data.imageUrl)
                     .into(binding.imgView)
 
-//                binding.root.setOnClickListener {
-//                    photiViewModel.id = data.id
-//                    photiViewModel.getChallenge()
-//                }
+                binding.root.setOnClickListener {
+                    photiViewModel.id = data.id
+                    photiViewModel.getChallenge()
+                }
             }
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -192,8 +152,6 @@ class ChallengeLatestFragment : Fragment() {
         override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
             getItem(position)?.let { viewHolder.bind(it) }
         }
-
-        //override fun getItemCount() = photiViewModel.latestItems.size
 
         class DiffCallback : DiffUtil.ItemCallback<ChallengeData>() {
             override fun areItemsTheSame(oldItem: ChallengeData, newItem: ChallengeData): Boolean {

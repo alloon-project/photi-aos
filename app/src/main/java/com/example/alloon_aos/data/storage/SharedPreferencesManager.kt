@@ -21,14 +21,4 @@ class SharedPreferencesManager @Inject constructor(
     fun getUserName() : String?{
         return sharedPreferences.getString(USER_NAME, null)
     }
-
-    //목표
-    fun saveMyGoal(token: String){
-        sharedPreferences.setString(GOAL_KEY, token)
-        Log.d("test","set myGoal : "+getMyGoal())
-    }
-
-    fun getMyGoal(): String?{
-        return sharedPreferences.getString(GOAL_KEY,null)
-    }
 }

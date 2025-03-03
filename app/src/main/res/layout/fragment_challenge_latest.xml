@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
@@ -10,13 +9,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        >
-<!--        <androidx.core.widget.NestedScrollView-->
-<!--            android:id="@+id/scrollView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:scrollbars="vertical">-->
+        android:background="@color/white">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:theme="@style/Theme.Photi"
@@ -55,6 +48,5 @@
                     app:layout_constraintTop_toBottomOf="@+id/latest_textview"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-<!--      //  </androidx.core.widget.NestedScrollView>-->
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

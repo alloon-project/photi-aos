@@ -3,18 +3,10 @@ package com.example.alloon_aos.data.paging
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.alloon_aos.data.model.ActionApiResponse
-import com.example.alloon_aos.data.model.response.ChallengeContent
 import com.example.alloon_aos.data.model.response.ChallengeData
-import com.example.alloon_aos.data.model.response.PagingListResponse
 import com.example.alloon_aos.data.repository.ChallengeRepository
-import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
-import com.example.alloon_aos.data.repository.ErrorHandler
-import com.example.alloon_aos.data.repository.UserRepository
-import com.example.alloon_aos.viewmodel.PhotiViewModel
 
-class AllChallengesPagingSource(private val challengeRepository: ChallengeRepository,
-    private val photiViewModel: PhotiViewModel) : PagingSource<Int, ChallengeData>() {
+class AllChallengesPagingSource(private val challengeRepository: ChallengeRepository) : PagingSource<Int, ChallengeData>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ChallengeData> {
         val page = params.key ?: 0 // 첫 페이지는 0부터 시작

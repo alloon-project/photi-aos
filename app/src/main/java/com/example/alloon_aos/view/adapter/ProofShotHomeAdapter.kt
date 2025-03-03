@@ -30,8 +30,10 @@ class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel,
                     binding.dividerBlue.visibility = View.GONE
                 else
                     binding.dividerBlue.visibility = View.VISIBLE
+
                 binding.bannerTextview.setText(name)
                 binding.timeTextview.setText(proveTime)
+
                 binding.proofshotButton.setOnClickListener {
                     photiViewModel.updateCurrentItem(this)
                     photiViewModel.id = id
