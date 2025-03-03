@@ -10,6 +10,10 @@
             name="viewModel"
             type="com.example.alloon_aos.viewmodel.SearchViewModel" />
     </data>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search"
         tools:context=".view.activity.SearchActivity"
@@ -195,6 +199,8 @@
                     android:layout_marginBottom="16dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
+                    android:scrollbars="vertical"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line_view"/>
 
@@ -215,4 +221,5 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

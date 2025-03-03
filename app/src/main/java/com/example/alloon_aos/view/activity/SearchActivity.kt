@@ -14,26 +14,32 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.databinding.ActivitySearchBinding
 import com.example.alloon_aos.databinding.ItemSearchChallengeRecyclerviewBinding
 import com.example.alloon_aos.databinding.ItemSearchChipRecyclerviewBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.SearchViewModel
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class SearchActivity : AppCompatActivity() {
     lateinit var binding : ActivitySearchBinding
     private val searchViewModel : SearchViewModel by viewModels()
     lateinit var hashAdapter: SearchHashAdapter
     lateinit var challengAdapter: SearchChallengeAdpater
-    private lateinit var nestedScrollView: NestedScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,31 +47,32 @@ class SearchActivity : AppCompatActivity() {
         binding.viewModel = searchViewModel
 
         searchViewModel.resetApiResponseValue()
-        searchViewModel.resetSearchList()
 
         hashAdapter = SearchHashAdapter()
         binding.hashRecyclerview.adapter = hashAdapter
         binding.hashRecyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         binding.hashRecyclerview.setHasFixedSize(true)
 
-        challengAdapter = SearchChallengeAdpater()
+        challengAdapter = SearchChallengeAdpater(searchViewModel)
         binding.challengeRecyclerview.adapter = challengAdapter
         binding.challengeRecyclerview.layoutManager = GridLayoutManager(this, 2)
         binding.challengeRecyclerview.setHasFixedSize(true)
 
         setListener()
         setObserve()
+    }
 
-//        nestedScrollView = binding.scrollView
-//        nestedScrollView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
-//            if (scrollY == nestedScrollView.getChildAt(0).measuredHeight - v.measuredHeight){
-//                if (!searchViewModel.latestPage)
-//                    if (searchViewModel.isHash)
-//                        searchViewModel.getSearchHash()
-//                    else
-//                        searchViewModel.getSearchName()
-//            }
-//        }
+    override fun onResume() {
+        super.onResume()
+        if (binding.searchEditText.text.isEmpty())
+            setBeforeLayout()
+        else
+            setAfterLayout()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        searchViewModel.clearSearchChallengeData()
     }
 
 
@@ -74,7 +81,6 @@ class SearchActivity : AppCompatActivity() {
         binding.searchAfterLayout.visibility = View.GONE
         binding.searchBtn.visibility = View.VISIBLE
         binding.deleteBtn.visibility = View.GONE
-        searchViewModel.resetSearchList()
     }
 
     private fun setAfterLayout() {
@@ -84,7 +90,11 @@ class SearchActivity : AppCompatActivity() {
         binding.deleteBtn.visibility = View.VISIBLE
         searchViewModel.search = binding.searchEditText.text.toString()
         searchViewModel.addHash()
-        searchViewModel.getSearchName()
+        searchViewModel.clearSearchChallengeData()
+        if (searchViewModel.isHash)
+            searchViewModel.fetchSearchHash()
+        else
+            searchViewModel.fetchSearchName()
     }
 
     private fun setHashLayout() {
@@ -94,21 +104,6 @@ class SearchActivity : AppCompatActivity() {
         } else {
             binding.hashRecyclerview.visibility = View.VISIBLE
             binding.noSearchTextview.visibility = View.GONE
-        }
-    }
-
-    private fun setChallengeLayout() {
-        val size = searchViewModel.searchList.size
-        if (size == 0) {
-            binding.challengeRecyclerview.visibility = View.GONE
-            binding.noChallengeTextview.visibility = View.VISIBLE
-        } else {
-            binding.challengeRecyclerview.visibility = View.VISIBLE
-            binding.noChallengeTextview.visibility = View.GONE
-
-//            if (size < 10)
-//                searchViewModel.latestPage = true
-//            searchViewModel.page ++
         }
     }
 
@@ -166,10 +161,10 @@ class SearchActivity : AppCompatActivity() {
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(p0: TabLayout.Tab?) {
-                searchViewModel.resetSearchList()
+                searchViewModel.clearSearchChallengeData()
                 when(p0?.position) {
-                    0 -> { searchViewModel.getSearchName() }
-                    1 -> { searchViewModel.getSearchHash() }
+                    0 -> { searchViewModel.fetchSearchName() }
+                    1 -> { searchViewModel.fetchSearchHash() }
                 }
             }
 
@@ -193,29 +188,30 @@ class SearchActivity : AppCompatActivity() {
             setAfterLayout()
         }
 
-        searchViewModel._searchList.observe(this) {
-            challengAdapter.notifyDataSetChanged()
+        searchViewModel.page.observe(this) {
+            if (it == 0) {
+                binding.challengeRecyclerview.visibility = View.GONE
+                binding.noChallengeTextview.visibility = View.VISIBLE
+            } else {
+                binding.challengeRecyclerview.visibility = View.VISIBLE
+                binding.noChallengeTextview.visibility = View.GONE
+            }
         }
 
-        searchViewModel.apiResponse.observe(this) { response ->
-            when (response.code) {
-                "200 OK" -> {
-                    setChallengeLayout()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchViewModel.searchNameData.collectLatest { pagingData ->
+                    challengAdapter.submitData(pagingData)
+                    Log.d("PagingSource", "Adapter item count: ${challengAdapter.snapshot().items.size}")
                 }
-                "CHALLENGE_MEMBER_NOT_FOUND" -> {
-                    CustomToast.createToast(this, "존재하지 않는 챌린지 파티원입니다.")?.show()
-                }
-                "TOKEN_UNAUTHENTICATED" -> {
-                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
-                }
-                "TOKEN_UNAUTHORIZED" -> {
-                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
-                }
-                "IO_Exception" -> {
-                    CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
-                }
-                else -> {
-                    Log.d("Observer", "Unhandled response code: ${response.code}")
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchViewModel.searchHashData.collectLatest { pagingData ->
+                    challengAdapter.submitData(pagingData)
+                    Log.d("PagingSource", "Adapter item count: ${challengAdapter.snapshot().items.size}")
                 }
             }
         }
@@ -254,6 +250,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
+
     //before adapter
     inner class HashViewHolder(private val binding: ItemSearchChipRecyclerviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -269,7 +266,6 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
-
     inner class SearchHashAdapter() : RecyclerView.Adapter<HashViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HashViewHolder {
             val binding = ItemSearchChipRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -284,97 +280,102 @@ class SearchActivity : AppCompatActivity() {
 
 
     // after adapter
-    inner class ChallengeViewHolder(var binding: ItemSearchChallengeRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun setContents(holder: ChallengeViewHolder, pos: Int) {
-            with(searchViewModel.searchList[pos]) {
-                binding.titleTextView.text = name
-                binding.dateTextView.text = endDate
+    class SearchChallengeAdpater(private val searchViewModel: SearchViewModel): PagingDataAdapter<ChallengeData, SearchChallengeAdpater.ViewHolder> (DiffCallback()) {
 
-                Glide
-                    .with(holder.itemView.context)
-                    .load(imageUrl)
-                    .into(binding.imgView)
+        inner class ViewHolder(var binding: ItemSearchChallengeRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root) {
+            fun bind(data: ChallengeData) {
+                    binding.titleTextView.text = data.name
+                    binding.dateTextView.text = data.endDate
 
-                val cnt = currentMemberCnt
-                val imgs = memberImages
+                    Glide
+                        .with(binding.imgView.context)
+                        .load(data.imageUrl)
+                        .into(binding.imgView)
 
-                when (cnt) {
-                    1 -> {
-                        binding.avatarOneLayout.visibility = View.VISIBLE
-                        loadImage(binding.oneUser1ImageView, imgs.getOrNull(0)?.memberImage)
+                    val cnt = data.currentMemberCnt
+                    val imgs = data.memberImages
+
+                    when (cnt) {
+                        1 -> {
+                            binding.avatarOneLayout.visibility = View.VISIBLE
+                            loadImage(binding.oneUser1ImageView, imgs.getOrNull(0)?.memberImage)
+                        }
+                        2 -> {
+                            binding.avatarTwoLayout.visibility = View.VISIBLE
+                            loadImage(binding.twoUser1ImageView, imgs.getOrNull(0)?.memberImage)
+                            loadImage(binding.twoUser2ImageView, imgs.getOrNull(1)?.memberImage)
+                        }
+                        3 -> {
+                            binding.avatarThreeLayout.visibility = View.VISIBLE
+                            loadImage(binding.threeUser1ImageView, imgs.getOrNull(0)?.memberImage)
+                            loadImage(binding.threeUser2ImageView, imgs.getOrNull(1)?.memberImage)
+                            loadImage(binding.threeUser3ImageView, imgs.getOrNull(2)?.memberImage)
+                        }
+                        else -> {
+                            binding.avatarMultipleLayout.visibility = View.VISIBLE
+                            loadImage(binding.multipleUser1ImageView, imgs.getOrNull(0)?.memberImage)
+                            loadImage(binding.multipleUser2ImageView, imgs.getOrNull(1)?.memberImage)
+                            binding.countTextView.text = "+${(cnt - 2).coerceAtLeast(0)}"
+                        }
                     }
-                    2 -> {
-                        binding.avatarTwoLayout.visibility = View.VISIBLE
-                        loadImage(binding.twoUser1ImageView, imgs.getOrNull(0)?.memberImage)
-                        loadImage(binding.twoUser2ImageView, imgs.getOrNull(1)?.memberImage)
-                    }
-                    3 -> {
-                        binding.avatarThreeLayout.visibility = View.VISIBLE
-                        loadImage(binding.threeUser1ImageView, imgs.getOrNull(0)?.memberImage)
-                        loadImage(binding.threeUser2ImageView, imgs.getOrNull(1)?.memberImage)
-                        loadImage(binding.threeUser3ImageView, imgs.getOrNull(2)?.memberImage)
-                    }
-                    else -> {
-                        binding.avatarMultipleLayout.visibility = View.VISIBLE
-                        loadImage(binding.multipleUser1ImageView, imgs.getOrNull(0)?.memberImage)
-                        loadImage(binding.multipleUser2ImageView, imgs.getOrNull(1)?.memberImage)
-                        binding.countTextView.text = "+${(cnt - 2).coerceAtLeast(0)}"
-                    }
-                }
 
-                if(!searchViewModel.isHash){
-                    binding.hashLayout.visibility = View.GONE
-                } else {
-                    binding.hashLayout.visibility = View.VISIBLE
+                    if(!searchViewModel.isHash){
+                        binding.hashLayout.visibility = View.GONE
+                    } else {
+                        binding.hashLayout.visibility = View.VISIBLE
 
-                    binding.hash1Btn.visibility = View.GONE
-                    binding.hash2Btn.visibility = View.GONE
-                    binding.hash3Btn.visibility = View.GONE
+                        binding.hash1Btn.visibility = View.GONE
+                        binding.hash2Btn.visibility = View.GONE
+                        binding.hash3Btn.visibility = View.GONE
 
-                    hashtags.forEachIndexed { index, hashtag ->
-                        when (index) {
-                            0 -> {
-                                binding.hash1Btn.text = hashtag.hashtag
-                                binding.hash1Btn.visibility = View.VISIBLE
-                            }
-                            1 -> {
-                                binding.hash2Btn.text = hashtag.hashtag
-                                binding.hash2Btn.visibility = View.VISIBLE
-                            }
-                            2 -> {
-                                binding.hash3Btn.text = hashtag.hashtag
-                                binding.hash3Btn.visibility = View.VISIBLE
+                        data.hashtags.forEachIndexed { index, hashtag ->
+                            when (index) {
+                                0 -> {
+                                    binding.hash1Btn.text = hashtag.hashtag
+                                    binding.hash1Btn.visibility = View.VISIBLE
+                                }
+                                1 -> {
+                                    binding.hash2Btn.text = hashtag.hashtag
+                                    binding.hash2Btn.visibility = View.VISIBLE
+                                }
+                                2 -> {
+                                    binding.hash3Btn.text = hashtag.hashtag
+                                    binding.hash3Btn.visibility = View.VISIBLE
+                                }
                             }
                         }
                     }
-                }
 
-                binding.root.setOnClickListener {
-                    searchViewModel.id = id
-                    searchViewModel.getChallenge()
-                }
+                    binding.root.setOnClickListener {
+                        searchViewModel.id = data.id
+                        searchViewModel.getChallenge()
+                    }
             }
         }
-    }
-    private fun loadImage(imageView: ImageView, url: String?) {
-        if (!url.isNullOrEmpty()) {
-            Glide.with(imageView.context)
-                .load(url)
-                .circleCrop()
-                .into(imageView)
+        private fun loadImage(imageView: ImageView, url: String?) {
+            if (!url.isNullOrEmpty()) {
+                Glide.with(imageView.context)
+                    .load(url)
+                    .circleCrop()
+                    .into(imageView)
+            }
         }
-    }
-
-    inner class SearchChallengeAdpater(): RecyclerView.Adapter<ChallengeViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChallengeViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = ItemSearchChallengeRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ChallengeViewHolder(view)
+            return ViewHolder(view)
         }
 
-        override fun onBindViewHolder(viewHolder: ChallengeViewHolder, position: Int) {
-            viewHolder.setContents(viewHolder, position)
+        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+            getItem(position)?.let { viewHolder.bind(it) }
         }
-        override fun getItemCount() = searchViewModel.searchList.size
+
+        class DiffCallback : DiffUtil.ItemCallback<ChallengeData>() {
+            override fun areItemsTheSame(oldItem: ChallengeData, newItem: ChallengeData): Boolean {
+                return oldItem.id == newItem.id
+            }
+            override fun areContentsTheSame(oldItem: ChallengeData, newItem: ChallengeData): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

@@ -5,13 +5,11 @@ import com.example.alloon_aos.data.model.request.CreateData
 import com.example.alloon_aos.data.model.request.Goal
 import com.example.alloon_aos.data.model.request.InviteCode
 import com.example.alloon_aos.data.model.request.ModifyData
-import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.ExamImgResponse
-import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.PagingListResponse
 import com.example.alloon_aos.data.remote.ChallengeService
 import com.example.alloon_aos.data.storage.TokenManager
@@ -97,40 +95,12 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
         })
     }
 
-    // 챌린지 이름 검색
-    fun getSearchName(name: String, page: Int, size: Int, callback: ChallengeRepositoryCallback<PagingListResponse>) {
-        challengeService.get_searchName(name, page, size).enqueue(object : Callback<PagingListResponse> {
-            override fun onResponse(call: Call<PagingListResponse>, response: Response<PagingListResponse>) {
-                if (response.isSuccessful) {
-                    callback.onSuccess(response.body()!!)
-                } else {
-                    val error = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(error))
-                }
-            }
-
-            override fun onFailure(call: Call<PagingListResponse>, t: Throwable) {
-                callback.onFailure(t)
-            }
-        })
+    suspend fun getSearchName(name: String, page: Int, size: Int) : Response<PagingListResponse>{
+        return  challengeService.get_searchName(challengeName = name, page = page, size = size)
     }
 
-    // 챌린지 해시태그 검색
-    fun getSearchHashtag(hash: String, page: Int, size: Int, callback: ChallengeRepositoryCallback<PagingListResponse>) {
-        challengeService.get_searchHashtag(hash, page, size).enqueue(object : Callback<PagingListResponse> {
-            override fun onResponse(call: Call<PagingListResponse>, response: Response<PagingListResponse>) {
-                if (response.isSuccessful) {
-                    callback.onSuccess(response.body()!!)
-                } else {
-                    val error = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(error))
-                }
-            }
-
-            override fun onFailure(call: Call<PagingListResponse>, t: Throwable) {
-                callback.onFailure(t)
-            }
-        })
+    suspend fun getSearchHashtag(hash: String, page: Int, size: Int) : Response<PagingListResponse>{
+        return  challengeService.get_searchHashtag(hashtag = hash, page = page, size = size)
     }
 
     fun getChallengePopular(callback: ChallengeRepositoryCallback<ChallengeListResponse>) {

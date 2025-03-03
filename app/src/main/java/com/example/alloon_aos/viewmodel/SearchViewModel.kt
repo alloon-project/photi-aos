@@ -3,19 +3,28 @@ package com.example.alloon_aos.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.MyData
-import com.example.alloon_aos.data.model.SearchData
 import com.example.alloon_aos.data.model.request.HashTag
 import com.example.alloon_aos.data.model.request.MemberImg
 import com.example.alloon_aos.data.model.request.Rule
 import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeResponse
-import com.example.alloon_aos.data.model.response.PagingListResponse
+import com.example.alloon_aos.data.paging.SearchHashPagingSource
+import com.example.alloon_aos.data.paging.SearchNamePagingSource
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
 import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
 import com.example.alloon_aos.data.repository.ErrorHandler
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class SearchViewModel : ViewModel() {
@@ -26,8 +35,8 @@ class SearchViewModel : ViewModel() {
     private val challengeService = RetrofitClient.challengeService
     private val repository = ChallengeRepository(challengeService)
 
-    val apiResponse = MutableLiveData<ActionApiResponse>()
     val challengeResponse = MutableLiveData<ActionApiResponse>()
+    val page = MutableLiveData<Int>()
 
     var id = -1
     var name = ""
@@ -41,18 +50,10 @@ class SearchViewModel : ViewModel() {
     var memberCnt = -1
     var imgFile = ""
 
-    var page = 0
-    var latestPage = false
-
     fun resetApiResponseValue() {
-        apiResponse.value = ActionApiResponse()
         challengeResponse.value = ActionApiResponse()
     }
-    fun resetSearchList() {
-        searchList = arrayListOf()
-        page = 0
-        latestPage = false
-    }
+
 
     fun getData(): MyData {
         var data =
@@ -90,44 +91,44 @@ class SearchViewModel : ViewModel() {
             })
     }
 
-    fun getSearchName() {
-        isHash = false
-        repository.getSearchName(search, page, 10, object :
-            ChallengeRepositoryCallback<PagingListResponse> {
-            override fun onSuccess(data: PagingListResponse) {
-                val result = data.code
-                val mes = data.message
-                val data = data.data
-                val content = data.content
-                setNameList(content)
-                apiResponse.value = ActionApiResponse(result)
-                Log.d(TAG, "getSearchName: $mes $result")
-            }
 
-            override fun onFailure(error: Throwable) {
-                apiResponse.value = ActionApiResponse(ErrorHandler.handle(error))
-            }
-        })
+    private val _searchNameData = MutableStateFlow<PagingData<ChallengeData>>(PagingData.empty())
+    val searchNameData: StateFlow<PagingData<ChallengeData>> = _searchNameData
+
+    private val _searchHashData = MutableStateFlow<PagingData<ChallengeData>>(PagingData.empty())
+    val searchHashData: StateFlow<PagingData<ChallengeData>> = _searchHashData
+
+    fun clearSearchChallengeData() {
+        _searchNameData.value = PagingData.empty()
+        _searchHashData.value = PagingData.empty()
     }
 
-    fun getSearchHash() {
-        isHash = true
-        repository.getSearchHashtag(search, page, 10, object :
-            ChallengeRepositoryCallback<PagingListResponse> {
-            override fun onSuccess(data: PagingListResponse) {
-                val result = data.code
-                val mes = data.message
-                val data = data.data
-                val content = data.content
-                setHashList(content)
-                apiResponse.value = ActionApiResponse(result)
-                Log.d(TAG, "getSearchHash: $mes $result")
-            }
+    fun fetchSearchName() {
+        isHash = false
+        viewModelScope.launch {
+            Pager(
+                PagingConfig(initialLoadSize = 40, pageSize = 20,enablePlaceholders = false ),
+            ) {
+                SearchNamePagingSource(search, this@SearchViewModel, repository)
+            }.flow.cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _searchNameData.value = pagingData
+                }
+        }
+    }
 
-            override fun onFailure(error: Throwable) {
-                apiResponse.value = ActionApiResponse(ErrorHandler.handle(error))
-            }
-        })
+    fun fetchSearchHash() {
+        isHash = true
+        viewModelScope.launch {
+            Pager(
+                PagingConfig(initialLoadSize = 40, pageSize = 20,enablePlaceholders = false ),
+            ) {
+                SearchHashPagingSource(search, this@SearchViewModel, repository)
+            }.flow.cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _searchHashData.value = pagingData
+                }
+        }
     }
 
 
@@ -159,26 +160,7 @@ class SearchViewModel : ViewModel() {
 
 
     // after
-    var _search = MutableLiveData<String>()
     var search = ""
     var isHash = false
 
-    val _searchList = MutableLiveData<ArrayList<SearchData>>()
-    var searchList : ArrayList<SearchData> = arrayListOf()
-
-    fun setNameList(list: List<ChallengeData>) {
-        for (item in list) {
-            searchList.add(SearchData(item.id, item.name, item.imageUrl,
-                item.currentMemberCnt, item.endDate, item.memberImages))
-        }
-        _searchList.value = searchList
-    }
-
-    fun setHashList(list: List<ChallengeData>) {
-        for (item in list) {
-            searchList.add(SearchData(item.id, item.name, item.imageUrl,
-                item.currentMemberCnt, item.endDate, item.memberImages, item.hashtags))
-        }
-        _searchList.value = searchList
-    }
 }

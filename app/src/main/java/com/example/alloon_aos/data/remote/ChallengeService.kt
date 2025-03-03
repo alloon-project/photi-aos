@@ -50,18 +50,18 @@ interface ChallengeService {
     ): Call<ChallengeResponse>
 
     @GET("/api/challenges/search/name")
-    fun get_searchName( //챌린지 이름 검색
+    suspend fun get_searchName( //챌린지 이름 검색
         @Query("challengeName") challengeName: String,
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): Call<PagingListResponse>
+    ): Response<PagingListResponse>
 
     @GET("/api/challenges/search/hashtag")
-    fun get_searchHashtag( //챌린지 해시태그 검색
+    suspend fun get_searchHashtag( //챌린지 해시태그 검색
         @Query("hashtag") hashtag: String,
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): Call<PagingListResponse>
+    ): Response<PagingListResponse>
 
     @GET("/api/challenges/popular")
     fun get_challengePopular( //추천순-인기있는 챌린지 조회
