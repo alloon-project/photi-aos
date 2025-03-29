@@ -2,13 +2,9 @@ package com.example.alloon_aos.data.paging.feed
 
 import android.util.Log
 import androidx.paging.PagingSource
-import androidx.paging.PagingSource.LoadResult
 import androidx.paging.PagingState
-import com.example.alloon_aos.data.model.response.EndedChallengeContent
 import com.example.alloon_aos.data.model.response.Feed
 import com.example.alloon_aos.data.repository.FeedRepository
-import com.example.alloon_aos.data.repository.UserRepository
-
 
 class ChallengeFeedsPagingSource(private val feedRepository: FeedRepository,private val challengeId : Int) : PagingSource<Int, Feed>() {
 

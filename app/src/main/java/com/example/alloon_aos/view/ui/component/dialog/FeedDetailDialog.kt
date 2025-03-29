@@ -38,7 +38,6 @@ import com.example.alloon_aos.databinding.DialogFeedDetailBinding
 import com.example.alloon_aos.databinding.ItemFeedCommentBinding
 import com.example.alloon_aos.view.adapter.OnFeedDeletedListener
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
-import com.example.alloon_aos.viewmodel.FeedInItem
 import com.example.alloon_aos.viewmodel.FeedViewModel
 
 class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListener) : DialogFragment(),CustomTwoButtonDialogInterface  {
@@ -254,12 +253,12 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
         }
     }
 
-    private fun updateHeartCountView(heartBtn: ImageButton, heartCntTextView: TextView, feed : FeedInItem) {
-        feed.isClick = !feed.isClick
-        heartBtn.setImageResource(if (feed.isClick) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
-        feed.heartCnt += if (feed.isClick) 1 else -1
-        heartCntTextView.text = if (feed.heartCnt == 0) "" else feed.heartCnt.toString()
-    }
+//    private fun updateHeartCountView(heartBtn: ImageButton, heartCntTextView: TextView, feed : FeedInItem) {
+//        feed.isClick = !feed.isClick
+//        heartBtn.setImageResource(if (feed.isClick) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
+//        feed.heartCnt += if (feed.isClick) 1 else -1
+//        heartCntTextView.text = if (feed.heartCnt == 0) "" else feed.heartCnt.toString()
+//    }
 
     private fun showCustomToast(customToastLayout: ConstraintLayout) {
 //        // 마지막 아이템의 뷰를 찾아서 그 뷰를 기준으로 토스트 위치를 설정

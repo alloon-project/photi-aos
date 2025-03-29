@@ -9,6 +9,7 @@ import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
+import com.example.alloon_aos.data.model.response.VerifiedMemberCount
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -113,4 +114,11 @@ interface FeedApiService {
         @Path("challengeId") challengeId: Int,
         @Path("feedId") feedId: Int,
     ): Response<ApiResponse<SuccessMessageReponse>>
+
+    //피드 당일 인증 파티원 수 조회
+    @GET("/api/challenges/{challengeId}/feed-members")
+    suspend fun get_verifiedMemberCount(
+        @Path("challengeId") challengeId: Int,
+    ): Response<ApiResponse<VerifiedMemberCount>>
+
 }

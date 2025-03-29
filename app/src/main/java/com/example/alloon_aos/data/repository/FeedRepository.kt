@@ -9,6 +9,7 @@ import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
+import com.example.alloon_aos.data.model.response.VerifiedMemberCount
 import com.example.alloon_aos.data.remote.FeedApiService
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -102,6 +103,12 @@ class FeedRepository(private val apiService: FeedApiService) {
         feedId: Int,
     ): Response<ApiResponse<SuccessMessageReponse>> {
         return apiService.deleteFeedLike(challengeId, feedId)
+    }
+
+    suspend fun getVerifiedMemberCount(
+        challengeId: Int,
+    ): Response<ApiResponse<VerifiedMemberCount>> {
+        return apiService.get_verifiedMemberCount(challengeId)
     }
 
 }

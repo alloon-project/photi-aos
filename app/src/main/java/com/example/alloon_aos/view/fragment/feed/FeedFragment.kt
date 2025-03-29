@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -33,7 +34,6 @@ import com.example.alloon_aos.view.ui.component.dialog.UploadCardDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.CameraHelper
 import com.example.alloon_aos.view.ui.util.dpToPx
-import com.example.alloon_aos.viewmodel.FeedInItem
 import com.example.alloon_aos.viewmodel.FeedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,11 +41,13 @@ import kotlinx.coroutines.launch
 class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterface {
     private lateinit var binding : FragmentFeedBinding
     private lateinit var mContext: Context
-    private lateinit var feedOutAdapter : FeedAdapter
+    private lateinit var feedAdapter : FeedAdapter
     private val feedViewModel by activityViewModels<FeedViewModel>()
     private var selected_order = "first"
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private lateinit var photoUri: Uri
+    private lateinit var progressBar: ProgressBar
+    private lateinit var tag : ConstraintLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,25 +58,28 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         binding.viewModel = feedViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        feedOutAdapter = FeedAdapter(requireActivity().supportFragmentManager,feedViewModel )
-        binding.feedOutRecyclerView.adapter = feedOutAdapter
+        feedAdapter = FeedAdapter(requireActivity().supportFragmentManager,feedViewModel )
 
-        binding.feedOutRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        val layoutManager = GridLayoutManager(context, 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (feedAdapter.getItemViewType(position)) {
+                    FeedAdapter.VIEW_TYPE_HEADER -> 2
+                    else -> 1
+                }
+            }
+        }
+        binding.feedOutRecyclerView.layoutManager =layoutManager
         binding.feedOutRecyclerView.setHasFixedSize(true)
+        binding.feedOutRecyclerView.adapter = feedAdapter
 
         setObserve()
 
         feedViewModel.fetchChallengeFeeds()
-
-        val progressBar = binding.feedProgress
-        val tag = binding.constraintLayout7
-
-        progressBar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                progressBar.viewTreeObserver.removeOnGlobalLayoutListener(this) // 리스너 제거 (중복 실행 방지)
-                animateProgressBar(progressBar, tag, 100, 55)
-            }
-        })
+        feedViewModel.fetchVerifiedMemberCount()
+         progressBar = binding.feedProgress
+         tag = binding.constraintlayoutTag
 
         return binding.root
     }
@@ -115,6 +120,52 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         }
     }
 
+
+    private fun setObserve() {
+        feedViewModel.code.observe(viewLifecycleOwner) { code ->
+            handleApiError(code)
+        }
+
+        feedViewModel.isMissionClear.observe(viewLifecycleOwner) { isClear ->
+            if (isClear) {
+                binding.fixedImageButton.visibility = View.GONE
+            }
+            else
+                showToastAbove("오늘의 인증이 완료되지 않았어요!")
+        }
+
+        feedViewModel.feedVerifiedUserCount.observe(viewLifecycleOwner) { verifiedCount ->
+            val totalCount = feedViewModel.challengeMembers.value?.size ?: 0
+            val verified = verifiedCount ?: 0
+
+            val percentage = if (totalCount == 0) 0 else (verified * 100) / totalCount
+
+            Log.d("FeedFragment", "total: $totalCount, verified: $verified, percentage: $percentage%")
+
+            //TODO 태그 텍스트
+           // tag.text = "$percentage% 인증"
+
+            if (verified == 0 || totalCount == 0) return@observe
+
+            progressBar.viewTreeObserver.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    progressBar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    animateProgressBar(progressBar, tag, 100, percentage)
+                }
+            })
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                feedViewModel.challengeFeeds.collectLatest { pagingData ->
+                    feedAdapter.submitData(pagingData)
+                }
+            }
+        }
+
+    }
+
     private fun animateProgressBar(progressBar: ProgressBar, layout: View, max: Int, progress: Int) {
         val scaleFactor = if (max >= 100) 1 else (100 / max)
 
@@ -139,29 +190,6 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
             layout.translationX = progressX - layoutCenterOffset
         }
         animator.start()
-    }
-
-    private fun setObserve() {
-        feedViewModel.code.observe(viewLifecycleOwner) { code ->
-            handleApiError(code)
-        }
-
-        feedViewModel.isMissionClear.observe(viewLifecycleOwner) { isClear ->
-            if (isClear) {
-                binding.fixedImageButton.visibility = View.GONE
-            }
-            else
-                showToastAbove("오늘의 인증이 완료되지 않았어요!")
-        }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                feedViewModel.challengeFeeds.collectLatest { pagingData ->
-                    feedOutAdapter.submitData(pagingData)
-                }
-            }
-        }
-
-
     }
 
     private fun handleApiError(code: String) {
@@ -220,12 +248,12 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
     }
 
     override fun onClickUploadButton() {
-        feedViewModel.isMissionClear.value = true
-        CustomToast.createToast(activity, "인증 완료! 오늘도 수고했어요!")?.show()
-
-        val newFeedInItem= FeedInItem(feedViewModel.id,"방금",photoUri.toString(),false,0)
-        feedViewModel.feedOutItems[0].feedInItems.add(0, newFeedInItem)
-        feedOutAdapter.notifyItemChanged(0)
+//        feedViewModel.isMissionClear.value = true
+//        CustomToast.createToast(activity, "인증 완료! 오늘도 수고했어요!")?.show()
+//
+//        val newFeedInItem= FeedInItem(feedViewModel.id,"방금",photoUri.toString(),false,0)
+//        feedViewModel.feedOutItems[0].feedInItems.add(0, newFeedInItem)
+//        feedAdapter.notifyItemChanged(0)
     }
 
 }

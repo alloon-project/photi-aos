@@ -1,11 +1,10 @@
 package com.example.alloon_aos.view.adapter
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -14,63 +13,116 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.response.Feed
-import com.example.alloon_aos.databinding.ItemFeedOutBinding
-import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog
+import com.example.alloon_aos.data.model.response.FeedUiItem
+import com.example.alloon_aos.databinding.ItemFeedContentBinding
+import com.example.alloon_aos.databinding.ItemFeedHeaderBinding
 import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
-import com.example.alloon_aos.viewmodel.FeedInItem
 import com.example.alloon_aos.viewmodel.FeedViewModel
-import java.time.Duration
-import java.time.LocalDateTime
 import java.time.*
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
-import java.time.ZonedDateTime
+import java.time.Duration
+
+
 interface OnFeedDeletedListener {
     fun onFeedDeleted(position: Int)
 }
 
-class FeedAdapter(private val fragmentManager: FragmentManager, val feedViewModel: FeedViewModel):
-    PagingDataAdapter<Feed, FeedAdapter.ViewHolder>(DiffCallback()), OnFeedDeletedListener  {
-    inner class ViewHolder(var binding : ItemFeedOutBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(data: Feed) {
-            binding.timeTextView.text = formatTimeAgo(data.createdDateTime)
-            binding.idTextView.text = data.username
-            Glide
-                .with(binding.imgView.context)
-                .load(data.imageUrl)
-                .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))
-                .into(binding.imgView)
-//            //TODO : 하트 클릭, 클릭 시 다이얼로그+ondelete
+class FeedAdapter(
+    private val fragmentManager: FragmentManager,
+    private val feedViewModel: FeedViewModel
+) : PagingDataAdapter<FeedUiItem, RecyclerView.ViewHolder>(DiffCallback()), OnFeedDeletedListener {
 
+    companion object {
+        const val VIEW_TYPE_HEADER = 0
+         const val VIEW_TYPE_FEED = 1
+    }
 
-            binding.heartButton.setImageResource(if (data.isLike) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
-            binding.heartButton.setOnClickListener {
-                binding.heartButton.isEnabled = false
+    inner class HeaderViewHolder(private val binding: ItemFeedHeaderBinding)
+        : RecyclerView.ViewHolder(binding.root) {
 
-                data.isLike = !data.isLike
-
-                if (data.isLike) {
-                    feedViewModel.addFeedLike(data.id) {
-                        binding.heartButton.isEnabled = true
-                        binding.heartButton.setImageResource(R.drawable.ic_heart_filled_14)
-                    }
-                } else {
-                    feedViewModel.removeFeedLike(data.id) {
-                        binding.heartButton.isEnabled = true
-                        binding.heartButton.setImageResource(R.drawable.ic_heart_empty_14)
-                    }
-                }
+        fun bind(headerData: FeedUiItem.Header) {
+            if(headerData.dateLabel.equals("오늘")){
+                binding.timeLayout.visibility = View.VISIBLE
             }
-
-//            binding.feed.setOnClickListener {
-//                FeedDetailDialog(data.id,this@FeedInAdapter)
-//                    .show(fragmentManager,"FeedDetailDialog")
-//            }
-
+            binding.dateTextView.text = headerData.dateLabel
         }
     }
 
-   private fun formatTimeAgo(dateString: String): String {
+    inner class FeedViewHolder(private val binding: ItemFeedContentBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(data: Feed) {
+            binding.timeTextView.text = formatTimeAgo(data.createdDateTime)
+            binding.idTextView.text = data.username
+
+            Glide.with(binding.imgView.context)
+                .load(data.imageUrl)
+                .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))
+                .into(binding.imgView)
+
+            setHeartButtonClickListener(data, binding.heartButton)
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when(viewType) {
+            VIEW_TYPE_HEADER -> {
+                val binding = ItemFeedHeaderBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                HeaderViewHolder(binding)
+            }
+            else -> {
+                val binding = ItemFeedContentBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                FeedViewHolder(binding)
+            }
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when(val item = getItem(position)) {
+            is FeedUiItem.Header -> {
+                (holder as? HeaderViewHolder)?.bind(item)
+            }
+            is FeedUiItem.Content -> {
+                (holder as? FeedViewHolder)?.bind(item.feed)
+            }
+            null -> { /* do nothing */ }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is FeedUiItem.Header -> VIEW_TYPE_HEADER
+            is FeedUiItem.Content -> VIEW_TYPE_FEED
+            null -> VIEW_TYPE_FEED
+        }
+    }
+
+    class DiffCallback : DiffUtil.ItemCallback<FeedUiItem>() {
+        override fun areItemsTheSame(oldItem: FeedUiItem, newItem: FeedUiItem): Boolean {
+            // Header vs Header / Content vs Content 에 따라 비교
+            return when {
+                oldItem is FeedUiItem.Header && newItem is FeedUiItem.Header ->
+                    oldItem.dateLabel == newItem.dateLabel
+                oldItem is FeedUiItem.Content && newItem is FeedUiItem.Content ->
+                    oldItem.feed.id == newItem.feed.id
+                else -> false
+            }
+        }
+
+        override fun areContentsTheSame(oldItem: FeedUiItem, newItem: FeedUiItem): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    private fun formatTimeAgo(dateString: String): String {
         val formatter = DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"))
         val inputDate = Instant.from(formatter.parse(dateString))
 
@@ -87,41 +139,33 @@ class FeedAdapter(private val fragmentManager: FragmentManager, val feedViewMode
         }
     }
 
-    private fun updateHeartIcon(heartBtn: ImageButton, heartCntTextView: TextView, feed : FeedInItem) {
-        feed.isClick = !feed.isClick
-        heartBtn.setImageResource(if (feed.isClick) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
-        feed.heartCnt += if (feed.isClick) 1 else -1
-        heartCntTextView.text = if (feed.heartCnt == 0) "" else feed.heartCnt.toString()
-    }
+    private fun setHeartButtonClickListener(data: Feed, heartButton: ImageView) {
+        heartButton.setImageResource(
+            if (data.isLike) R.drawable.ic_heart_filled_14
+            else R.drawable.ic_heart_empty_14
+        )
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedAdapter.ViewHolder {
-        var view = ItemFeedOutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return ViewHolder(view)
-    }
+        heartButton.setOnClickListener {
+            heartButton.isEnabled = false
+            data.isLike = !data.isLike
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it) }
-    }
-
-    class DiffCallback : DiffUtil.ItemCallback<Feed>() {
-        override fun areItemsTheSame(
-            oldItem: Feed,
-            newItem: Feed
-        ): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(
-            oldItem: Feed,
-            newItem: Feed
-        ): Boolean {
-            return oldItem == newItem
+            if (data.isLike) {
+                feedViewModel.addFeedLike(data.id) {
+                    heartButton.isEnabled = true
+                    heartButton.setImageResource(R.drawable.ic_heart_filled_14)
+                }
+            } else {
+                feedViewModel.removeFeedLike(data.id) {
+                    heartButton.isEnabled = true
+                    heartButton.setImageResource(R.drawable.ic_heart_empty_14)
+                }
+            }
         }
     }
 
+
+    // 삭제 인터페이스 (필요시 구현)
     override fun onFeedDeleted(position: Int) {
-//        val currentList = currentList.toMutableList() // 현재 리스트를 변경 가능한 MutableList로 변환
-//        currentList.removeAt(position) // 해당 위치의 아이템 삭제
-//        submitList(currentList) // 새로운 리스트를 적용 (DiffUtil 자동 반영)
+        // TODO: 필요시 구현
     }
 }

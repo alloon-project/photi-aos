@@ -9,6 +9,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.insertSeparators
+import androidx.paging.map
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.request.ReportRequest
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
@@ -21,8 +23,10 @@ import com.example.alloon_aos.data.model.response.Feed
 import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
+import com.example.alloon_aos.data.model.response.FeedUiItem
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
+import com.example.alloon_aos.data.model.response.VerifiedMemberCount
 import com.example.alloon_aos.data.paging.EndedChallengePagingSource
 import com.example.alloon_aos.data.paging.feed.ChallengeFeedsPagingSource
 import com.example.alloon_aos.data.remote.RetrofitClient
@@ -31,28 +35,18 @@ import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
 import com.example.alloon_aos.data.repository.ErrorHandler
 import com.example.alloon_aos.data.repository.FeedRepository
 import com.example.alloon_aos.data.repository.handleApiCall
-import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
-import org.threeten.bp.LocalDate
-
-data class FeedOutItem(
-    val daysAgo: Int,
-    val feedInItems: ArrayList<FeedInItem> = ArrayList()
-)
-
-data class FeedInItem(
-    val id: String,
-    val time: String,
-    var url: String? = null,
-    var isClick: Boolean, //본인이 하트를 눌렀는지
-    var heartCnt: Int = 0, //다른 사용자들이 누른 하트 수
-    val comments: ArrayList<Comments> = ArrayList()
-)
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 data class Comments(
     val id: String,
@@ -142,21 +136,6 @@ class FeedViewModel : ViewModel() {
         Comments("긴아이디입니다아아앙아앙", "행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.")
     )
 
-    val feedInItems = arrayListOf<FeedInItem>(
-        FeedInItem("photi", "방금", "https://ifh.cc/g/6HRkxa.jpg", true, 2, comments),
-        FeedInItem("seul", "1분전", "https://ifh.cc/g/AA0NMd.jpg", false, 5, comments),
-        FeedInItem("HB", "18분전", "https://ifh.cc/g/09y6Mo.jpg", false, 10),
-        FeedInItem("photi1", "30분전", "https://ifh.cc/g/KB2Vh1.jpg", false, 1, comments),
-        FeedInItem("photi2", "방금", "https://ifh.cc/g/yxgmBH.webp", false),
-    )
-
-    val feedOutItems = arrayListOf<FeedOutItem>(
-        FeedOutItem(0, feedInItems),
-        FeedOutItem(1, feedInItems),
-        FeedOutItem(2, feedInItems),
-        FeedOutItem(3, feedInItems)
-    )
-
 
     //파티원
     val paryItem = arrayListOf<PartyItem>(
@@ -177,8 +156,8 @@ class FeedViewModel : ViewModel() {
     private val _code = MutableLiveData<String>()
     val code: LiveData<String> get() = _code
 
-    private val _challengeFeeds = MutableStateFlow<PagingData<Feed>>(PagingData.empty())
-    val challengeFeeds: StateFlow<PagingData<Feed>> = _challengeFeeds
+    private val _challengeFeeds = MutableStateFlow<PagingData<FeedUiItem>>(PagingData.empty())
+    val challengeFeeds: StateFlow<PagingData<FeedUiItem>> = _challengeFeeds
 
     private val _challenge = MutableLiveData<FeedChallengeData?>()
     val challenge: LiveData<FeedChallengeData?> get() = _challenge
@@ -195,6 +174,8 @@ class FeedViewModel : ViewModel() {
     private val _feedComments = MutableLiveData<List<Comment>?>()
     val feedComments: LiveData<List<Comment>?> get() = _feedComments
 
+    private val _feedVerifiedUserCount = MutableLiveData<Int?>()
+    val feedVerifiedUserCount: LiveData<Int?> get() = _feedVerifiedUserCount
     private val _updateGoalResponse = MutableLiveData<SuccessMessageReponse?>()
     val updateGoalResponse: LiveData<SuccessMessageReponse?> get() = _updateGoalResponse
 
@@ -241,15 +222,62 @@ class FeedViewModel : ViewModel() {
     fun fetchChallengeFeeds() {
         viewModelScope.launch {
             Pager(
-                PagingConfig(initialLoadSize = 40, pageSize = 20, enablePlaceholders = false,)
+                PagingConfig(initialLoadSize = 40, pageSize = 20, enablePlaceholders = false)
             ) {
-                ChallengeFeedsPagingSource(feedRepository,challengeId = challengeId)
-            }.flow.cachedIn(viewModelScope)
+                ChallengeFeedsPagingSource(feedRepository, challengeId)
+            }.flow
+                // 1) 먼저 Feed -> FeedUiItem.Content 변환
+                .map { pagingData ->
+                    pagingData.map { feed ->
+                        FeedUiItem.Content(feed)
+                    }
+                }
+                // 2) insertSeparators로 날짜가 달라지는 지점에 FeedUiItem.Header 삽입
+                .map { pagingData ->
+                    pagingData.insertSeparators { before: FeedUiItem.Content?, after: FeedUiItem.Content? ->
+                        if (after == null) return@insertSeparators null
+                        // 첫 아이템 앞에 헤더를 붙이고 싶다면 before == null 시점에서 넣을 수도 있음
+                        if (before == null) {
+                            // 예: 리스트의 첫 아이템 앞에 무조건 헤더를 달고 싶다면
+                            return@insertSeparators FeedUiItem.Header(
+                                formatHeader(after.feed.createdDateTime)
+                            )
+                        }
+
+                        // 날짜 비교 (연월일만 비교하는 간단 예시)
+                        val beforeDate = before.feed.createdDateTime.substring(0, 10) // "2025-03-29"
+                        val afterDate = after.feed.createdDateTime.substring(0, 10)
+
+                        if (beforeDate != afterDate) {
+                            // 날짜가 달라졌다면 새 헤더 삽입
+                            FeedUiItem.Header(formatHeader(after.feed.createdDateTime))
+                        } else {
+                            null
+                        }
+                    }
+                }
+                .cachedIn(viewModelScope)
                 .collectLatest { pagingData ->
+                    // 이제 PagingData<FeedUiItem>를 저장
                     _challengeFeeds.value = pagingData
                 }
         }
     }
+
+    private fun formatHeader(dateString: String): String {
+        val formatter = DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"))
+        val inputDate = Instant.from(formatter.parse(dateString))
+
+        val now = Instant.now()
+        val duration = Duration.between(inputDate, now)
+
+
+        return when {
+            duration.toDays() <= 1 -> "오늘"
+            else -> "${duration.toDays()}일전"
+        }
+    }
+
 
     fun fetchChallengeFeedDetail(feedId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -338,6 +366,22 @@ class FeedViewModel : ViewModel() {
                 onFailure = { errorCode ->
                     _code.postValue(errorCode)
                     onComplete()
+                }
+            )
+        }
+    }
+
+    fun fetchVerifiedMemberCount() {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleApiCall(
+                call = { feedRepository.getVerifiedMemberCount(challengeId) },
+                onSuccess = { data ->
+                    if(data != null)
+                        _feedVerifiedUserCount.postValue(data.feedMemberCnt)
+                },
+                onFailure = { errorCode ->
+                    _feedComments.postValue(null)
+                    _code.postValue(errorCode)
                 }
             )
         }

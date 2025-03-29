@@ -11,6 +11,11 @@ data class ChallengeFeedsData(
     val last: Boolean
 )
 
+sealed class FeedUiItem {
+    data class Header(val dateLabel: String) : FeedUiItem()
+    data class Content(val feed: Feed) : FeedUiItem()
+}
+
 data class Feed(
     val id: Int, // feed id
     val username: String, // "photi"
@@ -75,6 +80,10 @@ data class Comment(
     val id: Long,         // 댓글 ID
     val username: String, // 작성자 이름
     val comment: String   // 댓글 내용
+)
+
+data class VerifiedMemberCount (
+   val feedMemberCnt : Int,
 )
 
 data class SuccessMessageReponse(
