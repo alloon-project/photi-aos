@@ -288,13 +288,17 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         feedViewModel.challengeMembers.observe(this) { data ->
             if (data != null) {
                 val myName = sharedPreferencesManager.getUserName() ?: ""
-                val creator : ChallengeMember? = data.find { it.isCreator }
+                val creator: ChallengeMember? = data.find { it.isCreator }
 
-                if (myName.equals(creator!!.username))
-                    isLeader = true
-                else
-                    isLeader = false
+                isLeader = if (creator != null) {
+                    myName == creator.username
+                } else {
+                    //TODO()
+                    Log.w("DEBUG", "Warning: Creator is null!")
+                    false
+                }
             }
+
         }
 
         feedViewModel.code.observe(this) { code ->

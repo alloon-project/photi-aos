@@ -39,10 +39,14 @@ object ApiConfig {
         //feed
         "/api/challenges/{challengeId}/info" to "GET",
         "/api/challenges/{challengeId}/challenge-members" to "GET",
-        "/api/challenges/{challengeId}/feeds" to mapOf(
-            "POST" to "챌린지 피드 인증", // 챌린지 탈퇴
-            "GET" to "챌린지 피드 조회" // 챌린지 개별 조회
-        ),
+        "/api/challenges/{challengeId}/feeds/v2" to "GET",
+        "/api/challenges/{challengeId}/feed-members" to "GET",
+        "/api/challenges/{challengeId}/feeds" to "POST",
+        "/api/challenges/{challengeId}/feeds/{feedId}/like" to mapOf(
+                "DELETE" to "좋아요 삭제",
+                "POST" to "좋아요 추가"
+    ),
+
     )
 
 

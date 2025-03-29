@@ -4,27 +4,22 @@ import com.example.alloon_aos.data.model.request.HashTag
 import com.example.alloon_aos.data.model.request.Rule
 
 data class ChallengeFeedsData(
-    val content: List<FeedContent>,
+    val content: List<Feed>,
     val page: Int,
     val size: Int,
     val first: Boolean,
     val last: Boolean
 )
 
-data class FeedContent(
-    val createdDate: String, // "2024-10-09"
-    val feedMemberCnt: Int, // 5
-    val feeds: List<Feed>
-)
-
 data class Feed(
-    val id: Int, // 1
+    val id: Int, // feed id
     val username: String, // "photi"
     val imageUrl: String, // "https://url.kr/5MhHhD"
     val createdDateTime: String, // "2024-12-08T07:44:51.349Z"
     val proveTime: String, // "13:00"
-    val isLike : Boolean,
+    var isLike : Boolean
 )
+
 
 data class FeedChallengeData(
     val name: String, // 챌린지 이름

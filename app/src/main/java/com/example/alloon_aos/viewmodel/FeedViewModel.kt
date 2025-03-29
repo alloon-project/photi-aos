@@ -5,6 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.request.ReportRequest
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
@@ -12,12 +16,15 @@ import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.Comment
+import com.example.alloon_aos.data.model.response.EndedChallengeContent
+import com.example.alloon_aos.data.model.response.Feed
 import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
-import com.example.alloon_aos.data.model.response.FeedContent
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
+import com.example.alloon_aos.data.paging.EndedChallengePagingSource
+import com.example.alloon_aos.data.paging.feed.ChallengeFeedsPagingSource
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
 import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
@@ -26,6 +33,9 @@ import com.example.alloon_aos.data.repository.FeedRepository
 import com.example.alloon_aos.data.repository.handleApiCall
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import org.threeten.bp.LocalDate
@@ -167,8 +177,8 @@ class FeedViewModel : ViewModel() {
     private val _code = MutableLiveData<String>()
     val code: LiveData<String> get() = _code
 
-    private val _challengeFeeds = MutableLiveData<List<FeedContent>?>()
-    val challengeFeeds: MutableLiveData<List<FeedContent>?> get() = _challengeFeeds
+    private val _challengeFeeds = MutableStateFlow<PagingData<Feed>>(PagingData.empty())
+    val challengeFeeds: StateFlow<PagingData<Feed>> = _challengeFeeds
 
     private val _challenge = MutableLiveData<FeedChallengeData?>()
     val challenge: LiveData<FeedChallengeData?> get() = _challenge
@@ -224,24 +234,20 @@ class FeedViewModel : ViewModel() {
         }
     }
 
-    fun fetchChallengeFeeds(
-        page: Int = 0,
-        size: Int = 30,
-        sort: String = "LATEST"
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleApiCall(
-                call = { feedRepository.getChallengeFeeds(challengeId, page, size, sort) },
-                onSuccess = { data ->
-                    if (data != null) {
-                        _challengeFeeds.postValue(data.content)
-                    }
-                },
-                onFailure = { errorCode ->
-                    _challengeFeeds.postValue(null)
-                    _code.postValue(errorCode)
+    fun clearEndedChallengeData() {
+        _challengeFeeds.value = PagingData.empty()
+    }
+
+    fun fetchChallengeFeeds() {
+        viewModelScope.launch {
+            Pager(
+                PagingConfig(initialLoadSize = 40, pageSize = 20, enablePlaceholders = false,)
+            ) {
+                ChallengeFeedsPagingSource(feedRepository,challengeId = challengeId)
+            }.flow.cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _challengeFeeds.value = pagingData
                 }
-            )
         }
     }
 
@@ -305,6 +311,37 @@ class FeedViewModel : ViewModel() {
         }
     }
 
+    fun addFeedLike(feedId: Int, onComplete: () -> Unit) {
+        viewModelScope.launch {
+            handleApiCall(
+                call = { feedRepository.postFeedLike(challengeId, feedId) },
+                onSuccess = { data ->
+                    _code.value = "201 CREATED"
+                    onComplete()
+                },
+                onFailure = { errorCode ->
+                    _code.postValue(errorCode)
+                    onComplete()
+                }
+            )
+        }
+    }
+
+    fun removeFeedLike(feedId: Int, onComplete: () -> Unit) {
+        viewModelScope.launch {
+            handleApiCall(
+                call = { feedRepository.deleteFeedLike(challengeId, feedId) },
+                onSuccess = { data ->
+                    _code.value = "201 CREATED"
+                    onComplete()
+                },
+                onFailure = { errorCode ->
+                    _code.postValue(errorCode)
+                    onComplete()
+                }
+            )
+        }
+    }
 
 //    fun postChallengeFeed(challengeId: Long, image: MultipartBody.Part, description: String) {
 //        viewModelScope.launch(Dispatchers.IO) {

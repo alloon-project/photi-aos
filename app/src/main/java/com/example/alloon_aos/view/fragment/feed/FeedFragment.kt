@@ -1,6 +1,5 @@
 package com.example.alloon_aos.view.fragment.feed
 
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.pm.PackageManager
@@ -20,12 +19,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentFeedBinding
-import com.example.alloon_aos.view.adapter.FeedInAdapter
-import com.example.alloon_aos.view.adapter.FeedOutAdapter
+import com.example.alloon_aos.view.adapter.FeedAdapter
 import com.example.alloon_aos.view.ui.component.bottomsheet.AlignBottomSheet
 import com.example.alloon_aos.view.ui.component.bottomsheet.AlignBottomSheetInterface
 import com.example.alloon_aos.view.ui.component.dialog.UploadCardDialog
@@ -35,11 +35,13 @@ import com.example.alloon_aos.view.ui.util.CameraHelper
 import com.example.alloon_aos.view.ui.util.dpToPx
 import com.example.alloon_aos.viewmodel.FeedInItem
 import com.example.alloon_aos.viewmodel.FeedViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterface {
     private lateinit var binding : FragmentFeedBinding
     private lateinit var mContext: Context
-    private lateinit var feedOutAdapter : FeedOutAdapter
+    private lateinit var feedOutAdapter : FeedAdapter
     private val feedViewModel by activityViewModels<FeedViewModel>()
     private var selected_order = "first"
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
@@ -54,9 +56,10 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         binding.viewModel = feedViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        feedOutAdapter = FeedOutAdapter(requireActivity().supportFragmentManager ,feedViewModel)
+        feedOutAdapter = FeedAdapter(requireActivity().supportFragmentManager,feedViewModel )
         binding.feedOutRecyclerView.adapter = feedOutAdapter
-        binding.feedOutRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.feedOutRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.feedOutRecyclerView.setHasFixedSize(true)
 
         setObserve()
@@ -92,6 +95,12 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
                 CustomToast.createToast(activity, "사진 촬영 실패")?.show()
             }
         }
+    }
+
+
+    override fun onDestroyView() {
+        feedViewModel.clearEndedChallengeData()
+        super.onDestroyView()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -144,12 +153,15 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
             else
                 showToastAbove("오늘의 인증이 완료되지 않았어요!")
         }
-
-        feedViewModel.challengeFeeds.observe(viewLifecycleOwner) { data ->
-            if (data != null ) {
-                feedOutAdapter.submitList(data.toList())
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                feedViewModel.challengeFeeds.collectLatest { pagingData ->
+                    feedOutAdapter.submitData(pagingData)
+                }
             }
         }
+
+
     }
 
     private fun handleApiError(code: String) {

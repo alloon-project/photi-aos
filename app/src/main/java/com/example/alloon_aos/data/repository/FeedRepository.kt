@@ -18,8 +18,8 @@ class FeedRepository(private val apiService: FeedApiService) {
     // 챌린지 피드 조회
     suspend fun getChallengeFeeds(
         challengeId: Int,
-        page: Int = 0,
-        size: Int = 10,
+        page: Int,
+        size: Int,
         sort: String = "LATEST"
     ): Response<ApiResponse<ChallengeFeedsData>> {
         return apiService.get_challengeFeeds(challengeId, page, size, sort)
@@ -88,6 +88,20 @@ class FeedRepository(private val apiService: FeedApiService) {
         reportRequest: ReportRequest
     ): Response<ApiResponse<SuccessMessageReponse>> {
         return apiService.post_reports(targetId, reportRequest)
+    }
+
+    suspend fun postFeedLike(
+        challengeId: Int,
+        feedId: Int,
+    ): Response<ApiResponse<SuccessMessageReponse>> {
+        return apiService.postFeedLike(challengeId, feedId)
+    }
+
+    suspend fun deleteFeedLike(
+        challengeId: Int,
+        feedId: Int,
+    ): Response<ApiResponse<SuccessMessageReponse>> {
+        return apiService.deleteFeedLike(challengeId, feedId)
     }
 
 }

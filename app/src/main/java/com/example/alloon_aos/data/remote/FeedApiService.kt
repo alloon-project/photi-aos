@@ -12,6 +12,7 @@ import com.example.alloon_aos.data.model.response.SuccessMessageReponse
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
@@ -29,13 +30,18 @@ interface FeedApiService {
         @Path("challengeId") challengeId: Int
     ): Response<ApiResponse<FeedChallengeData>>
 
-    @GET("/api/challenges/{challengeId}/feeds")
+    @GET("/api/challenges/{challengeId}/feeds/v2")
     suspend fun get_challengeFeeds(
         @Path("challengeId") challengeId: Int,
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 10,
         @Query("sort") sort: String = "LATEST"
     ): Response<ApiResponse<ChallengeFeedsData>>
+
+    @GET("/api/challenges/{challengeId}/feed-members")
+    suspend fun get_challengeFeedCount(
+        @Path("challengeId") challengeId: Int,
+    ): Response<ApiResponse<ChallengeFeedsData>> //TODO response type 수정
 
     //피드 챌린지 소개
     @GET("/api/challenges/{challengeId}/info")
@@ -92,5 +98,19 @@ interface FeedApiService {
     suspend fun post_reports(
         @Path("targetId") targetId: Int,
         @Body params: ReportRequest
+    ): Response<ApiResponse<SuccessMessageReponse>>
+
+    // 피드 좋아요 추가
+    @POST("/api/challenges/{challengeId}/feeds/{feedId}/like")
+    suspend fun postFeedLike(
+        @Path("challengeId") challengeId: Int,
+        @Path("feedId") feedId: Int,
+    ): Response<ApiResponse<SuccessMessageReponse>>
+
+    // 피드 좋아요 취소
+    @DELETE("/api/challenges/{challengeId}/feeds/{feedId}/like")
+    suspend fun deleteFeedLike(
+        @Path("challengeId") challengeId: Int,
+        @Path("feedId") feedId: Int,
     ): Response<ApiResponse<SuccessMessageReponse>>
 }
