@@ -6,13 +6,13 @@ import androidx.paging.PagingState
 import com.example.alloon_aos.data.model.response.Feed
 import com.example.alloon_aos.data.repository.FeedRepository
 
-class ChallengeFeedsPagingSource(private val feedRepository: FeedRepository,private val challengeId : Int) : PagingSource<Int, Feed>() {
+class ChallengeFeedsPagingSource(private val feedRepository: FeedRepository,private val challengeId : Int, private val sort: String,) : PagingSource<Int, Feed>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Feed> {
         val page = params.key ?: 0
         return try {
             Log.d("ChallengeFeedsPagingSource", "ChallengeFeedsPagingSource Loading page: $page, pageSize: ${params.loadSize}")
-            val response = feedRepository.getChallengeFeeds(challengeId, page, params.loadSize)
+            val response = feedRepository.getChallengeFeeds(challengeId, page, params.loadSize,sort)
             val data = response.body()?.data
 
             if (data == null) {

@@ -70,6 +70,7 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
 
         if(challengeId != -1){
             feedViewModel.fetchChallenge()
+            feedViewModel.fetchChallengeInfo()
             feedViewModel.fetchChallengeMembers()
         }
 

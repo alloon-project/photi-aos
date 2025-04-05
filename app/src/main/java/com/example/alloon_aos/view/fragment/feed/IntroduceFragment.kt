@@ -33,7 +33,7 @@ class IntroduceFragment : Fragment() {
 
         setObserve()
 
-        feedViewModel.fetchChallengeInfo()
+
         return binding.root
     }
 

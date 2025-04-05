@@ -76,10 +76,12 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
 
         setObserve()
 
+        feedViewModel.fetchIsUserVerifiedToday()
         feedViewModel.fetchChallengeFeeds()
         feedViewModel.fetchVerifiedMemberCount()
-         progressBar = binding.feedProgress
-         tag = binding.constraintlayoutTag
+
+        progressBar = binding.feedProgress
+        tag = binding.constraintlayoutTag
 
         return binding.root
     }
@@ -142,8 +144,8 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
 
             Log.d("FeedFragment", "total: $totalCount, verified: $verified, percentage: $percentage%")
 
-            //TODO 태그 텍스트
-           // tag.text = "$percentage% 인증"
+
+          binding.memberCntTextView.text = "오늘 ${verified}명 인증!"
 
             if (verified == 0 || totalCount == 0) return@observe
 
@@ -238,13 +240,15 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
     override fun onClickFirstButton() {
         selected_order = "first"
 
-        //TODO api 호출시 정렬 기준 ui에 적용
-        //최신순으로 정렬
+        binding.sortingButton.text = "최신순"
+        feedViewModel.fetchChallengeFeeds("LATEST")
     }
 
     override fun onClickSecondButton() {
         selected_order = "second"
-        //인기순으로 정렬
+
+        binding.sortingButton.text = "인기순"
+        feedViewModel.fetchChallengeFeeds("POPULAR")
     }
 
     override fun onClickUploadButton() {

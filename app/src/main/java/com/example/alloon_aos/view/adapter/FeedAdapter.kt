@@ -42,8 +42,17 @@ class FeedAdapter(
 
         fun bind(headerData: FeedUiItem.Header) {
             if(headerData.dateLabel.equals("오늘")){
-                binding.timeLayout.visibility = View.VISIBLE
+                if (feedViewModel.isUserVerifiedToday.value == true) {
+                     binding.proveLayout.visibility = View.VISIBLE
+                }else{
+                    binding.timeLayout.visibility = View.VISIBLE
+                    val proveTime = feedViewModel.challengeInfo.value?.proveTime
+                    binding.proveTimeTextView.text = proveTime?.let { "${it}까지" } ?: "시간미정"
+                    //TODO 시간 넘으면 invisible
+                }
             }
+
+
             binding.dateTextView.text = headerData.dateLabel
         }
     }

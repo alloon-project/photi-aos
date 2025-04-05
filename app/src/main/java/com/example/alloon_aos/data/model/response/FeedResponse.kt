@@ -86,6 +86,11 @@ data class VerifiedMemberCount (
    val feedMemberCnt : Int,
 )
 
+data class UserVerificationStatus (
+    val isProve : Boolean,
+)
+
+
 data class SuccessMessageReponse(
     val successMessage: String // 성공 메시지
 )

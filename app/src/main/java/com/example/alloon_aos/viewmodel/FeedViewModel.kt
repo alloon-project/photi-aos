@@ -176,6 +176,12 @@ class FeedViewModel : ViewModel() {
 
     private val _feedVerifiedUserCount = MutableLiveData<Int?>()
     val feedVerifiedUserCount: LiveData<Int?> get() = _feedVerifiedUserCount
+
+
+    private val _isUserVerifiedToday= MutableLiveData<Boolean?>()
+    val isUserVerifiedToday: LiveData<Boolean?> get() = _isUserVerifiedToday
+
+
     private val _updateGoalResponse = MutableLiveData<SuccessMessageReponse?>()
     val updateGoalResponse: LiveData<SuccessMessageReponse?> get() = _updateGoalResponse
 
@@ -219,12 +225,12 @@ class FeedViewModel : ViewModel() {
         _challengeFeeds.value = PagingData.empty()
     }
 
-    fun fetchChallengeFeeds() {
+    fun fetchChallengeFeeds( sort: String = "LATEST") {
         viewModelScope.launch {
             Pager(
                 PagingConfig(initialLoadSize = 40, pageSize = 20, enablePlaceholders = false)
             ) {
-                ChallengeFeedsPagingSource(feedRepository, challengeId)
+                ChallengeFeedsPagingSource(feedRepository, challengeId, sort)
             }.flow
                 // 1) 먼저 Feed -> FeedUiItem.Content 변환
                 .map { pagingData ->
@@ -258,7 +264,6 @@ class FeedViewModel : ViewModel() {
                 }
                 .cachedIn(viewModelScope)
                 .collectLatest { pagingData ->
-                    // 이제 PagingData<FeedUiItem>를 저장
                     _challengeFeeds.value = pagingData
                 }
         }
@@ -380,7 +385,23 @@ class FeedViewModel : ViewModel() {
                         _feedVerifiedUserCount.postValue(data.feedMemberCnt)
                 },
                 onFailure = { errorCode ->
-                    _feedComments.postValue(null)
+                    _feedVerifiedUserCount.postValue(null)
+                    _code.postValue(errorCode)
+                }
+            )
+        }
+    }
+
+    fun fetchIsUserVerifiedToday() {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleApiCall(
+                call = { feedRepository.getIsUserVerifiedToday(challengeId) },
+                onSuccess = { data ->
+                    if(data != null)
+                        _isUserVerifiedToday.postValue(data.isProve)
+                },
+                onFailure = { errorCode ->
+                    _isUserVerifiedToday.postValue(null)
                     _code.postValue(errorCode)
                 }
             )

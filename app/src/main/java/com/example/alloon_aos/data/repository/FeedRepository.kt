@@ -9,6 +9,7 @@ import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
+import com.example.alloon_aos.data.model.response.UserVerificationStatus
 import com.example.alloon_aos.data.model.response.VerifiedMemberCount
 import com.example.alloon_aos.data.remote.FeedApiService
 import okhttp3.MultipartBody
@@ -21,7 +22,7 @@ class FeedRepository(private val apiService: FeedApiService) {
         challengeId: Int,
         page: Int,
         size: Int,
-        sort: String = "LATEST"
+        sort: String,
     ): Response<ApiResponse<ChallengeFeedsData>> {
         return apiService.get_challengeFeeds(challengeId, page, size, sort)
     }
@@ -111,4 +112,9 @@ class FeedRepository(private val apiService: FeedApiService) {
         return apiService.get_verifiedMemberCount(challengeId)
     }
 
+    suspend fun getIsUserVerifiedToday(
+        challengeId: Int,
+    ): Response<ApiResponse<UserVerificationStatus>> {
+        return apiService.get_is_user_verified_today(challengeId)
+    }
 }
