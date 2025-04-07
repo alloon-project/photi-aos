@@ -73,7 +73,6 @@ class ProofShotByDateDialog(val feedList:
                 binding.root.setOnClickListener {
                     val intent = Intent(activity, FeedActivity::class.java)
                     intent.putExtra("CHALLENGE_ID", challengeId)
-
                     startActivity(intent)
                 }
 

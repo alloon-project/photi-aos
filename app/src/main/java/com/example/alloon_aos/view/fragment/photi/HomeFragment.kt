@@ -55,9 +55,9 @@ class HomeFragment : Fragment() {
     private fun setObserve() {
         photiViewModel.challengeCount.observe(viewLifecycleOwner) { data ->
             if(data != null) {
-//                if (data.challengeCnt > 0)
-//                    childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
-//                else
+                if (data.challengeCnt > 0)
+                    childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
+                else
                     childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
             }
         }

@@ -167,13 +167,11 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
                 fragTransaction.show(home)
             }
         }
-
         else if (tag == TAG_CHALLENGE) {
             if (challenge!=null){
                 fragTransaction.show(challenge)
             }
         }
-
         else if (tag == TAG_PROFILE){
             if (profile != null){
                 fragTransaction.show(profile)
@@ -191,4 +189,20 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         val intent = Intent(this, AuthActivity::class.java)
         startForResult.launch(intent)
     }
+
+
+    fun startChallengeActivity() {
+        val intent = Intent(this, ChallengeActivity::class.java)
+        intent.putExtra("IS_FROM_HOME",true)
+        intent.putExtra("ID", photiViewModel.id)
+        intent.putExtra("data", photiViewModel.getData())
+        intent.putExtra("image", photiViewModel.imgFile)
+        startActivity(intent)
+    }
+    fun startFeedActivity() {
+        val intent = Intent(this, FeedActivity::class.java)
+        intent.putExtra("CHALLENGE_ID", photiViewModel.id)
+        startActivity(intent)
+    }
+
 }

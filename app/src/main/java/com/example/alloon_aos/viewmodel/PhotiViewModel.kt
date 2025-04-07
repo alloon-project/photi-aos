@@ -188,6 +188,16 @@ class PhotiViewModel : ViewModel() {
     }
 
 
+    //챌린지 참여 여부
+    fun checkUserInChallenge(): Boolean {
+        for (id in myIdList) {
+            if (this.id == id)
+                return true
+        }
+        return false
+    }
+
+
     //최신순 챌린지
     private val _latestChallengeData = MutableStateFlow<PagingData<ChallengeData>>(PagingData.empty())
     val latestChallengeData: StateFlow<PagingData<ChallengeData>> = _latestChallengeData
@@ -267,7 +277,7 @@ class PhotiViewModel : ViewModel() {
         })
     }
 
-    fun getHashList() { //해시 리스트 조회
+    fun getHashList() {
         challenge_repository.getHashList(object : ChallengeRepositoryCallback<ChipListResponse> {
             override fun onSuccess(data: ChipListResponse) {
                 val result = data.code
@@ -364,6 +374,8 @@ class PhotiViewModel : ViewModel() {
     var currentItem: MyChallengeData? = null
     var completeProof = false
 
+    var myIdList = arrayListOf<Int>()
+
     fun updateCurrentItem(item: MyChallengeData) {
         currentItem = item
     }
@@ -372,6 +384,7 @@ class PhotiViewModel : ViewModel() {
         proofItems = arrayListOf()
         completeItems = arrayListOf()
         allItems = arrayListOf()
+        myIdList = arrayListOf()
     }
 
     fun setMyChallenge(list: List<ChallengeContent>) {
@@ -383,6 +396,7 @@ class PhotiViewModel : ViewModel() {
             else
                 proofItems.add(newItem)
             allItems.add(newItem)
+            myIdList.add(item.id)
         }
         _proofItems.value = proofItems
         _completeItems.value = completeItems

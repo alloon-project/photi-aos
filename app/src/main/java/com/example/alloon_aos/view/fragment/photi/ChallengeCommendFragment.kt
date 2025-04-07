@@ -22,7 +22,7 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.databinding.FragmentChallengeCommendBinding
 import com.example.alloon_aos.databinding.ItemCardMissionLargeRecyclerviewBinding
-import com.example.alloon_aos.view.activity.ChallengeActivity
+import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.adapter.HashTagAdapter
 import com.example.alloon_aos.view.adapter.HotCardAdapter
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
@@ -38,6 +38,7 @@ class ChallengeCommendFragment : Fragment() {
 
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var mContext : Context
+    private lateinit var mActivity: PhotiActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +46,8 @@ class ChallengeCommendFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_challenge_commend, container, false)
         binding.fragment = this
+
+        mActivity = activity as PhotiActivity
 
         hotCardAdapter = HotCardAdapter(this, photiViewModel)
         binding.hotRecyclerView.adapter = hotCardAdapter
@@ -56,7 +59,7 @@ class ChallengeCommendFragment : Fragment() {
         binding.chipRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.chipRecyclerview.setHasFixedSize(true)
 
-        hashCardAdapter = HashCardAdapter(photiViewModel)
+        hashCardAdapter = HashCardAdapter(this, photiViewModel)
         binding.hashtagRecyclerView.adapter = hashCardAdapter
         binding.hashtagRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.hashtagRecyclerView.setHasFixedSize(true)
@@ -136,7 +139,7 @@ class ChallengeCommendFragment : Fragment() {
         photiViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    startChallenge()
+                    mActivity.startChallengeActivity()
                 }
                 "TOKEN_UNAUTHENTICATED" -> {
                     CustomToast.createToast(activity, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
@@ -158,7 +161,10 @@ class ChallengeCommendFragment : Fragment() {
     }
 
     fun setOnclick() {
-        photiViewModel.getChallenge()
+        if (photiViewModel.checkUserInChallenge())
+            mActivity.startFeedActivity()
+        else
+            photiViewModel.getChallenge()
     }
 
     fun clickAllChip() {
@@ -172,17 +178,8 @@ class ChallengeCommendFragment : Fragment() {
         binding.allChipBtn.setTextColor(mContext.getColor(R.color.gray800))
     }
 
-    private fun startChallenge() {
-        val intent = Intent(requireContext(), ChallengeActivity::class.java)
-        intent.putExtra("IS_FROM_HOME",true)
-        intent.putExtra("ID",photiViewModel.id)
-        intent.putExtra("data", photiViewModel.getData())
-        intent.putExtra("image", photiViewModel.imgFile)
-        startActivity(intent)
-    }
 
-
-    class HashCardAdapter(private val photiViewModel: PhotiViewModel) : PagingDataAdapter<ChallengeData, HashCardAdapter.ViewHolder> (DiffCallback()) {
+    class HashCardAdapter(private val fragment: ChallengeCommendFragment , private val photiViewModel: PhotiViewModel) : PagingDataAdapter<ChallengeData, HashCardAdapter.ViewHolder> (DiffCallback()) {
         inner class ViewHolder(private val binding: ItemCardMissionLargeRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(data: ChallengeData) {
@@ -218,7 +215,7 @@ class ChallengeCommendFragment : Fragment() {
 
                 binding.root.setOnClickListener {
                     photiViewModel.id = data.id
-                    photiViewModel.getChallenge()
+                    fragment.setOnclick()
                 }
             }
         }
