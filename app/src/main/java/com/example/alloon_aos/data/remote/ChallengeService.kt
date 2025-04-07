@@ -4,6 +4,7 @@ import com.example.alloon_aos.data.model.request.Goal
 import com.example.alloon_aos.data.model.request.InviteCode
 import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeResponse
+import com.example.alloon_aos.data.model.response.ChipListResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.ExamImgResponse
@@ -67,18 +68,20 @@ interface ChallengeService {
     fun get_challengePopular( //추천순-인기있는 챌린지 조회
     ): Call<ChallengeListResponse>
 
-    //해시태그 리스트 조회
+    @GET("/api/challenges/hashtags")
+    fun get_hashtagList( //해시태그 리스트 조회
+    ): Call<ChipListResponse>
 
     @GET("/api/challenges/example-images")
     fun get_exampleImg( //예시 이미지 리스트 조회
     ): Call<ExamImgResponse>
 
     @GET("/api/challenges/by-hashtags")
-    fun get_challengeHashtag( //해시태그 모아보기 조회
+    suspend fun get_challengeHashtag( //해시태그 모아보기 조회
         @Query("hashtag") hashtag: String,
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): Call<PagingListResponse>
+    ): Response<PagingListResponse>
 
     //PATCH
     @Multipart

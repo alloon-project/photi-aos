@@ -22,16 +22,17 @@ import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeRecordData
 import com.example.alloon_aos.data.model.response.ChallengeResponse
+import com.example.alloon_aos.data.model.response.ChipListResponse
 import com.example.alloon_aos.data.model.response.EndedChallengeContent
 import com.example.alloon_aos.data.model.response.FeedByDate
 import com.example.alloon_aos.data.model.response.FeedHistoryContent
 import com.example.alloon_aos.data.model.response.MyChallengeCount
-import com.example.alloon_aos.data.model.response.PagingListResponse
 import com.example.alloon_aos.data.model.response.ProfileImageData
 import com.example.alloon_aos.data.model.response.UserProfile
 import com.example.alloon_aos.data.paging.AllChallengesPagingSource
 import com.example.alloon_aos.data.paging.EndedChallengePagingSource
 import com.example.alloon_aos.data.paging.FeedHistoryPagingSource
+import com.example.alloon_aos.data.paging.HashChallengePagingSource
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
 import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
@@ -73,7 +74,6 @@ class PhotiViewModel : ViewModel() {
 
     val apiResponse = MutableLiveData<ActionApiResponse>()
     val popularResponse = MutableLiveData<ActionApiResponse>()
-    val hashResponse = MutableLiveData<ActionApiResponse>()
     val hashListResponse = MutableLiveData<ActionApiResponse>()
     val homeResponse = MutableLiveData<ActionApiResponse>()
 
@@ -89,10 +89,6 @@ class PhotiViewModel : ViewModel() {
     var memberCnt = -1
     var imgFile = ""
 
-    var hashPage = 0
-    var lastHashPage = false
-    var hashtag = "전체"
-
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
     }
@@ -104,27 +100,13 @@ class PhotiViewModel : ViewModel() {
     }
     fun resetHashResponseValue() {
         hashListResponse.value = ActionApiResponse()
-        hashResponse.value = ActionApiResponse()
-        hashPage = 0
-        hashItems = arrayListOf()
-        hashtag = "전체"
-        lastHashPage = false
     }
 
     fun resetAllResponseValue() {
         apiResponse.value = ActionApiResponse()
         popularResponse.value = ActionApiResponse()
-        hashResponse.value = ActionApiResponse()
         hashListResponse.value = ActionApiResponse()
         homeResponse.value = ActionApiResponse()
-        resetPaging()
-    }
-
-    fun resetPaging() {
-        hashPage = 0
-        hashItems = arrayListOf()
-        hashtag = "전체"
-        lastHashPage = false
     }
 
 
@@ -286,28 +268,20 @@ class PhotiViewModel : ViewModel() {
     }
 
     fun getHashList() { //해시 리스트 조회
+        challenge_repository.getHashList(object : ChallengeRepositoryCallback<ChipListResponse> {
+            override fun onSuccess(data: ChipListResponse) {
+                val result = data.code
+                val mes = data.message
+                val data = data.data
+                addHashList(data)
+                hashListResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "getHashList: $mes $result")
+            }
 
-    }
-
-    fun getChallengeHashtag() {
-        challenge_repository.getChallengeHashtag(
-            hashtag,
-            hashPage,
-            10,
-            object : ChallengeRepositoryCallback<PagingListResponse> {
-                override fun onSuccess(data: PagingListResponse) {
-                    val result = data.code
-                    val mes = data.message
-                    val data = data.data
-                    addHashItem(changeToCommendDataLast(data.content))
-                    hashResponse.value = ActionApiResponse(result)
-                    Log.d(TAG, "getChallengeHashtag: $mes $result")
-                }
-
-                override fun onFailure(error: Throwable) {
-                    hashResponse.value = ActionApiResponse(ErrorHandler.handle(error))
-                }
-            })
+            override fun onFailure(error: Throwable) {
+                hashListResponse.value = ActionApiResponse(ErrorHandler.handle(error))
+            }
+        })
     }
 
 
@@ -330,51 +304,51 @@ class PhotiViewModel : ViewModel() {
 
 
     //해시태그별 챌린지
-    val hashItemsListData = MutableLiveData<ArrayList<CommendData>>()
-    var hashItems: ArrayList<CommendData> = arrayListOf()
+    private val _hashChallengeData = MutableStateFlow<PagingData<ChallengeData>>(PagingData.empty())
+    val hashChallengeData: StateFlow<PagingData<ChallengeData>> = _hashChallengeData
 
-    fun addHashItem(list: ArrayList<CommendData>) {
-        hashItems.addAll(list)
-        hashItemsListData.value = hashItems
-        if (list.size < 10)
-            lastHashPage = true
+    fun clearHashChallengeData() {
+        _hashChallengeData.value = PagingData.empty()
+    }
+
+    fun fetchChallengeHashtag(hash: String) {
+        viewModelScope.launch {
+            Pager(
+                PagingConfig(initialLoadSize = 20, pageSize = 10,enablePlaceholders = false ),
+            ) {
+                HashChallengePagingSource(hash, challenge_repository)
+            }.flow.cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _hashChallengeData.value = pagingData
+                }
+        }
     }
 
 
     //해시태그 칩 목록
     val hashChipsListData = MutableLiveData<ArrayList<ChipItem>>()
-    var hashChips = arrayListOf<ChipItem>(
-        ChipItem("챌린지", false),
-        ChipItem("개발", false),
-        ChipItem("독서", false),
-        ChipItem("맛집", false),
-        ChipItem("안드로이드", false)
-    )
+    var hashChips = arrayListOf<ChipItem>()
 
-    fun addHashList(list: ArrayList<HashTag>) {
+    fun addHashList(list: List<HashTag>) {
         hashChips = arrayListOf()
         list.forEach { hashChips.add(ChipItem(it.hashtag, false)) }
         hashChipsListData.value = hashChips
     }
 
     fun clickAllChip() {
+        clearHashChallengeData()
         hashChips.forEach { it.select = false }
         hashChipsListData.value = hashChips
-        hashPage = 0
-        hashtag = "전체"
-        hashItems = arrayListOf()
-        getChallengeHashtag()
+        fetchChallengeHashtag("전체")
     }
 
     fun clickOneChip(pos: Int, hash: String) {
+        clearHashChallengeData()
         hashChips.forEachIndexed { index, chipItem ->
             chipItem.select = (index == pos)
         }
         hashChipsListData.value = hashChips
-        hashPage = 0
-        hashItems = arrayListOf()
-        hashtag = hash
-        getChallengeHashtag()
+        fetchChallengeHashtag(hash)
     }
 
 
