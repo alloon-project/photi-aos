@@ -250,8 +250,9 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
 
             // 다이얼로그 크기 설정
             window.setLayout(width, height)
-        }
 
+            window.setBackgroundDrawableResource(R.drawable.radius_16)
+        }
     }
 
     override fun onDestroyView() {
