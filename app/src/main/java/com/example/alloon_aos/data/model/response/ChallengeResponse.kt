@@ -111,9 +111,5 @@ data class ChipListResponse(
     @field:Json(name = "message")
     val message: String,
     @field:Json(name = "data")
-    val data: ChipListData
-)
-data class ChipListData(
-    @field:Json(name = "hashtag")
-    val hashtag: List<String>
+    val data: List<HashTag>
 )

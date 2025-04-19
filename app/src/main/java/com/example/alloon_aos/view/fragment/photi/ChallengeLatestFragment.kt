@@ -21,7 +21,7 @@ import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.databinding.FragmentChallengeLatestBinding
 import com.example.alloon_aos.databinding.ItemCardMissionSmallRecyclerviewBinding
-import com.example.alloon_aos.view.activity.ChallengeActivity
+import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -31,6 +31,7 @@ class ChallengeLatestFragment : Fragment() {
     private lateinit var binding : FragmentChallengeLatestBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var latestCardAdapter: LatestCardAdapter
+    private lateinit var mActivity: PhotiActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +40,9 @@ class ChallengeLatestFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_challenge_latest, container, false)
         binding.fragment = this
 
-        latestCardAdapter = LatestCardAdapter(photiViewModel)
+        mActivity = activity as PhotiActivity
+
+        latestCardAdapter = LatestCardAdapter(mActivity, photiViewModel)
         binding.latestRecyclerView.adapter = latestCardAdapter
         binding.latestRecyclerView.layoutManager = GridLayoutManager(context, 2)
         binding.latestRecyclerView.setHasFixedSize(true)
@@ -73,7 +76,7 @@ class ChallengeLatestFragment : Fragment() {
         photiViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    startChallenge()
+                    mActivity.startChallengeActivity()
                 }
                 "TOKEN_UNAUTHENTICATED" -> {
                     CustomToast.createToast(activity, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
@@ -94,17 +97,8 @@ class ChallengeLatestFragment : Fragment() {
         }
     }
 
-    private fun startChallenge() {
-        val intent = Intent(requireContext(), ChallengeActivity::class.java)
-        intent.putExtra("IS_FROM_HOME",true)
-        intent.putExtra("ID",photiViewModel.id)
-        intent.putExtra("data", photiViewModel.getData())
-        intent.putExtra("image", photiViewModel.imgFile)
-        startActivity(intent)
-    }
 
-
-    class LatestCardAdapter(private val photiViewModel: PhotiViewModel) : PagingDataAdapter<ChallengeData, LatestCardAdapter.ViewHolder>(DiffCallback()){
+    class LatestCardAdapter(private val mActivity: PhotiActivity, private val photiViewModel: PhotiViewModel) : PagingDataAdapter<ChallengeData, LatestCardAdapter.ViewHolder>(DiffCallback()){
 
         inner class ViewHolder(var binding : ItemCardMissionSmallRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root){
             fun bind(data: ChallengeData) {
@@ -140,7 +134,10 @@ class ChallengeLatestFragment : Fragment() {
 
                 binding.root.setOnClickListener {
                     photiViewModel.id = data.id
-                    photiViewModel.getChallenge()
+                    if (photiViewModel.checkUserInChallenge())
+                        mActivity.startFeedActivity()
+                    else
+                        photiViewModel.getChallenge()
                 }
             }
         }

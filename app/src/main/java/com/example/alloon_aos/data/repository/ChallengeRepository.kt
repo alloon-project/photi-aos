@@ -7,6 +7,7 @@ import com.example.alloon_aos.data.model.request.InviteCode
 import com.example.alloon_aos.data.model.request.ModifyData
 import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeResponse
+import com.example.alloon_aos.data.model.response.ChipListResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.ExamImgResponse
@@ -120,7 +121,22 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
         })
     }
 
-    //해시태그리스트조회
+    fun getHashList(callback: ChallengeRepositoryCallback<ChipListResponse>) {
+        challengeService.get_hashtagList().enqueue(object : Callback<ChipListResponse> {
+            override fun onResponse(call: Call<ChipListResponse>, response: Response<ChipListResponse>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(response.body()!!)
+                } else {
+                    val error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
+                }
+            }
+
+            override fun onFailure(call: Call<ChipListResponse>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
 
     fun getExamImg(callback: ChallengeRepositoryCallback<ExamImgResponse>) {
         challengeService.get_exampleImg().enqueue(object : Callback<ExamImgResponse> {
@@ -139,21 +155,8 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
         })
     }
 
-    fun getChallengeHashtag(hashtag: String, page: Int, size: Int, callback: ChallengeRepositoryCallback<PagingListResponse>) {
-        challengeService.get_challengeHashtag(hashtag = hashtag, page = page, size = size).enqueue(object : Callback<PagingListResponse> {
-            override fun onResponse(call: Call<PagingListResponse>, response: Response<PagingListResponse>) {
-                if (response.isSuccessful) {
-                    callback.onSuccess(response.body()!!)
-                } else {
-                    val error = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(error))
-                }
-            }
-
-            override fun onFailure(call: Call<PagingListResponse>, t: Throwable) {
-                callback.onFailure(t)
-            }
-        })
+    suspend fun getChallengeHashtag(hashtag: String, page: Int, size: Int) : Response<PagingListResponse>{
+        return  challengeService.get_challengeHashtag(hashtag = hashtag, page = page, size = size)
     }
 
 

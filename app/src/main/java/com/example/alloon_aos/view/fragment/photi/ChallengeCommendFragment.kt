@@ -8,30 +8,37 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.NestedScrollView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.alloon_aos.R
+import com.example.alloon_aos.data.model.response.ChallengeData
 import com.example.alloon_aos.databinding.FragmentChallengeCommendBinding
-import com.example.alloon_aos.view.activity.ChallengeActivity
+import com.example.alloon_aos.databinding.ItemCardMissionLargeRecyclerviewBinding
 import com.example.alloon_aos.view.activity.PhotiActivity
-import com.example.alloon_aos.view.adapter.HashCardAdapter
 import com.example.alloon_aos.view.adapter.HashTagAdapter
 import com.example.alloon_aos.view.adapter.HotCardAdapter
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class ChallengeCommendFragment : Fragment() {
     private lateinit var binding : FragmentChallengeCommendBinding
     private lateinit var hotCardAdapter: HotCardAdapter
     private lateinit var hashCardAdapter: HashCardAdapter
     private lateinit var hashTagAdapter: HashTagAdapter
-    private lateinit var nestedScrollView: NestedScrollView
 
     private val photiViewModel by activityViewModels<PhotiViewModel>()
     private lateinit var mContext : Context
+    private lateinit var mActivity: PhotiActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,35 +46,28 @@ class ChallengeCommendFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_challenge_commend, container, false)
         binding.fragment = this
-        val mActivity = activity as PhotiActivity
+
+        mActivity = activity as PhotiActivity
 
         hotCardAdapter = HotCardAdapter(this, photiViewModel)
         binding.hotRecyclerView.adapter = hotCardAdapter
         binding.hotRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.hotRecyclerView.setHasFixedSize(true)
 
-        hashCardAdapter = HashCardAdapter(this, photiViewModel)
-        binding.hashtagRecyclerView.adapter = hashCardAdapter
-        binding.hashtagRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        binding.hashtagRecyclerView.setHasFixedSize(true)
-
         hashTagAdapter = HashTagAdapter(mContext,this, photiViewModel)
         binding.chipRecyclerview.adapter = hashTagAdapter
         binding.chipRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         binding.chipRecyclerview.setHasFixedSize(true)
 
+        hashCardAdapter = HashCardAdapter(this, photiViewModel)
+        binding.hashtagRecyclerView.adapter = hashCardAdapter
+        binding.hashtagRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        binding.hashtagRecyclerView.setHasFixedSize(true)
+
         photiViewModel.resetApiResponseValue()
         photiViewModel.resetPopularResponseValue()
         photiViewModel.resetHashResponseValue()
         setObserver()
-
-        nestedScrollView = binding.scrollView
-        nestedScrollView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
-            if (scrollY == nestedScrollView.getChildAt(0).measuredHeight - v.measuredHeight){
-                if (!photiViewModel.lastHashPage)
-                    photiViewModel.getChallengeHashtag()
-            }
-        }
 
         return binding.root
     }
@@ -75,7 +75,7 @@ class ChallengeCommendFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         photiViewModel.getChallengePopular()
-        //photiViewModel.getHashList()
+        photiViewModel.getHashList()
     }
 
     override fun onAttach(context: Context) {
@@ -83,17 +83,28 @@ class ChallengeCommendFragment : Fragment() {
         mContext = context
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        photiViewModel.clearHashChallengeData()
+    }
+
+
     private fun setObserver() {
         photiViewModel.hotItemsListData.observe(viewLifecycleOwner) {
             hotCardAdapter.notifyDataSetChanged()
         }
 
-        photiViewModel.hashItemsListData.observe(viewLifecycleOwner) {
-            hashCardAdapter.notifyDataSetChanged()
-        }
-
         photiViewModel.hashChipsListData.observe(viewLifecycleOwner) {
             hashTagAdapter.notifyDataSetChanged()
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                photiViewModel.hashChallengeData.collectLatest { pagingData ->
+                    hashCardAdapter.submitData(pagingData)
+                    Log.d("PagingSource", "Adapter item count: ${hashCardAdapter.snapshot().items.size}")
+                }
+            }
         }
 
         photiViewModel.popularResponse.observe(viewLifecycleOwner) { response ->
@@ -112,21 +123,9 @@ class ChallengeCommendFragment : Fragment() {
         photiViewModel.hashListResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    photiViewModel.getChallengeHashtag()
-                }
-                "IO_Exception" -> {
-                    CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
-                }
-                else -> {
-                    Log.d("Observer", "Unhandled response code: ${response.code}")
-                }
-            }
-        }
-
-        photiViewModel.hashResponse.observe(viewLifecycleOwner) { response ->
-            when (response.code) {
-                "200 OK" -> {
-                    photiViewModel.hashPage += 1
+                    binding.allChipBtn.setBackgroundResource(R.drawable.chip_blue)
+                    binding.allChipBtn.setTextColor(mContext.getColor(R.color.blue500))
+                    photiViewModel.fetchChallengeHashtag("전체")
                 }
                 "IO_Exception" -> {
                     CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
@@ -140,7 +139,7 @@ class ChallengeCommendFragment : Fragment() {
         photiViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    startChallenge()
+                    mActivity.startChallengeActivity()
                 }
                 "TOKEN_UNAUTHENTICATED" -> {
                     CustomToast.createToast(activity, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
@@ -162,7 +161,10 @@ class ChallengeCommendFragment : Fragment() {
     }
 
     fun setOnclick() {
-        photiViewModel.getChallenge()
+        if (photiViewModel.checkUserInChallenge())
+            mActivity.startFeedActivity()
+        else
+            photiViewModel.getChallenge()
     }
 
     fun clickAllChip() {
@@ -176,12 +178,64 @@ class ChallengeCommendFragment : Fragment() {
         binding.allChipBtn.setTextColor(mContext.getColor(R.color.gray800))
     }
 
-    private fun startChallenge() {
-        val intent = Intent(requireContext(), ChallengeActivity::class.java)
-        intent.putExtra("IS_FROM_HOME",true)
-        intent.putExtra("ID",photiViewModel.id)
-        intent.putExtra("data", photiViewModel.getData())
-        intent.putExtra("image", photiViewModel.imgFile)
-        startActivity(intent)
+
+    class HashCardAdapter(private val fragment: ChallengeCommendFragment , private val photiViewModel: PhotiViewModel) : PagingDataAdapter<ChallengeData, HashCardAdapter.ViewHolder> (DiffCallback()) {
+        inner class ViewHolder(private val binding: ItemCardMissionLargeRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root) {
+
+            fun bind(data: ChallengeData) {
+                binding.titleTextView.text = data.name
+                binding.dateTextView.text = data.endDate
+
+                if(data.hashtags.isNotEmpty()) {
+                    data.hashtags.forEachIndexed { index, hashtag ->
+                        when (index) {
+                            0 -> {
+                                binding.chip1Btn.text = hashtag.hashtag
+                                binding.chip1Btn.visibility = View.VISIBLE
+                                binding.chip2Btn.visibility = View.GONE
+                                binding.chip3Btn.visibility = View.GONE
+                            }
+                            1 -> {
+                                binding.chip2Btn.text = hashtag.hashtag
+                                binding.chip2Btn.visibility = View.VISIBLE
+                                binding.chip3Btn.visibility = View.GONE
+                            }
+                            2 -> {
+                                binding.chip3Btn.text = hashtag.hashtag
+                                binding.chip3Btn.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                }
+
+                Glide
+                    .with(binding.imgView.context)
+                    .load(data.imageUrl)
+                    .into(binding.imgView)
+
+                binding.root.setOnClickListener {
+                    photiViewModel.id = data.id
+                    fragment.setOnclick()
+                }
+            }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val binding = ItemCardMissionLargeRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return ViewHolder(binding)
+        }
+
+        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+            getItem(position)?.let { viewHolder.bind(it) }
+        }
+
+        class DiffCallback : DiffUtil.ItemCallback<ChallengeData>() {
+            override fun areItemsTheSame(oldItem: ChallengeData, newItem: ChallengeData): Boolean {
+                return oldItem.id == newItem.id
+            }
+            override fun areContentsTheSame(oldItem: ChallengeData, newItem: ChallengeData): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

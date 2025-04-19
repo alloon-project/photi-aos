@@ -17,8 +17,8 @@ import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.storage.SharedPreferencesManager
 import com.example.alloon_aos.databinding.FragmentHomeNochallengeBinding
-import com.example.alloon_aos.view.activity.ChallengeActivity
 import com.example.alloon_aos.view.activity.CreateActivity
+import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.adapter.MemberHomeAdapter
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
@@ -26,6 +26,7 @@ import com.example.alloon_aos.viewmodel.PhotiViewModel
 class HomeNoChallengeFragment : Fragment() {
     private lateinit var binding : FragmentHomeNochallengeBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
+    private lateinit var mActivity: PhotiActivity
     private lateinit var memberHomeAdapter: MemberHomeAdapter
     private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
 
@@ -37,6 +38,8 @@ class HomeNoChallengeFragment : Fragment() {
         binding.fragment = this
         binding.viewModel = photiViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        mActivity = activity as PhotiActivity
 
         binding.memberTextview.text = "${sharedPreferencesManager.getUserName() ?: ""}님의 \n열정을 보여주세요!"
 
@@ -141,7 +144,7 @@ class HomeNoChallengeFragment : Fragment() {
         photiViewModel.homeResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    startChallenge()
+                    mActivity.startChallengeActivity()
                 }
                 "TOKEN_UNAUTHENTICATED" -> {
                     CustomToast.createToast(activity, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
@@ -177,15 +180,6 @@ class HomeNoChallengeFragment : Fragment() {
 
     fun createChallenge() {
         val intent = Intent(requireContext(), CreateActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun startChallenge() {
-        val intent = Intent(requireContext(), ChallengeActivity::class.java)
-        intent.putExtra("IS_FROM_HOME",true)
-        intent.putExtra("ID",photiViewModel.id)
-        intent.putExtra("data", photiViewModel.getData())
-        intent.putExtra("image", photiViewModel.imgFile)
         startActivity(intent)
     }
 
