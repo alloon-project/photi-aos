@@ -18,94 +18,137 @@
         android:layout_height="match_parent"
         android:theme="@style/Theme.Photi"
         android:background="@color/white">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_editor_absoluteX="0dp">
+
+            <ProgressBar
+                android:id="@+id/feed_progress"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginRight="8dp"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/progress_bar_radius"
+                android:progressTint="@color/green400"
+                app:layout_constraintEnd_toStartOf="@id/sortingButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/sortingButton"
+                style="@style/text_xsmall"
+                android:layout_width="67dp"
+                android:layout_height="22dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="16dp"
+                android:background="#00ff0000"
+                android:drawableRight="@drawable/ic_down12"
+                android:drawableTint="@color/gray700"
+                android:onClick="@{() -> fragment.showBottomList()}"
+                android:text="최신순"
+                android:textColor="@color/textcolor_textbtn_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/feed_progress"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+              android:id="@+id/no_verified_user_view"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="400dp"
+                android:layout_marginTop="30dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/feed_progress">
 
-                <ProgressBar
-                    android:id="@+id/feed_progress"
-                    android:max="100"
-                    android:progress="0"
-                    android:progressTint="@color/green400"
-                    android:layout_width="0dp"
-                    android:layout_height="6dp"
-                    android:progressDrawable="@drawable/progress_bar_radius"
-                    style="@android:style/Widget.ProgressBar.Horizontal"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginRight="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/sortingButton" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/blank_medium_layout" />
 
-                <Button
-                    android:id="@+id/sortingButton"
-                    android:onClick="@{() -> fragment.showBottomList()}"
-                    style="@style/text_xsmall"
-                    android:layout_width="67dp"
-                    android:layout_height="22dp"
-                    android:background="#00ff0000"
-                    android:text="최신순"
-                    android:textColor="@color/textcolor_textbtn_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/feed_progress"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:drawableRight="@drawable/ic_down12"
-                    android:drawableTint="@color/gray700"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="14dp"/>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintlayout_tag"
+                <ImageView
+                    android:id="@+id/blank_imgView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:background="@drawable/tag_dafault"
-
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/feed_progress">
-
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_marginRight="4dp"
-                        android:src="@drawable/ic_people"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/memberCnt_textView"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/white" />
-
-                    <TextView
-                        android:id="@+id/memberCnt_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/suit_bold"
-                        android:text="오늘 5명 인증!"
-                        android:textColor="@color/white"
-                        android:textSize="10dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/feed_out_recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@color/white"
-                    android:clipToPadding="false"
-                    android:paddingBottom="28dp"
+                    android:src="@drawable/blank_medium_circle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintlayout_tag" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:fontFamily="@font/suit_medium"
+                    android:text="첫번째로 인증해주세요! 얼른~"
+                    android:textColor="@color/gray400"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/blank_imgView" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintlayout_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/tag_dafault"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/feed_progress">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginRight="4dp"
+                    android:src="@drawable/ic_people"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/memberCnt_textView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/memberCnt_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_bold"
+                    android:text="오늘 0명 인증!"
+                    android:textColor="@color/white"
+                    android:textSize="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/feed_out_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/white"
+                android:clipToPadding="false"
+                android:paddingBottom="28dp"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintlayout_tag" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton
             android:id="@+id/fixed_imageButton"

@@ -147,8 +147,10 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
 
           binding.memberCntTextView.text = "오늘 ${verified}명 인증!"
 
-            if (verified == 0 || totalCount == 0) return@observe
-
+            if (verified == 0 || totalCount == 0)   return@observe
+//
+//            binding.noVerifiedUserView.visibility = View.GONE
+//            binding.feedOutRecyclerView.visibility = View.VISIBLE TODO 인증 횟수 0일때 UI로 변경
             progressBar.viewTreeObserver.addOnGlobalLayoutListener(object :
                 ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
