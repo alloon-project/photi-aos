@@ -18,6 +18,7 @@ import android.view.WindowManager
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
@@ -31,8 +32,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.response.Comment
+import com.example.alloon_aos.data.model.response.Feed
+import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.databinding.CustomPopupMenuBinding
 import com.example.alloon_aos.databinding.DialogFeedDetailBinding
 import com.example.alloon_aos.databinding.ItemFeedCommentBinding
@@ -47,6 +51,7 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
     private lateinit var adapter:CommentsAdapter
     private var isFirstInput = true
     private var isFirstAdd = true
+    private var feedUserName : String? = null
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -56,9 +61,6 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
         setupRecyclerView()
         observeLiveData()
 
-        binding.backImgBtn.setOnClickListener {
-            dismiss()
-        }
 
         binding.ellipsisImgBtn.setOnClickListener { view ->
             setCustomPopUp(view)
@@ -94,7 +96,6 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
 //        }
     }
 
-
     private fun observeLiveData() {
         feedViewModel.code.observe(viewLifecycleOwner) { code ->
             handleApiError(code)
@@ -103,15 +104,14 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
         feedViewModel.challengeFeedDetail.observe(viewLifecycleOwner) { data ->
             with(binding) {
                 if (data != null) {
-                    idTextView.text = data.username
+                    feedUserName = data.username
+                    idTextView.text = feedUserName
                     heartCntTextView.text = if (data.likeCnt == 0) "" else data.likeCnt.toString()
 
                     //TODO 사용자가 heart click 여부
                     // heartBtn.setImageResource(if (feed.isClick) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
 
-//                    heartBtn.setOnClickListener {
-//                        updateHeartCountView(heartBtn, heartCntTextView, feed)
-//                    }
+                    setHeartButtonClickListener(data,binding.heartBtn)
 
                     Glide.with(feedImgView)
                         .load(data.feedImageUrl)
@@ -120,9 +120,10 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
                     if(data.userImageUrl != ""){
                         Glide.with(profileImageView)
                             .load(data.userImageUrl)
-                            .transform(CenterCrop())
+                            .transform(CircleCrop())
                             .into(profileImageView)
                     }
+
 
                     commentEditText.addTextChangedListener(object : TextWatcher {
                         override fun afterTextChanged(s: Editable?) {}
@@ -224,10 +225,32 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
         //댓글 추가 api
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
-    override fun onResume() {
-        super.onResume()
-        setBlurredBackground(50, 0)
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.let { window ->
+            val displayMetrics = resources.displayMetrics
+            val density = displayMetrics.density
+
+            val fullWidth = displayMetrics.widthPixels
+            val fullHeight = displayMetrics.heightPixels
+
+            // dp → px 변환
+            val marginHorizontal = (24 * density).toInt() // 좌우 24dp
+            val marginVertical = (69 * density).toInt()        // 위 69dp
+
+            // 최종 크기 계산
+            val width = fullWidth - 2 * marginHorizontal
+            val height = fullHeight - 2 * marginVertical
+
+            // 다이얼로그의 레이아웃 속성 설정
+            val params = window.attributes
+            params.dimAmount = 0.4f // 배경 어둡기 설정
+            window.attributes = params
+
+            // 다이얼로그 크기 설정
+            window.setLayout(width, height)
+        }
 
     }
 
@@ -236,22 +259,7 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
         _binding = null
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun setBlurredBackground(blurBehindRadius: Int, backgroundBlurRadius: Int) {
-        val dialogWindow = dialog?.window
-        dialogWindow?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        dialogWindow?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogWindow?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
 
-        if (dialogWindow?.windowManager?.isCrossWindowBlurEnabled == true) {
-            dialogWindow.setFlags(
-                WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-                WindowManager.LayoutParams.FLAG_BLUR_BEHIND
-            )
-            dialogWindow.attributes?.blurBehindRadius = blurBehindRadius
-            dialogWindow.setDimAmount(0f)
-        }
-    }
 
 //    private fun updateHeartCountView(heartBtn: ImageButton, heartCntTextView: TextView, feed : FeedInItem) {
 //        feed.isClick = !feed.isClick
@@ -259,7 +267,43 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
 //        feed.heartCnt += if (feed.isClick) 1 else -1
 //        heartCntTextView.text = if (feed.heartCnt == 0) "" else feed.heartCnt.toString()
 //    }
+private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: ImageView,) {
+    heartButton.setImageResource(
+        if (data.isLike) R.drawable.ic_heart_filled_14
+        else R.drawable.ic_heart_empty_14
+    )
 
+    heartButton.setOnClickListener {
+        heartButton.isEnabled = false
+        data.isLike = !data.isLike
+
+        val currentLikeText = binding.heartCntTextView.text.toString().replace(",", "")
+        val currentCount = currentLikeText.toIntOrNull() ?: 0
+
+        if (data.isLike) {
+            feedViewModel.addFeedLike(feedId) {
+                heartButton.isEnabled = true
+                heartButton.setImageResource(R.drawable.ic_heart_filled_14)
+
+                val updatedCount = currentCount + 1
+                binding.heartCntTextView.text = String.format("%,d", updatedCount)
+            }
+        } else {
+            feedViewModel.removeFeedLike(feedId) {
+                heartButton.isEnabled = true
+                heartButton.setImageResource(R.drawable.ic_heart_empty_14)
+
+                val updatedCount = (currentCount - 1).coerceAtLeast(0)
+                binding.heartCntTextView.text = if (updatedCount == 0) {
+                    ""
+                } else {
+                    String.format("%,d", updatedCount)
+                }
+            }
+        }
+    }
+
+}
     private fun showCustomToast(customToastLayout: ConstraintLayout) {
 //        // 마지막 아이템의 뷰를 찾아서 그 뷰를 기준으로 토스트 위치를 설정
 //        val lastVisiblePosition = recyclerView.adapter?.itemCount?.minus(1) ?: return@addOnGlobalLayoutListener
@@ -305,38 +349,63 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
 //            Log.e("showCustomToast", "RecyclerView의 마지막 아이템을 찾을 수 없습니다.")
 //        }
     }
-
-
-    private fun setCustomPopUp(view: View) {
+    private fun setCustomPopUp(anchorView: View) {
         val popupViewBinding = CustomPopupMenuBinding.inflate(LayoutInflater.from(context))
-        val popupWindow = PopupWindow(popupViewBinding.root, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+        val popupWindow = PopupWindow(
+            popupViewBinding.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
 
-        with(popupViewBinding){
-            //if(본인이 아니면)
-                //optionOne.text = 피드 신고하기
-            //else
+        // 팝업 뷰의 실제 너비 측정
+        popupViewBinding.root.measure(
+            View.MeasureSpec.UNSPECIFIED,
+            View.MeasureSpec.UNSPECIFIED
+        )
+        val popupWidth = popupViewBinding.root.measuredWidth
+        val anchorWidth = anchorView.width
+
+        // 오른쪽 끝을 기준으로 맞추기 위한 x 보정값
+        val xOffset = anchorWidth - popupWidth
+
+        // 8dp 아래로 yOffset 보정
+        val density = anchorView.resources.displayMetrics.density
+        val yOffset = (8 * density).toInt()
+
+        // 위치 설정
+        popupWindow.showAsDropDown(anchorView, xOffset, yOffset)
+
+        // 클릭 리스너
+        with(popupViewBinding) {
+            if(feedUserName == feedViewModel.id){
                 optionOne.text = "인스타 공유하기"
                 optionTwo.text = "피드 삭제하기"
+            }
+            else{
+                optionOne.text = "피드 신고하기"
+                //TODO listener확인,본인확인
+            }
 
             optionOne.setOnClickListener {
-                //if(본인이 아니면)
-                    //피드 신고 플로우
                 Toast.makeText(context, "Share 클릭됨", Toast.LENGTH_SHORT).show()
                 popupWindow.dismiss()
             }
 
             optionTwo.setOnClickListener {
-                CustomTwoButtonDialog(this@FeedDetailDialog,
-                    "피드를 삭제할까요?","삭제한 피드는 복구할 수 없으며,\n" + "오늘 더 이상 피드를 올릴 수 없어요.",
-                    "취소할게요","삭제할게요")
-                .show(requireActivity().supportFragmentManager, "CustomDialog")
+                CustomTwoButtonDialog(
+                    this@FeedDetailDialog,
+                    "피드를 삭제할까요?",
+                    "삭제한 피드는 복구할 수 없으며,\n오늘 더 이상 피드를 올릴 수 없어요.",
+                    "취소할게요",
+                    "삭제할게요"
+                ).show(requireActivity().supportFragmentManager, "CustomDialog")
                 popupWindow.dismiss()
                 dismiss()
             }
         }
-
-        popupWindow.showAsDropDown(view, 0, 0, Gravity.CENTER)
     }
+
 
     class CommentsAdapter: ListAdapter<Comment, CommentsAdapter.ViewHolder>(
         DiffCallback()
