@@ -44,9 +44,12 @@ object ApiConfig {
         "/api/challenges/{challengeId}/feeds" to "POST",
         "/api/challenges/{challengeId}/feeds/{feedId}/like" to mapOf(
                 "DELETE" to "좋아요 삭제",
-                "POST" to "좋아요 추가"
+                "POST" to "좋아요 추가",
         ),
+        "/api/challenges/{challengeId}/feeds/{feedId}" to "GET",
         "/api/users/challenges/{challengeId}/prove" to "GET",
+        "/api/challenges/feeds/{feedId}/comments" to "GET",
+
     )
 
 

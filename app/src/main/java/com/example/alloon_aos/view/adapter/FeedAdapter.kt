@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.adapter
 
+import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.alloon_aos.data.model.response.Feed
 import com.example.alloon_aos.data.model.response.FeedUiItem
 import com.example.alloon_aos.databinding.ItemFeedContentBinding
 import com.example.alloon_aos.databinding.ItemFeedHeaderBinding
+import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog
 import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
 import com.example.alloon_aos.viewmodel.FeedViewModel
 import java.time.*
@@ -30,7 +32,7 @@ interface OnFeedDeletedListener {
 class FeedAdapter(
     private val fragmentManager: FragmentManager,
     private val feedViewModel: FeedViewModel
-) : PagingDataAdapter<FeedUiItem, RecyclerView.ViewHolder>(DiffCallback()), OnFeedDeletedListener {
+) : PagingDataAdapter<FeedUiItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
     companion object {
         const val VIEW_TYPE_HEADER = 0
@@ -69,7 +71,16 @@ class FeedAdapter(
                 .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))
                 .into(binding.imgView)
 
-            setHeartButtonClickListener(data, binding.heartButton)
+            setHeartButtonClickListener(data, binding.heartButton, binding.proofshotShape)
+
+            binding.feedLayout.setOnClickListener {
+                val dialog = FeedDetailDialog(feedId = data.id, listener = object : OnFeedDeletedListener {
+                    override fun onFeedDeleted(position: Int) {
+                        // TODO 삭제 이벤트 처리
+                    }
+                })
+                dialog.show(fragmentManager, "FeedDetailDialog")
+            }
         }
     }
 
@@ -148,33 +159,28 @@ class FeedAdapter(
         }
     }
 
-    private fun setHeartButtonClickListener(data: Feed, heartButton: ImageView) {
+    private fun setHeartButtonClickListener(data: Feed, heartButton: ImageView, clickArea : ImageView) {
         heartButton.setImageResource(
             if (data.isLike) R.drawable.ic_heart_filled_14
             else R.drawable.ic_heart_empty_14
         )
 
-        heartButton.setOnClickListener {
-            heartButton.isEnabled = false
+        clickArea.setOnClickListener {
+            clickArea.isEnabled = false
             data.isLike = !data.isLike
 
             if (data.isLike) {
                 feedViewModel.addFeedLike(data.id) {
-                    heartButton.isEnabled = true
+                    clickArea.isEnabled = true
                     heartButton.setImageResource(R.drawable.ic_heart_filled_14)
                 }
             } else {
                 feedViewModel.removeFeedLike(data.id) {
-                    heartButton.isEnabled = true
+                    clickArea.isEnabled = true
                     heartButton.setImageResource(R.drawable.ic_heart_empty_14)
                 }
             }
         }
     }
 
-
-    // 삭제 인터페이스 (필요시 구현)
-    override fun onFeedDeleted(position: Int) {
-        // TODO: 필요시 구현
-    }
 }

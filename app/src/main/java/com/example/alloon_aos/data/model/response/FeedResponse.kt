@@ -54,7 +54,8 @@ data class FeedDetailData(
     val userImageUrl: String,    // "https://url.kr/5MhHhD"
     val feedImageUrl: String,    // "https://url.kr/5MhHhD"
     val createdDateTime: String, // "2024-12-08T07:55:51.190Z"
-    val likeCnt: Int             // 10
+    val likeCnt: Int, // 10
+    var isLike: Boolean,
 )
 
 //멤버조회
