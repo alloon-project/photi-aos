@@ -47,14 +47,15 @@ suspend fun <T> handleApiCall(
             Log.d("handleApiCall", "Response body: $body")
 
             if (body != null) {
-                if (body.code.trim().equals("200 OK", ignoreCase = true) ||
-                    body.code.trim().equals("201 CREATED", ignoreCase = true)) {
+                if (body.code.trim().startsWith("200", ignoreCase = true) ||
+                    body.code.trim().startsWith("201", ignoreCase = true)) {
                     Log.d("handleApiCall", "Success: ${body.data}")
                     onSuccess(body.data)
                 } else {
                     Log.e("handleApiCall", "Unexpected code: ${body.code}")
                     onFailure(body.code)
                 }
+
             } else {
                 Log.e("handleApiCall", "Response body is null!")
                 onFailure("UNKNOWN_ERROR")

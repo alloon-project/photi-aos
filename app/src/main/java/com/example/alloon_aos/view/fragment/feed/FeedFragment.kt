@@ -59,7 +59,8 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         binding.viewModel = feedViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        feedAdapter = FeedAdapter(requireActivity().supportFragmentManager,feedViewModel )
+        feedAdapter = FeedAdapter(requireActivity().supportFragmentManager,feedViewModel,  lifecycle = viewLifecycleOwner.lifecycle
+            )
 
 
         val layoutManager = GridLayoutManager(context, 2)
@@ -131,6 +132,13 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
             handleApiError(code)
         }
 
+        feedViewModel.deleteFeedCode.observe(viewLifecycleOwner) { deletedId ->
+            deletedId?.let {
+                feedAdapter.removeFeedById(it)
+                CustomToast.createToast(activity, "피드가 삭제됐어요. 내일 또 인증해주세요!")?.show()
+            }
+        }
+
         feedViewModel.isMissionClear.observe(viewLifecycleOwner) { isClear ->
             if (isClear) {
                 binding.fixedImageButton.visibility = View.GONE
@@ -140,13 +148,14 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         }
 
         feedViewModel.isVerifiedFeedExistence.observe(viewLifecycleOwner){ isFeedExist ->
-            if(!isFeedExist!!){
-                binding.noVerifiedUserView.visibility = View.VISIBLE
-                binding.feedOutRecyclerView.visibility = View.GONE
-            }else{
-
-                binding.noVerifiedUserView.visibility = View.GONE
-                binding.feedOutRecyclerView.visibility = View.VISIBLE
+            isFeedExist?.let {
+                if (!it) {
+                    binding.noVerifiedUserView.visibility = View.VISIBLE
+                    binding.feedOutRecyclerView.visibility = View.GONE
+                } else {
+                    binding.noVerifiedUserView.visibility = View.GONE
+                    binding.feedOutRecyclerView.visibility = View.VISIBLE
+                }
             }
         }
 
@@ -212,7 +221,9 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
             "UNKNOWN_ERROR" to "알 수 없는 오류가 발생했습니다."
         )
 
-        if (code == "200 OK")   return
+        if (code == "200 OK")
+            CustomToast.createToast(activity, "피드가 삭제됐어요. 내일 또 인증해주세요!.")?.show()
+
 
         if (code == "IO_Exception") {
             CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()

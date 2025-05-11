@@ -124,4 +124,12 @@ class FeedRepository(private val apiService: FeedApiService) {
     ): Response<ApiResponse<VerifiedFeedExistence>> {
         return apiService.get_is_verified_feed_exist(challengeId)
     }
+
+
+    suspend fun deleteFeed(
+        challengeId: Int,
+        feedId: Int,
+    ): Response<ApiResponse<SuccessMessageReponse>> {
+        return apiService.delete_feed(challengeId,feedId)
+    }
 }

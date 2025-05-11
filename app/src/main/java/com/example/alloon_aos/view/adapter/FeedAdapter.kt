@@ -1,12 +1,13 @@
 package com.example.alloon_aos.view.adapter
 
-import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -25,13 +26,10 @@ import java.time.format.DateTimeFormatter
 import java.time.Duration
 
 
-interface OnFeedDeletedListener {
-    fun onFeedDeleted(position: Int)
-}
-
 class FeedAdapter(
     private val fragmentManager: FragmentManager,
-    private val feedViewModel: FeedViewModel
+    private val feedViewModel: FeedViewModel,
+    private val lifecycle: Lifecycle,
 ) : PagingDataAdapter<FeedUiItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
     companion object {
@@ -49,8 +47,7 @@ class FeedAdapter(
                 }else{
                     binding.timeLayout.visibility = View.VISIBLE
                     val proveTime = feedViewModel.challengeInfo.value?.proveTime
-                    binding.proveTimeTextView.text = proveTime?.let { "${it}까지" } ?: "시간미정"
-                    //TODO 시간 넘으면 invisible
+                    binding.proveTimeTextView.text = proveTime?.let { "${it}까지" } ?: ""
                 }
             }
 
@@ -74,11 +71,7 @@ class FeedAdapter(
             setHeartButtonClickListener(data, binding.heartButton, binding.proofshotShape)
 
             binding.feedLayout.setOnClickListener {
-                val dialog = FeedDetailDialog(feedId = data.id, listener = object : OnFeedDeletedListener {
-                    override fun onFeedDeleted(position: Int) {
-                        // TODO 삭제 이벤트 처리
-                    }
-                })
+                val dialog = FeedDetailDialog(feedId = data.id)
                 dialog.show(fragmentManager, "FeedDetailDialog")
             }
         }
@@ -125,6 +118,53 @@ class FeedAdapter(
         }
     }
 
+    fun removeFeedById(feedId: Int) {
+        val currentList = snapshot().items.toMutableList()
+
+        // 삭제할 피드 위치
+        val feedIndex = currentList.indexOfFirst {
+            it is FeedUiItem.Content && it.feed.id == feedId
+        }
+
+        if (feedIndex == -1) return
+
+        // 삭제할 피드 바로 앞의 헤더 찾기
+        val headerIndex = (feedIndex downTo 0).firstOrNull {
+            currentList[it] is FeedUiItem.Header
+        }
+
+        // 피드 삭제
+        currentList.removeAt(feedIndex)
+
+        // 헤더 아래에 해당 헤더의 날짜와 일치하는 피드가 더 남아있는지 확인
+        val header = headerIndex?.let { currentList.getOrNull(it) as? FeedUiItem.Header }
+
+        val hasFeedUnderHeader = header != null && currentList.any {
+            it is FeedUiItem.Content &&
+                    formatHeader(it.feed.createdDateTime) == header.dateLabel
+        }
+
+        if (!hasFeedUnderHeader && headerIndex != null) {
+            currentList.removeAt(headerIndex)
+        }
+
+        submitData(lifecycle, PagingData.from(currentList))
+    }
+
+    private fun formatHeader(dateString: String): String {
+        val formatter = DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"))
+        val inputDate = Instant.from(formatter.parse(dateString))
+
+        val now = Instant.now()
+        val duration = Duration.between(inputDate, now)
+
+        return when {
+            duration.toDays() <= 1 -> "오늘"
+            else -> "${duration.toDays()}일전"
+        }
+    }
+
+
     class DiffCallback : DiffUtil.ItemCallback<FeedUiItem>() {
         override fun areItemsTheSame(oldItem: FeedUiItem, newItem: FeedUiItem): Boolean {
             // Header vs Header / Content vs Content 에 따라 비교
@@ -170,17 +210,31 @@ class FeedAdapter(
             data.isLike = !data.isLike
 
             if (data.isLike) {
-                feedViewModel.addFeedLike(data.id) {
-                    clickArea.isEnabled = true
-                    heartButton.setImageResource(R.drawable.ic_heart_filled_14)
-                }
+                feedViewModel.addFeedLike(
+                    data.id,
+                    onComplete = {
+                        clickArea.isEnabled = true
+                        heartButton.setImageResource(R.drawable.ic_heart_filled_14)
+                    },
+                    onFailure = {
+                        clickArea.isEnabled = true
+
+                    }
+                )
             } else {
-                feedViewModel.removeFeedLike(data.id) {
-                    clickArea.isEnabled = true
-                    heartButton.setImageResource(R.drawable.ic_heart_empty_14)
-                }
+                feedViewModel.removeFeedLike(
+                    data.id,
+                    onComplete =  {
+                        clickArea.isEnabled = true
+                        heartButton.setImageResource(R.drawable.ic_heart_empty_14)
+                    },
+                    onFailure = {
+                        clickArea.isEnabled = true
+                    }
+                )
             }
         }
     }
+
 
 }

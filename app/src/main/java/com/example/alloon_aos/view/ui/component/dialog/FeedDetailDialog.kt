@@ -1,7 +1,5 @@
 package com.example.alloon_aos.view.ui.component.dialog
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -9,18 +7,14 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.EditorInfo
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.PopupWindow
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -31,20 +25,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.response.Comment
-import com.example.alloon_aos.data.model.response.Feed
 import com.example.alloon_aos.data.model.response.FeedDetailData
+import com.example.alloon_aos.data.storage.SharedPreferencesManager
 import com.example.alloon_aos.databinding.CustomPopupMenuBinding
 import com.example.alloon_aos.databinding.DialogFeedDetailBinding
 import com.example.alloon_aos.databinding.ItemFeedCommentBinding
-import com.example.alloon_aos.view.adapter.OnFeedDeletedListener
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.FeedViewModel
 
-class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListener) : DialogFragment(),CustomTwoButtonDialogInterface  {
+class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialogInterface  {
     private var _binding: DialogFeedDetailBinding? = null
     private val binding get() = _binding!!
     private val feedViewModel by activityViewModels<FeedViewModel>()
@@ -52,6 +45,8 @@ class FeedDetailDialog(val feedId: Int, private val listener: OnFeedDeletedListe
     private var isFirstInput = true
     private var isFirstAdd = true
     private var feedUserName : String? = null
+    private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
+
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -282,25 +277,36 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
         val currentCount = currentLikeText.toIntOrNull() ?: 0
 
         if (data.isLike) {
-            feedViewModel.addFeedLike(feedId) {
-                heartButton.isEnabled = true
-                heartButton.setImageResource(R.drawable.ic_heart_filled_14)
+            feedViewModel.addFeedLike(feedId,
+                onComplete =  {
+                    heartButton.isEnabled = true
+                    heartButton.setImageResource(R.drawable.ic_heart_filled_14)
 
-                val updatedCount = currentCount + 1
-                binding.heartCntTextView.text = String.format("%,d", updatedCount)
-            }
-        } else {
-            feedViewModel.removeFeedLike(feedId) {
-                heartButton.isEnabled = true
-                heartButton.setImageResource(R.drawable.ic_heart_empty_14)
-
-                val updatedCount = (currentCount - 1).coerceAtLeast(0)
-                binding.heartCntTextView.text = if (updatedCount == 0) {
-                    ""
-                } else {
-                    String.format("%,d", updatedCount)
+                    val updatedCount = currentCount + 1
+                    binding.heartCntTextView.text = String.format("%,d", updatedCount)
+                },
+                onFailure = {
+                    heartButton.isEnabled = true
                 }
-            }
+            )
+        } else {
+            feedViewModel.removeFeedLike(
+                feedId,
+                onComplete = {
+                    heartButton.isEnabled = true
+                    heartButton.setImageResource(R.drawable.ic_heart_empty_14)
+
+                    val updatedCount = (currentCount - 1).coerceAtLeast(0)
+                    binding.heartCntTextView.text = if (updatedCount == 0) {
+                        ""
+                    } else {
+                        String.format("%,d", updatedCount)
+                    }
+                },
+                onFailure = {
+                    heartButton.isEnabled = true
+                }
+            )
         }
     }
 
@@ -376,20 +382,24 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
 
         // 위치 설정
         popupWindow.showAsDropDown(anchorView, xOffset, yOffset)
+        val myId = sharedPreferencesManager.getUserName() ?: ""
+        if (feedUserName == myId) {
+            setupMyFeedOptions(popupViewBinding,popupWindow)
+        } else {
+            setupOtherFeedOptions(popupViewBinding,popupWindow)
+        }
+    }
 
-        // 클릭 리스너
-        with(popupViewBinding) {
-            if(feedUserName == feedViewModel.id){
-                optionOne.text = "인스타 공유하기"
-                optionTwo.text = "피드 삭제하기"
-            }
-            else{
-                optionOne.text = "피드 신고하기"
-                //TODO listener확인,본인확인
-            }
+    private fun setupMyFeedOptions(
+        popupViewBinding: CustomPopupMenuBinding,
+        popupWindow: PopupWindow
+    ) {
+        with(popupViewBinding){
+            optionOne.text = "공유하기"
+            optionTwo.text = "피드 삭제하기"
 
             optionOne.setOnClickListener {
-                Toast.makeText(context, "Share 클릭됨", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "인스타 공유하기", Toast.LENGTH_SHORT).show()
                 popupWindow.dismiss()
             }
 
@@ -403,6 +413,20 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
                 ).show(requireActivity().supportFragmentManager, "CustomDialog")
                 popupWindow.dismiss()
                 dismiss()
+            }
+        }
+
+    }
+
+    private fun setupOtherFeedOptions(popupViewBinding: CustomPopupMenuBinding,  popupWindow: PopupWindow) {
+        with(popupViewBinding){
+            divider.visibility = View.GONE
+            optionTwo.visibility = View.GONE
+
+            optionOne.text = "피드 신고하기"
+            optionOne.setOnClickListener {
+//TODO 피드 신고하기로 이동
+                popupWindow.dismiss()
             }
         }
     }
@@ -455,7 +479,7 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
     override fun onClickFisrtButton() {}
 
     override fun onClickSecondButton() {
-        //TODO 삭제
+        feedViewModel.deleteFeed(feedId)
         //listener.onFeedDeleted(index)
     }
 }

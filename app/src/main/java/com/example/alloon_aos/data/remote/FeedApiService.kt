@@ -135,5 +135,11 @@ interface FeedApiService {
         @Path("challengeId") challengeId: Int,
     ): Response<ApiResponse<VerifiedFeedExistence>>
 
+    //피드 삭제
+    @DELETE("/api/challenges/{challengeId}/feeds/{feedId}")
+    suspend fun delete_feed(
+        @Path("challengeId") challengeId: Int,
+        @Path("feedId") feedId: Int,
+    ): Response<ApiResponse<SuccessMessageReponse>>
 
 }

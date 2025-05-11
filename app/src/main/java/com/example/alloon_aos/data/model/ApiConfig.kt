@@ -46,10 +46,13 @@ object ApiConfig {
                 "DELETE" to "좋아요 삭제",
                 "POST" to "좋아요 추가",
         ),
-        "/api/challenges/{challengeId}/feeds/{feedId}" to "GET",
+        "/api/challenges/{challengeId}/feeds/{feedId}" to mapOf(
+            "DELETE" to "피드 삭제",
+            "GET" to "피드 개별 조회",
+        ), //삭제 토스트 안뜸 리스트도 재 정렬해얗마
         "/api/users/challenges/{challengeId}/prove" to "GET",
         "/api/challenges/feeds/{feedId}/comments" to "GET",
-
+        "/api/challenges/{challengeId}/feed-existence" to "GET",
     )
 
 

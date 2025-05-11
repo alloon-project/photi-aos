@@ -1,6 +1,8 @@
 package com.example.alloon_aos.viewmodel
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -91,11 +93,11 @@ class FeedViewModel : ViewModel() {
             override fun onSuccess(data: MessageResponse) {
                 val result = data.code
                 val mes = data.message
-                apiResponse.value = ActionApiResponse(result)
+                apiResponse.postValue( ActionApiResponse(result))
                 Log.d(TAG, "deleteChallenge: $mes $result")
             }
             override fun onFailure(error: Throwable) {
-                apiResponse.value = ActionApiResponse(ErrorHandler.handle(error))
+                apiResponse.postValue(ActionApiResponse(ErrorHandler.handle(error)))
             }
         })
     }
@@ -116,9 +118,6 @@ class FeedViewModel : ViewModel() {
     }
 
     /////////////////////////////////////////////////////////
-
-
-    var id = "myId" //TODO 내 아이디 받아와야함
     val isMissionClear = MutableLiveData(false) //api에서 받아올 오늘 미션관련 플래그
 
     //피드뷰
@@ -155,6 +154,9 @@ class FeedViewModel : ViewModel() {
 
     private val _code = MutableLiveData<String>()
     val code: LiveData<String> get() = _code
+
+    private val _deleteFeedCode = MutableLiveData<Int>()
+    val deleteFeedCode: LiveData<Int> get() = _deleteFeedCode
 
     private val _challengeFeeds = MutableStateFlow<PagingData<FeedUiItem>>(PagingData.empty())
     val challengeFeeds: StateFlow<PagingData<FeedUiItem>> = _challengeFeeds
@@ -274,6 +276,7 @@ class FeedViewModel : ViewModel() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun formatHeader(dateString: String): String {
         val formatter = DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"))
         val inputDate = Instant.from(formatter.parse(dateString))
@@ -349,33 +352,33 @@ class FeedViewModel : ViewModel() {
         }
     }
 
-    fun addFeedLike(feedId: Int, onComplete: () -> Unit) {
+    fun addFeedLike(feedId: Int, onComplete: () -> Unit,onFailure: () -> Unit) {
         viewModelScope.launch {
             handleApiCall(
                 call = { feedRepository.postFeedLike(challengeId, feedId) },
                 onSuccess = { data ->
-                    _code.value = "201 CREATED"
+                    _code.postValue( "201 CREATED")
                     onComplete()
                 },
                 onFailure = { errorCode ->
                     _code.postValue(errorCode)
-                    onComplete()
+                    onFailure()
                 }
             )
         }
     }
 
-    fun removeFeedLike(feedId: Int, onComplete: () -> Unit) {
+    fun removeFeedLike(feedId: Int, onComplete: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
             handleApiCall(
                 call = { feedRepository.deleteFeedLike(challengeId, feedId) },
                 onSuccess = { data ->
-                    _code.value = "201 CREATED"
+                    _code.postValue("201 CREATED")
                     onComplete()
                 },
                 onFailure = { errorCode ->
                     _code.postValue(errorCode)
-                    onComplete()
+                    onFailure()
                 }
             )
         }
@@ -412,6 +415,7 @@ class FeedViewModel : ViewModel() {
             )
         }
     }
+
     fun fetchIsVerifiedFeedExist() {
         viewModelScope.launch(Dispatchers.IO) {
             handleApiCall(
@@ -427,6 +431,23 @@ class FeedViewModel : ViewModel() {
             )
         }
     }
+
+    fun deleteFeed(feedId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleApiCall(
+                call = { feedRepository.deleteFeed(challengeId, feedId = feedId ) },
+                onSuccess = { data ->
+                    Log.d("feedViewModel","data : $data ")
+                    _deleteFeedCode.postValue(feedId)
+                },
+                onFailure = { errorCode ->
+                    Log.d("feedViewModel","errorCode : $errorCode ")
+                   // _deleteFeedCode.postValue(errorCode)
+                }
+            )
+        }
+    }
+
 
 //    fun postChallengeFeed(challengeId: Long, image: MultipartBody.Part, description: String) {
 //        viewModelScope.launch(Dispatchers.IO) {
