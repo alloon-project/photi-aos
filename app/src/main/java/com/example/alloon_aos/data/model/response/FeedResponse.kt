@@ -91,6 +91,10 @@ data class UserVerificationStatus (
     val isProve : Boolean,
 )
 
+data class VerifiedFeedExistence (
+    val hasFeed : Boolean,
+)
+
 
 data class SuccessMessageReponse(
     val successMessage: String // 성공 메시지

@@ -62,7 +62,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
               android:id="@+id/no_verified_user_view"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
                 android:layout_marginTop="30dp"
@@ -73,30 +73,45 @@
                 app:layout_constraintTop_toBottomOf="@+id/feed_progress">
 
                 <View
+                    android:id="@+id/view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/blank_medium_layout" />
+                    android:background="@drawable/blank_medium_layout"
+                    tools:layout_editor_absoluteX="24dp" />
 
-                <ImageView
-                    android:id="@+id/blank_imgView"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/blank_medium_circle"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    >
+                    <ImageView
+                        android:id="@+id/blank_imgView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_empty_feed"
+                        app:layout_constraintBottom_toTopOf="@id/blank_textView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:text="첫번째로 인증해주세요! 얼른~"
-                    android:textColor="@color/gray400"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/blank_imgView" />
+                    <TextView
+                        android:id="@+id/blank_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="@font/suit_medium"
+                        android:text="첫번째로 인증해주세요! 얼른~"
+                        android:textColor="@color/gray400"
+                        android:layout_marginBottom="40dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/blank_imgView"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -135,6 +150,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/feed_out_recyclerView"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginLeft="24dp"

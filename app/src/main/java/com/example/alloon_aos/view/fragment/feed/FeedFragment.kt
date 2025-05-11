@@ -1,6 +1,7 @@
 package com.example.alloon_aos.view.fragment.feed
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -79,6 +80,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         feedViewModel.fetchIsUserVerifiedToday()
         feedViewModel.fetchChallengeFeeds()
         feedViewModel.fetchVerifiedMemberCount()
+        feedViewModel.fetchIsVerifiedFeedExist()
 
         progressBar = binding.feedProgress
         tag = binding.constraintlayoutTag
@@ -123,6 +125,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
     }
 
 
+
     private fun setObserve() {
         feedViewModel.code.observe(viewLifecycleOwner) { code ->
             handleApiError(code)
@@ -136,6 +139,13 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
                 showToastAbove("오늘의 인증이 완료되지 않았어요!")
         }
 
+        feedViewModel.isVerifiedFeedExistence.observe(viewLifecycleOwner){ isFeedExist ->
+            if(!isFeedExist!!){
+                binding.noVerifiedUserView.visibility = View.VISIBLE
+                binding.feedOutRecyclerView.visibility = View.GONE
+            }
+        }
+
         feedViewModel.feedVerifiedUserCount.observe(viewLifecycleOwner) { verifiedCount ->
             val totalCount = feedViewModel.challengeMembers.value?.size ?: 0
             val verified = verifiedCount ?: 0
@@ -143,14 +153,9 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
             val percentage = if (totalCount == 0) 0 else (verified * 100) / totalCount
 
             Log.d("FeedFragment", "total: $totalCount, verified: $verified, percentage: $percentage%")
-
-
-          binding.memberCntTextView.text = "오늘 ${verified}명 인증!"
+            binding.memberCntTextView.text = "오늘 ${verified}명 인증!"
 
             if (verified == 0 || totalCount == 0)   return@observe
-//
-//            binding.noVerifiedUserView.visibility = View.GONE
-//            binding.feedOutRecyclerView.visibility = View.VISIBLE TODO 인증 횟수 0일때 UI로 변경
             progressBar.viewTreeObserver.addOnGlobalLayoutListener(object :
                 ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {

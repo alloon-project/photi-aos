@@ -118,7 +118,7 @@ class FeedViewModel : ViewModel() {
     /////////////////////////////////////////////////////////
 
 
-    var id = "myId" //api에서 받아올 나의 아이디
+    var id = "myId" //TODO 내 아이디 받아와야함
     val isMissionClear = MutableLiveData(false) //api에서 받아올 오늘 미션관련 플래그
 
     //피드뷰
@@ -180,6 +180,11 @@ class FeedViewModel : ViewModel() {
 
     private val _isUserVerifiedToday= MutableLiveData<Boolean?>()
     val isUserVerifiedToday: LiveData<Boolean?> get() = _isUserVerifiedToday
+
+
+    private val _isVerifiedFeedExist= MutableLiveData<Boolean?>()
+    val isVerifiedFeedExistence: LiveData<Boolean?> get() = _isVerifiedFeedExist
+
 
 
     private val _updateGoalResponse = MutableLiveData<SuccessMessageReponse?>()
@@ -402,6 +407,21 @@ class FeedViewModel : ViewModel() {
                 },
                 onFailure = { errorCode ->
                     _isUserVerifiedToday.postValue(null)
+                    _code.postValue(errorCode)
+                }
+            )
+        }
+    }
+    fun fetchIsVerifiedFeedExist() {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleApiCall(
+                call = { feedRepository.getIsVerifiedFeedExist(challengeId) },
+                onSuccess = { data ->
+                    if(data != null)
+                        _isVerifiedFeedExist.postValue(data.hasFeed)
+                },
+                onFailure = { errorCode ->
+                    _isVerifiedFeedExist.postValue(null)
                     _code.postValue(errorCode)
                 }
             )

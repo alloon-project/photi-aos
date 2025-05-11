@@ -10,6 +10,7 @@ import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
 import com.example.alloon_aos.data.model.response.UserVerificationStatus
+import com.example.alloon_aos.data.model.response.VerifiedFeedExistence
 import com.example.alloon_aos.data.model.response.VerifiedMemberCount
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -122,10 +123,17 @@ interface FeedApiService {
         @Path("challengeId") challengeId: Int,
     ): Response<ApiResponse<VerifiedMemberCount>>
 
-    //피드 당일 인증 파티원 수 조회
+    //피드 오늘 인증 여부
     @GET("/api/users/challenges/{challengeId}/prove")
     suspend fun get_is_user_verified_today(
         @Path("challengeId") challengeId: Int,
     ): Response<ApiResponse<UserVerificationStatus>>
+
+    //챌린지 인증 피드 존재 여부
+    @GET("/api/challenges/{challengeId}/feed-existence")
+    suspend fun get_is_verified_feed_exist(
+        @Path("challengeId") challengeId: Int,
+    ): Response<ApiResponse<VerifiedFeedExistence>>
+
 
 }
