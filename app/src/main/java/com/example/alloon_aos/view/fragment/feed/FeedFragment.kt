@@ -143,6 +143,10 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
             if(!isFeedExist!!){
                 binding.noVerifiedUserView.visibility = View.VISIBLE
                 binding.feedOutRecyclerView.visibility = View.GONE
+            }else{
+
+                binding.noVerifiedUserView.visibility = View.GONE
+                binding.feedOutRecyclerView.visibility = View.VISIBLE
             }
         }
 
