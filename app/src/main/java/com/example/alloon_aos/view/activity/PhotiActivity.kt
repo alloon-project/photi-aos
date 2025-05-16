@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -56,9 +55,6 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
             "LEAVE" -> {
                 CustomToast.createToast(this, "챌린지 탈퇴가 완료됐어요.")?.show()
             }
-            "LOGIN" -> {
-                CustomToast.createToast(this, "photi님 환영합니다!")?.show()
-            }
         }
 
         photiViewModel.resetAllResponseValue()
@@ -66,8 +62,10 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data?.getBooleanExtra("IS_FROM_LOGIN",false)
-                if(data == true)
-                    setBottomNavigation(TAG_PROFILE)
+                if(data == true) {
+                    val id = result.data?.getStringExtra("id")
+                    CustomToast.createToast(this, "${id}님 환영합니다!")?.show()
+                }
             }
         }
     }
@@ -186,11 +184,14 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
     }
 
     override fun onClickSecondButton() {
-        val intent = Intent(this, AuthActivity::class.java)
-        startForResult.launch(intent)
+        startAuthActivity()
     }
 
 
+    fun startAuthActivity() {
+        val intent = Intent(this, AuthActivity::class.java)
+        startForResult.launch(intent)
+    }
     fun startChallengeActivity() {
         val intent = Intent(this, ChallengeActivity::class.java)
         intent.putExtra("IS_FROM_HOME",true)

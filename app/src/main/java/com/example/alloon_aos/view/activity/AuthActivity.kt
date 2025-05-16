@@ -3,6 +3,7 @@ package com.example.alloon_aos.view.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
@@ -11,15 +12,19 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.ActivityAuthBinding
+import com.example.alloon_aos.viewmodel.AuthViewModel
 
 class AuthActivity : AppCompatActivity() {
-   lateinit var binding : ActivityAuthBinding
-   lateinit var navHostFragment : NavHostFragment
-   lateinit var navController : NavController
-   var isFromSettingsActivity = false
+    lateinit var binding : ActivityAuthBinding
+    lateinit var navHostFragment : NavHostFragment
+    lateinit var navController : NavController
+    var isFromSettingsActivity = false
+    private val authViewModel : AuthViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_auth)
+        binding.viewModel = authViewModel
 
         val appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(),
@@ -61,6 +66,7 @@ class AuthActivity : AppCompatActivity() {
     fun finishActivity() {
         val resultIntent = Intent().apply {
             putExtra("IS_FROM_LOGIN", true)
+            putExtra("id", authViewModel.id )
         }
         setResult(Activity.RESULT_OK, resultIntent)
         finish()

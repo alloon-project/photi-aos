@@ -198,7 +198,7 @@
                                 android:letterSpacing="-0.03"
                                 android:text="인증 시간"
                                 android:textColor="@color/gray800"
-                                android:textSize="12dp" />
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/time_textview"
@@ -209,7 +209,7 @@
                                 android:letterSpacing="-0.03"
                                 android:text="XX시까지"
                                 android:textColor="@color/gray700"
-                                android:textSize="14dp" />
+                                android:textSize="12dp" />
 
                             <ImageView
                                 android:id="@+id/divider"
@@ -228,7 +228,7 @@
                                 android:letterSpacing="-0.03"
                                 android:text="챌린지 종료"
                                 android:textColor="@color/gray800"
-                                android:textSize="12dp" />
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:id="@+id/date_textview"
@@ -239,7 +239,7 @@
                                 android:letterSpacing="-0.03"
                                 android:text="20XX.XX.XX"
                                 android:textColor="@color/gray700"
-                                android:textSize="14dp" />
+                                android:textSize="12dp" />
 
                         </LinearLayout>
                     </LinearLayout>

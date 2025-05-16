@@ -1,6 +1,5 @@
 package com.example.alloon_aos.view.fragment.photi
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
-import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.FragmentHomeGuestBinding
-import com.example.alloon_aos.view.activity.AuthActivity
+import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
 import com.example.alloon_aos.viewmodel.PhotiViewModel
@@ -20,7 +18,7 @@ import com.example.alloon_aos.viewmodel.PhotiViewModel
 class HomeGuestFragment : Fragment(), CustomTwoButtonDialogInterface {
     private lateinit var binding : FragmentHomeGuestBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
-    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
+    private lateinit var mActivity: PhotiActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +28,8 @@ class HomeGuestFragment : Fragment(), CustomTwoButtonDialogInterface {
         binding.fragment = this
         binding.viewModel = photiViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        mActivity = activity as PhotiActivity
 
         if (MyApplication.isTokenExpired) {
             CustomTwoButtonDialog(this,"재로그인이 필요해요","보안을 위해 자동 로그아웃 됐어요.\n" +
@@ -42,8 +42,7 @@ class HomeGuestFragment : Fragment(), CustomTwoButtonDialogInterface {
     }
 
     fun redirectToLogin() {
-        val intent = Intent(requireContext(), AuthActivity::class.java)
-        startActivity(intent)
+        mActivity.startAuthActivity()
     }
 
     override fun onClickFisrtButton() {}

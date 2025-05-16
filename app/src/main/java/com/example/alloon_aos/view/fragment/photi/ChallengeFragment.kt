@@ -11,7 +11,6 @@ import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.storage.TokenManager
 import com.example.alloon_aos.databinding.FragmentChallengeBinding
-import com.example.alloon_aos.view.activity.AuthActivity
 import com.example.alloon_aos.view.activity.CreateActivity
 import com.example.alloon_aos.view.activity.PhotiActivity
 import com.example.alloon_aos.view.activity.SearchActivity
@@ -95,7 +94,6 @@ class ChallengeFragment : Fragment(), JoinGuestDialogInterface {
     }
 
     override fun onClickLoginButton() {
-        val intent = Intent(requireContext(), AuthActivity::class.java)
-        startActivity(intent)
+        mActivity.startAuthActivity()
     }
 }

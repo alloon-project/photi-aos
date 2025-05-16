@@ -43,6 +43,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
     private val challengeViewModel : ChallengeViewModel by viewModels()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var startForResult: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,6 +133,16 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                     hashAdapter.notifyDataSetChanged()
                 }
                 isURI?.let { challengeViewModel.setIsUri(it) }
+            }
+        }
+
+        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data?.getBooleanExtra("IS_FROM_LOGIN",false)
+                if(data == true) {
+                    val id = result.data?.getStringExtra("id")
+                    CustomToast.createToast(this, "${id}님 환영합니다!")?.show()
+                }
             }
         }
     }
@@ -300,6 +311,11 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                         privateCodeDialog.returnFail()
                     CustomToast.createToast(this, "초대코드가 일치하지 않아요")?.show()
                 }
+                "CHALLENGE_LIMIT_EXCEED" -> {
+                    if (!challengeViewModel.isPublic)
+                        privateCodeDialog.returnFail()
+                    CustomToast.createToast(this, "챌린지는 최대 20개까지 참여할 수 있습니다.","circle")?.show()
+                }
                 "TOKEN_UNAUTHENTICATED" -> {
                     if (!challengeViewModel.isPublic)
                         privateCodeDialog.returnFail()
@@ -414,7 +430,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
     override fun onClickLoginButton() {
         val intent = Intent(this, AuthActivity::class.java)
-        startActivity(intent)
+        startForResult.launch(intent)
     }
 
     fun startGoal() { //join
