@@ -53,7 +53,8 @@ data class FeedHistoryData(
 )
 
 data class FeedHistoryContent(
-    val id: Int,
+    val feedId: Int,
+    val challengeId : Int,
     val imageUrl: String,
     val createdDate: String,
     val name: String

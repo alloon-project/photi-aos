@@ -160,7 +160,7 @@ class FeedAdapter(
 
         return when {
             duration.toDays() <= 1 -> "오늘"
-            else -> "${duration.toDays()}일전"
+            else -> "${duration.toDays()}일전" //추가
         }
     }
 
@@ -195,7 +195,7 @@ class FeedAdapter(
             duration.toMinutes() < 1 -> "방금"
             duration.toHours() < 1 -> "${duration.toMinutes()}분전"
             duration.toDays() < 1 -> "${duration.toHours()}시간전"
-            else -> "${duration.toDays()}일전"
+            else -> "${duration.toDays()}일전" //추가
         }
     }
 

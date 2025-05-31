@@ -36,9 +36,8 @@ import com.example.alloon_aos.view.fragment.feed.PartyMemberFragment
 import com.example.alloon_aos.view.fragment.feed.FeedFragment
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
+import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
-import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
-import com.example.alloon_aos.view.ui.util.dpToPx
 import com.example.alloon_aos.viewmodel.FeedViewModel
 import com.google.android.material.tabs.TabLayout
 
@@ -66,6 +65,12 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         feedViewModel.resetResponse()
 
         val challengeId = intent.getIntExtra("CHALLENGE_ID", -1)
+        val feedId = intent.getIntExtra("FEED_ID", -1)
+        if(feedId != -1){
+            val dialog = FeedDetailDialog(feedId = feedId)
+            dialog.show(supportFragmentManager, "FeedDetailDialog")
+        }
+
         feedViewModel.challengeId = challengeId
 
         if(challengeId != -1){

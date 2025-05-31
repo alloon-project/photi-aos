@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.ui.component.dialog
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -8,6 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat.finishAffinity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -22,6 +26,8 @@ import com.example.alloon_aos.data.model.response.EndedChallengeContent
 import com.example.alloon_aos.data.model.response.MemberImage
 import com.example.alloon_aos.databinding.DialogEndedChallengesBinding
 import com.example.alloon_aos.databinding.ItemEndedChallengesBinding
+import com.example.alloon_aos.view.activity.FeedActivity
+import com.example.alloon_aos.view.activity.SettingsActivity
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -122,8 +128,17 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
 
                 setupAvatar(data.currentMemberCnt, data.memberImages, binding)
 
+                binding.imgView.setOnClickListener {
+                    val ctx = binding.root.context
+                    val intent = Intent(ctx, FeedActivity::class.java).apply {
+                        putExtra("CHALLENGE_ID", data.id)
+                    }
+                    ctx.startActivity(intent)
+                }
+
             }
         }
+
 
         private fun setupAvatar(
             currentMemberCnt: Int,

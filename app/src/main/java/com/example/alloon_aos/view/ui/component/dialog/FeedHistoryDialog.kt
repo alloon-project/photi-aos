@@ -1,5 +1,6 @@
 package com.example.alloon_aos.view.ui.component.dialog
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -22,6 +23,7 @@ import com.example.alloon_aos.data.model.response.FeedHistoryContent
 import com.example.alloon_aos.databinding.DialogFeedHistoryBinding
 import com.example.alloon_aos.databinding.ItemFeedHistoryHeaderBinding
 import com.example.alloon_aos.databinding.ItemProofShotsGalleryBinding
+import com.example.alloon_aos.view.activity.FeedActivity
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -115,7 +117,41 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
                     .into(binding.challengeImgView)
                 binding.chipBtn.text = data.name
                 binding.dateTextView.text = data.createdDate.replace("-", ".") + " 인증"
+
+                binding.challengeImgView.setOnClickListener {
+                    val ctx = binding.root.context
+                    val intent = Intent(ctx, FeedActivity::class.java).apply {
+                        putExtra("CHALLENGE_ID", data.challengeId)
+                        putExtra("FEED_ID", data.feedId)
+                    }
+                    ctx.startActivity(intent)
+                }
+
+                binding.shortcutImgBtn.setOnClickListener{
+                    sendInviteMsg()
+                }
             }
+        }
+
+
+        private fun sendInviteMsg() {
+           // TODO invite code 추가 시
+//            val inviteCode = feedViewModel.invitecode
+//            val appLink = "https://photi.com/challenge/$inviteCode"
+//            val chooserTitle = "소설 필사하기"
+//            var message = ""
+//
+//            if (!feedChallengeData.isPublic)
+//                message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* 초대코드 : $inviteCode \n\n$appLink"
+//            else
+//                message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* \n\n$appLink"
+//
+//            val sendIntent = Intent(Intent.ACTION_SEND)
+//            sendIntent.type = "text/plain"
+//            sendIntent.putExtra(Intent.EXTRA_TEXT, message)
+//
+//            val chooser = Intent.createChooser(sendIntent, chooserTitle)
+//            startActivity(chooser)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -129,7 +165,7 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
 
         class DiffCallback : DiffUtil.ItemCallback<FeedHistoryContent>() {
             override fun areItemsTheSame(oldItem: FeedHistoryContent, newItem: FeedHistoryContent): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.feedId == newItem.feedId
             }
 
             override fun areContentsTheSame(oldItem: FeedHistoryContent, newItem: FeedHistoryContent): Boolean {
