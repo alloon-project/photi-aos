@@ -103,10 +103,10 @@ class GoalActivity : AppCompatActivity() {
         })
 
         binding.nextBtn.setOnClickListener {
-            if (goalViewModel.goal.isEmpty())
-                startToActivity()
-            else
+            if (isFromFeed)
                 goalViewModel.setGoal()
+            else
+                goalViewModel.joinChallenge()
         }
     }
 
@@ -129,6 +129,18 @@ class GoalActivity : AppCompatActivity() {
                         returnResultToActivity()
                     else
                         startToActivity()
+                }
+                "CHALLENGE_LIMIT_EXCEED" -> {
+                    CustomToast.createToast(this, "챌린지는 최대 20개까지 참여할 수 있습니다.")?.show()
+                }
+                "USER_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 회원입니다.")?.show()
+                }
+                "CHALLENGE_NOT_FOUND" -> {
+                    CustomToast.createToast(this, "존재하지 않는 챌린지입니다.")?.show()
+                }
+                "EXISTING_CHALLENGE_MEMBER" -> {
+                    CustomToast.createToast(this, "이미 챌린지에 참여한 회원입니다.")?.show()
                 }
                 "CHALLENGE_MEMBER_NOT_FOUND" -> {
                     CustomToast.createToast(this, "존재하지 않는 챌린지 파티원입니다.")?.show()

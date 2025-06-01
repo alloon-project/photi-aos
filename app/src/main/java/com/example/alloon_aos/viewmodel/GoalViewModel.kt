@@ -28,6 +28,23 @@ class GoalViewModel : ViewModel() {
         apiResponse.value = ActionApiResponse()
     }
 
+
+    fun joinChallenge() {
+        repository.joinChallenge(id, Goal(goal), object  : ChallengeRepositoryCallback<MessageResponse> {
+            override fun onSuccess(data: MessageResponse) {
+                val result = data.code
+                val mes = data.message
+                apiResponse.value = ActionApiResponse(result)
+                Log.d(TAG, "joinChallenge: $mes $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                val errorCode = ErrorHandler.handle(error)
+                apiResponse.value = ActionApiResponse(errorCode)
+            }
+        })
+    }
+
     fun setGoal() {
         repository.setGoal(id, Goal(goal), object : ChallengeRepositoryCallback<MessageResponse> {
             override fun onSuccess(data: MessageResponse) {

@@ -13,6 +13,7 @@ import com.example.alloon_aos.data.model.request.MemberImg
 import com.example.alloon_aos.data.model.request.ModifyData
 import com.example.alloon_aos.data.model.request.Rule
 import com.example.alloon_aos.data.model.response.ChallengeResponse
+import com.example.alloon_aos.data.model.response.MatchResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
@@ -204,29 +205,14 @@ class ChallengeViewModel : ViewModel() {
         }
     }
 
-    fun joinPublicChallenge() {
-        repository.joinPublicChallenge(id, object  : ChallengeRepositoryCallback<MessageResponse> {
-            override fun onSuccess(data: MessageResponse) {
+    fun matchInviteCode() {
+        repository.getChallengeCodeMatch(id, invitecode, object  : ChallengeRepositoryCallback<MatchResponse> {
+            override fun onSuccess(data: MatchResponse) {
                 val result = data.code
                 val mes = data.message
-                joinResponse.value = ActionApiResponse(result)
-                Log.d(TAG, "joinPublicChallenge: $mes $result")
-            }
-
-            override fun onFailure(error: Throwable) {
-                val errorCode = ErrorHandler.handle(error)
-                joinResponse.value = ActionApiResponse(errorCode)
-            }
-        })
-    }
-
-    fun joinPrivateChallenge() {
-        repository.joinPrivateChallenge(id, invitecode, object  : ChallengeRepositoryCallback<MessageResponse> {
-            override fun onSuccess(data: MessageResponse) {
-                val result = data.code
-                val mes = data.message
-                joinResponse.value = ActionApiResponse(result)
-                Log.d(TAG, "joinPrivateChallenge: $mes $result")
+                val isMatch = data.data.isMatch
+                joinResponse.value = ActionApiResponse(result, isMatch.toString())
+                Log.d(TAG, "matchInviteCode: $mes $result")
             }
 
             override fun onFailure(error: Throwable) {

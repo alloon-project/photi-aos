@@ -3,7 +3,6 @@ package com.example.alloon_aos.data.repository
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.data.model.request.CreateData
 import com.example.alloon_aos.data.model.request.Goal
-import com.example.alloon_aos.data.model.request.InviteCode
 import com.example.alloon_aos.data.model.request.ModifyData
 import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeResponse
@@ -11,6 +10,7 @@ import com.example.alloon_aos.data.model.response.ChipListResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.ExamImgResponse
+import com.example.alloon_aos.data.model.response.MatchResponse
 import com.example.alloon_aos.data.model.response.PagingListResponse
 import com.example.alloon_aos.data.remote.ChallengeService
 import com.example.alloon_aos.data.storage.TokenManager
@@ -74,6 +74,23 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
             }
 
             override fun onFailure(call: Call<CodeResponse>, t: Throwable) {
+                callback.onFailure(t)
+            }
+        })
+    }
+
+    fun getChallengeCodeMatch(id: Int, code: String, callback: ChallengeRepositoryCallback<MatchResponse>) {
+        challengeService.get_challengeCodeMatch(id, code).enqueue(object : Callback<MatchResponse> {
+            override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(response.body()!!)
+                } else {
+                    val error = response.errorBody()?.string()!!
+                    callback.onFailure(Throwable(error))
+                }
+            }
+
+            override fun onFailure(call: Call<MatchResponse>, t: Throwable) {
                 callback.onFailure(t)
             }
         })
@@ -224,25 +241,8 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
         })
     }
 
-    fun joinPublicChallenge(id: Int, callback: ChallengeRepositoryCallback<MessageResponse>) {
-        challengeService.post_joinPublicChallenge(id).enqueue(object : Callback<MessageResponse> {
-            override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
-                if (response.isSuccessful) {
-                    callback.onSuccess(response.body()!!)
-                } else {
-                    val error = response.errorBody()?.string()!!
-                    callback.onFailure(Throwable(error))
-                }
-            }
-
-            override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
-                callback.onFailure(t)
-            }
-        })
-    }
-
-    fun joinPrivateChallenge(id: Int, code: String, callback: ChallengeRepositoryCallback<MessageResponse>) {
-        challengeService.post_joinPrivateChallenge(id, InviteCode(code)).enqueue(object : Callback<MessageResponse> {
+    fun joinChallenge(id: Int, goal: Goal, callback: ChallengeRepositoryCallback<MessageResponse>) {
+        challengeService.post_joinChallenge(id, goal).enqueue(object : Callback<MessageResponse> {
             override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)

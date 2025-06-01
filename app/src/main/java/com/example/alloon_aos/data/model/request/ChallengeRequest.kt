@@ -39,8 +39,5 @@ data class MemberImg(
 data class Goal(
     val goal: String
 )
-data class InviteCode(
-    val invitationCode: String
-)
 
 

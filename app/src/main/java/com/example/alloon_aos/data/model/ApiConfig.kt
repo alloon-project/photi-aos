@@ -23,8 +23,7 @@ object ApiConfig {
         "/api/challenges/{challengeId}/invitation-code" to "GET", // 챌린지 초대 코드 조회
         "/api/challenges/{challengeId}/challenge-members/goal" to "PATCH", // 챌린지 개인 목표 작성
         "/api/challenges" to "POST", // 챌린지 생성
-        "/api/challenges/{challengeId}/join/public" to "POST", // 공개 챌린지 참여하기
-        "/api/challenges/{challengeId}/join/private" to "POST", // 비공개 챌린지 참여하기
+        "/api/challenges/{challengeId}/join" to "POST", // 챌린지 참여하기
 
         // user
         "/api/users/my-challenges" to "GET", // 사용자 참여중인 챌린지 조회

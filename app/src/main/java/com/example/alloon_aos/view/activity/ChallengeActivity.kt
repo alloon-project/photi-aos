@@ -282,7 +282,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                     .show(this.supportFragmentManager!!, "CustomDialog")
             } else {
                 if (challengeViewModel.isPublic)
-                    challengeViewModel.joinPublicChallenge()
+                    startGoal()
                 else {
                     privateCodeDialog.show(this.supportFragmentManager!!, "CustomDialog")
                 }
@@ -302,48 +302,20 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         challengeViewModel.joinResponse.observe(this) { response ->
             when (response.code) {
                 "200 OK" -> {
-                    if (!challengeViewModel.isPublic)
+                    if (response.action.equals("true")) {
                         privateCodeDialog.returnSuccess()
-                    startGoal()
-                }
-                "CHALLENGE_INVITATION_CODE_INVALID" -> {
-                    if (!challengeViewModel.isPublic)
+                        startGoal()
+                    } else {
                         privateCodeDialog.returnFail()
-                    CustomToast.createToast(this, "초대코드가 일치하지 않아요")?.show()
-                }
-                "CHALLENGE_LIMIT_EXCEED" -> {
-                    if (!challengeViewModel.isPublic)
-                        privateCodeDialog.returnFail()
-                    CustomToast.createToast(this, "챌린지는 최대 20개까지 참여할 수 있습니다.","circle")?.show()
-                }
-                "TOKEN_UNAUTHENTICATED" -> {
-                    if (!challengeViewModel.isPublic)
-                        privateCodeDialog.returnFail()
-                    CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
-                }
-                "TOKEN_UNAUTHORIZED" -> {
-                    if (!challengeViewModel.isPublic)
-                        privateCodeDialog.returnFail()
-                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
-                }
-                "USER_NOT_FOUND" -> {
-                    if (!challengeViewModel.isPublic)
-                        privateCodeDialog.returnFail()
-                    CustomToast.createToast(this, "존재하지 않는 회원입니다.")?.show()
+                        CustomToast.createToast(this, "초대코드가 일치하지 않아요.")?.show()
+                    }
                 }
                 "CHALLENGE_NOT_FOUND" -> {
-                    if (!challengeViewModel.isPublic)
-                        privateCodeDialog.returnFail()
+                    privateCodeDialog.returnFail()
                     CustomToast.createToast(this, "존재하지 않는 챌린지입니다.")?.show()
                 }
-                "EXISTING_CHALLENGE_MEMBER" -> {
-                    if (!challengeViewModel.isPublic)
-                        privateCodeDialog.returnFail()
-                    CustomToast.createToast(this, "이미 챌린지에 참여한 회원입니다.")?.show()
-                }
                 "IO_Exception" -> {
-                    if (!challengeViewModel.isPublic)
-                        privateCodeDialog.returnFail()
+                    privateCodeDialog.returnFail()
                     CustomToast.createToast(this, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
                 }
                 else -> {
@@ -424,8 +396,8 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         }
     }
 
-    override fun onClickJoinBtn() {
-        challengeViewModel.joinPrivateChallenge()
+    override fun onClickMatchBtn() {
+        challengeViewModel.matchInviteCode()
     }
 
     override fun onClickLoginButton() {

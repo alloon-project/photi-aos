@@ -105,6 +105,22 @@ data class CodeData(
     @field:Json(name = "invitationCode")
     val invitationCode: String
 )
+
+data class MatchResponse(
+    @field:Json(name = "code")
+    val code: String,
+    @field:Json(name = "message")
+    val message: String,
+    @field:Json(name = "data")
+    val data: MatchData
+)
+data class MatchData(
+    @field:Json(name = "name")
+    val name: String,
+    @field:Json(name = "isMatch")
+    val isMatch: Boolean
+)
+
 data class ChipListResponse(
     @field:Json(name = "code")
     val code: String,

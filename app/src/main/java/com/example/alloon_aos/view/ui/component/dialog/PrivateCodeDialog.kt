@@ -15,7 +15,7 @@ import com.example.alloon_aos.databinding.DialogPrivateCodeBinding
 import com.example.alloon_aos.viewmodel.ChallengeViewModel
 
 interface PrivateCodeDialogInterface {
-    fun onClickJoinBtn()
+    fun onClickMatchBtn()
 }
 
 class PrivateCodeDialog(val privateCodeDialogInterface: PrivateCodeDialogInterface,
@@ -44,7 +44,7 @@ class PrivateCodeDialog(val privateCodeDialogInterface: PrivateCodeDialogInterfa
 
         binding.codeBtn.setOnClickListener {
             challengeViewModel.invitecode = binding.codeEdittext.text.toString()
-            privateCodeDialogInterface.onClickJoinBtn()
+            privateCodeDialogInterface.onClickMatchBtn()
         }
 
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)

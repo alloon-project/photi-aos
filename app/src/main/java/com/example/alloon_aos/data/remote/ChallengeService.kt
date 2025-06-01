@@ -1,13 +1,13 @@
 package com.example.alloon_aos.data.remote
 
 import com.example.alloon_aos.data.model.request.Goal
-import com.example.alloon_aos.data.model.request.InviteCode
 import com.example.alloon_aos.data.model.response.ChallengeListResponse
 import com.example.alloon_aos.data.model.response.ChallengeResponse
 import com.example.alloon_aos.data.model.response.ChipListResponse
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.ExamImgResponse
+import com.example.alloon_aos.data.model.response.MatchResponse
 import com.example.alloon_aos.data.model.response.PagingListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -44,6 +44,12 @@ interface ChallengeService {
     fun get_challengeCode( //챌린지 초대코드 조회
         @Path("challengeId") challengeId: Int
     ): Call<CodeResponse>
+
+    @GET("/api/challenges/{challengeId}/invitation-code-match")
+    fun get_challengeCodeMatch( //챌린지 초대코드 일치여부 조회
+        @Path("challengeId") challengeId: Int,
+        @Query("invitationCode") invitationCode: String
+    ): Call<MatchResponse>
 
     @GET("/api/challenges/{challengeId}")
     fun get_challenge( //챌린지 소개 조회
@@ -106,14 +112,9 @@ interface ChallengeService {
         @Part imageFile: MultipartBody.Part
     ): Call<ChallengeResponse>
 
-    @POST("/api/challenges/{challengeId}/join/public")
-    fun post_joinPublicChallenge( //공개 챌린지 참여하기
-        @Path("challengeId") challengeId: Int
-    ): Call<MessageResponse>
-
-    @POST("/api/challenges/{challengeId}/join/private")
-    fun post_joinPrivateChallenge( //비공개 챌린지 참여하기
+    @POST("/api/challenges/{challengeId}/join")
+    fun post_joinChallenge( //챌린지 참여하기
         @Path("challengeId") challengeId: Int,
-        @Body params: InviteCode
+        @Body params: Goal
     ): Call<MessageResponse>
 }
