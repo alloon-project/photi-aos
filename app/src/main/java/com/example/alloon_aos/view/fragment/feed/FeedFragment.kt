@@ -1,21 +1,17 @@
 package com.example.alloon_aos.view.fragment.feed
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -34,10 +30,13 @@ import com.example.alloon_aos.view.ui.component.dialog.UploadCardDialog
 import com.example.alloon_aos.view.ui.component.dialog.UploadCardDialogInterface
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.view.ui.util.CameraHelper
-import com.example.alloon_aos.view.ui.util.dpToPx
 import com.example.alloon_aos.viewmodel.FeedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterface {
     private lateinit var binding : FragmentFeedBinding
@@ -139,14 +138,6 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
             }
         }
 
-        feedViewModel.isMissionClear.observe(viewLifecycleOwner) { isClear ->
-            if (isClear) {
-                binding.fixedImageButton.visibility = View.GONE
-            }
-            else
-                showToastAbove("오늘의 인증이 완료되지 않았어요!")
-        }
-
         feedViewModel.isVerifiedFeedExistence.observe(viewLifecycleOwner){ isFeedExist ->
             isFeedExist?.let {
                 if (!it) {
@@ -176,6 +167,16 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
                     animateProgressBar(progressBar, tag, 100, percentage)
                 }
             })
+        }
+
+        feedViewModel.feedUploadPhoto.observe(viewLifecycleOwner) {
+            if (it) {
+                Log.d("test","come")
+                feedViewModel.fetchIsUserVerifiedToday()
+                feedViewModel.fetchChallengeFeeds()
+                feedViewModel.fetchVerifiedMemberCount()
+                feedViewModel.fetchIsVerifiedFeedExist()
+            }
         }
 
         lifecycleScope.launch {
@@ -233,21 +234,6 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         }
     }
 
-    private fun showToastAbove(message:String){
-        val inflater = LayoutInflater.from(requireContext())
-        val customToastView = inflater.inflate(R.layout.toast_tooltip_under, null)
-
-        customToastView.findViewById<TextView>(R.id.textView).text = message
-
-        val toast = Toast(requireContext())
-        val yOffset = requireContext().dpToPx(95f)
-
-        toast.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, yOffset)
-        toast.duration = Toast.LENGTH_SHORT
-        toast.view = customToastView
-        toast.show()
-    }
-
     fun showBottomList(){
         AlignBottomSheet(mContext,this,"최신순","인기순",selected_order)
             .show(activity?.supportFragmentManager!!, "bottomList")
@@ -274,12 +260,22 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
     }
 
     override fun onClickUploadButton() {
-//        feedViewModel.isMissionClear.value = true
-//        CustomToast.createToast(activity, "인증 완료! 오늘도 수고했어요!")?.show()
-//
-//        val newFeedInItem= FeedInItem(feedViewModel.id,"방금",photoUri.toString(),false,0)
-//        feedViewModel.feedOutItems[0].feedInItems.add(0, newFeedInItem)
-//        feedAdapter.notifyItemChanged(0)
+        val imageFile = createMultipartFromUri(photoUri)
+        feedViewModel.fetchChallengeFeed(imageFile)
+    }
+
+    private fun createMultipartFromUri(uri: Uri): MultipartBody.Part {
+        val contentResolver = requireContext().contentResolver
+        val inputStream = contentResolver.openInputStream(uri) ?: throw IllegalArgumentException("Invalid URI")
+        val fileName = System.currentTimeMillis().toString() + ".jpg"
+        val tempFile = File(requireContext().cacheDir, fileName)
+
+        tempFile.outputStream().use { outputStream ->
+            inputStream.copyTo(outputStream)
+        }
+
+        val requestBody = tempFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("imageFile", tempFile.name, requestBody)
     }
 
 }

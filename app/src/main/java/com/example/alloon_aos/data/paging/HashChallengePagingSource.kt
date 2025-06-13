@@ -12,7 +12,7 @@ class HashChallengePagingSource(private val hashtag: String, private val challen
         val page = params.key ?: 0 // 첫 페이지는 0부터 시작
 
         return try {
-            Log.d("HashChallengePagingSource", "Search History Loading page: $page, pageSize: ${params.loadSize}")
+            Log.d("HashChallengePagingSource", "Hash Challenge page: $page, pageSize: ${params.loadSize}")
 
             val response = challengeRepository.getChallengeHashtag(hashtag, page, params.loadSize)
             val data = response.body()?.data
@@ -27,7 +27,6 @@ class HashChallengePagingSource(private val hashtag: String, private val challen
             }
 
             val content = data.content
-            //searchViewModel.page.value = content.size
             Log.d("HashChallengePagingSource", "Loaded ${content.size} items")
 
             LoadResult.Page(

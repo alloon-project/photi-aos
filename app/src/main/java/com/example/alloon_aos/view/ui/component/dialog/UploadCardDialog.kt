@@ -2,7 +2,6 @@ package com.example.alloon_aos.view.ui.component.dialog
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,12 +10,8 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.example.alloon_aos.databinding.DialogUploadCardBinding
 
 interface UploadCardDialogInterface {
@@ -35,23 +30,10 @@ class UploadCardDialog(val uploadCardDialogInterface: UploadCardDialogInterface,
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.setCanceledOnTouchOutside(false)
 
-        val multiOption = MultiTransformation(
-            CenterCrop(),
-            RoundedCorners(32),
-        )
-
-        Glide
-            .with(view.context)
+        Glide.with(binding.imgView.context)
             .load(url)
-            .apply(RequestOptions.bitmapTransform(multiOption))
-            .into(object : CustomTarget<Drawable>() {
-                override fun onResourceReady(a_resource: Drawable, a_transition: Transition<in Drawable>?) {
-                    view.background = a_resource
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {
-                }
-            })
+            .transform(CenterCrop(), RoundedCorners(32))
+            .into(binding.imgView)
 
         binding.cancelBtn.setOnClickListener {
             dismiss()

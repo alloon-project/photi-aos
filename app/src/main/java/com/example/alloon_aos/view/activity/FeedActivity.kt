@@ -11,6 +11,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
@@ -19,7 +20,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -38,6 +38,7 @@ import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.example.alloon_aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
 import com.example.alloon_aos.view.ui.component.dialog.FeedDetailDialog
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
+import com.example.alloon_aos.view.ui.util.dpToPx
 import com.example.alloon_aos.viewmodel.FeedViewModel
 import com.google.android.material.tabs.TabLayout
 
@@ -49,16 +50,24 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     private var isLeader = false
     private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
 
+    private lateinit var tabLayout: TabLayout
+    private lateinit var button: ImageButton
+
+    private val feedFragment = FeedFragment()
+    private val introduceFragment = IntroduceFragment()
+    private val partyFragment = PartyMemberFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_feed)
         binding.activity = this
 
-        if (savedInstanceState == null) {
-            val initialFragment = FeedFragment()
+        tabLayout = binding.tabLayout
+        button = binding.fixedImageButton
 
+        if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.frag_layout, initialFragment)
+                .replace(R.id.frag_layout, feedFragment)
                 .commit()
         }
 
@@ -92,12 +101,6 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             setCustomPopUp(view)
         }
 
-        val tabLayout = binding.tabLayout
-
-        var viewFeedTab = FeedFragment()
-        val introduceTab = IntroduceFragment()
-        val partyTab = PartyMemberFragment()
-
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val fragmentManager = supportFragmentManager
@@ -105,13 +108,15 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
 
                 when(tab?.position){
                     0 ->{
-                        fragmentTransaction.replace(R.id.frag_layout,viewFeedTab).commit()
+                        fragmentTransaction.replace(R.id.frag_layout,feedFragment).commit()
                     }
                     1 -> {
-                        fragmentTransaction.replace(R.id.frag_layout,introduceTab ).commit()
+                        fragmentTransaction.replace(R.id.frag_layout,introduceFragment ).commit()
+                        button.visibility = View.GONE
                     }
                     2 -> {
-                        fragmentTransaction.replace(R.id.frag_layout,partyTab).commit()
+                        fragmentTransaction.replace(R.id.frag_layout,partyFragment).commit()
+                        button.visibility = View.GONE
                     }
                 }
             }
@@ -310,7 +315,6 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         feedViewModel.code.observe(this) { code ->
             when (code) {
                 "200 OK" -> {
-
                 }
 
                 "CHALLENGE_NOT_FOUND" -> {
@@ -361,6 +365,40 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 }
             }
 
+        }
+
+        feedViewModel.isUserVerifiedToday.observe(this) { isProve ->
+            isProve?.let {
+                if (it) {
+                    button.visibility = View.GONE
+                    showToastAbove("인증 완료! 오늘도 수고했어요!")
+                } else {
+                    button.visibility = View.VISIBLE
+                    showToastAbove("오늘의 인증이 완료되지 않았어요!")
+                }
+            }
+        }
+    }
+
+    private fun showToastAbove(message:String){
+        val inflater = LayoutInflater.from(this)
+        val customToastView = inflater.inflate(R.layout.toast_tooltip_under, null)
+
+        customToastView.findViewById<TextView>(R.id.textView).text = message
+
+        val toast = Toast(this)
+        val yOffset = this.dpToPx(95f)
+
+        toast.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, yOffset)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = customToastView
+        toast.show()
+    }
+
+    fun onClickImageButton() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.frag_layout)
+        if (currentFragment is FeedFragment) {
+            feedFragment.doTodayCertify()
         }
     }
 

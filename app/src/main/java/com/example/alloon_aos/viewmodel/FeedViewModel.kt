@@ -15,21 +15,15 @@ import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.example.alloon_aos.data.model.ActionApiResponse
 import com.example.alloon_aos.data.model.request.ReportRequest
-import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.Comment
-import com.example.alloon_aos.data.model.response.EndedChallengeContent
-import com.example.alloon_aos.data.model.response.Feed
 import com.example.alloon_aos.data.model.response.FeedChallengeData
-import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.FeedUiItem
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
-import com.example.alloon_aos.data.model.response.VerifiedMemberCount
-import com.example.alloon_aos.data.paging.EndedChallengePagingSource
 import com.example.alloon_aos.data.paging.feed.ChallengeFeedsPagingSource
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
@@ -43,12 +37,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import java.time.Duration
 import java.time.Instant
-import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 data class Comments(
     val id: String,
@@ -198,6 +191,10 @@ class FeedViewModel : ViewModel() {
     private val _postCommentResponse = MutableLiveData<SuccessMessageReponse?>()
     val postCommentResponse: LiveData<SuccessMessageReponse?> get() = _postCommentResponse
 
+    private val _feedUploadPhoto = MutableLiveData<Boolean>()
+    val feedUploadPhoto: LiveData<Boolean> get() = _feedUploadPhoto
+
+
     fun fetchChallenge() {
         viewModelScope.launch(Dispatchers.IO) {
             handleApiCall(
@@ -332,6 +329,21 @@ class FeedViewModel : ViewModel() {
                 },
                 onFailure = { errorCode ->
                     _feedComments.postValue(null)
+                    _code.postValue(errorCode)
+                }
+            )
+        }
+    }
+
+    fun fetchChallengeFeed(image: MultipartBody.Part) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleApiCall(
+                call = { feedRepository.postChallengeFeed(challengeId, image) },
+                onSuccess = { data ->
+                    _feedUploadPhoto.postValue(true)
+                },
+                onFailure = { errorCode ->
+                    _feedUploadPhoto.postValue(false)
                     _code.postValue(errorCode)
                 }
             )

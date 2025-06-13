@@ -1,20 +1,13 @@
 package com.example.alloon_aos.view.adapter
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.example.alloon_aos.databinding.ItemHomeChallengeRecyclerviewBinding
-import com.example.alloon_aos.view.ui.util.CustomRotationTransformation
-import com.example.alloon_aos.view.ui.util.RoundedCornersTransformation
 import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel,
@@ -49,23 +42,10 @@ class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel,
                     }
                 }
 
-                val multiOption = MultiTransformation(
-                    CenterCrop(),
-                    RoundedCorners(8),
-                )
-
-                Glide
-                    .with(holder.itemView.context)
+                Glide.with(binding.imgView.context)
                     .load(challengeImageUrl)
-                    .apply(RequestOptions.bitmapTransform(multiOption))
-                    .into(object : CustomTarget<Drawable>() {
-                        override fun onResourceReady(a_resource: Drawable, a_transition: Transition<in Drawable>?) {
-                            binding.cardLayout.background = a_resource
-                        }
-
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                        }
-                    })
+                    .transform(CenterCrop(), RoundedCorners(12))
+                    .into(binding.imgView)
 
                 binding.root.setOnClickListener {
                     onCardClickListener(id)

@@ -75,13 +75,20 @@
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/card_layout"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginTop="32dp"
-            android:background="@drawable/card_shape2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="@+id/linearLayout8">
+
+            <android.widget.ImageView
+                android:id="@+id/imgView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/card_shape2"
+                android:scaleType="centerCrop"
+                android:clipToOutline="true"
+                android:layout_centerInParent="true" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
