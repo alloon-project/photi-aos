@@ -113,10 +113,13 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                     1 -> {
                         fragmentTransaction.replace(R.id.frag_layout,introduceFragment ).commit()
                         button.visibility = View.GONE
+                        binding.fixedBgView.visibility = View.GONE
                     }
                     2 -> {
                         fragmentTransaction.replace(R.id.frag_layout,partyFragment).commit()
                         button.visibility = View.GONE
+                        binding.fixedBgView.visibility = View.GONE
+
                     }
                 }
             }
@@ -371,9 +374,12 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             isProve?.let {
                 if (it) {
                     button.visibility = View.GONE
+                    binding.fixedBgView.visibility = View.GONE
+
                     showToastAbove("인증 완료! 오늘도 수고했어요!")
                 } else {
                     button.visibility = View.VISIBLE
+                    binding.fixedBgView.visibility = View.VISIBLE
                     showToastAbove("오늘의 인증이 완료되지 않았어요!")
                 }
             }

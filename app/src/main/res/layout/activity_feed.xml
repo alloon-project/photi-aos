@@ -232,7 +232,12 @@
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <View
+            android:id="@+id/fixedBg_View"
+            android:layout_gravity="center|bottom"
+            android:layout_width="match_parent"
+            android:layout_height="195dp"
+            android:background="@drawable/feed_graident_bg" />
         <ImageButton
             android:id="@+id/fixed_imageButton"
             android:layout_width="wrap_content"
