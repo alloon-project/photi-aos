@@ -83,6 +83,10 @@ data class Comment(
     val comment: String   // 댓글 내용
 )
 
+data class CommentRequest(
+    val comment: String
+)
+
 data class VerifiedMemberCount (
    val feedMemberCnt : Int,
 )
@@ -93,6 +97,10 @@ data class UserVerificationStatus (
 
 data class VerifiedFeedExistence (
     val hasFeed : Boolean,
+)
+
+data class CommentResponse(
+    val id : String,
 )
 
 

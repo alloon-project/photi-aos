@@ -19,12 +19,15 @@ import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
 import com.example.alloon_aos.data.model.response.CodeResponse
 import com.example.alloon_aos.data.model.response.Comment
+import com.example.alloon_aos.data.model.response.CommentRequest
 import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.FeedUiItem
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
+import com.example.alloon_aos.data.paging.SearchNamePagingSource
 import com.example.alloon_aos.data.paging.feed.ChallengeFeedsPagingSource
+import com.example.alloon_aos.data.paging.feed.FeedCommentsPagingSource
 import com.example.alloon_aos.data.remote.RetrofitClient
 import com.example.alloon_aos.data.repository.ChallengeRepository
 import com.example.alloon_aos.data.repository.ChallengeRepositoryCallback
@@ -113,20 +116,6 @@ class FeedViewModel : ViewModel() {
     /////////////////////////////////////////////////////////
     val isMissionClear = MutableLiveData(false) //api에서 받아올 오늘 미션관련 플래그
 
-    //피드뷰
-    val comments = arrayListOf<Comments>(
-        Comments("aaa", "이 책 좋네요"),
-        Comments("abc", "멋져요"),
-        Comments("baa", "와우"),
-        Comments("Seul", "우왕굳 ㅋㅋ"),
-        Comments("HB", "짱~!"),
-        Comments("aaa", "엄청긴댓글입니다아홉열열하나다여"),
-        Comments("aaa", "이 책 좋네요"),
-        Comments("abc", "멋져요"),
-        Comments("aaa", "엄청긴댓글입니다아홉열열하나다여"),
-        Comments("긴아이디입니다아아앙아앙", "오늘은 정말 기분 좋은 날이야."),
-        Comments("긴아이디입니다아아앙아앙", "행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.행복한 하루가 되길 진심으로 바랍니다.")
-    )
 
 
     //파티원
@@ -166,8 +155,8 @@ class FeedViewModel : ViewModel() {
     private val _challengeMembers = MutableLiveData<List<ChallengeMember>?>()
     val challengeMembers: LiveData<List<ChallengeMember>?> get() = _challengeMembers
 
-    private val _feedComments = MutableLiveData<List<Comment>?>()
-    val feedComments: LiveData<List<Comment>?> get() = _feedComments
+    private val _feedComments =  MutableStateFlow<PagingData<Comment>>(PagingData.empty())
+    val feedComments: StateFlow<PagingData<Comment>> get() = _feedComments
 
     private val _feedVerifiedUserCount = MutableLiveData<Int?>()
     val feedVerifiedUserCount: LiveData<Int?> get() = _feedVerifiedUserCount
@@ -188,8 +177,8 @@ class FeedViewModel : ViewModel() {
     private val _postChallengeFeedResponse = MutableLiveData<SuccessMessageReponse?>()
     val postChallengeFeedResponse: LiveData<SuccessMessageReponse?> get() = _postChallengeFeedResponse
 
-    private val _postCommentResponse = MutableLiveData<SuccessMessageReponse?>()
-    val postCommentResponse: LiveData<SuccessMessageReponse?> get() = _postCommentResponse
+    private val _postCommentResponse = MutableLiveData<Comment?>()
+    val postCommentResponse: LiveData<Comment?> get() = _postCommentResponse
 
     private val _feedUploadPhoto = MutableLiveData<Boolean>()
     val feedUploadPhoto: LiveData<Boolean> get() = _feedUploadPhoto
@@ -319,21 +308,24 @@ class FeedViewModel : ViewModel() {
         }
     }
 
-    fun fetchFeedComments(feedId: Int, page: Int = 0, size: Int = 10) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleApiCall(
-                call = { feedRepository.getFeedComments(feedId, page, size) },
-                onSuccess = { data ->
-                    if(data != null)
-                     _feedComments.postValue(data.content)
-                },
-                onFailure = { errorCode ->
-                    _feedComments.postValue(null)
-                    _code.postValue(errorCode)
+    fun fetchFeedComments(feedId: Int,) {
+        viewModelScope.launch {
+            Pager(
+                PagingConfig(initialLoadSize = 10, pageSize = 5,enablePlaceholders = false ),
+            ) {
+                FeedCommentsPagingSource(feedRepository,feedId)
+            }.flow.cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _feedComments.value = pagingData
                 }
-            )
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+
+
         }
     }
+
+
 
     fun fetchChallengeFeed(image: MultipartBody.Part) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -476,18 +468,21 @@ class FeedViewModel : ViewModel() {
 //        }
 //    }
 //
-//    fun postComment(feedId: Int, comment: Map<String, String>) {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            handleApiCall(
-//                call = { feedRepository.postComment(challengeId, feedId, comment) },
-//                onSuccess = { data ->
-//                    _postCommentResponse.postValue(data)
-//                },
-//                onFailure = { errorCode ->
-//                    _postCommentResponse.postValue(null)
-//                    _code.postValue(errorCode)
-//                }
-//            )
-//        }
-//    }
+    fun postComment(feedId: Int, comment: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleApiCall(
+                call = { feedRepository.postComment(challengeId, feedId, CommentRequest(comment = comment)) },
+                onSuccess = { data ->
+                    if (data != null) {//TODO username 추가
+                        _postCommentResponse.postValue(Comment(id = data.id.toLong(), username = "ㅇㅇ", comment = comment))
+                    }
+                },
+                onFailure = { errorCode ->
+                    _postCommentResponse.postValue(null)
+                    _code.postValue(errorCode)
+                }
+            )
+        }
+    }
+    fun consumePostedComment() { _postCommentResponse.value = null }
 }

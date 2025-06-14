@@ -5,6 +5,8 @@ import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
+import com.example.alloon_aos.data.model.response.CommentRequest
+import com.example.alloon_aos.data.model.response.CommentResponse
 import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
@@ -80,8 +82,8 @@ class FeedRepository(private val apiService: FeedApiService) {
     suspend fun postComment(
         challengeId: Int,
         feedId: Int,
-        comment: Map<String, String>
-    ): ApiResponse<SuccessMessageReponse> {
+        comment: CommentRequest
+    ): Response<ApiResponse<CommentResponse>> {
         return apiService.postComment(challengeId, feedId, comment)
     }
 

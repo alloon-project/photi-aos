@@ -20,6 +20,11 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.PagingData
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -29,6 +34,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.response.Comment
+import com.example.alloon_aos.data.model.response.CommentRequest
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.storage.SharedPreferencesManager
 import com.example.alloon_aos.databinding.CustomPopupMenuBinding
@@ -36,6 +42,9 @@ import com.example.alloon_aos.databinding.DialogFeedDetailBinding
 import com.example.alloon_aos.databinding.ItemFeedCommentBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.FeedViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.observeOn
+import kotlinx.coroutines.launch
 
 class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialogInterface  {
     private var _binding: DialogFeedDetailBinding? = null
@@ -157,7 +166,7 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
                             val newCommentText = commentEditText.text.toString()
 
                             if (newCommentText.isNotEmpty()) {
-                                addComment(newCommentText)
+                                feedViewModel.postComment(feedId, newCommentText)
                                 commentEditText.setText("")
 
                                 if (isFirstAdd) {
@@ -191,10 +200,28 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
             }
         }
 
-        feedViewModel.feedComments.observe(viewLifecycleOwner){
-            data ->
-            adapter.submitList(data?.toList() ?: emptyList())
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                feedViewModel.feedComments.collectLatest { pagingData ->
+                    adapter.submitData(pagingData)
+
+                }
+            }
         }
+
+
+        feedViewModel.postCommentResponse.observe(viewLifecycleOwner) { comment ->
+            if(comment != null){
+                adapter.addComment(comment , viewLifecycleOwner.lifecycle)
+                binding.commentsRecyclerView.post {
+                    binding.commentsRecyclerView.scrollToPosition(adapter.itemCount - 1)
+                }
+
+                feedViewModel.consumePostedComment()
+
+            }
+        }
+
     }
 
     private fun handleApiError(code: String) {
@@ -216,9 +243,6 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
         }
     }
 
-    private fun addComment(commentText: String, ) {
-        //댓글 추가 api
-    }
 
 
     override fun onStart() {
@@ -255,14 +279,6 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
         _binding = null
     }
 
-
-
-//    private fun updateHeartCountView(heartBtn: ImageButton, heartCntTextView: TextView, feed : FeedInItem) {
-//        feed.isClick = !feed.isClick
-//        heartBtn.setImageResource(if (feed.isClick) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
-//        feed.heartCnt += if (feed.isClick) 1 else -1
-//        heartCntTextView.text = if (feed.heartCnt == 0) "" else feed.heartCnt.toString()
-//    }
 private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: ImageView,) {
     heartButton.setImageResource(
         if (data.isLike) R.drawable.ic_heart_filled_14
@@ -432,18 +448,16 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
     }
 
 
-    class CommentsAdapter: ListAdapter<Comment, CommentsAdapter.ViewHolder>(
-        DiffCallback()
-    ) {
-        inner class ViewHolder(var binding: ItemFeedCommentBinding) : RecyclerView.ViewHolder(binding.root) {
-            fun bind(data : Comment) {
-                with(data) {
-                    binding.idTextView.text = username
-                    binding.commentTextView.text = comment
+    class CommentsAdapter : PagingDataAdapter<Comment, CommentsAdapter.ViewHolder>(DiffCallback()) {
 
-                    //TODO 내 인증인 경우만 삭제되게
-                    binding.commentLayout.setOnLongClickListener {
-                        //댓글 삭제 api
+        inner class ViewHolder(private val binding: ItemFeedCommentBinding) : RecyclerView.ViewHolder(binding.root) {
+            fun bind(data: Comment) {
+                with(binding) {
+                    idTextView.text = data.username
+                    commentTextView.text = data.comment
+
+                    commentLayout.setOnLongClickListener {
+                        // 댓글 삭제 로직
                         true
                     }
                 }
@@ -451,30 +465,29 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = ItemFeedCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ViewHolder(view)
+            val binding = ItemFeedCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return ViewHolder(binding)
         }
 
-        override fun onBindViewHolder(holder: ViewHolder,  position: Int) {
-            holder.bind(getItem(position))
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            getItem(position)?.let { holder.bind(it) }
         }
-
+        fun addComment(comment: Comment, lifecycle: Lifecycle) {
+            val current = snapshot().items.toMutableList()  // 현재까지 로드된 아이템
+            current.add(comment)                           // 맨 끝에 삽입
+            submitData(lifecycle, PagingData.from(current))
+        }
         class DiffCallback : DiffUtil.ItemCallback<Comment>() {
-            override fun areItemsTheSame(
-                oldItem: Comment,
-                newItem: Comment
-            ): Boolean {
+            override fun areItemsTheSame(oldItem: Comment, newItem: Comment): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(
-                oldItem: Comment,
-                newItem: Comment
-            ): Boolean {
+            override fun areContentsTheSame(oldItem: Comment, newItem: Comment): Boolean {
                 return oldItem == newItem
             }
         }
     }
+
 
     override fun onClickFisrtButton() {}
 

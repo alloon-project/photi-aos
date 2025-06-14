@@ -5,6 +5,8 @@ import com.example.alloon_aos.data.model.response.ApiResponse
 import com.example.alloon_aos.data.model.response.ChallengeFeedsData
 import com.example.alloon_aos.data.model.response.ChallengeInfoData
 import com.example.alloon_aos.data.model.response.ChallengeMember
+import com.example.alloon_aos.data.model.response.CommentRequest
+import com.example.alloon_aos.data.model.response.CommentResponse
 import com.example.alloon_aos.data.model.response.FeedChallengeData
 import com.example.alloon_aos.data.model.response.FeedCommentsData
 import com.example.alloon_aos.data.model.response.FeedDetailData
@@ -91,10 +93,10 @@ interface FeedApiService {
     //댓글 등록
     @POST("/api/challenges/{challengeId}/feeds/{feedId}/comments")
     suspend fun postComment(
-        @Path("challengeId") challengeId: Int, // 챌린지 ID
-        @Path("feedId") feedId: Int, // 피드 ID
-        @Body comment: Map<String, String> // 댓글 등록 요청 데이터
-    ): ApiResponse<SuccessMessageReponse>
+        @Path("challengeId") challengeId: Int,
+        @Path("feedId") feedId: Int,
+        @Body comment: CommentRequest
+    ): Response<ApiResponse<CommentResponse>>
 
     //신고 등록
     @POST("/api/reports/{targetId}")
