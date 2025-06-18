@@ -180,8 +180,8 @@ class FeedViewModel : ViewModel() {
     private val _postCommentResponse = MutableLiveData<Comment?>()
     val postCommentResponse: LiveData<Comment?> get() = _postCommentResponse
 
-    private val _feedUploadPhoto = MutableLiveData<Boolean>()
-    val feedUploadPhoto: LiveData<Boolean> get() = _feedUploadPhoto
+    private val _feedUploadPhoto = MutableLiveData<Boolean?>()
+    val feedUploadPhoto: LiveData<Boolean?> get() = _feedUploadPhoto
 
 
     fun fetchChallenge() {
@@ -335,7 +335,7 @@ class FeedViewModel : ViewModel() {
                     _feedUploadPhoto.postValue(true)
                 },
                 onFailure = { errorCode ->
-                    _feedUploadPhoto.postValue(false)
+                    _feedUploadPhoto.postValue(null)
                     _code.postValue(errorCode)
                 }
             )

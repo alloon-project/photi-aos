@@ -86,6 +86,7 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             feedViewModel.fetchChallenge()
             feedViewModel.fetchChallengeInfo()
             feedViewModel.fetchChallengeMembers()
+            feedViewModel.fetchIsUserVerifiedToday()
         }
 
         setObserve()
@@ -109,6 +110,10 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 when(tab?.position){
                     0 ->{
                         fragmentTransaction.replace(R.id.frag_layout,feedFragment).commit()
+                        if(feedViewModel.isUserVerifiedToday.value == true)
+                            button.visibility = View.GONE
+                        else
+                            button.visibility = View.VISIBLE
                     }
                     1 -> {
                         fragmentTransaction.replace(R.id.frag_layout,introduceFragment ).commit()
@@ -375,12 +380,22 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 if (it) {
                     button.visibility = View.GONE
                     binding.fixedBgView.visibility = View.GONE
-
-                    showToastAbove("인증 완료! 오늘도 수고했어요!")
                 } else {
                     button.visibility = View.VISIBLE
                     binding.fixedBgView.visibility = View.VISIBLE
                     showToastAbove("오늘의 인증이 완료되지 않았어요!")
+                }
+            }
+        }
+
+        feedViewModel.feedUploadPhoto.observe(this) {isSuccess ->
+            isSuccess?.let {
+                if (it) {
+                    showToastAbove("인증 완료! 오늘도 수고했어요!")
+                    feedViewModel.fetchIsUserVerifiedToday()
+                    feedViewModel.fetchChallengeFeeds()
+                    feedViewModel.fetchVerifiedMemberCount()
+                    feedViewModel.fetchIsVerifiedFeedExist()
                 }
             }
         }

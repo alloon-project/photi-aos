@@ -77,7 +77,6 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
 
         setObserve()
 
-        feedViewModel.fetchIsUserVerifiedToday()
         feedViewModel.fetchChallengeFeeds()
         feedViewModel.fetchVerifiedMemberCount()
         feedViewModel.fetchIsVerifiedFeedExist()
@@ -167,16 +166,6 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
                     animateProgressBar(progressBar, tag, 100, percentage)
                 }
             })
-        }
-
-        feedViewModel.feedUploadPhoto.observe(viewLifecycleOwner) {
-            if (it) {
-                Log.d("test","come")
-                feedViewModel.fetchIsUserVerifiedToday()
-                feedViewModel.fetchChallengeFeeds()
-                feedViewModel.fetchVerifiedMemberCount()
-                feedViewModel.fetchIsVerifiedFeedExist()
-            }
         }
 
         lifecycleScope.launch {
