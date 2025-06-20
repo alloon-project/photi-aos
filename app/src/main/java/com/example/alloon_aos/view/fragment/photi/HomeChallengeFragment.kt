@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.alloon_aos.R
 import com.example.alloon_aos.databinding.FragmentHomeChallengeBinding
 import com.example.alloon_aos.view.activity.FeedActivity
@@ -34,6 +35,7 @@ import java.io.File
 class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
     private lateinit var binding : FragmentHomeChallengeBinding
     private val photiViewModel by activityViewModels<PhotiViewModel>()
+    private lateinit var viewPager2: ViewPager2
     private lateinit var proofShotHomeAdapter: ProofShotHomeAdapter
     private lateinit var challengeCardAdapter: ChallengeCardAdapter
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
@@ -52,13 +54,21 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
             CameraHelper.checkPermissions(this) {
                 CameraHelper.takePicture(this, takePictureLauncher)
             }
-        }, onCompleteClickListener = { startFeedDetail(id) })
+        }, onCompleteClickListener = { startFeedDetail() })
 
         challengeCardAdapter = ChallengeCardAdapter(photiViewModel, onCardClickListener = { startFeedPage(it) })
 
-        binding.viewPager2.adapter = proofShotHomeAdapter
-        binding.viewPager2.offscreenPageLimit = 2
-        binding.viewPager2.setPageTransformer(ProofShotHomeTransformer())
+        viewPager2 = binding.viewPager2
+        viewPager2.adapter = proofShotHomeAdapter
+        viewPager2.offscreenPageLimit = 2
+        viewPager2.setPageTransformer(ProofShotHomeTransformer())
+
+        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                photiViewModel.currentPos = position
+            }
+        })
 
         binding.myChallengeRecyclerview.adapter = challengeCardAdapter
         binding.myChallengeRecyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
@@ -92,10 +102,19 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
         photiViewModel._allItems.observe(viewLifecycleOwner) {
             proofShotHomeAdapter.notifyDataSetChanged()
             challengeCardAdapter.notifyDataSetChanged()
+            viewPager2.setCurrentItem(photiViewModel.currentPos, true)
+            viewPager2.post {
+                if (!viewPager2.isFakeDragging) {
+                    viewPager2.beginFakeDrag()
+                    viewPager2.fakeDragBy(-1f)
+                    viewPager2.fakeDragBy(1f)
+                    viewPager2.endFakeDrag()
+                }
+            }
         }
         photiViewModel.proofPos.observe(viewLifecycleOwner) {
-            binding.viewPager2.setCurrentItem(photiViewModel.proofItems.size + it, true)
             proofShotHomeAdapter.notifyDataSetChanged()
+            viewPager2.setCurrentItem(it, true)
         }
         photiViewModel.feedUploadPhoto.observe(viewLifecycleOwner) {
             if (it) {
@@ -114,9 +133,12 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
         intent.putExtra("CHALLENGE_ID", id)
         startActivity(intent)
     }
-
-    private fun startFeedDetail(id: Int) { //피드개별조회로 이동
-
+    private fun startFeedDetail() {
+        val intent = Intent(requireContext(), FeedActivity::class.java).apply {
+            putExtra("CHALLENGE_ID", photiViewModel.id)
+            putExtra("FEED_ID", photiViewModel.feedId)
+        }
+        startActivity(intent)
     }
 
     override fun onClickUploadButton() {

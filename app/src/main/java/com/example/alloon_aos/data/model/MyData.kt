@@ -51,5 +51,6 @@ data class MyChallengeData(
     val endDate: String,
     val hashtags: List<Hashtag>,
     val feedImageUrl: String,
-    val isProve: Boolean
+    val isProve: Boolean,
+    val feedId: Int?
 )

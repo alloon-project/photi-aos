@@ -24,6 +24,7 @@ data class ChallengeContent(
     val endDate: String,
     val hashtags: List<Hashtag>,
     val feedImageUrl: String,
+    val feedId: Int?,
     val isProve: Boolean
 )
 

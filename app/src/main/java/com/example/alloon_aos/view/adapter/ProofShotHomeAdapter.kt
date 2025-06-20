@@ -13,7 +13,7 @@ import com.example.alloon_aos.viewmodel.PhotiViewModel
 
 class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel,
                            private val onProofItemClickListener: (Int) -> Unit,
-                           private val onCompleteClickListener: (Int) -> Unit) :
+                           private val onCompleteClickListener: () -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -37,7 +37,7 @@ class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel,
                 binding.proofshotButton.setOnClickListener {
                     photiViewModel.updateCurrentItem(this)
                     photiViewModel.id = id
-                    onProofItemClickListener(pos)
+                    onProofItemClickListener(id)
                 }
             }
         }
@@ -59,8 +59,10 @@ class ProofShotHomeAdapter(private val photiViewModel: PhotiViewModel,
                     .transform(CenterCrop(), RoundedCornersTransformation(20f, 68f))
                     .into(binding.proofshotImageview)
 
-                binding.root.setOnClickListener {
-                    onCompleteClickListener(id)
+                binding.proofshotImageview.setOnClickListener {
+                    photiViewModel.id = id
+                    photiViewModel.feedId = feedId!!
+                    onCompleteClickListener()
                 }
             }
         }

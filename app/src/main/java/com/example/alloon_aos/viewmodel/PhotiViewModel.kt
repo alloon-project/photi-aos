@@ -88,6 +88,7 @@ class PhotiViewModel : ViewModel() {
     var memberImg: List<MemberImg> = listOf()
     var memberCnt = -1
     var imgFile = ""
+    var feedId = -1
 
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
@@ -363,14 +364,13 @@ class PhotiViewModel : ViewModel() {
 
 
     // 내 챌린지 조회
-    val _proofItems = MutableLiveData<ArrayList<MyChallengeData>>()
     var proofItems = arrayListOf<MyChallengeData>()
-    val _completeItems = MutableLiveData<ArrayList<MyChallengeData>>()
     var completeItems = arrayListOf<MyChallengeData>()
     val _allItems = MutableLiveData<ArrayList<MyChallengeData>>()
     var allItems = arrayListOf<MyChallengeData>()
 
-    val proofPos = MutableLiveData<Int>() //현재 item
+    val proofPos = MutableLiveData<Int>() //인증 pos
+    var currentPos = 0 //현재 pos
     var currentItem: MyChallengeData? = null
     var completeProof = false
 
@@ -390,7 +390,7 @@ class PhotiViewModel : ViewModel() {
     fun setMyChallenge(list: List<ChallengeContent>) {
         for (item in list) {
             val newItem = MyChallengeData(item.id, item.name, item.challengeImageUrl, item.proveTime,
-                item.endDate, item.hashtags, item.feedImageUrl, item.isProve)
+                item.endDate, item.hashtags, item.feedImageUrl, item.isProve, item.feedId)
             if (item.isProve)
                 completeItems.add(newItem)
             else
@@ -398,12 +398,11 @@ class PhotiViewModel : ViewModel() {
             allItems.add(newItem)
             myIdList.add(item.id)
         }
-        _proofItems.value = proofItems
-        _completeItems.value = completeItems
         _allItems.value = allItems
 
         if (completeProof) {
-            proofPos.value = completeItems.indexOf(currentItem)
+            val index = allItems.indexOfFirst { it.id == currentItem!!.id }
+            proofPos.value = index
             completeProof = false
         }
     }
