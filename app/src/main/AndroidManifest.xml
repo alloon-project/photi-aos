@@ -43,7 +43,13 @@
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".view.activity.AuthActivity"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="www.notion.so" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.activity.GoalActivity"
             android:exported="true"/>

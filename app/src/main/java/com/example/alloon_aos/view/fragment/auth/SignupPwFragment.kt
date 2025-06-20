@@ -3,6 +3,8 @@ package com.example.alloon_aos.view.fragment.auth
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -228,10 +230,17 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     }
 
     override fun onClickImgButton1() {
-        CustomToast.createToast(activity,"첫번째 약관 클릭")?.show()
+        // 개인 정보 수집 및 이용 동의
+        val notionPageUrl = "https://www.notion.so/16c7071e9b43802fac6beedbac719400"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(notionPageUrl))
+        startActivity(intent)
     }
 
     override fun onClickImgButton2() {
+        // 서비스 이용 약관 동의
+        val notionPageUrl = "https://www.notion.so/f1dc17026f884c2ebe90437b0ee9fa63"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(notionPageUrl))
+        startActivity(intent)
         CustomToast.createToast(activity,"두번째 약관 클릭")?.show()
     }
 
