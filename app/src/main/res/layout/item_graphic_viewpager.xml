@@ -9,7 +9,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/graphic_nochallenge_photo"
+        android:src="@drawable/graphic_home_photo"
         android:layout_centerInParent="true" />
 
     <ImageView

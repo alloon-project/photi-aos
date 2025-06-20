@@ -430,4 +430,9 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         }
         finish()
     }
+
+    override fun onBackPressed() {
+        finishActivity()
+        super.onBackPressed()
+    }
 }
