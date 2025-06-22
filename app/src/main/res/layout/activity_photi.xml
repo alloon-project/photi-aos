@@ -6,7 +6,7 @@
     <data>
         <variable
             name="activity"
-            type="com.example.alloon_aos.view.activity.PhotiActivity" />
+            type="com.photi.aos.view.activity.PhotiActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

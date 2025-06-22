@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.alloon_aos"
+    namespace = "com.photi.aos"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.android.photi"
+        applicationId = "com.photi.aos"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -27,6 +27,7 @@ android {
             )
         }
         buildFeatures {
+            buildConfig = true
             viewBinding = true
             dataBinding = true
         }

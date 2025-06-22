@@ -6,10 +6,10 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.auth.LoginFragment" />
+            type="com.photi.aos.view.fragment.auth.LoginFragment" />
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.AuthViewModel" />
+            type="com.photi.aos.viewmodel.AuthViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

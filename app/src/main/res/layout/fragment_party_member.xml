@@ -7,10 +7,10 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.feed.PartyMemberFragment" />
+            type="com.photi.aos.view.fragment.feed.PartyMemberFragment" />
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.FeedViewModel" />
+            type="com.photi.aos.viewmodel.FeedViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView

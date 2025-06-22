@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/reportFeedFragment"
-        android:name="com.example.alloon_aos.view.fragment.report.ReportFeedFragment"
+        android:name="com.photi.aos.view.fragment.report.ReportFeedFragment"
         android:label=""
         tools:layout="@layout/fragment_report_feed">
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/reportMemberFragment"
-        android:name="com.example.alloon_aos.view.fragment.report.ReportMemberFragment"
+        android:name="com.photi.aos.view.fragment.report.ReportMemberFragment"
         android:label=""
         tools:layout="@layout/fragment_report_member">
         <action
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/reportMissionFragment"
-        android:name="com.example.alloon_aos.view.fragment.report.ReportMissionFragment"
+        android:name="com.photi.aos.view.fragment.report.ReportMissionFragment"
         android:label=""
         tools:layout="@layout/fragment_report_mission">
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/reportPageFragment"
-        android:name="com.example.alloon_aos.view.fragment.report.ReportPageFragment"
+        android:name="com.photi.aos.view.fragment.report.ReportPageFragment"
         android:label=""
         tools:layout="@layout/fragment_report_page" >
         <action

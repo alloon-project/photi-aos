@@ -6,7 +6,7 @@
     app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.LoginFragment"
+        android:name="com.photi.aos.view.fragment.auth.LoginFragment"
         android:label=" "
         tools:layout="@layout/fragment_login">
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/findIdFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.FindIdFragment"
+        android:name="com.photi.aos.view.fragment.auth.FindIdFragment"
         android:label=" "
         tools:layout="@layout/fragment_find_id">
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/passwordSendFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.PasswordSendFragment"
+        android:name="com.photi.aos.view.fragment.auth.PasswordSendFragment"
         android:label=" "
         tools:layout="@layout/fragment_password_send">
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/passwordEnterFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.PasswordEnterFragment"
+        android:name="com.photi.aos.view.fragment.auth.PasswordEnterFragment"
         android:label=" "
         tools:layout="@layout/fragment_password_enter">
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/passwordChangeFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.PasswordChangeFragment"
+        android:name="com.photi.aos.view.fragment.auth.PasswordChangeFragment"
         android:label=" "
         tools:layout="@layout/fragment_password_change">
         <action
@@ -65,7 +65,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupAuthFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.SignupAuthFragment"
+        android:name="com.photi.aos.view.fragment.auth.SignupAuthFragment"
         android:label=" "
         tools:layout="@layout/fragment_signup_auth">
         <action
@@ -74,7 +74,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupIdFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.SignupIdFragment"
+        android:name="com.photi.aos.view.fragment.auth.SignupIdFragment"
         android:label=" "
         tools:layout="@layout/fragment_signup_id">
         <action
@@ -83,7 +83,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupEmailFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.SignupEmailFragment"
+        android:name="com.photi.aos.view.fragment.auth.SignupEmailFragment"
         android:label=" "
         tools:layout="@layout/fragment_signup_email">
         <action
@@ -92,7 +92,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupPwFragment"
-        android:name="com.example.alloon_aos.view.fragment.auth.SignupPwFragment"
+        android:name="com.photi.aos.view.fragment.auth.SignupPwFragment"
         android:label=" "
         tools:layout="@layout/fragment_signup_pw">
         <action

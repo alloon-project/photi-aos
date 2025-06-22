@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainSettingsFragment"
-        android:name="com.example.alloon_aos.view.fragment.settings.MainSettingsFragment"
+        android:name="com.photi.aos.view.fragment.settings.MainSettingsFragment"
         android:label=" "
         tools:layout="@layout/fragment_main_settings" >
 
@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/inquireFragment"
-        android:name="com.example.alloon_aos.view.fragment.settings.InquireFragment"
+        android:name="com.photi.aos.view.fragment.settings.InquireFragment"
         android:label=" "
         tools:layout="@layout/fragment_inquire" >
         <action
@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/unSubscribeFragment"
-        android:name="com.example.alloon_aos.view.fragment.settings.UnSubscribeFragment"
+        android:name="com.photi.aos.view.fragment.settings.UnSubscribeFragment"
         android:label=" "
         tools:layout="@layout/fragment_un_subscribe" >
         <action
@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileModifyFragment"
-        android:name="com.example.alloon_aos.view.fragment.settings.ProfileModifyFragment"
+        android:name="com.photi.aos.view.fragment.settings.ProfileModifyFragment"
         android:label=" "
         tools:layout="@layout/fragment_profile_modify" >
 
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/profilePasswordFragment"
-        android:name="com.example.alloon_aos.view.fragment.settings.ProfilePasswordFragment"
+        android:name="com.photi.aos.view.fragment.settings.ProfilePasswordFragment"
         android:label=" "
         tools:layout="@layout/fragment_profile_password">
         <action

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.report.ReportFeedFragment" />
+            type="com.photi.aos.view.fragment.report.ReportFeedFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

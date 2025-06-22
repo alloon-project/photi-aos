@@ -5,10 +5,10 @@
     <data>
         <variable
             name="activity"
-            type="com.example.alloon_aos.view.activity.SearchActivity" />
+            type="com.photi.aos.view.activity.SearchActivity" />
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.SearchViewModel" />
+            type="com.photi.aos.viewmodel.SearchViewModel" />
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

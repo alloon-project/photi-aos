@@ -5,10 +5,10 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.create.CreateImageFragment" />
+            type="com.photi.aos.view.fragment.create.CreateImageFragment" />
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.CreateViewModel" />
+            type="com.photi.aos.viewmodel.CreateViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

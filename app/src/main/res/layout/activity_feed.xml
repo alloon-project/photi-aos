@@ -7,10 +7,10 @@
 
         <variable
             name="activity"
-            type="com.example.alloon_aos.view.activity.FeedActivity" />
+            type="com.photi.aos.view.activity.FeedActivity" />
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.feed.FeedFragment" />
+            type="com.photi.aos.view.fragment.feed.FeedFragment" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

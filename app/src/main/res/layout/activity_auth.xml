@@ -6,11 +6,11 @@
     <data>
         <variable
             name="activity"
-            type="com.example.alloon_aos.view.activity.AuthActivity" />
+            type="com.photi.aos.view.activity.AuthActivity" />
 
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.AuthViewModel" />
+            type="com.photi.aos.viewmodel.AuthViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

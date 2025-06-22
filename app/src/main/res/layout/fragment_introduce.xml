@@ -6,10 +6,10 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.feed.IntroduceFragment" />
+            type="com.photi.aos.view.fragment.feed.IntroduceFragment" />
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.FeedViewModel" />
+            type="com.photi.aos.viewmodel.FeedViewModel" />
     </data>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

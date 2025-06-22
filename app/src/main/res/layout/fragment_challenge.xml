@@ -5,7 +5,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.photi.ChallengeFragment" />
+            type="com.photi.aos.view.fragment.photi.ChallengeFragment" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:theme="@style/Theme.Photi"

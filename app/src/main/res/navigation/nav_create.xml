@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/createChallengeFragment"
-        android:name="com.example.alloon_aos.view.fragment.create.CreateChallengeFragment"
+        android:name="com.photi.aos.view.fragment.create.CreateChallengeFragment"
         android:label=""
         tools:layout="@layout/fragment_create_challenge">
         <action
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/createNameFragment"
-        android:name="com.example.alloon_aos.view.fragment.create.CreateNameFragment"
+        android:name="com.photi.aos.view.fragment.create.CreateNameFragment"
         android:label=""
         tools:layout="@layout/fragment_create_name" >
         <action
@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/createContentFragment"
-        android:name="com.example.alloon_aos.view.fragment.create.CreateContentFragment"
+        android:name="com.photi.aos.view.fragment.create.CreateContentFragment"
         android:label=""
         tools:layout="@layout/fragment_create_content" >
         <action
@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/createImageFragment"
-        android:name="com.example.alloon_aos.view.fragment.create.CreateImageFragment"
+        android:name="com.photi.aos.view.fragment.create.CreateImageFragment"
         android:label=""
         tools:layout="@layout/fragment_create_image" >
         <action
@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/createRuleFragment"
-        android:name="com.example.alloon_aos.view.fragment.create.CreateRuleFragment"
+        android:name="com.photi.aos.view.fragment.create.CreateRuleFragment"
         android:label=""
         tools:layout="@layout/fragment_create_rule" >
         <action
@@ -62,7 +62,7 @@
 
     <fragment
         android:id="@+id/createHashtagFragment"
-        android:name="com.example.alloon_aos.view.fragment.create.CreateHashtagFragment"
+        android:name="com.photi.aos.view.fragment.create.CreateHashtagFragment"
         android:label=""
         tools:layout="@layout/fragment_create_hashtag" />
 

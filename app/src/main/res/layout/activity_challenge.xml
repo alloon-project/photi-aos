@@ -6,11 +6,11 @@
     <data>
         <variable
             name="activity"
-            type="com.example.alloon_aos.view.activity.ChallengeActivity" />
+            type="com.photi.aos.view.activity.ChallengeActivity" />
 
         <variable
             name="viewModel"
-            type="com.example.alloon_aos.viewmodel.ChallengeViewModel" />
+            type="com.photi.aos.viewmodel.ChallengeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

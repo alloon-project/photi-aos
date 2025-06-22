@@ -4,7 +4,7 @@
     <data>
         <variable
             name="fragment"
-            type="com.example.alloon_aos.view.fragment.photi.ChallengeLatestFragment" />
+            type="com.photi.aos.view.fragment.photi.ChallengeLatestFragment" />
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
