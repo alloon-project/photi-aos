@@ -11,8 +11,8 @@
         android:width="160dp"
         android:height="320dp"/>
     <padding
-        android:right="16dp"
+        android:right="8dp"
         android:left="16dp"
         android:top="18dp"
-        android:bottom="18dp"/>
+        android:bottom="16dp"/>
 </shape>

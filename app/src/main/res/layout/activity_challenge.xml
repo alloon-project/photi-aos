@@ -321,7 +321,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/btn_layout"
                 app:layout_constraintTop_toBottomOf="@+id/top_layout">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/goal_layout"
                     android:layout_width="160dp"
                     android:layout_height="match_parent"
@@ -330,28 +330,41 @@
                     android:layout_weight="6">
 
                     <TextView
+                        android:id="@+id/goal_title_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/suit_bold"
                         android:letterSpacing="-0.03"
                         android:text="목표"
                         android:textColor="@color/blue400"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/goal_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
                         android:fontFamily="@font/suit_semibold"
                         android:letterSpacing="-0.03"
-                        android:lineSpacingExtra="4sp"
+                        android:lineSpacingExtra="4dp"
                         android:text="@={viewModel.goal}"
                         android:textColor="@color/gray800"
                         android:textSize="14dp"
-                        android:translationY="-1.76sp" />
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="8dp"
+                        app:layout_constraintStart_toStartOf="@+id/goal_title_textview"
+                        app:layout_constraintTop_toBottomOf="@+id/goal_title_textview"/>
 
-                </LinearLayout>
+                    <ImageView
+                        android:layout_width="77dp"
+                        android:layout_height="90dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/graphic_thunder"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
                 <LinearLayout
                     android:layout_width="136dp"
                     android:layout_height="match_parent"
@@ -386,7 +399,7 @@
                             android:layout_marginTop="25dp"
                             android:fontFamily="@font/suit_semibold"
                             android:letterSpacing="-0.03"
-                            android:lineSpacingExtra="4sp"
+                            android:lineSpacingExtra="4dp"
                             android:textColor="@color/gray800"
                             android:textSize="14dp"
                             android:layout_marginRight="16dp"
@@ -415,7 +428,7 @@
                             android:layout_marginTop="16dp"
                             android:fontFamily="@font/suit_semibold"
                             android:letterSpacing="-0.03"
-                            android:lineSpacingExtra="4sp"
+                            android:lineSpacingExtra="4dp"
                             android:textColor="@color/gray800"
                             android:textSize="14dp"
                             android:visibility="gone"

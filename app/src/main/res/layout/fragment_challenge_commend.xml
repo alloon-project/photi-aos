@@ -33,7 +33,7 @@
                     android:fontFamily="@font/suit_bold"
                     android:text="지금 인기있는 챌린지"
                     android:textColor="@color/gray900"
-                    android:textSize="18sp"
+                    android:textSize="18dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,7 +76,7 @@
                     android:fontFamily="@font/suit_semibold"
                     android:text="해시태그별 모아보기"
                     android:textColor="@color/gray900"
-                    android:textSize="18sp"
+                    android:textSize="18dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -98,7 +98,7 @@
                         android:stateListAnimator="@null"
                         android:text="전체"
                         android:textColor="@color/blue500"
-                        android:textSize="14sp"
+                        android:textSize="14dp"
                         android:onClick="@{() ->fragment.clickAllChip()}"/>
 
                     <ImageView

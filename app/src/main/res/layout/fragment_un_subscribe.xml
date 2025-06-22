@@ -73,7 +73,7 @@
                         android:inputType="textPassword"
                         android:letterSpacing="-0.03"
                         android:textColorHint="@color/gray400"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
 
                     <ImageButton
                         android:id="@+id/hide_btn"

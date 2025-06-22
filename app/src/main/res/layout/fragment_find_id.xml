@@ -71,7 +71,7 @@
             android:fontFamily="@font/suit_medium"
             android:text="@string/emailerror1"
             android:textColor="@color/red400"
-            android:textSize="12sp"
+            android:textSize="12dp"
             android:layout_marginLeft="6dp"/>
     </LinearLayout>
 

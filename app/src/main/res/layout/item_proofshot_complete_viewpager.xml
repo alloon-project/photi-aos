@@ -55,8 +55,8 @@
 
                 <ImageView
                     android:id="@+id/banner_imageview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="66dp"
+                    android:layout_height="66dp"
                     android:layout_gravity="bottom|end"
                     android:src="@drawable/graphic_clover"/>
 
