@@ -21,6 +21,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "alloon-aos"
+rootProject.name = "photi-aos"
 include(":app")
  
