@@ -68,6 +68,8 @@
                     android:layout_height="wrap_content"
                     android:text="챌린지챌린지챌린지챌린지챌린지"
                     android:textColor="@color/white"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/suit_bold"
                     android:layout_marginTop="14dp"
                     android:layout_marginLeft="14dp"/>
             </FrameLayout>

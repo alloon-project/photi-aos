@@ -51,7 +51,8 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
 
     private lateinit var tabLayout: TabLayout
-    private lateinit var button: ImageButton
+    private lateinit var fixedButton: ImageButton
+    private lateinit var fixedView: View
 
     private val feedFragment = FeedFragment()
     private val introduceFragment = IntroduceFragment()
@@ -63,7 +64,8 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         binding.activity = this
 
         tabLayout = binding.tabLayout
-        button = binding.fixedImageButton
+        fixedButton = binding.fixedImageButton
+        fixedView = binding.fixedBgView
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -110,20 +112,23 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 when(tab?.position){
                     0 ->{
                         fragmentTransaction.replace(R.id.frag_layout,feedFragment).commit()
-                        if(feedViewModel.isUserVerifiedToday.value == true)
-                            button.visibility = View.GONE
-                        else
-                            button.visibility = View.VISIBLE
+                        if(feedViewModel.isUserVerifiedToday.value == true) {
+                            fixedButton.visibility = View.GONE
+                            fixedView.visibility = View.GONE
+                        } else {
+                            fixedButton.visibility = View.VISIBLE
+                            fixedView.visibility = View.VISIBLE
+                        }
                     }
                     1 -> {
                         fragmentTransaction.replace(R.id.frag_layout,introduceFragment ).commit()
-                        button.visibility = View.GONE
-                        binding.fixedBgView.visibility = View.GONE
+                        fixedButton.visibility = View.GONE
+                        fixedView.visibility = View.GONE
                     }
                     2 -> {
                         fragmentTransaction.replace(R.id.frag_layout,partyFragment).commit()
-                        button.visibility = View.GONE
-                        binding.fixedBgView.visibility = View.GONE
+                        fixedButton.visibility = View.GONE
+                        fixedView.visibility = View.GONE
 
                     }
                 }
@@ -145,9 +150,8 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 val resultValue = data?.getIntExtra("ID", -1)
                 resultValue?.let {
                     feedViewModel.challengeId = it
-                    //수정 result 이짝
-//                    feedViewModel.fetchChallenge()
-//                    feedViewModel.fetchChallengeMembers()
+                    feedViewModel.fetchChallenge()
+                    feedViewModel.fetchChallengeInfo()
                     CustomToast.createToast(this,"챌린지 수정이 완료됐어요.")?.show()
                 }
             }
@@ -378,11 +382,11 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         feedViewModel.isUserVerifiedToday.observe(this) { isProve ->
             isProve?.let {
                 if (it) {
-                    button.visibility = View.GONE
-                    binding.fixedBgView.visibility = View.GONE
+                    fixedButton.visibility = View.GONE
+                    fixedView.visibility = View.GONE
                 } else {
-                    button.visibility = View.VISIBLE
-                    binding.fixedBgView.visibility = View.VISIBLE
+                    fixedButton.visibility = View.VISIBLE
+                    fixedView.visibility = View.VISIBLE
                     showToastAbove("오늘의 인증이 완료되지 않았어요!")
                 }
             }
