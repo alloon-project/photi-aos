@@ -98,6 +98,16 @@ interface FeedApiService {
         @Body comment: CommentRequest
     ): Response<ApiResponse<CommentResponse>>
 
+    //댓글 등록
+    @DELETE("/api/challenges/{challengeId}/feeds/{feedId}/comments/{commentId}")
+    suspend fun deleteComment(
+        @Path("challengeId") challengeId: Int,
+        @Path("feedId") feedId: Int,
+        @Path("commentId") commentId: Int,
+
+    ): Response<ApiResponse<SuccessMessageReponse>>
+
+
     //신고 등록
     @POST("/api/reports/{targetId}")
     suspend fun post_reports(

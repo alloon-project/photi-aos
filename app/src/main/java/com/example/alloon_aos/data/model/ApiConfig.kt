@@ -51,6 +51,8 @@ object ApiConfig {
         ), //삭제 토스트 안뜸 리스트도 재 정렬해얗마
         "/api/users/challenges/{challengeId}/prove" to "GET",
         "/api/challenges/feeds/{feedId}/comments" to "GET",
+        "/api/challenges/{challengeId}/feeds/{feedId}/comments" to "POST",
+        "/api/challenges/{challengeId}/feeds/{feedId}/comments/{commentId}" to "DELETE",
         "/api/challenges/{challengeId}/feed-existence" to "GET",
     )
 

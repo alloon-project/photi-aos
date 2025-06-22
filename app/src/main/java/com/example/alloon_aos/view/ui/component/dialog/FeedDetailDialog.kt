@@ -23,18 +23,17 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.alloon_aos.MyApplication
 import com.example.alloon_aos.R
 import com.example.alloon_aos.data.model.response.Comment
-import com.example.alloon_aos.data.model.response.CommentRequest
 import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.storage.SharedPreferencesManager
 import com.example.alloon_aos.databinding.CustomPopupMenuBinding
@@ -43,7 +42,6 @@ import com.example.alloon_aos.databinding.ItemFeedCommentBinding
 import com.example.alloon_aos.view.ui.component.toast.CustomToast
 import com.example.alloon_aos.viewmodel.FeedViewModel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
 
 class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialogInterface  {
@@ -51,10 +49,10 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
     private val binding get() = _binding!!
     private val feedViewModel by activityViewModels<FeedViewModel>()
     private lateinit var adapter:CommentsAdapter
+    private  var myId = SharedPreferencesManager(MyApplication.mySharedPreferences).getUserName() ?: ""
     private var isFirstInput = true
     private var isFirstAdd = true
     private var feedUserName : String? = null
-    private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
 
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -64,7 +62,6 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
 
         setupRecyclerView()
         observeLiveData()
-
 
         binding.ellipsisImgBtn.setOnClickListener { view ->
             setCustomPopUp(view)
@@ -77,11 +74,26 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
     }
 
     private fun setupRecyclerView() {
-        adapter = CommentsAdapter()
+        val lm = LinearLayoutManager(requireContext()).apply {
+            reverseLayout = true
+            stackFromEnd  = true
+        }
+        adapter = CommentsAdapter(feedViewModel,lifecycle,feedId,myId)
         binding.commentsRecyclerView.adapter = adapter
-        binding.commentsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.commentsRecyclerView.layoutManager = lm
 
-        //TODO 댓글 페이징
+        adapter.addLoadStateListener { state ->
+            val refresh = state.source.refresh
+            if (refresh is LoadState.NotLoading &&
+                feedViewModel.scrollToBottom.value &&           // 내려가야 함?
+                adapter.itemCount > 0
+            ) {
+                binding.commentsRecyclerView.post {
+                    lm.scrollToPositionWithOffset(0, 0)     // index 0 = 화면 맨밑
+                    feedViewModel.consumeScrollFlag()
+                }
+            }
+        }
 //        binding.scrollView.setOnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
 //            val nestedScrollView = v as NestedScrollView
 //
@@ -111,9 +123,6 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
                     feedUserName = data.username
                     idTextView.text = feedUserName
                     heartCntTextView.text = if (data.likeCnt == 0) "" else data.likeCnt.toString()
-
-                    //TODO 사용자가 heart click 여부
-                    // heartBtn.setImageResource(if (feed.isClick) R.drawable.ic_heart_filled_14 else R.drawable.ic_heart_empty_14)
 
                     setHeartButtonClickListener(data,binding.heartBtn)
 
@@ -166,7 +175,7 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
                             val newCommentText = commentEditText.text.toString()
 
                             if (newCommentText.isNotEmpty()) {
-                                feedViewModel.postComment(feedId, newCommentText)
+                                feedViewModel.postComment(feedId, newCommentText, myId)
                                 commentEditText.setText("")
 
                                 if (isFirstAdd) {
@@ -210,14 +219,14 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
         }
 
 
+
         feedViewModel.postCommentResponse.observe(viewLifecycleOwner) { comment ->
             if(comment != null){
-                adapter.addComment(comment , viewLifecycleOwner.lifecycle)
-                binding.commentsRecyclerView.post {
-                    binding.commentsRecyclerView.scrollToPosition(adapter.itemCount - 1)
-                }
+                adapter.addComment(comment,binding.commentsRecyclerView)
 
                 feedViewModel.consumePostedComment()
+
+                feedViewModel.refreshFeedComments(feedId)
 
             }
         }
@@ -398,7 +407,7 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
 
         // 위치 설정
         popupWindow.showAsDropDown(anchorView, xOffset, yOffset)
-        val myId = sharedPreferencesManager.getUserName() ?: ""
+
         if (feedUserName == myId) {
             setupMyFeedOptions(popupViewBinding,popupWindow)
         } else {
@@ -448,7 +457,7 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
     }
 
 
-    class CommentsAdapter : PagingDataAdapter<Comment, CommentsAdapter.ViewHolder>(DiffCallback()) {
+    class CommentsAdapter(val feedViewModel: FeedViewModel, private val lifecycle: Lifecycle,val feedId : Int,val myId : String) : PagingDataAdapter<Comment, CommentsAdapter.ViewHolder>(DiffCallback()) {
 
         inner class ViewHolder(private val binding: ItemFeedCommentBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(data: Comment) {
@@ -456,10 +465,16 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
                     idTextView.text = data.username
                     commentTextView.text = data.comment
 
-                    commentLayout.setOnLongClickListener {
-                        // 댓글 삭제 로직
-                        true
+                    if(myId == data.username){
+                        commentLayout.setOnLongClickListener {
+                            feedViewModel.deleteComment(feedId = feedId , commentId =  data.id.toInt(), onComplete = {
+                                removeCommentById(commentId = data.id.toInt())
+                            }, onFailure = {
+                            })
+                            true
+                        }
                     }
+
                 }
             }
         }
@@ -472,10 +487,24 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             getItem(position)?.let { holder.bind(it) }
         }
-        fun addComment(comment: Comment, lifecycle: Lifecycle) {
+        fun addComment(comment: Comment,recyclerView: RecyclerView) {
             val current = snapshot().items.toMutableList()  // 현재까지 로드된 아이템
-            current.add(comment)                           // 맨 끝에 삽입
+            current.add(0,comment)                           // 맨 끝에 삽입
             submitData(lifecycle, PagingData.from(current))
+
+            recyclerView.post {
+                (recyclerView.layoutManager as LinearLayoutManager)
+                    .scrollToPositionWithOffset(0, 0)
+            }
+        }
+
+        fun removeCommentById(commentId: Int) {
+            val current = snapshot().items.toMutableList()
+            val idx = current.indexOfFirst { it.id.toInt() == commentId }
+            if (idx != -1) {
+                current.removeAt(idx)
+                submitData(lifecycle, PagingData.from(current))
+            }
         }
         class DiffCallback : DiffUtil.ItemCallback<Comment>() {
             override fun areItemsTheSame(oldItem: Comment, newItem: Comment): Boolean {

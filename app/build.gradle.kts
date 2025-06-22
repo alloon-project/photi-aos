@@ -13,7 +13,7 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,7 +44,8 @@ dependencies {
     implementation ("androidx.recyclerview:recyclerview:1.3.1")
 
     //paging
-    implementation ("androidx.paging:paging-runtime:3.1.1")
+    implementation ("androidx.paging:paging-runtime:3.2.1")
+    implementation ("androidx.paging:paging-runtime-ktx:3.2.1")
 
     //zigzag
     implementation("ir.beigirad:ZigzagView:1.2.1")

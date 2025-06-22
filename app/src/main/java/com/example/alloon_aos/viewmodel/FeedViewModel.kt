@@ -25,7 +25,6 @@ import com.example.alloon_aos.data.model.response.FeedDetailData
 import com.example.alloon_aos.data.model.response.FeedUiItem
 import com.example.alloon_aos.data.model.response.MessageResponse
 import com.example.alloon_aos.data.model.response.SuccessMessageReponse
-import com.example.alloon_aos.data.paging.SearchNamePagingSource
 import com.example.alloon_aos.data.paging.feed.ChallengeFeedsPagingSource
 import com.example.alloon_aos.data.paging.feed.FeedCommentsPagingSource
 import com.example.alloon_aos.data.remote.RetrofitClient
@@ -37,6 +36,7 @@ import com.example.alloon_aos.data.repository.handleApiCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -158,6 +158,9 @@ class FeedViewModel : ViewModel() {
     private val _feedComments =  MutableStateFlow<PagingData<Comment>>(PagingData.empty())
     val feedComments: StateFlow<PagingData<Comment>> get() = _feedComments
 
+    private val _scrollToBottom = MutableStateFlow(false)
+    val scrollToBottom: StateFlow<Boolean> = _scrollToBottom.asStateFlow()
+
     private val _feedVerifiedUserCount = MutableLiveData<Int?>()
     val feedVerifiedUserCount: LiveData<Int?> get() = _feedVerifiedUserCount
 
@@ -179,6 +182,9 @@ class FeedViewModel : ViewModel() {
 
     private val _postCommentResponse = MutableLiveData<Comment?>()
     val postCommentResponse: LiveData<Comment?> get() = _postCommentResponse
+
+    private val _deleteCommentResponse = MutableLiveData<SuccessMessageReponse?>()
+    val deleteCommentResponse: LiveData<SuccessMessageReponse?> get() = _deleteCommentResponse
 
     private val _feedUploadPhoto = MutableLiveData<Boolean?>()
     val feedUploadPhoto: LiveData<Boolean?> get() = _feedUploadPhoto
@@ -308,7 +314,8 @@ class FeedViewModel : ViewModel() {
         }
     }
 
-    fun fetchFeedComments(feedId: Int,) {
+    fun fetchFeedComments(feedId: Int) {
+        _scrollToBottom.value = true
         viewModelScope.launch {
             Pager(
                 PagingConfig(initialLoadSize = 10, pageSize = 5,enablePlaceholders = false ),
@@ -323,6 +330,12 @@ class FeedViewModel : ViewModel() {
 
 
         }
+    }
+
+    fun refreshFeedComments(feedId: Int) {
+        _scrollToBottom.value = true
+        _feedComments.value = PagingData.empty()
+        fetchFeedComments(feedId)
     }
 
 
@@ -468,14 +481,15 @@ class FeedViewModel : ViewModel() {
 //        }
 //    }
 //
-    fun postComment(feedId: Int, comment: String) {
+    fun postComment(feedId: Int, comment: String,myId : String) {
         viewModelScope.launch(Dispatchers.IO) {
             handleApiCall(
                 call = { feedRepository.postComment(challengeId, feedId, CommentRequest(comment = comment)) },
                 onSuccess = { data ->
-                    if (data != null) {//TODO username 추가
-                        _postCommentResponse.postValue(Comment(id = data.id.toLong(), username = "ㅇㅇ", comment = comment))
+                    if (data != null) {
+                        _postCommentResponse.postValue(Comment(id = data.id.toLong(), username = myId, comment = comment))
                     }
+                    refreshFeedComments(feedId)
                 },
                 onFailure = { errorCode ->
                     _postCommentResponse.postValue(null)
@@ -484,5 +498,22 @@ class FeedViewModel : ViewModel() {
             )
         }
     }
+
+    fun consumeScrollFlag() { _scrollToBottom.value = false }
     fun consumePostedComment() { _postCommentResponse.value = null }
+
+    fun deleteComment(feedId: Int, commentId: Int,  onComplete: () -> Unit,onFailure: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleApiCall(
+                call = { feedRepository.deleteComment(challengeId, feedId, commentId) },
+                onSuccess = { data ->
+                    if (data != null) {
+                        onComplete()                   }
+                },
+                onFailure = { errorCode ->
+                    onFailure()
+                }
+            )
+        }
+    }
 }
