@@ -13,9 +13,15 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "9.9.9"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+        dataBinding = true
     }
 
     buildTypes {
@@ -26,11 +32,7 @@ android {
                 "proguard-rules.pro"
             )
         }
-        buildFeatures {
-            buildConfig = true
-            viewBinding = true
-            dataBinding = true
-        }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

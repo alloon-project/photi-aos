@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.photi.aos.BuildConfig
 import com.photi.aos.R
 import com.photi.aos.databinding.FragmentMainSettingsBinding
 import com.photi.aos.view.activity.SettingsActivity
 import com.photi.aos.view.ui.component.dialog.CustomTwoButtonDialog
 import com.photi.aos.view.ui.component.dialog.CustomTwoButtonDialogInterface
-
 class MainSettingsFragment : Fragment(), CustomTwoButtonDialogInterface {
     private lateinit var binding: FragmentMainSettingsBinding
 
@@ -26,7 +26,7 @@ class MainSettingsFragment : Fragment(), CustomTwoButtonDialogInterface {
             DataBindingUtil.inflate(inflater, R.layout.fragment_main_settings, container, false)
         binding.fragment = this
         binding.lifecycleOwner = viewLifecycleOwner
-      //  binding.versionTextView.text =  BuildConfig.VERSION_NAME
+          binding.versionTextView.text =  BuildConfig.VERSION_NAME
         val mActivity = activity as SettingsActivity
         mActivity.setAppBar("설정")
         return binding.root

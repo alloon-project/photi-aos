@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.photi.aos.BuildConfig
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -56,7 +57,7 @@ object CameraHelper {
         val photoFile = createImageFile(fragment)
         photoUri = FileProvider.getUriForFile(
             fragment.requireContext(),
-            "com.photi.aos.fileprovider",
+            "${BuildConfig.APPLICATION_ID}.fileprovider",
             photoFile
         )
         takePictureLauncher.launch(photoUri)
