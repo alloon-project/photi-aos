@@ -26,6 +26,7 @@ class MainSettingsFragment : Fragment(), CustomTwoButtonDialogInterface {
             DataBindingUtil.inflate(inflater, R.layout.fragment_main_settings, container, false)
         binding.fragment = this
         binding.lifecycleOwner = viewLifecycleOwner
+       // binding.versionTextView.text =  BuildConfig.VERSION_NAME
         val mActivity = activity as SettingsActivity
         mActivity.setAppBar("설정")
         return binding.root

@@ -87,6 +87,15 @@ class FeedRepository(private val apiService: FeedApiService) {
         return apiService.postComment(challengeId, feedId, comment)
     }
 
+    // 댓글 등록
+    suspend fun deleteComment(
+        challengeId: Int,
+        feedId: Int,
+        commentId: Int
+    ): Response<ApiResponse<SuccessMessageReponse>> {
+        return apiService.deleteComment(challengeId, feedId, commentId)
+    }
+
     // 신고 등록
     suspend fun postReport(
         targetId: Int,
