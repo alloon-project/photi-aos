@@ -49,11 +49,19 @@ class SearchViewModel : ViewModel() {
     var memberImg: List<MemberImg> = listOf()
     var memberCnt = -1
     var imgFile = ""
+    var myIdList = arrayListOf<Int>()
 
     fun resetApiResponseValue() {
         challengeResponse.value = ActionApiResponse()
     }
 
+    fun checkUserInChallenge(): Boolean {
+        for (id in myIdList) {
+            if (this.id == id)
+                return true
+        }
+        return false
+    }
 
     fun getData(): MyData {
         var data =

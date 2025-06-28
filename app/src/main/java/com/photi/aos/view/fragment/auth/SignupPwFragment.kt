@@ -128,7 +128,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 checkRequirements()
-                binding.checkPwEdittext.setText("")
+                checkPwMatch()
             }
         })
 
@@ -138,15 +138,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(s.toString().equals(binding.pwEdittext.text.toString()) ){
-                    binding.checkPwTextview.setTextColor(blue)
-                    binding.checkPwIconview.setImageResource(R.drawable.ic_check_blue)
-                    binding.nextBtn.isEnabled = true
-                } else {
-                    binding.checkPwTextview.setTextColor(gray)
-                    binding.checkPwIconview.setImageResource(R.drawable.ic_check_grey)
-                    binding.nextBtn.isEnabled = false
-                }
+                checkPwMatch()
             }
         })
     }
@@ -169,6 +161,18 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         }
     }
 
+
+    fun checkPwMatch() {
+        if(binding.checkPwEdittext.text.toString().equals(binding.pwEdittext.text.toString()) ){
+            binding.checkPwTextview.setTextColor(blue)
+            binding.checkPwIconview.setImageResource(R.drawable.ic_check_blue)
+            binding.nextBtn.isEnabled = true
+        } else {
+            binding.checkPwTextview.setTextColor(gray)
+            binding.checkPwIconview.setImageResource(R.drawable.ic_check_grey)
+            binding.nextBtn.isEnabled = false
+        }
+    }
 
     @SuppressLint("ResourceAsColor")
     fun checkRequirements() {
@@ -220,6 +224,7 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         }
     }
 
+
     fun showBottomList(){
         ObjectAnimator.ofInt(binding.pwProgress, "progress", 80,100)
             .setDuration(500)
@@ -241,7 +246,6 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         val notionPageUrl = "https://www.notion.so/f1dc17026f884c2ebe90437b0ee9fa63"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(notionPageUrl))
         startActivity(intent)
-        CustomToast.createToast(activity,"두번째 약관 클릭")?.show()
     }
 
     override fun onClickButton() {

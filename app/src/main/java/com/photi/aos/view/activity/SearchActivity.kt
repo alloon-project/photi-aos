@@ -47,13 +47,14 @@ class SearchActivity : AppCompatActivity() {
         binding.viewModel = searchViewModel
 
         searchViewModel.resetApiResponseValue()
+        searchViewModel.myIdList = intent.getIntegerArrayListExtra("IDList")!!
 
         hashAdapter = SearchHashAdapter()
         binding.hashRecyclerview.adapter = hashAdapter
         binding.hashRecyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         binding.hashRecyclerview.setHasFixedSize(true)
 
-        challengAdapter = SearchChallengeAdpater(searchViewModel)
+        challengAdapter = SearchChallengeAdpater(this, searchViewModel)
         binding.challengeRecyclerview.adapter = challengAdapter
         binding.challengeRecyclerview.layoutManager = GridLayoutManager(this, 2)
         binding.challengeRecyclerview.setHasFixedSize(true)
@@ -249,6 +250,12 @@ class SearchActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun startFeed() {
+        val intent = Intent(this, FeedActivity::class.java)
+        intent.putExtra("CHALLENGE_ID", searchViewModel.id)
+        startActivity(intent)
+    }
+
 
 
     //before adapter
@@ -280,8 +287,7 @@ class SearchActivity : AppCompatActivity() {
 
 
     // after adapter
-    class SearchChallengeAdpater(private val searchViewModel: SearchViewModel): PagingDataAdapter<ChallengeData, SearchChallengeAdpater.ViewHolder> (DiffCallback()) {
-
+    class SearchChallengeAdpater(private val mActivity: SearchActivity, private val searchViewModel: SearchViewModel): PagingDataAdapter<ChallengeData, SearchChallengeAdpater.ViewHolder> (DiffCallback()) {
         inner class ViewHolder(var binding: ItemSearchChallengeRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(data: ChallengeData) {
                     binding.titleTextView.text = data.name
@@ -298,21 +304,33 @@ class SearchActivity : AppCompatActivity() {
                     when (cnt) {
                         1 -> {
                             binding.avatarOneLayout.visibility = View.VISIBLE
+                            binding.avatarTwoLayout.visibility = View.GONE
+                            binding.avatarThreeLayout.visibility = View.GONE
+                            binding.avatarMultipleLayout.visibility = View.GONE
                             loadImage(binding.oneUser1ImageView, imgs.getOrNull(0)?.memberImage)
                         }
                         2 -> {
                             binding.avatarTwoLayout.visibility = View.VISIBLE
+                            binding.avatarOneLayout.visibility = View.GONE
+                            binding.avatarThreeLayout.visibility = View.GONE
+                            binding.avatarMultipleLayout.visibility = View.GONE
                             loadImage(binding.twoUser1ImageView, imgs.getOrNull(0)?.memberImage)
                             loadImage(binding.twoUser2ImageView, imgs.getOrNull(1)?.memberImage)
                         }
                         3 -> {
                             binding.avatarThreeLayout.visibility = View.VISIBLE
+                            binding.avatarOneLayout.visibility = View.GONE
+                            binding.avatarTwoLayout.visibility = View.GONE
+                            binding.avatarMultipleLayout.visibility = View.GONE
                             loadImage(binding.threeUser1ImageView, imgs.getOrNull(0)?.memberImage)
                             loadImage(binding.threeUser2ImageView, imgs.getOrNull(1)?.memberImage)
                             loadImage(binding.threeUser3ImageView, imgs.getOrNull(2)?.memberImage)
                         }
                         else -> {
                             binding.avatarMultipleLayout.visibility = View.VISIBLE
+                            binding.avatarOneLayout.visibility = View.GONE
+                            binding.avatarTwoLayout.visibility = View.GONE
+                            binding.avatarThreeLayout.visibility = View.GONE
                             loadImage(binding.multipleUser1ImageView, imgs.getOrNull(0)?.memberImage)
                             loadImage(binding.multipleUser2ImageView, imgs.getOrNull(1)?.memberImage)
                             binding.countTextView.text = "+${(cnt - 2).coerceAtLeast(0)}"
@@ -348,7 +366,10 @@ class SearchActivity : AppCompatActivity() {
 
                     binding.root.setOnClickListener {
                         searchViewModel.id = data.id
-                        searchViewModel.getChallenge()
+                        if (searchViewModel.checkUserInChallenge())
+                            mActivity.startFeed()
+                        else
+                            searchViewModel.getChallenge()
                     }
             }
         }

@@ -100,21 +100,24 @@
                         <Button
                             android:id="@+id/hash1_btn"
                             android:layout_width="wrap_content"
-                            android:layout_height="25dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginRight="8dp"
                             android:background="@drawable/chip_gray"
                             android:fontFamily="@font/suit_medium"
                             android:stateListAnimator="@null"
-                            android:text="해시태그 1"
+                            android:text="해시태그태그"
                             android:textColor="@color/gray600"
                             android:minWidth="41dp"
+                            android:minHeight="25dp"
                             android:textSize="14dp"
-                            android:visibility="gone"/>
+                            android:visibility="gone"
+                            android:paddingRight="8dp"
+                            android:paddingLeft="8dp"/>
 
                         <Button
                             android:id="@+id/hash2_btn"
                             android:layout_width="wrap_content"
-                            android:layout_height="25dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginRight="8dp"
                             android:background="@drawable/chip_gray"
                             android:fontFamily="@font/suit_medium"
@@ -122,21 +125,27 @@
                             android:text="해시태그3"
                             android:textColor="@color/gray600"
                             android:minWidth="41dp"
+                            android:minHeight="25dp"
                             android:textSize="14dp"
-                            android:visibility="gone"/>
+                            android:visibility="gone"
+                            android:paddingRight="8dp"
+                            android:paddingLeft="8dp"/>
 
                         <Button
                             android:id="@+id/hash3_btn"
                             android:layout_width="wrap_content"
-                            android:layout_height="25dp"
+                            android:layout_height="wrap_content"
                             android:background="@drawable/chip_gray"
                             android:fontFamily="@font/suit_medium"
                             android:stateListAnimator="@null"
                             android:text="나도해시"
                             android:textColor="@color/gray600"
                             android:minWidth="41dp"
+                            android:minHeight="25dp"
                             android:textSize="14dp"
-                            android:visibility="gone"/>
+                            android:visibility="gone"
+                            android:paddingRight="8dp"
+                            android:paddingLeft="8dp"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -422,6 +431,7 @@
                                         android:text="+16"
                                         android:textColor="@color/white"
                                         android:textSize="10dp"
+                                        android:gravity="center"
                                         app:layout_constraintBottom_toBottomOf="@+id/image3"
                                         app:layout_constraintEnd_toEndOf="@+id/image3"
                                         app:layout_constraintStart_toStartOf="@id/image3"

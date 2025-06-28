@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.photi.aos.MyApplication
 import com.photi.aos.R
 import com.photi.aos.data.storage.TokenManager
@@ -17,10 +18,12 @@ import com.photi.aos.view.activity.SearchActivity
 import com.photi.aos.view.ui.component.dialog.JoinGuestDialog
 import com.photi.aos.view.ui.component.dialog.JoinGuestDialogInterface
 import com.google.android.material.tabs.TabLayout
+import com.photi.aos.viewmodel.PhotiViewModel
 
 class ChallengeFragment : Fragment(), JoinGuestDialogInterface {
     private lateinit var binding : FragmentChallengeBinding
     private lateinit var mActivity: PhotiActivity
+    private val photiViewModel by activityViewModels<PhotiViewModel>()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
 
     lateinit var commendTab: ChallengeCommendFragment
@@ -46,9 +49,9 @@ class ChallengeFragment : Fragment(), JoinGuestDialogInterface {
     }
 
     private fun setListener() {
-
         binding.searchEdittext.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
+            intent.putIntegerArrayListExtra("IDList", photiViewModel.myIdList)
             startActivity(intent)
         }
 
