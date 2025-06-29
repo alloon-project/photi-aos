@@ -116,6 +116,7 @@
 
             <ImageButton
                 android:id="@+id/imageButton3"
+                android:onClick="@{() ->fragment.moveFrag(3)}"
                 android:layout_width="13dp"
                 android:layout_height="13dp"
                 android:layout_margin="10dp"
@@ -153,6 +154,7 @@
 
             <ImageButton
                 android:id="@+id/imageButton6"
+                android:onClick="@{() ->fragment.moveFrag(4)}"
                 android:layout_width="13dp"
                 android:layout_height="13dp"
                 android:layout_margin="10dp"
