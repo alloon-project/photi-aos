@@ -75,7 +75,6 @@ class PhotiViewModel : ViewModel() {
     val apiResponse = MutableLiveData<ActionApiResponse>()
     val popularResponse = MutableLiveData<ActionApiResponse>()
     val hashListResponse = MutableLiveData<ActionApiResponse>()
-    val homeResponse = MutableLiveData<ActionApiResponse>()
 
     var id = -1
     var name = ""
@@ -93,9 +92,6 @@ class PhotiViewModel : ViewModel() {
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
     }
-    fun resetHomeResponseValue() {
-        homeResponse.value = ActionApiResponse()
-    }
     fun resetPopularResponseValue() {
         popularResponse.value = ActionApiResponse()
     }
@@ -107,7 +103,6 @@ class PhotiViewModel : ViewModel() {
         apiResponse.value = ActionApiResponse()
         popularResponse.value = ActionApiResponse()
         hashListResponse.value = ActionApiResponse()
-        homeResponse.value = ActionApiResponse()
     }
 
 
@@ -237,25 +232,6 @@ class PhotiViewModel : ViewModel() {
 
                 override fun onFailure(error: Throwable) {
                     apiResponse.value = ActionApiResponse(ErrorHandler.handle(error))
-                }
-            })
-    }
-
-    fun getChallengeHome() {
-        challenge_repository.getChallenge(
-            id,
-            object : ChallengeRepositoryCallback<ChallengeResponse> {
-                override fun onSuccess(data: ChallengeResponse) {
-                    val result = data.code
-                    val mes = data.message
-                    val data = data.data
-                    setChallengeData(data)
-                    homeResponse.value = ActionApiResponse(result)
-                    Log.d(TAG, "getChallengeHome: $mes $result")
-                }
-
-                override fun onFailure(error: Throwable) {
-                    homeResponse.value = ActionApiResponse(ErrorHandler.handle(error))
                 }
             })
     }

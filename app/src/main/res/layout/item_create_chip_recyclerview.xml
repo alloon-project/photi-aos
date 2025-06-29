@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:theme="@style/Theme.Photi"
     android:layout_width="wrap_content"
@@ -18,14 +18,21 @@
         android:fontFamily="@font/suit_medium"
         android:text="해시태그"
         android:textColor="@color/blue500"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/delete_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/delete_btn"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:src="@drawable/ic_close_default"
         android:layout_marginRight="10dp"
+        android:src="@drawable/ic_close_default"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/blue500" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

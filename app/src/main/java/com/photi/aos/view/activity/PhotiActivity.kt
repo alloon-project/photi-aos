@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -42,7 +43,8 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
 
         setBottomNavigation(TAG_HOME)
         setListener()
-        setDeepLink()
+        setObserver()
+        //setDeepLink()
 
         val isFrom = intent.getStringExtra("IS_FROM")
         when(isFrom){
@@ -58,6 +60,12 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         }
 
         photiViewModel.resetAllResponseValue()
+
+//        val challengeId = intent.getStringExtra("challengeId")
+//        if (!challengeId.isNullOrEmpty()) {
+//            photiViewModel.id = challengeId.toInt()
+//            photiViewModel.getChallenge()
+//        }
 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -101,6 +109,31 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
                     .show(supportFragmentManager, "CustomDialog")
             else
                 setBottomNavigation(TAG_PROFILE)
+        }
+    }
+
+    private fun setObserver() {
+        photiViewModel.apiResponse.observe(this) { response ->
+            when (response.code) {
+                "200 OK" -> {
+                    startChallengeActivity()
+                }
+                "TOKEN_UNAUTHENTICATED" -> {
+                    CustomToast.createToast(this@PhotiActivity, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                }
+                "TOKEN_UNAUTHORIZED" -> {
+                    CustomToast.createToast(this@PhotiActivity, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                }
+                "CHALLENGE_NOT_FOUND" -> {
+                    CustomToast.createToast(this@PhotiActivity, "존재하지 않는 챌린지입니다.", "circle")?.show()
+                }
+                "IO_Exception" -> {
+                    CustomToast.createToast(this@PhotiActivity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
+                }
+                else -> {
+                    Log.d("Observer", "Unhandled response code: ${response.code}")
+                }
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package com.photi.aos.view.fragment.settings
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +28,7 @@ class MainSettingsFragment : Fragment(), CustomTwoButtonDialogInterface {
             DataBindingUtil.inflate(inflater, R.layout.fragment_main_settings, container, false)
         binding.fragment = this
         binding.lifecycleOwner = viewLifecycleOwner
-          binding.versionTextView.text =  BuildConfig.VERSION_NAME
+        binding.versionTextView.text =  BuildConfig.VERSION_NAME
         val mActivity = activity as SettingsActivity
         mActivity.setAppBar("설정")
         return binding.root
@@ -45,11 +47,15 @@ class MainSettingsFragment : Fragment(), CustomTwoButtonDialogInterface {
             }
 
             3 -> {//서비스 이용약관
-
+                val notionPageUrl = "https://www.notion.so/f1dc17026f884c2ebe90437b0ee9fa63"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(notionPageUrl))
+                startActivity(intent)
             }
 
             4 -> {//개인정보 처리방침
-
+                val notionPageUrl = "https://www.notion.so/16c7071e9b43802fac6beedbac719400"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(notionPageUrl))
+                startActivity(intent)
             }
 
             6 -> {//로그아웃
