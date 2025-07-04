@@ -2,6 +2,7 @@ package com.photi.aos
 
 import android.app.Application
 import android.content.Intent
+import androidx.appcompat.app.AppCompatDelegate
 import com.photi.aos.data.storage.MySharedPreferences
 import com.photi.aos.view.activity.PhotiActivity
 
@@ -20,6 +21,7 @@ class MyApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         mySharedPreferences = MySharedPreferences(applicationContext)
         instance = this
     }
