@@ -5,8 +5,7 @@
         android:color="@color/gray600"/>
     <solid
         android:color="@color/white"/>
-    <corners
-        android:radius="16dp"/>
+    <corners android:radius="?attr/btnCornerRadius"/>
     <size
         android:width="327dp"
         android:height="56dp" />
