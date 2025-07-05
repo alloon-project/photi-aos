@@ -83,6 +83,7 @@
         android:background="@drawable/card_goal"
         android:fontFamily="@font/suit_medium"
         android:text="목표를 생각 중이에요"
+        android:letterSpacing="-0.03"
         android:textColor="@color/gray400"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
