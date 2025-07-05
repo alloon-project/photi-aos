@@ -9,10 +9,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="312dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-
+    android:layout_marginHorizontal="24dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,10 +85,11 @@
         android:id="@+id/btn"
         android:text="버튼"
         style="@style/Theme.xlarge_round"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
         android:layout_marginTop="40dp"
-        android:layout_marginBottom="62dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/btn_round_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/linearLayout3"
