@@ -18,27 +18,26 @@ import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.photi.aos.MyApplication
 import com.photi.aos.R
-import com.photi.aos.data.model.response.Comment
 import com.photi.aos.data.model.response.FeedDetailData
 import com.photi.aos.data.storage.SharedPreferencesManager
 import com.photi.aos.databinding.CustomPopupMenuBinding
 import com.photi.aos.databinding.DialogFeedDetailBinding
-import com.photi.aos.databinding.ItemFeedCommentBinding
+import com.photi.aos.view.adapter.CommentsAdapter
+import com.photi.aos.view.ui.component.popup.FeedActionPopup
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.viewmodel.FeedViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -48,7 +47,7 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
     private var _binding: DialogFeedDetailBinding? = null
     private val binding get() = _binding!!
     private val feedViewModel by activityViewModels<FeedViewModel>()
-    private lateinit var adapter:CommentsAdapter
+    private lateinit var adapter: CommentsAdapter
     private  var myId = SharedPreferencesManager(MyApplication.mySharedPreferences).getUserName() ?: ""
     private var isFirstInput = true
     private var isFirstAdd = true
@@ -78,9 +77,28 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
             reverseLayout = true
             stackFromEnd  = true
         }
-        adapter = CommentsAdapter(feedViewModel,lifecycle,feedId,myId)
+        adapter = CommentsAdapter(feedViewModel,lifecycle,feedId,myId,binding.commentsRecyclerView)
         binding.commentsRecyclerView.adapter = adapter
         binding.commentsRecyclerView.layoutManager = lm
+        binding.commentsRecyclerView.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
+            val rv = v as RecyclerView
+
+            // 전체 컨텐츠 높이
+            val content = rv.computeVerticalScrollRange()    // API 14+
+
+            // 남는 공간 = RecyclerView 높이 - 컨텐츠 높이
+            val empty = rv.height - content
+
+            // top padding을 남는 공간만큼 주면 리스트가 아래로 밀림
+            rv.setPadding(
+                rv.paddingLeft,
+                if (empty > 0) empty else 0,
+                rv.paddingRight,
+                rv.paddingBottom
+            )
+        }
+        binding.commentsRecyclerView.itemAnimator = null
+        binding.commentsRecyclerView.clipToPadding = false
 
         adapter.addLoadStateListener { state ->
             val refresh = state.source.refresh
@@ -94,22 +112,6 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
                 }
             }
         }
-//        binding.scrollView.setOnScrollChangeListener { v, _, scrollY, _, oldScrollY ->
-//            val nestedScrollView = v as NestedScrollView
-//
-//            // NestedScrollView의 총 높이와 현재 스크롤 위치 확인
-//            if (scrollY == (nestedScrollView.getChildAt(0).measuredHeight - nestedScrollView.measuredHeight)) {
-//                val layoutManager = binding.challengeRecyclerview.layoutManager as GridLayoutManager
-//                val totalItemCount = layoutManager.itemCount
-//                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-//
-//                if (!photiViewModel.isLoading && !photiViewModel.isLastPage) {
-//                    if (lastVisibleItemPosition == totalItemCount - 1) {
-//                        photiViewModel.fetchFeedHistory()
-//                    }
-//                }
-//            }
-//        }
     }
 
     private fun observeLiveData() {
@@ -179,25 +181,7 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
                                 commentEditText.setText("")
 
                                 if (isFirstAdd) {
-//                            commentsRecyclerView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
-//                                override fun onLayoutChange(
-//                                    v: View?,
-//                                    left: Int,
-//                                    top: Int,
-//                                    right: Int,
-//                                    bottom: Int,
-//                                    oldLeft: Int,
-//                                    oldTop: Int,
-//                                    oldRight: Int,
-//                                    oldBottom: Int
-//                                ) {
-//                                    // 레이아웃이 변경된 후에 토스트를 띄움
                                     showCustomToast(removeCommentToastLayout)
-//
-//                                    // 리스너를 한 번만 적용하고 제거
-//                                    commentsRecyclerView.removeOnLayoutChangeListener(this)
-//                                }
-//                            })
 
                                     isFirstAdd = false
                                 }
@@ -222,7 +206,7 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
 
         feedViewModel.postCommentResponse.observe(viewLifecycleOwner) { comment ->
             if(comment != null){
-                adapter.addComment(comment,binding.commentsRecyclerView)
+                adapter.addComment(comment)
 
                 feedViewModel.consumePostedComment()
 
@@ -337,27 +321,6 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
 
 }
     private fun showCustomToast(customToastLayout: ConstraintLayout) {
-//        // 마지막 아이템의 뷰를 찾아서 그 뷰를 기준으로 토스트 위치를 설정
-//        val lastVisiblePosition = recyclerView.adapter?.itemCount?.minus(1) ?: return@addOnGlobalLayoutListener
-//        val lastVisibleItemView = recyclerView.findViewHolderForAdapterPosition(lastVisiblePosition)?.itemView
-//
-//        if (lastVisibleItemView != null) {
-//            // ConstraintSet을 사용하여 토스트 레이아웃의 제약 조건을 변경
-//            val constraintLayout = customToastLayout.parent as ConstraintLayout
-//            val constraintSet = ConstraintSet()
-//            constraintSet.clone(constraintLayout)
-//
-//            // customToastLayout의 BOTTOM을 새로 추가된 마지막 아이템의 TOP에 맞추기
-//            constraintSet.connect(
-//                customToastLayout.id, // 토스트 레이아웃
-//                ConstraintSet.BOTTOM, // 토스트 레이아웃의 BOTTOM
-//                lastVisibleItemView.id, // 마지막 아이템의 ID
-//                ConstraintSet.TOP // 마지막 아이템의 TOP에 맞추기
-//            )
-//
-//            // 수정된 제약 조건을 적용
-//            constraintSet.applyTo(constraintLayout)
-
             // 애니메이션 처리
             val fadeIn = AlphaAnimation(0f, 1f).apply {
                 duration = 300
@@ -377,145 +340,33 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
                 customToastLayout.startAnimation(fadeOut)
                 customToastLayout.visibility = View.GONE
             }, 1000)
-//        } else {
-//            Log.e("showCustomToast", "RecyclerView의 마지막 아이템을 찾을 수 없습니다.")
-//        }
-    }
-    private fun setCustomPopUp(anchorView: View) {
-        val popupViewBinding = CustomPopupMenuBinding.inflate(LayoutInflater.from(context))
-        val popupWindow = PopupWindow(
-            popupViewBinding.root,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            true
-        )
-
-        // 팝업 뷰의 실제 너비 측정
-        popupViewBinding.root.measure(
-            View.MeasureSpec.UNSPECIFIED,
-            View.MeasureSpec.UNSPECIFIED
-        )
-        val popupWidth = popupViewBinding.root.measuredWidth
-        val anchorWidth = anchorView.width
-
-        // 오른쪽 끝을 기준으로 맞추기 위한 x 보정값
-        val xOffset = anchorWidth - popupWidth
-
-        // 8dp 아래로 yOffset 보정
-        val density = anchorView.resources.displayMetrics.density
-        val yOffset = (8 * density).toInt()
-
-        // 위치 설정
-        popupWindow.showAsDropDown(anchorView, xOffset, yOffset)
-
-        if (feedUserName == myId) {
-            setupMyFeedOptions(popupViewBinding,popupWindow)
-        } else {
-            setupOtherFeedOptions(popupViewBinding,popupWindow)
-        }
-    }
-
-    private fun setupMyFeedOptions(
-        popupViewBinding: CustomPopupMenuBinding,
-        popupWindow: PopupWindow
-    ) {
-        with(popupViewBinding){
-            optionOne.text = "공유하기"
-            optionTwo.text = "피드 삭제하기"
-
-            optionOne.setOnClickListener {
-                Toast.makeText(context, "인스타 공유하기", Toast.LENGTH_SHORT).show()
-                popupWindow.dismiss()
-            }
-
-            optionTwo.setOnClickListener {
-                CustomTwoButtonDialog(
-                    this@FeedDetailDialog,
-                    "피드를 삭제할까요?",
-                    "삭제한 피드는 복구할 수 없으며,\n오늘 더 이상 피드를 올릴 수 없어요.",
-                    "취소할게요",
-                    "삭제할게요"
-                ).show(requireActivity().supportFragmentManager, "CustomDialog")
-                popupWindow.dismiss()
-                dismiss()
-            }
-        }
 
     }
-
-    private fun setupOtherFeedOptions(popupViewBinding: CustomPopupMenuBinding,  popupWindow: PopupWindow) {
-        with(popupViewBinding){
-            divider.visibility = View.GONE
-            optionTwo.visibility = View.GONE
-
-            optionOne.text = "피드 신고하기"
-            optionOne.setOnClickListener {
-//TODO 피드 신고하기로 이동
-                popupWindow.dismiss()
-            }
-        }
-    }
-
-
-    class CommentsAdapter(val feedViewModel: FeedViewModel, private val lifecycle: Lifecycle,val feedId : Int,val myId : String) : PagingDataAdapter<Comment, CommentsAdapter.ViewHolder>(DiffCallback()) {
-
-        inner class ViewHolder(private val binding: ItemFeedCommentBinding) : RecyclerView.ViewHolder(binding.root) {
-            fun bind(data: Comment) {
-                with(binding) {
-                    idTextView.text = data.username
-                    commentTextView.text = data.comment
-
-                    if(myId == data.username){
-                        commentLayout.setOnLongClickListener {
-                            feedViewModel.deleteComment(feedId = feedId , commentId =  data.id.toInt(), onComplete = {
-                                removeCommentById(commentId = data.id.toInt())
-                            }, onFailure = {
-                            })
-                            true
-                        }
-                    }
-
+    private fun setCustomPopUp(anchor: View) {
+        FeedActionPopup(
+            context = requireContext(),
+            isMyFeed = (feedUserName == myId),
+            listener = object : FeedActionPopup.Listener {
+                override fun onShare() {
+                    Toast.makeText(context, "인스타 공유하기", Toast.LENGTH_SHORT).show()
+                }
+                override fun onDelete() {
+                    CustomTwoButtonDialog(
+                        this@FeedDetailDialog,
+                        "피드를 삭제할까요?",
+                        "삭제한 피드는 복구할 수 없으며,\n오늘 더 이상 피드를 올릴 수 없어요.",
+                        "취소할게요",
+                        "삭제할게요"
+                    ).show(parentFragmentManager, "deleteDialog")
+                    dismiss()
+                }
+                override fun onReport() {
+                    // TODO: 신고 화면 이동
                 }
             }
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val binding = ItemFeedCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ViewHolder(binding)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            getItem(position)?.let { holder.bind(it) }
-        }
-        fun addComment(comment: Comment,recyclerView: RecyclerView) {
-            val current = snapshot().items.toMutableList()  // 현재까지 로드된 아이템
-            current.add(0,comment)                           // 맨 끝에 삽입
-            submitData(lifecycle, PagingData.from(current))
-
-            recyclerView.post {
-                (recyclerView.layoutManager as LinearLayoutManager)
-                    .scrollToPositionWithOffset(0, 0)
-            }
-        }
-
-        fun removeCommentById(commentId: Int) {
-            val current = snapshot().items.toMutableList()
-            val idx = current.indexOfFirst { it.id.toInt() == commentId }
-            if (idx != -1) {
-                current.removeAt(idx)
-                submitData(lifecycle, PagingData.from(current))
-            }
-        }
-        class DiffCallback : DiffUtil.ItemCallback<Comment>() {
-            override fun areItemsTheSame(oldItem: Comment, newItem: Comment): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Comment, newItem: Comment): Boolean {
-                return oldItem == newItem
-            }
-        }
+        ).show(anchor)
     }
+
 
 
     override fun onClickFisrtButton() {}
