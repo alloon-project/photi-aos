@@ -24,27 +24,16 @@
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_layout"
             app:layout_constraintTop_toTopOf="parent" />
 
-<!--            <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--                android:id="@+id/navigationView"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="70dp"-->
-<!--                android:background="@drawable/bottom_nav"-->
-<!--                app:itemIconTint="@drawable/menu_click_color"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:menu="@menu/home_menu"-->
-<!--                tools:ignore="MissingConstraints"-->
-<!--                android:paddingTop="12dp"/>-->
-
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="72dp"
+            android:layout_height="56dp"
             android:src="@drawable/bottom_nav_layered"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <LinearLayout
             android:id="@+id/bottom_navigation_layout"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="54dp"
             android:background="@drawable/bottom_nav"
             android:gravity="center"
             android:orientation="horizontal"
@@ -58,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginRight="8dp">
 
                 <ImageView
                     android:id="@+id/home_imageview"
@@ -84,7 +74,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginRight="8dp">
 
                 <ImageView
                     android:id="@+id/challenge_imageview"
