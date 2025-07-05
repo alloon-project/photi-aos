@@ -66,7 +66,10 @@ class IntroduceFragment : Fragment() {
                     }
                 }
 
-                binding.goalTextView.text = data.goal
+                if(data.goal.isNotEmpty()){
+                    binding.goalTextView.text = data.goal
+                    binding.goalTextView.setTextColor(mContext.getColor(R.color.gray600))
+                }
                 binding.proveTimeTextView.text = data.proveTime.replace(":", " : ")
                 binding.dateTextView.text = data.startDate.replace("-",". ") + " ~ " + data.endDate.replace("-",". ")
             }

@@ -13,7 +13,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
@@ -45,14 +47,18 @@ class PartyMemberFragment : Fragment() {
         binding.viewModel = feedViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        partyCardAdapter = PartyCardAdapter()
+        myName = sharedPreferencesManager.getUserName() ?: ""
+        partyCardAdapter =     PartyCardAdapter(
+            changeMyGoal = ::changeMyGoal,
+            mContext     = requireContext(),
+            myName       = myName
+        )
+
         binding.partyRecyclerView.adapter = partyCardAdapter
         binding.partyRecyclerView.layoutManager = LinearLayoutManager(mContext)
         binding.partyRecyclerView.setHasFixedSize(true)
 
         setObserve()
-
-        myName = sharedPreferencesManager.getUserName() ?: ""
         return binding.root
     }
 
@@ -69,7 +75,7 @@ class PartyMemberFragment : Fragment() {
         feedViewModel.challengeMembers.observe(viewLifecycleOwner) { data ->
             if (data != null ) {
                 binding.totalCountTextView.text = "파티원 ${data.size}명"
-                partyCardAdapter.updateMembers(data)
+                partyCardAdapter.submitList(data)
             }
         }
     }
@@ -119,66 +125,124 @@ class PartyMemberFragment : Fragment() {
         val index = feedViewModel.challengeMembers.value?.indexOfFirst { it.isCreator } ?: -1
         if (index != -1) {
             feedViewModel.challengeMembers.value?.get(index)?.let {
-                feedViewModel.updateGoal(str)
-                partyCardAdapter.notifyItemChanged(index)
+                feedViewModel.updateGoal(str,myName)
+               partyCardAdapter.notifyItemChanged(index)
+
                 CustomToast.createToast(activity, "수정 완료! 새로운 목표까지 화이팅이에요!")?.show()
             }
         }
     }
 
-    inner class ViewHolder(var binding : ItemFeedPartyBinding) : RecyclerView.ViewHolder(binding.root){
-        fun setContents(member: ChallengeMember) {
-            with (member) {
-                if (!imageUrl.isNullOrEmpty()) {
-                    Glide.with(binding.imageView6.context)
-                        .load(imageUrl)
-                        .transform(CircleCrop())
-                        .into(binding.imageView6)
-                }
+//    inner class ViewHolder(var binding : ItemFeedPartyBinding) : RecyclerView.ViewHolder(binding.root){
+//        fun setContents(member: ChallengeMember) {
+//            with (member) {
+//                if (!imageUrl.isNullOrEmpty()) {
+//                    Glide.with(binding.imageView6.context)
+//                        .load(imageUrl)
+//                        .transform(CircleCrop())
+//                        .into(binding.imageView6)
+//                }
+//
+//                binding.idTextView.text = username
+//                binding.timeTextView.text = "${duration}일 째 활동중"
+//                if(!goal.isNullOrEmpty()){
+//                    binding.goalTextView.text = goal
+//                    binding.goalTextView.setTextColor(mContext.getColor(R.color.gray600))
+//                }
+//
+//                if(isCreator){
+//                   binding.isCreatorTextView.visibility = View.VISIBLE
+//                    binding.divider.visibility = View.GONE
+//                }
+//
+//
+//                if(username == myName){
+//                    binding.editImgBtn.visibility = View.VISIBLE
+//                    binding.editImgBtn.setOnClickListener { changeMyGoal(goal ?: "") }
+//                }
+//
+//
+//            }
+//        }
+//    }
+//
+//    inner class PartyCardAdapter() : RecyclerView.Adapter<ViewHolder>(){
+//
+//        private var members: List<ChallengeMember> = emptyList()
+//
+//        fun updateMembers(newMembers: List<ChallengeMember>) {
+//            members = newMembers
+//            notifyDataSetChanged()
+//        }
+//
+//        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+//            var view = ItemFeedPartyBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+//            return ViewHolder(view)
+//        }
+//
+//        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+//            viewHolder.setContents(members[position])
+//        }
+//
+//        override fun getItemCount() = members.size
+//
+//    }
+class PartyCardAdapter(
+    private val changeMyGoal: (String) -> Unit,
+    private val mContext: Context,
+    private val myName: String
+) : ListAdapter<ChallengeMember, PartyCardAdapter.ViewHolder>(DIFF) {
 
-                binding.idTextView.text = username
-                binding.timeTextView.text = "${duration}일 째 활동중"
-                if(goal != null){
-                    binding.goalTextView.text = goal
-                    binding.goalTextView.setTextColor(mContext.getColor(R.color.gray600))
-                }
+    companion object {
+        private val DIFF = object : DiffUtil.ItemCallback<ChallengeMember>() {
+            override fun areItemsTheSame(o: ChallengeMember, n: ChallengeMember) = o.id == n.id
+            override fun areContentsTheSame(o: ChallengeMember, n: ChallengeMember) = o == n
+        }
+    }
 
-                if(isCreator){
-                   binding.isCreatorTextView.visibility = View.VISIBLE
-                    binding.divider.visibility = View.GONE
-                }
+    /* ---------- ViewHolder ---------- */
+    inner class ViewHolder(val binding: ItemFeedPartyBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
+        fun bind(member: ChallengeMember) = with(binding) {
+            // 프로필 이미지
+            if (member.imageUrl.isNotEmpty()) {
+                Glide.with(imageView6.context)
+                    .load(member.imageUrl)
+                    .transform(CircleCrop())
+                    .into(imageView6)
+            }
 
-                if(username == myName){
-                    binding.editImgBtn.visibility = View.VISIBLE
-                    binding.editImgBtn.setOnClickListener { changeMyGoal(goal ?: "") }
-                }
+            idTextView.text   = member.username
+            timeTextView.text = "${member.duration}일 째 활동중"
 
+            if (!member.goal.isNullOrEmpty()) {
+                goalTextView.text = member.goal
+                goalTextView.setTextColor(mContext.getColor(R.color.gray600))
+            }
 
+            isCreatorTextView.visibility = if (member.isCreator) View.VISIBLE else View.GONE
+            divider.visibility           = if (member.isCreator) View.GONE    else View.VISIBLE
+
+            if (member.username == myName) {
+                editImgBtn.visibility = View.VISIBLE
+                editImgBtn.setOnClickListener { changeMyGoal(member.goal ?: "") }
+            } else {
+                editImgBtn.visibility = View.GONE
             }
         }
     }
 
-    inner class PartyCardAdapter() : RecyclerView.Adapter<ViewHolder>(){
+    /* ---------- 필수 오버라이드 ---------- */
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+        ViewHolder(
+            ItemFeedPartyBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
 
-        private var members: List<ChallengeMember> = emptyList()
-
-        fun updateMembers(newMembers: List<ChallengeMember>) {
-            members = newMembers
-            notifyDataSetChanged()
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            var view = ItemFeedPartyBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-            return ViewHolder(view)
-        }
-
-        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-            viewHolder.setContents(members[position])
-        }
-
-        override fun getItemCount() = members.size
-
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+        holder.bind(getItem(position))
+}
 
 }
