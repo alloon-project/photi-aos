@@ -120,6 +120,7 @@
             android:id="@+id/constraintLayout3"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:onClick="@{() -> fragment.moveFlag(1)}"
             android:layout_marginHorizontal="24dp"
             android:layout_marginBottom="296dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -154,7 +155,7 @@
                     android:layout_gravity="center|right"
                     android:background="@drawable/ic_forward"
                     android:backgroundTint="@color/gray500"
-                    android:onClick="@{() -> fragment.moveFlag(1)}" />
+                  />
             </FrameLayout>
 
             <View
