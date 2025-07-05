@@ -42,22 +42,27 @@
             app:layout_constraintStart_toStartOf="@+id/auth_progress"
             app:layout_constraintTop_toBottomOf="@id/auth_progress" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linear_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="@id/textView5"
                 app:layout_constraintTop_toBottomOf="@id/textView5">
 
                 <TextView
+                    android:id="@+id/email_noti_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/suit_semibold"
                     android:gravity="bottom"
                     android:text="이메일 : "
                     android:textColor="@color/gray700"
-                    android:textSize="12dp" />
+                    android:textSize="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/email_textview"
@@ -68,20 +73,26 @@
                     android:fontFamily="@font/suit_semibold"
                     android:textColor="@color/gray700"
                     android:layout_marginLeft="4dp"
-                    android:layout_marginTop="1dp"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/email_noti_textview"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/resend_btn"
                     android:onClick="@{() ->viewModel.sendEmailCode()}"
                     style="@style/Theme.text_xsmall"
-                    android:layout_width="35dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
                     android:background="#00ff0000"
                     android:fontFamily="@font/suit_medium"
+                    android:minWidth="35dp"
                     android:text="@string/resend"
-                    android:textColor="@color/textcolor_textbtn_primary" />
-            </LinearLayout>
+                    android:textColor="@color/textcolor_textbtn_primary"
+                    android:layout_marginLeft="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/email_textview"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

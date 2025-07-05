@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,10 +37,14 @@
             app:layout_constraintTop_toBottomOf="@+id/title_textView">
 
             <ImageView
+                android:id="@+id/time_imgview"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/ic_time"
-                app:tint="@color/gray400"/>
+                app:tint="@color/gray400"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 android:id="@+id/time_textView"
@@ -52,13 +56,18 @@
                 android:textColor="@color/gray600"
                 android:textSize="12dp"
                 android:layout_marginLeft="6dp"
-                android:layout_gravity="center"/>
+                app:layout_constraintStart_toEndOf="@+id/time_imgview"
+                app:layout_constraintBottom_toBottomOf="@+id/time_imgview"/>
 
             <ImageView
+                android:id="@+id/date_imgview"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/ic_calendar_gray400"
-                android:layout_marginLeft="14dp"/>
+                android:layout_marginLeft="14dp"
+                app:layout_constraintStart_toEndOf="@+id/time_textView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 android:id="@+id/date_textView"
@@ -70,9 +79,10 @@
                 android:textColor="@color/gray600"
                 android:textSize="12dp"
                 android:layout_marginLeft="6dp"
-                android:layout_gravity="center"/>
+                app:layout_constraintStart_toEndOf="@+id/date_imgview"
+                app:layout_constraintBottom_toBottomOf="@+id/date_imgview"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -101,11 +111,11 @@
                 <Button
                     android:id="@+id/chip1_btn"
                     android:layout_width="wrap_content"
-                    android:layout_height="27dp"
-                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/chip_white"
                     android:fontFamily="@font/suit_medium"
                     android:minWidth="41dp"
+                    android:minHeight="27dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:stateListAnimator="@null"
@@ -117,11 +127,12 @@
                 <Button
                     android:id="@+id/chip2_btn"
                     android:layout_width="wrap_content"
-                    android:layout_height="27dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:background="@drawable/chip_white"
                     android:fontFamily="@font/suit_medium"
                     android:minWidth="41dp"
+                    android:minHeight="27dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:stateListAnimator="@null"
@@ -134,11 +145,12 @@
                 <Button
                     android:id="@+id/chip3_btn"
                     android:layout_width="wrap_content"
-                    android:layout_height="27dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:background="@drawable/chip_white"
                     android:fontFamily="@font/suit_medium"
                     android:minWidth="41dp"
+                    android:minHeight="27dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
                     android:stateListAnimator="@null"

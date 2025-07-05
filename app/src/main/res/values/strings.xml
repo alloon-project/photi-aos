@@ -27,7 +27,7 @@
     <string name="signupemail">환영합니다! \n이메일을 입력해주세요</string>
     <string name="signupauth">이메일로 인증코드를 보내드렸습니다 \n숫자 4자리를 입력해주세요</string>
     <string name="signupid">아이디를 입력해주세요</string>
-    <string name="signupid2">알파벳 소문자,숫자,특수문자(_)만 사용 가능해요</string>
+    <string name="signupid2">알파벳 소문자,숫자,특수문자만 사용 가능해요</string>
     <string name="signuppw">비밀번호를 입력해주세요</string>
     <string name="signuppw2">한번 더 입력해주세요</string>
     <string name="resend"><u>재전송</u></string>

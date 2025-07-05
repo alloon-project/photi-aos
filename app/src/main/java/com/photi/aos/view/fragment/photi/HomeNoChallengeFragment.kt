@@ -22,6 +22,8 @@ import com.photi.aos.view.activity.PhotiActivity
 import com.photi.aos.view.adapter.MemberHomeAdapter
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.viewmodel.PhotiViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class HomeNoChallengeFragment : Fragment() {
     private lateinit var binding : FragmentHomeNochallengeBinding
@@ -66,8 +68,13 @@ class HomeNoChallengeFragment : Fragment() {
         photiViewModel._photoItem.observe(viewLifecycleOwner){
             binding.titleTextview.setText(it.name)
             binding.contentTextview.setText(it.goal)
-            binding.dateTextview.setText(it.endDate)
-            binding.timeTextview.setText(it.proveTime)
+            binding.timeTextview.setText(it.proveTime!!.replace(":00","시까지"))
+
+            val formattedEnd = runCatching {
+                LocalDate.parse(it.endDate, DateTimeFormatter.ISO_LOCAL_DATE)
+                    .format(DateTimeFormatter.ofPattern("yyyy. M. d"))
+            }.getOrDefault("")
+            binding.dateTextview.setText(formattedEnd)
 
             binding.hash1Btn.visibility = View.GONE
             binding.hash2Btn.visibility = View.GONE
@@ -105,19 +112,12 @@ class HomeNoChallengeFragment : Fragment() {
                     loadImage(binding.twoUser1ImageView, imgs.getOrNull(0)?.memberImage)
                     loadImage(binding.twoUser2ImageView, imgs.getOrNull(1)?.memberImage)
                 }
-                3 -> {
+                else -> {
                     binding.avatarThreeLayout.visibility = View.VISIBLE
-                    binding.membernumTextview.text = "3명 도전 중"
+                    binding.membernumTextview.text = "${cnt}명 도전 중"
                     loadImage(binding.threeUser1ImageView, imgs.getOrNull(0)?.memberImage)
                     loadImage(binding.threeUser2ImageView, imgs.getOrNull(1)?.memberImage)
                     loadImage(binding.threeUser3ImageView, imgs.getOrNull(2)?.memberImage)
-                }
-                else -> {
-                    binding.avatarMultipleLayout.visibility = View.VISIBLE
-                    binding.membernumTextview.text = "${cnt}명 도전 중"
-                    loadImage(binding.multipleUser1ImageView, imgs.getOrNull(0)?.memberImage)
-                    loadImage(binding.multipleUser2ImageView, imgs.getOrNull(1)?.memberImage)
-                    binding.countTextView.text = "+${(cnt - 2).coerceAtLeast(0)}"
                 }
             }
         }

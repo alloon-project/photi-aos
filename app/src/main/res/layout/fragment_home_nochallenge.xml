@@ -101,7 +101,6 @@
                             android:id="@+id/hash1_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="8dp"
                             android:background="@drawable/chip_gray"
                             android:fontFamily="@font/suit_medium"
                             android:stateListAnimator="@null"
@@ -118,7 +117,7 @@
                             android:id="@+id/hash2_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="8dp"
+                            android:layout_marginLeft="8dp"
                             android:background="@drawable/chip_gray"
                             android:fontFamily="@font/suit_medium"
                             android:stateListAnimator="@null"
@@ -135,6 +134,7 @@
                             android:id="@+id/hash3_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
                             android:background="@drawable/chip_gray"
                             android:fontFamily="@font/suit_medium"
                             android:stateListAnimator="@null"
@@ -151,7 +151,7 @@
                     <LinearLayout
                         android:id="@+id/linearLayout5"
                         android:layout_width="match_parent"
-                        android:layout_height="116dp"
+                        android:layout_height="120dp"
                         android:layout_marginLeft="24dp"
                         android:layout_marginRight="24dp"
                         android:layout_marginBottom="10dp"
@@ -207,7 +207,7 @@
                                 android:letterSpacing="-0.03"
                                 android:text="인증 시간"
                                 android:textColor="@color/gray800"
-                                android:textSize="10dp" />
+                                android:textSize="12dp" />
 
                             <TextView
                                 android:id="@+id/time_textview"
@@ -237,7 +237,7 @@
                                 android:letterSpacing="-0.03"
                                 android:text="챌린지 종료"
                                 android:textColor="@color/gray800"
-                                android:textSize="10dp" />
+                                android:textSize="12dp" />
 
                             <TextView
                                 android:id="@+id/date_textview"
@@ -378,64 +378,6 @@
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="@id/three_user2_ImageView"
                                         app:layout_constraintTop_toTopOf="parent" />
-                                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                                <androidx.constraintlayout.widget.ConstraintLayout
-                                    android:id="@+id/avatar_multiple_layout"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="6dp"
-                                    android:visibility="gone"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@+id/membernum_textview"
-                                    app:layout_constraintTop_toTopOf="parent">
-
-                                    <ImageView
-                                        android:id="@+id/multiple_user1_ImageView"
-                                        android:layout_width="30dp"
-                                        android:layout_height="30dp"
-                                        android:scaleType="centerCrop"
-                                        android:src="@drawable/ic_avatar_part_line_xsmall"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent" />
-
-                                    <ImageView
-                                        android:id="@+id/multiple_user2_ImageView"
-                                        android:layout_width="30dp"
-                                        android:layout_height="30dp"
-                                        android:layout_marginLeft="18dp"
-                                        android:scaleType="centerCrop"
-                                        android:src="@drawable/ic_avatar_part_line_xsmall"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintStart_toStartOf="@id/multiple_user1_ImageView"
-                                        app:layout_constraintTop_toTopOf="parent" />
-
-                                    <ImageView
-                                        android:id="@+id/image3"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginLeft="18dp"
-                                        android:background="@drawable/circle_line_gray500"
-                                        android:scaleType="centerCrop"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="@id/multiple_user2_ImageView"
-                                        app:layout_constraintTop_toTopOf="parent" />
-
-                                    <TextView
-                                        android:id="@+id/count_textView"
-                                        android:layout_width="20dp"
-                                        android:layout_height="13dp"
-                                        android:fontFamily="@font/suit_bold"
-                                        android:text="+16"
-                                        android:textColor="@color/white"
-                                        android:textSize="10dp"
-                                        android:gravity="center"
-                                        app:layout_constraintBottom_toBottomOf="@+id/image3"
-                                        app:layout_constraintEnd_toEndOf="@+id/image3"
-                                        app:layout_constraintStart_toStartOf="@id/image3"
-                                        app:layout_constraintTop_toTopOf="@+id/image3" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                                 <TextView
