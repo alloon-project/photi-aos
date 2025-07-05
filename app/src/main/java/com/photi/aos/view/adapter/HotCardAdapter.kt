@@ -9,6 +9,8 @@ import com.bumptech.glide.Glide
 import com.photi.aos.databinding.ItemCardMissionSmallRecyclerviewBinding
 import com.photi.aos.view.fragment.photi.ChallengeCommendFragment
 import com.photi.aos.viewmodel.PhotiViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class HotCardAdapter(private val fragment: ChallengeCommendFragment, private val photiViewModel: PhotiViewModel) :
     RecyclerView.Adapter<HotCardAdapter.ViewHolder>() {
@@ -18,7 +20,11 @@ class HotCardAdapter(private val fragment: ChallengeCommendFragment, private val
             with (photiViewModel.hotItems[pos]) {
                 binding.cardLayout.layoutParams.width = convertDpToPixel(150, itemView.context)
                 binding.titleTextView.text = name
-                binding.dateTextView.text = endDate
+                val formattedEnd = runCatching {
+                    LocalDate.parse(endDate, DateTimeFormatter.ISO_LOCAL_DATE)
+                        .format(DateTimeFormatter.ofPattern("~yyyy. M. d"))
+                }.getOrDefault("")
+                binding.dateTextView.text = formattedEnd
 
                 if(hashtags.isNotEmpty()) {
                     hashtags.forEachIndexed { index, hashtag ->

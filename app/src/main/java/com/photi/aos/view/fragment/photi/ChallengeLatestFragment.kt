@@ -25,6 +25,8 @@ import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.viewmodel.PhotiViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ChallengeLatestFragment : Fragment() {
     private lateinit var binding : FragmentChallengeLatestBinding
@@ -79,7 +81,11 @@ class ChallengeLatestFragment : Fragment() {
         inner class ViewHolder(var binding : ItemCardMissionSmallRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root){
             fun bind(data: ChallengeData) {
                 binding.titleTextView.text = data.name
-                binding.dateTextView.text = data.endDate
+                val formattedEnd = runCatching {
+                    LocalDate.parse(data.endDate, DateTimeFormatter.ISO_LOCAL_DATE)
+                        .format(DateTimeFormatter.ofPattern("~yyyy. M. d"))
+                }.getOrDefault("")
+                binding.dateTextView.text = formattedEnd
 
                 if(data.hashtags.isNotEmpty()) {
                     data.hashtags.forEachIndexed { index, hashtag ->
