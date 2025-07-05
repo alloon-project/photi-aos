@@ -1,14 +1,19 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="288dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:layout_centerInParent="true">
+        android:layout_marginRight="24dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
             android:id="@+id/time_layout"
@@ -32,28 +37,30 @@
 
         <ImageView
             android:id="@+id/divider_blue"
-            android:layout_width="205dp"
+            android:layout_width="0dp"
             android:layout_height="2dp"
             android:scaleType="centerCrop"
             android:src="@drawable/tab_line"
             app:tint="@color/blue100"
             android:layout_marginLeft="14dp"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/time_layout"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/time_layout"
             app:layout_constraintTop_toTopOf="@+id/time_layout" />
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="238dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/time_layout">
 
             <FrameLayout
                 android:id="@+id/banner_framelayout"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
-                android:background="@drawable/banner_blue">
+                android:background="@drawable/banner_blue"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/banner_imageview"
@@ -73,14 +80,22 @@
                     android:layout_marginTop="14dp"
                     android:layout_marginLeft="14dp"/>
             </FrameLayout>
+
             <FrameLayout
                 android:id="@+id/proofshot_framelayout"
-                android:layout_width="184dp"
-                android:layout_height="184dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:background="@drawable/proofshot_blue"
                 android:layout_marginTop="48dp"
+                android:layout_marginRight="48dp"
                 android:layout_marginLeft="48dp"
-                android:rotation="-2">
+                android:layout_marginBottom="5dp"
+                android:rotation="-2"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/banner_framelayout">
 
                 <Button
                     android:id="@+id/proofshot_button"
@@ -100,6 +115,6 @@
                     android:layout_marginBottom="3dp"/>
 
             </FrameLayout>
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
