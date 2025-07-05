@@ -83,10 +83,12 @@ class MyPageFragment : Fragment() {
            if(data != null){
                binding.idTextView.text = data.username
 
-               Glide.with(binding.userImgImageView.context)
-                   .load(data.imageUrl)
-                   .transform(CircleCrop())
-                   .into(binding.userImgImageView)
+               if(data.imageUrl != ""){
+                   Glide.with(binding.userImgImageView.context)
+                       .load(data.imageUrl)
+                       .transform(CircleCrop())
+                       .into(binding.userImgImageView)
+               }
 
                endedChallengeCnt = data.endedChallengeCnt
                feedCnt = data.feedCnt

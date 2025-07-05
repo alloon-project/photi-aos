@@ -60,11 +60,13 @@ class ProfileModifyFragment : Fragment() {
             handleApiError(code)
         }
 
-        settingsViewModel.profileImage.observe(viewLifecycleOwner){
-            Glide.with(binding.userImgImageView.context)
-                .load(it)
-                .transform(CircleCrop())
-                .into(binding.userImgImageView)
+        settingsViewModel.profileImage.observe(viewLifecycleOwner){ url ->
+            if (!url.isNullOrBlank()) {
+                Glide.with(binding.userImgImageView.context)
+                    .load(url)
+                    .transform(CircleCrop())
+                    .into(binding.userImgImageView)
+            }
         }
     }
 
