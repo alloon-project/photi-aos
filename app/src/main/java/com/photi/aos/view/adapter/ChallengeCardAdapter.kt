@@ -9,6 +9,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.photi.aos.databinding.ItemHomeChallengeRecyclerviewBinding
 import com.photi.aos.viewmodel.PhotiViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel,
                            private val onCardClickListener: (Int) -> Unit) :
@@ -18,8 +20,13 @@ class ChallengeCardAdapter(private val photiViewModel: PhotiViewModel,
         fun setContents(holder: ChallengeCardAdapter.ViewHolder, pos: Int) {
             with (photiViewModel.allItems[pos]) {
                 binding.titleTextView.text = name
-                binding.dateTextView.text = endDate
                 binding.timeTextView.text = proveTime
+
+                val formattedEnd = runCatching {
+                    LocalDate.parse(endDate, DateTimeFormatter.ISO_LOCAL_DATE)
+                        .format(DateTimeFormatter.ofPattern("yyyy. M. d"))
+                }.getOrDefault("")
+                binding.dateTextView.text = formattedEnd
 
                 binding.chip1Btn.visibility = View.GONE
                 binding.chip2Btn.visibility = View.GONE
