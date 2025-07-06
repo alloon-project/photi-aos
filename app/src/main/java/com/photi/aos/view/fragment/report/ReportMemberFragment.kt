@@ -13,19 +13,19 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
+import androidx.fragment.app.activityViewModels
 import com.photi.aos.R
+import com.photi.aos.data.enum.ReasonType
 import com.photi.aos.databinding.FragmentReportMemberBinding
-import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.KeyboardListener
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
-import com.photi.aos.view.activity.ReportActivity
+import com.photi.aos.viewmodel.ReportViewModel
 
 class ReportMemberFragment : Fragment() {
-
     private lateinit var binding : FragmentReportMemberBinding
     private lateinit var mContext : Context
     private lateinit var radioTag: String
+    private val reportViewModel by activityViewModels<ReportViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,9 +33,8 @@ class ReportMemberFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_report_member, container, false)
         binding.fragment = this
+        binding.viewModel = reportViewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        val mActivity = activity as ReportActivity
-        mActivity.setAppBar(" ")
 
         setListener()
         return binding.root
@@ -66,6 +65,7 @@ class ReportMemberFragment : Fragment() {
             when(i) {
                 null -> binding.contentsLayout.visibility = View.INVISIBLE
                 binding.writeRadio.id -> {
+                    reportViewModel.reason = ReasonType.ETC
                     binding.contentsLayout.visibility = View.VISIBLE
                     if(binding.reportEdittext.text.isNotEmpty())
                         binding.nextBtn.isEnabled = true
@@ -73,6 +73,11 @@ class ReportMemberFragment : Fragment() {
                         binding.nextBtn.isEnabled = false
                 }
                 else -> {
+                    val selectedRadioButton =
+                        if (i != -1) binding.root.findViewById<RadioButton>(i) else null
+                    reportViewModel.reason = selectedRadioButton?.tag.toString().let {
+                        ReasonType.valueOf(it)
+                    }
                     binding.contentsLayout.visibility = View.VISIBLE
                     binding.nextBtn.isEnabled = true
                 }
@@ -95,9 +100,7 @@ class ReportMemberFragment : Fragment() {
     }
 
     fun click(){
-        view?.findNavController()?.navigate(R.id.action_reportMemberFragment_to_reportPageFragment)
-        CustomToast.createToast(activity,"신고가 완료됐어요. 꼼꼼히 확인하고, " +
-                "회원님의 이메일로 답변을 보내드릴게요.")?.show()
+        reportViewModel.sendReport()
     }
 
     fun RadioGroup.getCheckedRadioButton(): RadioButton? {

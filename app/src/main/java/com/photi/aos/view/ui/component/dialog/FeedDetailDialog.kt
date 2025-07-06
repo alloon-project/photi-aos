@@ -14,12 +14,9 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
-import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -34,8 +31,8 @@ import com.photi.aos.MyApplication
 import com.photi.aos.R
 import com.photi.aos.data.model.response.FeedDetailData
 import com.photi.aos.data.storage.SharedPreferencesManager
-import com.photi.aos.databinding.CustomPopupMenuBinding
 import com.photi.aos.databinding.DialogFeedDetailBinding
+import com.photi.aos.view.activity.FeedActivity
 import com.photi.aos.view.adapter.CommentsAdapter
 import com.photi.aos.view.ui.component.popup.FeedActionPopup
 import com.photi.aos.view.ui.component.toast.CustomToast
@@ -47,6 +44,7 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
     private var _binding: DialogFeedDetailBinding? = null
     private val binding get() = _binding!!
     private val feedViewModel by activityViewModels<FeedViewModel>()
+    private lateinit var mActivity : FeedActivity
     private lateinit var adapter: CommentsAdapter
     private  var myId = SharedPreferencesManager(MyApplication.mySharedPreferences).getUserName() ?: ""
     private var isFirstInput = true
@@ -57,6 +55,7 @@ class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialog
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = DialogFeedDetailBinding.inflate(inflater, container, false)
+        mActivity = activity as FeedActivity
         val view = binding.root
 
         setupRecyclerView()
@@ -361,7 +360,8 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
                     dismiss()
                 }
                 override fun onReport() {
-                    // TODO: 신고 화면 이동
+                    feedViewModel.feedId = feedId
+                    mActivity.reportFeed()
                 }
             }
         ).show(anchor)

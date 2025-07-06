@@ -45,6 +45,7 @@ import com.google.android.material.tabs.TabLayout
 class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     lateinit var binding : ActivityFeedBinding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var reportForResult: ActivityResultLauncher<Intent>
     private val feedViewModel : FeedViewModel by viewModels()
     private lateinit var feedChallengeData : FeedChallengeData
     private var isLeader = false
@@ -156,6 +157,15 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                 }
             }
         }
+
+        reportForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data?.getBooleanExtra("IS_FROM_REPORT", false)
+                if (data == true)
+                    CustomToast.createToast(this,"신고가 완료됐어요. 꼼꼼히 확인하고, " +
+                "회원님의 이메일로 답변을 보내드릴게요.")?.show()
+            }
+        }
     }
 
     private fun sendInviteMsg() {
@@ -221,7 +231,10 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                     intent.putExtra("image", feedChallengeData.imageUrl)
                     activityResultLauncher.launch(intent)
                 } else {
-                    //챌린지 신고하기
+                    val intent = Intent(this@FeedActivity, ReportActivity::class.java)
+                    intent.putExtra("Id",feedViewModel.challengeId)
+                    intent.putExtra("Category", "Challenge")
+                    reportForResult.launch(intent)
                 }
 
                 popupWindow.dismiss()
@@ -426,6 +439,21 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             feedFragment.doTodayCertify()
         }
     }
+
+    fun reportFeed() {
+        val intent = Intent(this@FeedActivity, ReportActivity::class.java)
+        intent.putExtra("Id",feedViewModel.feedId)
+        intent.putExtra("Category", "Feed")
+        reportForResult.launch(intent)
+    }
+
+    fun reportMember() {
+        val intent = Intent(this@FeedActivity, ReportActivity::class.java)
+        intent.putExtra("Id",feedViewModel.memberId)
+        intent.putExtra("Category", "Member")
+        reportForResult.launch(intent)
+    }
+
 
     fun finishActivity() {
         if (isTaskRoot) { // 최상위 스택에 있으면 홈으로

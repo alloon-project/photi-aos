@@ -14,7 +14,6 @@ import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.photi.aos.data.model.ActionApiResponse
-import com.photi.aos.data.model.request.ReportRequest
 import com.photi.aos.data.model.response.ChallengeInfoData
 import com.photi.aos.data.model.response.ChallengeMember
 import com.photi.aos.data.model.response.CodeResponse
@@ -76,12 +75,8 @@ class FeedViewModel : ViewModel() {
 
     var challengeId = -1
     var invitecode = ""
-
-    var targetId = -1
-    var category = ""
-    var reason = ""
-    var content = ""
-
+    var feedId = -1
+    var memberId = -1
 
 
     fun deleteChallenge() {
@@ -355,19 +350,6 @@ class FeedViewModel : ViewModel() {
         }
     }
 
-    fun sendReport(id: Int) {
-        viewModelScope.launch {
-            handleApiCall(
-                call = { feedRepository.postReport(id, ReportRequest(category, reason, content)) },
-                onSuccess = { data ->
-                    //_code.value = "201 CREATED"
-                },
-                onFailure = { errorCode ->
-                    _code.postValue(errorCode)
-                }
-            )
-        }
-    }
 
     fun addFeedLike(feedId: Int, onComplete: () -> Unit,onFailure: () -> Unit) {
         viewModelScope.launch {

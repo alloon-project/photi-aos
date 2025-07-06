@@ -5,6 +5,9 @@
         <variable
             name="fragment"
             type="com.photi.aos.view.fragment.report.ReportMemberFragment" />
+        <variable
+            name="viewModel"
+            type="com.photi.aos.viewmodel.ReportViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +52,8 @@
                     android:paddingLeft="7dp"
                     android:text="중복 / 도배를 해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:tag="REDUNDANT"/>
 
                 <RadioButton
                     android:layout_width="316dp"
@@ -61,7 +65,8 @@
                     android:paddingLeft="7dp"
                     android:text="음란성 / 선정적인 이야기를 해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:tag="OBSCENITY"/>
 
                 <RadioButton
                     android:layout_width="316dp"
@@ -73,7 +78,8 @@
                     android:paddingLeft="7dp"
                     android:text="욕설 / 혐오적인 이야기를 해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:tag="ABUSIVE"/>
 
                 <RadioButton
                     android:layout_width="316dp"
@@ -85,7 +91,8 @@
                     android:paddingLeft="7dp"
                     android:text="폭력적 / 위험적인 이야기를 해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:tag="DANGEROUS"/>
 
                 <RadioButton
                     android:layout_width="316dp"
@@ -97,7 +104,8 @@
                     android:paddingLeft="7dp"
                     android:text="상업적 홍보 / 광고를 해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:tag="PROMOTION" />
 
                 <RadioButton
                     android:layout_width="316dp"
@@ -109,7 +117,8 @@
                     android:paddingLeft="7dp"
                     android:text="타인을 비방해요"
                     android:textColor="@drawable/selector_radio_text"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:tag="SLANDER" />
 
                 <RadioButton
                     android:id="@+id/write_radio"
@@ -122,7 +131,8 @@
                     android:paddingLeft="7dp"
                     android:text="직접 작성"
                     android:textColor="@drawable/selector_radio_text"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:tag="ETC" />
             </RadioGroup>
         </FrameLayout>
             <LinearLayout
@@ -158,9 +168,12 @@
                     android:fontFamily="@font/suit_medium"
                     android:gravity="top"
                     android:hint="신고 내용을 상세히 알려주세요"
-                    android:inputType="text"
+                    android:text="@={viewModel.content}"
                     android:textColorHint="@color/gray400"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
+                    android:scrollHorizontally="false"/>
 
                 <TextView
                     android:id="@+id/num_textview"

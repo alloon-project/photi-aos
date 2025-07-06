@@ -1,5 +1,8 @@
 package com.photi.aos.data.model.request
 
+import com.photi.aos.data.enum.CategoryType
+import com.photi.aos.data.enum.ReasonType
+
 data class ChallengeFeedsRequest(
     val challengeId: Long,
     val page: Int = 0,
@@ -8,7 +11,7 @@ data class ChallengeFeedsRequest(
 )
 
 data class ReportRequest(
-    val category: String,
-    val reason: String,
+    val category: CategoryType,
+    val reason: ReasonType,
     val content: String
 )

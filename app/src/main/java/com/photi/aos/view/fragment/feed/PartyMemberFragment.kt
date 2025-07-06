@@ -25,13 +25,17 @@ import com.photi.aos.data.model.response.ChallengeMember
 import com.photi.aos.data.storage.SharedPreferencesManager
 import com.photi.aos.databinding.FragmentPartyMemberBinding
 import com.photi.aos.databinding.ItemFeedPartyBinding
+import com.photi.aos.view.activity.FeedActivity
 import com.photi.aos.view.activity.GoalActivity
+import com.photi.aos.view.ui.component.bottomsheet.AlignBottomSheet
+import com.photi.aos.view.ui.component.bottomsheet.AlignBottomSheetInterface
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.viewmodel.FeedViewModel
 
-class PartyMemberFragment : Fragment() {
+class PartyMemberFragment : Fragment(), AlignBottomSheetInterface {
     private lateinit var binding : FragmentPartyMemberBinding
     private lateinit var mContext: Context
+    private lateinit var mActivity: FeedActivity
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var partyCardAdapter: PartyCardAdapter
     private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
@@ -46,12 +50,14 @@ class PartyMemberFragment : Fragment() {
         binding.fragment = this
         binding.viewModel = feedViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        mActivity = activity as FeedActivity
 
         myName = sharedPreferencesManager.getUserName() ?: ""
         partyCardAdapter =     PartyCardAdapter(
             changeMyGoal = ::changeMyGoal,
             mContext     = requireContext(),
-            myName       = myName
+            myName       = myName,
+            this
         )
 
         binding.partyRecyclerView.adapter = partyCardAdapter
@@ -133,6 +139,17 @@ class PartyMemberFragment : Fragment() {
         }
     }
 
+    fun showBottomList(){
+        AlignBottomSheet(mContext,this,"신고하기","닫기","")
+            .show(activity?.supportFragmentManager!!, "bottomList")
+    }
+
+    override fun onClickFirstButton() {
+        mActivity.reportMember()
+    }
+    override fun onClickSecondButton() {
+    }
+
 //    inner class ViewHolder(var binding : ItemFeedPartyBinding) : RecyclerView.ViewHolder(binding.root){
 //        fun setContents(member: ChallengeMember) {
 //            with (member) {
@@ -190,7 +207,8 @@ class PartyMemberFragment : Fragment() {
 class PartyCardAdapter(
     private val changeMyGoal: (String) -> Unit,
     private val mContext: Context,
-    private val myName: String
+    private val myName: String,
+    private val fragment: PartyMemberFragment
 ) : ListAdapter<ChallengeMember, PartyCardAdapter.ViewHolder>(DIFF) {
 
     companion object {
@@ -212,6 +230,12 @@ class PartyCardAdapter(
                     .transform(CircleCrop())
                     .into(imageView6)
             }
+
+            //본인이 아닐때만 신고 활성화
+//            imageView6.setOnClickListener {
+//                //멤버 아이디 저장 -> feedViewModel.memberId
+//                fragment.showBottomList()
+//            }
 
             idTextView.text   = member.username
             timeTextView.text = "${member.duration}일 째 활동중"
