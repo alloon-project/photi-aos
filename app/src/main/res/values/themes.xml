@@ -152,5 +152,13 @@
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
     </style>
 
+    <!-- ////////////////////// Metarial Button ////////////////////////// -->
+    <style name="materialButton" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/blue600</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14dp</item>
+        <item name ="android:fontFamily">@font/suit_bold</item>
+        <item name="btnCornerRadius">12dp</item>
+    </style>
 
 </resources>

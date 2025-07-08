@@ -12,9 +12,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:clipToOutline="true"
-        android:scaleType="centerCrop"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-170dp" />
+        android:scaleType="centerCrop" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -40,20 +38,24 @@
             android:theme="@style/Theme.small_round"
             android:stateListAnimator="@null"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/upload_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/btn_round_primary"
+            android:text="올리기"
+            android:stateListAnimator="@null"
+            android:theme="@style/materialButton"
+            app:backgroundTint="@color/blue400"
+            app:icon="@drawable/ic_rocket"
+            app:iconGravity="textStart"
+            app:iconPadding="6dp"
+            app:iconSize="16dp"
             app:layout_constraintStart_toEndOf="@id/cancel_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@drawable/btn_round_primary"
-            android:text="올리기"
-            android:textSize="14dp"
-            android:theme="@style/Theme.small_round"
-            android:layout_marginLeft="16dp"
-            android:stateListAnimator="@null"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
