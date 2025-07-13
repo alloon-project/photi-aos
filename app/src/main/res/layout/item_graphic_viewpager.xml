@@ -19,7 +19,6 @@
         android:layout_alignTop="@+id/imageView"
         android:layout_alignEnd="@+id/imageView"
         android:layout_marginTop="-13dp"
-        android:src="@drawable/ic_pin"
-        app:tint="@color/blue400" />
+        android:src="@drawable/ic_pin_blue" />
 
 </RelativeLayout>
