@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.photi.aos.databinding.ItemGraphicViewpagerBinding
 import com.photi.aos.databinding.ItemPhotoViewpagerBinding
 import com.photi.aos.viewmodel.PhotiViewModel
@@ -22,6 +24,7 @@ class MemberHomeAdapter( private val photiViewModel: PhotiViewModel) :
             with (photiViewModel.hotItems[pos]) {
                 Glide.with(binding.imageView.context)
                     .load(imageUrl)
+                    .transform(CenterCrop(), RoundedCorners(20))
                     .into(binding.imageView)
             }
         }

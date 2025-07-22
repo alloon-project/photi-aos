@@ -169,22 +169,27 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     }
 
     private fun sendInviteMsg() {
-        val inviteCode = feedViewModel.invitecode
-        val appLink = "https://photi.com/challenge/$inviteCode"
-        val chooserTitle = "소설 필사하기"
-        var message = ""
-
-        if (!feedChallengeData.isPublic)
-            message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* 초대코드 : $inviteCode \n\n$appLink"
-        else
-            message = "[Photi] ‘$chooserTitle' 챌린지에 함께 참여해 보세요!\n* \n\n$appLink"
-
-        val sendIntent = Intent(Intent.ACTION_SEND)
-        sendIntent.type = "text/plain"
-        sendIntent.putExtra(Intent.EXTRA_TEXT, message)
-
-        val chooser = Intent.createChooser(sendIntent, chooserTitle)
-        startActivity(chooser)
+//        val challengeId = feedViewModel.challengeId
+//        val inviteCode = feedViewModel.invitecode
+//        val challengeTitle = feedChallengeData.name
+//
+//        // 딥링크 URL 구성
+//        val appLink = "https://photi.test/invite?challengeId=$challengeId"
+//
+//        // 메시지 구성
+//        val message = if (!feedChallengeData.isPublic) {
+//            "[Photi] '$challengeTitle' 챌린지에 함께 참여해 보세요!\n* 초대코드: $inviteCode\n\n$appLink"
+//        } else {
+//            "[Photi] '$challengeTitle' 챌린지에 함께 참여해 보세요!\n\n$appLink"
+//        }
+//
+//        val sendIntent = Intent(Intent.ACTION_SEND).apply {
+//            type = "text/plain"
+//            putExtra(Intent.EXTRA_TEXT, message)
+//        }
+//
+//        val chooser = Intent.createChooser(sendIntent, challengeTitle)
+//        startActivity(chooser)
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -409,13 +414,24 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             isSuccess?.let {
                 if (it) {
                     showToastAbove("인증 완료! 오늘도 수고했어요!")
-                    feedViewModel.fetchIsUserVerifiedToday()
-                    feedViewModel.fetchChallengeFeeds()
-                    feedViewModel.fetchVerifiedMemberCount()
-                    feedViewModel.fetchIsVerifiedFeedExist()
+                    fetchFeed()
                 }
             }
         }
+
+        feedViewModel.deleteFeedCode.observe(this) { deletedId ->
+            deletedId?.let {
+                showToastAbove("피드가 삭제됐어요")
+                fetchFeed()
+            }
+        }
+    }
+
+    fun fetchFeed() {
+        feedViewModel.fetchIsUserVerifiedToday()
+        feedViewModel.fetchChallengeFeeds()
+        feedViewModel.fetchVerifiedMemberCount()
+        feedViewModel.fetchIsVerifiedFeedExist()
     }
 
     private fun showToastAbove(message:String){

@@ -23,6 +23,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.photi.aos.R
 import com.photi.aos.databinding.FragmentFeedBinding
+import com.photi.aos.view.activity.FeedActivity
 import com.photi.aos.view.adapter.FeedAdapter
 import com.photi.aos.view.ui.component.bottomsheet.AlignBottomSheet
 import com.photi.aos.view.ui.component.bottomsheet.AlignBottomSheetInterface
@@ -42,6 +43,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
     private lateinit var binding : FragmentFeedBinding
     private lateinit var mContext: Context
     private lateinit var feedAdapter : FeedAdapter
+    private lateinit var mActivity : FeedActivity
     private val feedViewModel by activityViewModels<FeedViewModel>()
     private var selected_order = "first"
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
@@ -57,6 +59,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         binding.fragment = this
         binding.viewModel = feedViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        mActivity = activity as FeedActivity
 
         feedAdapter = FeedAdapter(requireActivity().supportFragmentManager,feedViewModel,  lifecycle = viewLifecycleOwner.lifecycle
             )
@@ -133,7 +136,6 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         feedViewModel.deleteFeedCode.observe(viewLifecycleOwner) { deletedId ->
             deletedId?.let {
                 feedAdapter.removeFeedById(it)
-                CustomToast.createToast(activity, "피드가 삭제됐어요. 내일 또 인증해주세요!")?.show()
             }
         }
 
@@ -211,8 +213,8 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
             "UNKNOWN_ERROR" to "알 수 없는 오류가 발생했습니다."
         )
 
-        if (code == "200 OK")
-            CustomToast.createToast(activity, "피드가 삭제됐어요. 내일 또 인증해주세요!.")?.show()
+//        if (code == "200 OK")
+//            CustomToast.createToast(activity, "피드가 삭제됐어요. 내일 또 인증해주세요!.")?.show()
 
 
         if (code == "IO_Exception") {

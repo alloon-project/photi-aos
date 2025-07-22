@@ -36,6 +36,10 @@
     <string name="autherror">인증코드가 일치하지 않아요</string>
     <string name="iderror">이미 사용중인 아이디예요</string>
     <string name="idsuccess">사용할 수 있는 아이디예요</string>
+    <string name="emailinfo1">이메일이 오지 않는 경우</string>
+    <string name="emailinfo2">입력하신 이메일 주소가 정확한지 확인해 주세요.</string>
+    <string name="emailinfo3">스팸 메일함을 확인해 주세요.</string>
+    <string name="emailinfo4">재전송 요청 버튼을 눌러 메일을 다시 받아주세요.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
