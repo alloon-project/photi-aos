@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">photi-aos</string>
+    <string name="app_name">Photi</string>
     <!-- AUTH -->
     <string name="login">로그인</string>
     <string name="signup">회원가입</string>
