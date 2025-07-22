@@ -48,7 +48,10 @@ class RuleBottomSheet (val mContext: Context, val createViewModel: CreateViewMod
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.numTextview.setText("${s!!.length}/30")
-                binding.addBtn.isEnabled = true
+                if (s!!.isEmpty())
+                    binding.addBtn.isEnabled = false
+                else
+                    binding.addBtn.isEnabled = true
                 rule = binding.ruleEdittext.text.toString()
             }
         })
