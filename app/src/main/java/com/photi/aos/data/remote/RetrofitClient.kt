@@ -12,7 +12,8 @@ import java.util.concurrent.TimeUnit
 
 
 object RetrofitClient {
-    private const val BASE_URL = "http://54.180.105.206:8080" //클라우드 서버
+    private const val BASE_URL = "http://3.34.44.185:8080" //상용 서버
+    //private const val BASE_URL = "http://54.180.105.206:8080" //데브 서버
 
     private val tokenManager: TokenManager by lazy {
         TokenManager(MyApplication.mySharedPreferences)
