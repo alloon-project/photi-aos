@@ -1,10 +1,13 @@
 package com.photi.aos.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.photi.aos.MyApplication
 import com.photi.aos.data.model.ActionApiResponse
+import com.photi.aos.data.model.request.Email
 import com.photi.aos.data.model.request.EmailCode
 import com.photi.aos.data.model.request.NewPwd
 import com.photi.aos.data.model.request.UserData
@@ -13,8 +16,10 @@ import com.photi.aos.data.remote.RetrofitClient
 import com.photi.aos.data.repository.AuthRepository
 import com.photi.aos.data.repository.ErrorHandler
 import com.photi.aos.data.repository.MainRepositoryCallback
+import com.photi.aos.data.repository.handleApiCall
 import com.photi.aos.data.storage.SharedPreferencesManager
 import com.photi.aos.view.ui.util.StringUtil
+import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
 
@@ -35,6 +40,9 @@ class AuthViewModel : ViewModel() {
     var newPassword = ""
     var checkPassword = ""
 
+    private val _date = MutableLiveData<String>("")
+    val date: LiveData<String> get() = _date
+
     fun resetAllValue() {
         actionApiResponse.value = ActionApiResponse()
         email = ""
@@ -43,6 +51,7 @@ class AuthViewModel : ViewModel() {
         password = ""
         newPassword = ""
         checkPassword = ""
+        _date.value = ""
     }
 
     fun resetApiResponseValue() {
@@ -61,6 +70,11 @@ class AuthViewModel : ViewModel() {
         password = ""
         newPassword = ""
     }
+
+    fun resetDateValue() {
+        _date.value = ""
+    }
+
 
     fun sendEmailCode() {
         email = StringUtil.removeSpaces(email)
@@ -219,5 +233,25 @@ class AuthViewModel : ViewModel() {
     fun handleFailure(error: Throwable) {
         val errorCode = ErrorHandler.handle(error)
         actionApiResponse.value = ActionApiResponse(errorCode)
+    }
+
+
+    fun deletedDate() {
+        email = StringUtil.removeSpaces(email)
+        viewModelScope.launch {
+            handleApiCall(
+                call = {
+                    repository.deletedDate(
+                        Email(email)
+                    )
+                },
+                onSuccess = { data ->
+                    _date.value = data!!.deletedDate
+                },
+                onFailure = { errorCode ->
+                    actionApiResponse.value = ActionApiResponse(errorCode)
+                }
+            )
+        }
     }
 }

@@ -21,9 +21,13 @@ import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.KeyboardListener
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.view.activity.AuthActivity
+import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialog
+import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialogInterface
 import com.photi.aos.viewmodel.AuthViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-class SignupEmailFragment : Fragment() {
+class SignupEmailFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentSignupEmailBinding
     private lateinit var mContext: Context
     private val authViewModel by activityViewModels<AuthViewModel>()
@@ -41,6 +45,7 @@ class SignupEmailFragment : Fragment() {
         mActivity.setAppBar("")
 
         authViewModel.resetApiResponseValue()
+        authViewModel.resetDateValue()
         setObserve()
         setListener()
 
@@ -96,11 +101,17 @@ class SignupEmailFragment : Fragment() {
                     authViewModel.resetAuthCodeValue()
                     view?.findNavController()?.navigate(R.id.action_signupEmailFragment_to_signupAuthFragment)
                 }
-                "EXISTING_EMAIL", "DELETED_USER" -> {
+                "EXISTING_EMAIL" -> {
                     binding.emailLinearlayout.isVisible = true
                     binding.emailEdittext.background = mContext.getDrawable(R.drawable.input_line_error)
                     binding.nextBtn.isEnabled = false
                     binding.emailErrorTextview.text = "이미 가입된 이메일이에요"
+                }
+                "DELETED_USER" -> {
+                    authViewModel.deletedDate()
+                }
+                "USER_NOT_FOUND" -> {
+                    CustomToast.createToast(activity, "존재하지 않는 회원입니다.", "circle")?.show()
                 }
                 "IO_Exception" -> {
                     CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
@@ -110,8 +121,28 @@ class SignupEmailFragment : Fragment() {
                 }
             }
         }
+
+        authViewModel.date.observe(viewLifecycleOwner) { date ->
+            if (date.isNotEmpty()) {
+                CustomOneButtonDialog(
+                    this,
+                    "탈퇴 처리된 계정이에요",
+                    "탈퇴한 이메일 계정으로는\n" + "${daysUntilDate(date)}일 뒤 재가입 가능해요.",
+                    "확인"
+                ).show(activity?.supportFragmentManager!!, "CustomDialog")
+            }
+        }
     }
 
+
+    private fun daysUntilDate(date: String): Int {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val deletedDate = LocalDate.parse(date, formatter)
+        val rejoinDate = deletedDate.plusDays(30)
+        val today = LocalDate.now()
+
+        return (rejoinDate.toEpochDay() - today.toEpochDay()).toInt()
+    }
 
     fun checkEmailValidation(){
         var email =binding.emailEdittext.text.toString().trim()
@@ -132,5 +163,8 @@ class SignupEmailFragment : Fragment() {
 
         }
     }
-    
+
+    override fun onClickYesButton() {
+    }
+
 }

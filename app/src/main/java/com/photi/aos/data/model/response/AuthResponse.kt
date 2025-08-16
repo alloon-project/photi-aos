@@ -40,3 +40,7 @@ data class TokenData(
 data class InquiryResponse(
     val successMessage: String
 )
+
+data class DeletedDateResponse(
+    val deletedDate: String
+)

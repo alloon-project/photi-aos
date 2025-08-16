@@ -1,11 +1,13 @@
 package com.photi.aos.data.remote
 
+import com.photi.aos.data.model.request.Email
 import com.photi.aos.data.model.request.EmailCode
 import com.photi.aos.data.model.request.InquiryRequest
 import com.photi.aos.data.model.request.NewPwd
 import com.photi.aos.data.model.request.UserData
 import com.photi.aos.data.model.response.ApiResponse
 import com.photi.aos.data.model.response.AuthResponse
+import com.photi.aos.data.model.response.DeletedDateResponse
 import com.photi.aos.data.model.response.InquiryResponse
 import com.photi.aos.data.model.response.ProfileImageData
 import com.photi.aos.data.model.response.TokenResponse
@@ -62,6 +64,11 @@ interface ApiService {
     fun post_findPwd(
         @Body parmas: UserData
     ): Call<AuthResponse>
+
+    @POST("/api/users/deleted-date")
+    suspend fun post_deletedDate(
+        @Body params: Email
+    ): Response<ApiResponse<DeletedDateResponse>>
 
     @POST("/api/users/login")
     fun post_login(

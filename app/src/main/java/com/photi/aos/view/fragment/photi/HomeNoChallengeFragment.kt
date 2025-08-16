@@ -103,17 +103,23 @@ class HomeNoChallengeFragment : Fragment() {
             when (cnt) {
                 1 -> {
                     binding.avatarOneLayout.visibility = View.VISIBLE
+                    binding.avatarTwoLayout.visibility = View.GONE
+                    binding.avatarThreeLayout.visibility = View.GONE
                     binding.membernumTextview.text = "1명 도전 중"
                     loadImage(binding.oneUser1ImageView, imgs.getOrNull(0)?.memberImage)
                 }
                 2 -> {
                     binding.avatarTwoLayout.visibility = View.VISIBLE
+                    binding.avatarOneLayout.visibility = View.GONE
+                    binding.avatarThreeLayout.visibility = View.GONE
                     binding.membernumTextview.text = "2명 도전 중"
                     loadImage(binding.twoUser1ImageView, imgs.getOrNull(0)?.memberImage)
                     loadImage(binding.twoUser2ImageView, imgs.getOrNull(1)?.memberImage)
                 }
                 else -> {
                     binding.avatarThreeLayout.visibility = View.VISIBLE
+                    binding.avatarOneLayout.visibility = View.GONE
+                    binding.avatarTwoLayout.visibility = View.GONE
                     binding.membernumTextview.text = "${cnt}명 도전 중"
                     loadImage(binding.threeUser1ImageView, imgs.getOrNull(0)?.memberImage)
                     loadImage(binding.threeUser2ImageView, imgs.getOrNull(1)?.memberImage)

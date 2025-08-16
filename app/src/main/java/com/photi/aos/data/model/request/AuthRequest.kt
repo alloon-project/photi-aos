@@ -29,3 +29,7 @@ data class InquiryRequest(
     val type: InquiryType,
     val content: String
 )
+
+data class Email(
+    val email: String
+)

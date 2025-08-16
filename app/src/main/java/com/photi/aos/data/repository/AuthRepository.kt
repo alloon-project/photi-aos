@@ -2,7 +2,9 @@ package com.photi.aos.data.repository
 
 import com.photi.aos.MyApplication
 import com.photi.aos.data.model.request.*
+import com.photi.aos.data.model.response.ApiResponse
 import com.photi.aos.data.model.response.AuthResponse
+import com.photi.aos.data.model.response.DeletedDateResponse
 import com.photi.aos.data.remote.ApiService
 import com.photi.aos.data.storage.TokenManager
 import retrofit2.Call
@@ -167,6 +169,10 @@ class AuthRepository(private val apiService: ApiService) {
                 callback.onFailure(t)
             }
         })
+    }
+
+    suspend fun deletedDate(email: Email): Response<ApiResponse<DeletedDateResponse>> {
+        return apiService.post_deletedDate(email)
     }
 
 }

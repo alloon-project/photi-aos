@@ -353,7 +353,7 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
                     CustomTwoButtonDialog(
                         this@FeedDetailDialog,
                         "피드를 삭제할까요?",
-                        "삭제한 피드는 복구할 수 없으며,\n오늘 더 이상 피드를 올릴 수 없어요.",
+                        "삭제한 피드는 복구할 수 없어요",
                         "취소할게요",
                         "삭제할게요"
                     ).show(parentFragmentManager, "deleteDialog")
