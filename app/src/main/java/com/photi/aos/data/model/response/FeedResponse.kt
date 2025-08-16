@@ -60,7 +60,7 @@ data class FeedDetailData(
 
 //멤버조회
 data class ChallengeMember(
-    val id: Long,           // 1
+    val id: Int,           // 1
     val username: String,   // "photi"
     val imageUrl: String,   // "https://url.kr/5MhHhD"
     val isCreator: Boolean, // true (파티장 여부)

@@ -57,7 +57,8 @@ class PartyMemberFragment : Fragment(), AlignBottomSheetInterface {
             changeMyGoal = ::changeMyGoal,
             mContext     = requireContext(),
             myName       = myName,
-            this
+            this,
+            feedViewModel
         )
 
         binding.partyRecyclerView.adapter = partyCardAdapter
@@ -208,7 +209,8 @@ class PartyCardAdapter(
     private val changeMyGoal: (String) -> Unit,
     private val mContext: Context,
     private val myName: String,
-    private val fragment: PartyMemberFragment
+    private val fragment: PartyMemberFragment,
+    private val feedViewModel: FeedViewModel
 ) : ListAdapter<ChallengeMember, PartyCardAdapter.ViewHolder>(DIFF) {
 
     companion object {
@@ -225,17 +227,18 @@ class PartyCardAdapter(
         fun bind(member: ChallengeMember) = with(binding) {
             // 프로필 이미지
             if (member.imageUrl.isNotEmpty()) {
-                Glide.with(imageView6.context)
+                Glide.with(profileImg.context)
                     .load(member.imageUrl)
                     .transform(CircleCrop())
-                    .into(imageView6)
+                    .into(profileImg)
             }
 
-            //본인이 아닐때만 신고 활성화
-//            imageView6.setOnClickListener {
-//                //멤버 아이디 저장 -> feedViewModel.memberId
-//                fragment.showBottomList()
-//            }
+            if (member.username != myName) {
+                profileImg.setOnClickListener {
+                    feedViewModel.memberId = member.id
+                    fragment.showBottomList()
+                }
+            }
 
             idTextView.text   = member.username
             timeTextView.text = "${member.duration}일 째 활동중"
