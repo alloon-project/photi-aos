@@ -49,6 +49,13 @@ class LoginFragment : Fragment() {
     }
 
 
+    fun onClickLogin() {
+        if (binding.idEdittext.text.isEmpty() || binding.pwEdittext.text.isEmpty())
+            CustomToast.createToast(mActivity,"아이디와 비밀번호 모두 입력해주세요")?.show()
+        else
+            authViewModel.login()
+    }
+
     fun moveFrag(fragNum : Int){
         /*
         * 1 : login to signUp
@@ -116,7 +123,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-
     fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             when (response.code) {
@@ -141,5 +147,4 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
 }
