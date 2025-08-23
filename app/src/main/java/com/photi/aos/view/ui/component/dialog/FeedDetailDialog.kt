@@ -40,7 +40,10 @@ import com.photi.aos.viewmodel.FeedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class FeedDetailDialog(val feedId: Int) : DialogFragment(),CustomTwoButtonDialogInterface  {
+class FeedDetailDialog(
+    val feedId: Int,
+    private val onLikeChanged: ((isLike: Boolean) -> Unit)? = null
+) : DialogFragment(),CustomTwoButtonDialogInterface  {
     private var _binding: DialogFeedDetailBinding? = null
     private val binding get() = _binding!!
     private val feedViewModel by activityViewModels<FeedViewModel>()
@@ -292,6 +295,7 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
 
                     val updatedCount = currentCount + 1
                     binding.heartCntTextView.text = String.format("%,d", updatedCount)
+                    onLikeChanged?.let { it -> it(true) }
                 },
                 onFailure = {
                     heartButton.isEnabled = true
@@ -303,6 +307,7 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
                 onComplete = {
                     heartButton.isEnabled = true
                     heartButton.setImageResource(R.drawable.ic_heart_empty_14)
+                    onLikeChanged?.let { it -> it(false) }
 
                     val updatedCount = (currentCount - 1).coerceAtLeast(0)
                     binding.heartCntTextView.text = if (updatedCount == 0) {
