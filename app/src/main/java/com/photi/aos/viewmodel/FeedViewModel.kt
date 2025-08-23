@@ -42,8 +42,11 @@ import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 data class Comments(
     val id: String,
@@ -236,21 +239,13 @@ class FeedViewModel : ViewModel() {
                 .map { pagingData ->
                     pagingData.insertSeparators { before: FeedUiItem.Content?, after: FeedUiItem.Content? ->
                         if (after == null) return@insertSeparators null
-                        // 첫 아이템 앞에 헤더를 붙이고 싶다면 before == null 시점에서 넣을 수도 있음
-                        if (before == null) {
-                            // 예: 리스트의 첫 아이템 앞에 무조건 헤더를 달고 싶다면
-                            return@insertSeparators FeedUiItem.Header(
-                                formatHeader(after.feed.createdDateTime)
-                            )
-                        }
 
-                        // 날짜 비교 (연월일만 비교하는 간단 예시)
-                        val beforeDate = before.feed.createdDateTime.substring(0, 10) // "2025-03-29"
-                        val afterDate = after.feed.createdDateTime.substring(0, 10)
+                        val afterLabel = formatHeader(after.feed.createdDateTime)
+                        val beforeLabel = before?.let { formatHeader(it.feed.createdDateTime) }
 
-                        if (beforeDate != afterDate) {
-                            // 날짜가 달라졌다면 새 헤더 삽입
-                            FeedUiItem.Header(formatHeader(after.feed.createdDateTime))
+                        // 첫 아이템(before == null)도 헤더 추가, 또는 라벨 바뀔 때만 헤더 추가
+                        if (beforeLabel == null || beforeLabel != afterLabel) {
+                            FeedUiItem.Header(afterLabel)
                         } else {
                             null
                         }
@@ -265,18 +260,22 @@ class FeedViewModel : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun formatHeader(dateString: String): String {
-        val formatter = DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"))
-        val inputDate = Instant.from(formatter.parse(dateString))
+        val ldt = LocalDateTime.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        val inputDate = ldt.atZone(ZoneId.of("Asia/Seoul")).toLocalDate()
+        val nowDate = LocalDate.now(ZoneId.of("Asia/Seoul"))
 
-        val now = Instant.now()
-        val duration = Duration.between(inputDate, now)
-
+        val days = ChronoUnit.DAYS.between(inputDate, nowDate)
 
         return when {
-            duration.toDays() <= 1 -> "오늘"
-            else -> "${duration.toDays()}일전"
+            days == 0L -> "오늘"
+            days in 1..29 -> "${days}일전"
+            else -> {
+                val months = (days / 30).toInt() // 30일 단위로 묶어서 달로 표기
+                "${months}달전"
+            }
         }
     }
+
 
 
     fun fetchChallengeFeedDetail(feedId: Int) {

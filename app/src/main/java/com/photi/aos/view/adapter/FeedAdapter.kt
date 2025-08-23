@@ -24,6 +24,7 @@ import com.photi.aos.viewmodel.FeedViewModel
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.Duration
+import java.time.temporal.ChronoUnit
 
 
 class FeedAdapter(
@@ -157,15 +158,15 @@ class FeedAdapter(
     }
 
     private fun formatHeader(dateString: String): String {
-        val formatter = DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"))
-        val inputDate = Instant.from(formatter.parse(dateString))
+        val ldt = LocalDateTime.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        val inputDate = ldt.atZone(ZoneId.of("Asia/Seoul")).toLocalDate()
+        val today = LocalDate.now(ZoneId.of("Asia/Seoul"))
 
-        val now = Instant.now()
-        val duration = Duration.between(inputDate, now)
+        val days = ChronoUnit.DAYS.between(inputDate, today)
 
         return when {
-            duration.toDays() <= 1 -> "오늘"
-            else -> "${duration.toDays()}일전" //추가
+            days <= 1L  -> "오늘"
+            else -> "${days}일전"
         }
     }
 
@@ -188,19 +189,23 @@ class FeedAdapter(
     }
 
     private fun formatTimeAgo(dateString: String): String {
-        val formatter = DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.of("UTC"))
-        val inputDate = Instant.from(formatter.parse(dateString))
+        val ldt = LocalDateTime.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        val inputZdt = ldt.atZone(ZoneId.of("Asia/Seoul"))
+        val nowZdt = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
 
-        val now = Instant.now()
-        val duration = Duration.between(inputDate, now)
+        val dayDiff = ChronoUnit.DAYS.between(inputZdt.toLocalDate(), nowZdt.toLocalDate())
+        if (dayDiff >= 1) {
+            return "${dayDiff}일전"   // ← 달력 기준: 2025-08-08 → 2025-08-23면 15일전
+        }
 
-        Log.d("formatTime", "$now ${duration.toMinutes()} $inputDate")
+        val duration = Duration.between(inputZdt.toInstant(), nowZdt.toInstant())
+        val mins = duration.toMinutes().coerceAtLeast(0)
+        val hours = duration.toHours().coerceAtLeast(0)
 
         return when {
-            duration.toMinutes() < 1 -> "방금"
-            duration.toHours() < 1 -> "${duration.toMinutes()}분전"
-            duration.toDays() < 1 -> "${duration.toHours()}시간전"
-            else -> "${duration.toDays()}일전" //추가
+            mins < 1  -> "방금"
+            hours < 1 -> "${mins}분전"
+            else      -> "${hours}시간전"
         }
     }
 
