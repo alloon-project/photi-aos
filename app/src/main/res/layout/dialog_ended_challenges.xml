@@ -22,7 +22,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@null"
-                android:src="@drawable/ic_back"
+                android:src="@drawable/ic_back_enabled"
                 android:layout_marginStart="17dp"
                 android:layout_gravity="start|center_vertical"
                 app:tint="@color/gray700" />

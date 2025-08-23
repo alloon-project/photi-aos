@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:background="@drawable/ic_back_gray400" />
+                android:background="@drawable/ic_back_enabled" />
 
             <TextView
                 android:id="@+id/month_textView"
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="2dp"
-                android:background="@drawable/ic_forward"
+                android:background="@drawable/ic_forward_disabled"
                 android:backgroundTint="@color/gray700"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

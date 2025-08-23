@@ -211,7 +211,7 @@
                         android:layout_marginLeft="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/ic_back_gray400" />
+                        android:background="@drawable/ic_back_disabled" />
 
                     <TextView
                         android:id="@+id/month_textView"
@@ -234,8 +234,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="2dp"
-                        android:background="@drawable/ic_forward"
-                        android:backgroundTint="@color/gray700"
+                        android:background="@drawable/ic_forward_disabled"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/month_textView"

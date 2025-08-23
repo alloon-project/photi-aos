@@ -159,7 +159,7 @@ class CreateActivity : AppCompatActivity() {
     }
 
     fun setAppBar() {
-        binding.actionBar.setNavigationIcon(R.drawable.ic_back)
+        binding.actionBar.setNavigationIcon(R.drawable.ic_back_enabled)
     }
 
     fun setTitle(title : String) {

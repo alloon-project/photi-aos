@@ -17,6 +17,7 @@ import com.photi.aos.data.model.response.FeedByDate
 import com.photi.aos.databinding.DialogProofshotByDateBinding
 import com.photi.aos.databinding.ItemProofshotCompleteViewpagerBinding
 import com.photi.aos.view.activity.FeedActivity
+import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.RoundedCornersTransformation
 
 class ProofShotByDateDialog(val feedList:
@@ -71,9 +72,13 @@ class ProofShotByDateDialog(val feedList:
                 }
 
                 binding.root.setOnClickListener {
-                    val intent = Intent(activity, FeedActivity::class.java)
-                    intent.putExtra("CHALLENGE_ID", challengeId)
-                    startActivity(intent)
+                    if(isDeleted){
+                        CustomToast.createToast(activity, "탈퇴한 챌린지예요.", "close")?.show()
+                    }else{
+                        val intent = Intent(activity, FeedActivity::class.java)
+                        intent.putExtra("CHALLENGE_ID", challengeId)
+                        startActivity(intent)
+                    }
                 }
 
                 Glide.with(binding.proofshotImageview.context)

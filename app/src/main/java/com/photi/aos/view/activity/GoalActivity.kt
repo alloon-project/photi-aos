@@ -46,7 +46,7 @@ class GoalActivity : AppCompatActivity() {
             binding.title.setText(it)
         }
 
-        binding.actionBar.setNavigationIcon(R.drawable.ic_back)
+        binding.actionBar.setNavigationIcon(R.drawable.ic_back_enabled)
 
         if (isFromFeed) {
             if (goalViewModel.goal.isEmpty())

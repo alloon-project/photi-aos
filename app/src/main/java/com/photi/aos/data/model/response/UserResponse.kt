@@ -40,7 +40,8 @@ data class FeedByDate(
     val challengeId : Int,
     val imageUrl: String,
     val name: String,
-    val proveTime: String
+    val proveTime: String,
+    val isDeleted : Boolean,
 )
 
 data class FeedHistoryData(

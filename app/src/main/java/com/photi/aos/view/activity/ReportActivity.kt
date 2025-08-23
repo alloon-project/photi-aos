@@ -36,7 +36,7 @@ class ReportActivity : AppCompatActivity() {
         setLayout()
         setListener()
 
-        binding.actionBar.setNavigationIcon(R.drawable.ic_back)
+        binding.actionBar.setNavigationIcon(R.drawable.ic_back_enabled)
     }
 
     fun setLayout() {

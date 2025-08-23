@@ -90,7 +90,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         setListener()
 
         privateCodeDialog = PrivateCodeDialog(this, challengeViewModel)
-        binding.actionBar.setNavigationIcon(R.drawable.ic_back)
+        binding.actionBar.setNavigationIcon(R.drawable.ic_back_enabled)
 
         activityResultLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()

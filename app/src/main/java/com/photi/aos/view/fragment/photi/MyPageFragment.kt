@@ -25,6 +25,9 @@ import com.photi.aos.view.ui.util.TodayDecorator
 import com.photi.aos.viewmodel.PhotiViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.ZoneId
 import java.util.Locale
 
 
@@ -34,9 +37,13 @@ class MyPageFragment : Fragment() {
     private lateinit var materialCalendarView: MaterialCalendarView
     private lateinit var todayDecorator: TodayDecorator
     private var calendarList : List<CalendarDay> = emptyList()
-    private var year : Int = 0
-    private var month : Int = 0
-    private var day : Int = 0
+    private var curY : Int = 0
+    private var curM : Int = 0
+    private var curD : Int = 0
+    private var maxCalDay: CalendarDay =
+        LocalDate.now( ZoneId.of("Asia/Seoul")).run { CalendarDay.from(year, monthValue, lengthOfMonth()) }
+    private var minCalDay: CalendarDay =
+        LocalDate.now( ZoneId.of("Asia/Seoul")).run { CalendarDay.from(year, monthValue, lengthOfMonth()) }
     private var feedCnt : Int = 0
     private var endedChallengeCnt : Int = 0
 
@@ -75,7 +82,16 @@ class MyPageFragment : Fragment() {
         photiViewModel.feedCalendarData.observe(viewLifecycleOwner) {
                 feedDate ->
             calendarList =  feedDate ?: emptyList()
-            setupCalendarDecorators()
+            if (calendarList.isNotEmpty()) {
+                minCalDay = calendarList.minByOrNull { it.date }
+                    ?.date?.withDayOfMonth(1)
+                    ?.let { CalendarDay.from(it.year, it.monthValue, 1) }
+                    ?: minCalDay
+                materialCalendarView.state().edit().apply {
+                    setMinimumDate(minCalDay)
+                    setMaximumDate(maxCalDay)
+                }.commit()
+            }
         }
 
         photiViewModel.challengeRecodData.observe(viewLifecycleOwner) {
@@ -101,7 +117,7 @@ class MyPageFragment : Fragment() {
         photiViewModel.feedsByDateData.observe(viewLifecycleOwner) {
                 data ->
                     if(data != null)
-                            ProofShotByDateDialog(data,"${year}년 ${month}월 ${day}일")
+                            ProofShotByDateDialog(data,"${curY}년 ${curM}월 ${curD}일")
                     .show(parentFragmentManager, "ProofShotByDateDialog")
 
         }
@@ -125,10 +141,6 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun setupCalendarDecorators() {
-        val eventDecorator = EventDecorator(requireContext(), month, calendarList)
-        materialCalendarView.addDecorators(todayDecorator, eventDecorator)
-    }
 
 
     private fun setCalendarView() {
@@ -140,9 +152,6 @@ class MyPageFragment : Fragment() {
             koWeekDays[dayOfWeek.ordinal]
         }
         materialCalendarView.state().edit()
-            // 필요 시 최대 최소 날짜 설정
-//            .setMinimumDate(CalendarDay.from(2024, 7, 3))
-//            .setMaximumDate(CalendarDay.from(2024, 9, 30))
             .commit()
     }
 
@@ -155,26 +164,46 @@ class MyPageFragment : Fragment() {
 
             if (materialCalendarView.currentDate.month == date.month && calendarList.contains(date)) {
                 val formattedDate = String.format(Locale.US,"%04d-%02d-%02d", date.year, date.month, date.day)
-                Log.d("calendar","클릭!! $formattedDate")
-                day = date.day
+                curD = date.day
                 photiViewModel.fetchFeedsByDate(formattedDate)
 
             }
         }
-
     }
 
     private fun setCalendarDecorator() {
         materialCalendarView.removeDecorators()
 
-         year = materialCalendarView.currentDate.year
-         month = materialCalendarView.currentDate.month
+         curY = materialCalendarView.currentDate.year
+         curM = materialCalendarView.currentDate.month
 
-        todayDecorator = TodayDecorator(requireContext(), month)
+        todayDecorator = TodayDecorator(requireContext(), curM)
+        val eventDecorator = EventDecorator(requireContext(), curM, calendarList)
 
-        materialCalendarView.addDecorators(todayDecorator)
-        calendarYearMonth.set("${year}년 ${month}월")
+        materialCalendarView.addDecorators(todayDecorator, eventDecorator)
+        calendarYearMonth.set("${curY}년 ${curM}월")
+
+        val curYM = YearMonth.of(curY, curM)
+        val maxYM = YearMonth.of(maxCalDay.year, maxCalDay.month)
+        val minYM = YearMonth.of(minCalDay.year, minCalDay.month)
+
+        val canGoBack    = curYM.isAfter(minYM)
+        val canGoForward = curYM.isBefore(maxYM)
+
+        binding.backImgBtn.isEnabled = canGoBack
+        binding.forwardImgBtn.isEnabled = canGoForward
+
+        Log.d("calendarr", "canGoBack $canGoBack $canGoForward")
+        binding.backImgBtn.setImageResource(
+            if (canGoBack) R.drawable.ic_back_enabled
+            else  R.drawable.ic_back_disabled
+        )
+        binding.forwardImgBtn.setImageResource(
+            if (canGoForward) R.drawable.ic_forward_enabled
+            else  R.drawable.ic_forward_disabled
+        )
     }
+
 
     fun changeMonth(flag: Int) {
         //1 : 다음달
@@ -187,7 +216,6 @@ class MyPageFragment : Fragment() {
             currentDate = currentDate.plusMonths(1)
 
         materialCalendarView.setCurrentDate(currentDate)
-        setupCalendarDecorators()
     }
 
     fun showProofShotsDialog() {

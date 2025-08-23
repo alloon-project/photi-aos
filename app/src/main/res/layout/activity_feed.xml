@@ -56,7 +56,7 @@
                             android:onClick="@{() -> activity.finishActivity()}"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:background="@drawable/ic_back"
+                            android:background="@drawable/ic_back_enabled"
                             android:backgroundTint="@color/white"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
