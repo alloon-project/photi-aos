@@ -33,3 +33,8 @@ data class InquiryRequest(
 data class Email(
     val email: String
 )
+
+data class AppVersionRequest(
+    val os: String,
+    val appVersion: String
+)

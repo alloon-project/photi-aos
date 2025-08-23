@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.photi.aos.MyApplication
 import com.photi.aos.data.model.ActionApiResponse
+import com.photi.aos.data.model.request.AppVersionRequest
 import com.photi.aos.data.model.request.Email
 import com.photi.aos.data.model.request.EmailCode
 import com.photi.aos.data.model.request.NewPwd
@@ -33,6 +34,8 @@ class AuthViewModel : ViewModel() {
     private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
 
     val actionApiResponse = MutableLiveData<ActionApiResponse>()
+    val splashResponse = MutableLiveData<ActionApiResponse>()
+
     var email = ""
     var email_code = ""
     var id = ""
@@ -42,6 +45,9 @@ class AuthViewModel : ViewModel() {
 
     private val _date = MutableLiveData<String>("")
     val date: LiveData<String> get() = _date
+
+    private val _needUpdate = MutableLiveData<Boolean>()
+    val needUpdate: LiveData<Boolean> get() = _needUpdate
 
     fun resetAllValue() {
         actionApiResponse.value = ActionApiResponse()
@@ -250,6 +256,24 @@ class AuthViewModel : ViewModel() {
                 },
                 onFailure = { errorCode ->
                     actionApiResponse.value = ActionApiResponse(errorCode)
+                }
+            )
+        }
+    }
+
+    fun checkUpdate(version: String) {
+        viewModelScope.launch {
+            handleApiCall(
+                call = {
+                    repository.checkUpdate(
+                        AppVersionRequest("ANDROID", version)
+                    )
+                },
+                onSuccess = { data ->
+                    _needUpdate.value = data!!.forceUpdate
+                },
+                onFailure = { errorCode ->
+                    splashResponse.value = ActionApiResponse(errorCode)
                 }
             )
         }

@@ -145,7 +145,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_round_primary"
-            android:onClick="@{() ->viewModel.login()}"
+            android:onClick="@{() -> fragment.onClickLogin()}"
             android:text="로그인"
             android:theme="@style/Theme.xlarge_round"
             android:layout_marginTop="56dp"
