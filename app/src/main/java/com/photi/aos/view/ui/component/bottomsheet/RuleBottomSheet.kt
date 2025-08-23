@@ -78,6 +78,6 @@ class RuleBottomSheet (val mContext: Context, val createViewModel: CreateViewMod
         }
     }
 
-    override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
+    override fun getTheme(): Int = R.style.CustomBottomSheetDialogTheme
 
 }

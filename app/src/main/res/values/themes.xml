@@ -151,6 +151,10 @@
     <style name="AppBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
     </style>
+    <style name="CustomBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
 
     <!-- ////////////////////// Metarial Button ////////////////////////// -->
     <style name="materialButton" parent="Theme.Material3.Light.NoActionBar">
