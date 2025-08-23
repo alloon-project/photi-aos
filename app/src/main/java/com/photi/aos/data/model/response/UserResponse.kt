@@ -56,7 +56,9 @@ data class FeedHistoryContent(
     val challengeId : Int,
     val imageUrl: String,
     val createdDate: String,
-    val name: String
+    val name: String,
+    val invitationCode: String,
+    val isDeleted: Boolean
 )
 
 // EndedChallenge Response

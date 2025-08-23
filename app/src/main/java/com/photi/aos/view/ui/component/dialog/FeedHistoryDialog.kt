@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -66,7 +67,7 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = FeedHistoryAdapter()
+        adapter = FeedHistoryAdapter(requireActivity())
         binding.challengeRecyclerview.adapter = adapter
         binding.challengeRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
     }
@@ -106,7 +107,7 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
     }
 
 
-    class FeedHistoryAdapter : PagingDataAdapter<FeedHistoryContent, FeedHistoryAdapter.ViewHolder>(DiffCallback()) {
+    class FeedHistoryAdapter(private val activity :FragmentActivity) : PagingDataAdapter<FeedHistoryContent, FeedHistoryAdapter.ViewHolder>(DiffCallback()) {
 
         inner class ViewHolder(val binding: ItemProofShotsGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(data: FeedHistoryContent) {
@@ -116,20 +117,48 @@ class FeedHistoryDialog(val count : Int): DialogFragment() {
                 binding.chipBtn.text = data.name
                 binding.dateTextView.text = data.createdDate.replace("-", ".") + " 인증"
 
-                binding.challengeImgView.setOnClickListener {
-                    val ctx = binding.root.context
-                    val intent = Intent(ctx, FeedActivity::class.java).apply {
-                        putExtra("CHALLENGE_ID", data.challengeId)
-                        putExtra("FEED_ID", data.feedId)
-                    }
-                    ctx.startActivity(intent)
-                }
+               if(data.isDeleted){
+                   bindDeletedChallengeUI(binding)
+               }else{
+                   bindActiveChallengeUI(binding, data)
+               }
 
-                binding.shortcutImgBtn.setOnClickListener{
-                    sendInviteMsg()
+
+
+
+            }
+        }
+
+        private fun bindDeletedChallengeUI(binding: ItemProofShotsGalleryBinding) {
+            binding.challengeImgView.setOnClickListener {
+                CustomToast.createToast(activity, "탈퇴한 챌린지예요.", "close")?.show()
+            }
+
+            binding.shortcutImgBtn.apply {
+                visibility = View.GONE
+                setOnClickListener(null)
+            }
+        }
+
+        private fun bindActiveChallengeUI(binding: ItemProofShotsGalleryBinding, data: FeedHistoryContent) {
+            val ctx = binding.root.context
+
+            binding.challengeImgView.setOnClickListener {
+                val intent = Intent(ctx, FeedActivity::class.java).apply {
+                    putExtra("CHALLENGE_ID", data.challengeId)
+                    putExtra("FEED_ID", data.feedId)
+                }
+                ctx.startActivity(intent)
+            }
+
+            binding.shortcutImgBtn.apply {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    // TODO 인스타 공유
                 }
             }
         }
+
 
 
         private fun sendInviteMsg() {

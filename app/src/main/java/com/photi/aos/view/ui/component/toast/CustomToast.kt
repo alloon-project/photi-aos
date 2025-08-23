@@ -22,6 +22,9 @@ object CustomToast {
             "circle" -> {
                 binding.icon.setImageResource(R.drawable.ic_close_circle_red)
             }
+            "close" -> {
+                binding.icon.setImageResource(R.drawable.ic_close_default)
+            }
         }
         return Toast(context).apply {
             //setGravity(Gravity.TOP or Gravity.LEFT, 100, 0)
