@@ -38,6 +38,17 @@
                 android:textColor="@color/gray900"
                 android:textSize="22dp"
                 android:visibility="visible"/>
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/suit_medium"
+                android:gravity="center"
+                android:text="탈퇴한 이메일 계정으로는\n한 달 뒤 재가입 가능해요."
+                android:textColor="@color/gray600"
+                android:textSize="14dp"
+                android:visibility="visible"/>
 
             <LinearLayout
                 android:id="@+id/enterPassword_layout"
