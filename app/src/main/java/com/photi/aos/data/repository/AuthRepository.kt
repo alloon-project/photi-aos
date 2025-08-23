@@ -3,6 +3,7 @@ package com.photi.aos.data.repository
 import com.photi.aos.MyApplication
 import com.photi.aos.data.model.request.*
 import com.photi.aos.data.model.response.ApiResponse
+import com.photi.aos.data.model.response.AppVersionResponse
 import com.photi.aos.data.model.response.AuthResponse
 import com.photi.aos.data.model.response.DeletedDateResponse
 import com.photi.aos.data.remote.ApiService
@@ -173,6 +174,10 @@ class AuthRepository(private val apiService: ApiService) {
 
     suspend fun deletedDate(email: Email): Response<ApiResponse<DeletedDateResponse>> {
         return apiService.post_deletedDate(email)
+    }
+
+    suspend fun checkUpdate(appVersionRequest: AppVersionRequest): Response<ApiResponse<AppVersionResponse>> {
+        return apiService.post_appVersion(appVersionRequest)
     }
 
 }

@@ -1,11 +1,13 @@
 package com.photi.aos.data.remote
 
+import com.photi.aos.data.model.request.AppVersionRequest
 import com.photi.aos.data.model.request.Email
 import com.photi.aos.data.model.request.EmailCode
 import com.photi.aos.data.model.request.InquiryRequest
 import com.photi.aos.data.model.request.NewPwd
 import com.photi.aos.data.model.request.UserData
 import com.photi.aos.data.model.response.ApiResponse
+import com.photi.aos.data.model.response.AppVersionResponse
 import com.photi.aos.data.model.response.AuthResponse
 import com.photi.aos.data.model.response.DeletedDateResponse
 import com.photi.aos.data.model.response.InquiryResponse
@@ -99,5 +101,9 @@ interface ApiService {
         @Part imageFile: MultipartBody.Part
     ): Response<ApiResponse<ProfileImageData>>
 
+    @POST("/api/app-version")
+    suspend fun post_appVersion(
+        @Body params: AppVersionRequest
+    ): Response<ApiResponse<AppVersionResponse>>
 }
 

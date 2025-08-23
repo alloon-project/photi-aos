@@ -44,3 +44,7 @@ data class InquiryResponse(
 data class DeletedDateResponse(
     val deletedDate: String
 )
+
+data class AppVersionResponse(
+    val forceUpdate: Boolean
+)
