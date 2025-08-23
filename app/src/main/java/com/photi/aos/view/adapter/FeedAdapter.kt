@@ -71,7 +71,12 @@ class FeedAdapter(
             setHeartButtonClickListener(data, binding.heartButton, binding.proofshotShape)
 
             binding.feedLayout.setOnClickListener {
-                val dialog = FeedDetailDialog(feedId = data.id)
+                val dialog = FeedDetailDialog(
+                    feedId = data.id,
+                    onLikeChanged = {isLike ->
+                        data.isLike = isLike
+                        renderLikeUi(data,binding.heartButton)
+                    })
                 dialog.show(fragmentManager, "FeedDetailDialog")
             }
         }
@@ -199,6 +204,13 @@ class FeedAdapter(
         }
     }
 
+    fun renderLikeUi(data: Feed,heartButton: ImageView) {
+        heartButton.setImageResource(
+            if (data.isLike) R.drawable.ic_heart_filled_14
+            else R.drawable.ic_heart_empty_14
+        )
+    }
+
     private fun setHeartButtonClickListener(data: Feed, heartButton: ImageView, clickArea : ImageView) {
         heartButton.setImageResource(
             if (data.isLike) R.drawable.ic_heart_filled_14
@@ -218,7 +230,7 @@ class FeedAdapter(
                     },
                     onFailure = {
                         clickArea.isEnabled = true
-
+                        data.isLike = !data.isLike
                     }
                 )
             } else {
@@ -230,6 +242,7 @@ class FeedAdapter(
                     },
                     onFailure = {
                         clickArea.isEnabled = true
+                        data.isLike = !data.isLike
                     }
                 )
             }
