@@ -84,13 +84,13 @@
     <Button
         android:id="@+id/btn"
         android:text="버튼"
-        style="@style/Theme.xlarge_round"
+        android:theme="@style/Theme.xlarge_round"
+        android:background="@drawable/btn_round_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/btn_round_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/linearLayout3"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
