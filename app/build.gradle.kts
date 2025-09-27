@@ -44,6 +44,8 @@ android {
 }
 
 dependencies {
+    implementation ("com.facebook.android:facebook-android-sdk:latest.release")
+
     implementation ("androidx.recyclerview:recyclerview:1.3.1")
 
     //paging

@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Photi</string>
+    <string name="facebook_app_id">1178922380714530</string>
+    <string name="facebook_client_token">5701967ed244b1fb1e8cd5ebc531800c</string>
+
+
     <!-- AUTH -->
     <string name="login">로그인</string>
     <string name="signup">회원가입</string>

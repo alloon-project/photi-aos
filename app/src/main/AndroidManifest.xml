@@ -6,7 +6,9 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+    <queries>
+        <package android:name="com.instagram.android" />
+    </queries>
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -19,6 +21,17 @@
         android:theme="@style/Theme.Photi"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!-- Facebook SDK 설정 -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token"/>
+        <meta-data
+            android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled"
+            android:value="false"/>
         <activity
             android:name=".view.activity.SplashActivity"
             android:exported="true">
@@ -71,6 +84,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1178922380714530"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true" />
+
     </application>
 
 </manifest>
