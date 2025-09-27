@@ -11,7 +11,6 @@ import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,7 +33,7 @@ import com.photi.aos.view.ui.component.dialog.RuleCardDialog
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.viewmodel.ChallengeViewModel
 
-class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, AppCompatActivity() {
+class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, BaseActivity() {
     lateinit var binding : ActivityChallengeBinding
     lateinit var id : String
     lateinit var isFrom : String

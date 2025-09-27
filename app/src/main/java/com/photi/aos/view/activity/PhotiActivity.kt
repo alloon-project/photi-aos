@@ -9,7 +9,6 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -29,7 +28,7 @@ private const val TAG_CHALLENGE = "challenge_fragment"
 private const val TAG_HOME = "home_fragment"
 private const val TAG_PROFILE = "profile_fragment"
 
-class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
+class PhotiActivity : BaseActivity(), CustomTwoButtonDialogInterface {
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     lateinit var binding : ActivityPhotiBinding
     private lateinit var mContext: Context
@@ -78,7 +77,7 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
         }
     }
 
-    private fun setDeepLink() {
+    private fun setDeepLink() { //TODO
         val intent = intent
         val action = intent.action
         val data: Uri? = intent.data
@@ -113,6 +112,23 @@ class PhotiActivity : AppCompatActivity(),CustomTwoButtonDialogInterface {
     }
 
     private fun setObserver() {
+//        lifecycleScope.launch { //TODO
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                var previous = 0
+//                photiViewModel.loadingCount.collect { current ->
+//                    Log.i("loading","count: $current")
+//                    if (previous == 0 && current > 0) {
+//                        // 처음 로딩 시작
+//                        LoadingDialogManager.show(this@PhotiActivity)
+//                    } else if (previous > 0 && current == 0) {
+//                        // 모든 로딩 종료
+//                        LoadingDialogManager.hide()
+//                    }
+//                    previous = current
+//                }
+//            }
+//        }
+
         photiViewModel.apiResponse.observe(this) { response ->
             when (response.code) {
                 "200 OK" -> {

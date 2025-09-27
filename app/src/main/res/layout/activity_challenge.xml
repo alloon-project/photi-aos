@@ -14,7 +14,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/inquiry"
+        android:id="@+id/challenge"
         tools:context=".view.activity.ChallengeActivity"
         android:theme="@style/Theme.Photi"
         android:layout_width="match_parent"

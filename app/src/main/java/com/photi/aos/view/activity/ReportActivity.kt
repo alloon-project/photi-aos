@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.photi.aos.R
 import com.photi.aos.data.enum.CategoryType
@@ -16,7 +15,7 @@ import com.photi.aos.view.fragment.report.ReportMissionFragment
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.viewmodel.ReportViewModel
 
-class ReportActivity : AppCompatActivity() {
+class ReportActivity : BaseActivity() {
     lateinit var binding : ActivityReportBinding
     private val reportViewModel : ReportViewModel by viewModels()
     lateinit var category : String

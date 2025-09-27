@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -18,7 +17,7 @@ import com.photi.aos.databinding.ActivityCreateBinding
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.viewmodel.CreateViewModel
 
-class CreateActivity : AppCompatActivity() {
+class CreateActivity : BaseActivity() {
     lateinit var binding : ActivityCreateBinding
     lateinit var navHostFragment : NavHostFragment
     lateinit var navController : NavController

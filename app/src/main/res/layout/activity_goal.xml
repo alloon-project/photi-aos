@@ -10,7 +10,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/inquiry"
+        android:id="@+id/goal"
         tools:context=".view.activity.GoalActivity"
         android:theme="@style/Theme.Photi"
         android:layout_width="match_parent"

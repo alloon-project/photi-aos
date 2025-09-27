@@ -2,7 +2,6 @@ package com.photi.aos.view.activity
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,7 +11,7 @@ import com.photi.aos.R
 import com.photi.aos.data.storage.TokenManager
 import com.photi.aos.databinding.ActivitySettingsBinding
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseActivity() {
     lateinit var binding : ActivitySettingsBinding
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     override fun onCreate(savedInstanceState: Bundle?) {

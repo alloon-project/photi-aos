@@ -10,7 +10,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/home"
+        android:id="@+id/main"
         tools:context=".view.activity.PhotiActivity"
         android:theme="@style/Theme.Photi"
         android:layout_width="match_parent"

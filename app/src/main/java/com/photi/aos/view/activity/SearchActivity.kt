@@ -13,7 +13,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -35,7 +34,7 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : BaseActivity() {
     lateinit var binding : ActivitySearchBinding
     private val searchViewModel : SearchViewModel by viewModels()
     lateinit var hashAdapter: SearchHashAdapter

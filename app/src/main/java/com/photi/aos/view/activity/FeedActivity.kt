@@ -19,7 +19,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -42,7 +41,7 @@ import com.photi.aos.view.ui.util.dpToPx
 import com.photi.aos.viewmodel.FeedViewModel
 import com.google.android.material.tabs.TabLayout
 
-class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
+class FeedActivity : BaseActivity(), CustomTwoButtonDialogInterface {
     lateinit var binding : ActivityFeedBinding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var reportForResult: ActivityResultLauncher<Intent>
@@ -170,7 +169,7 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         }
     }
 
-    private fun sendInviteMsg() {
+    private fun sendInviteMsg() { //TODO
 //        val challengeId = feedViewModel.challengeId
 //        val inviteCode = feedViewModel.invitecode
 //        val challengeTitle = feedChallengeData.name

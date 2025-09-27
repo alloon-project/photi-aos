@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.photi.aos.R
 import com.photi.aos.databinding.ActivityGoalBinding
@@ -18,7 +17,7 @@ import com.photi.aos.view.ui.util.KeyboardListener
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.GoalViewModel
 
-class GoalActivity : AppCompatActivity() {
+class GoalActivity : BaseActivity() {
     lateinit var binding : ActivityGoalBinding
     private val goalViewModel : GoalViewModel by viewModels()
     private var isFromFeed = false

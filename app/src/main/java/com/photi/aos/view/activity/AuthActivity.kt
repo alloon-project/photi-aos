@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -14,7 +13,7 @@ import com.photi.aos.R
 import com.photi.aos.databinding.ActivityAuthBinding
 import com.photi.aos.viewmodel.AuthViewModel
 
-class AuthActivity : AppCompatActivity() {
+class AuthActivity : BaseActivity() {
     lateinit var binding : ActivityAuthBinding
     lateinit var navHostFragment : NavHostFragment
     lateinit var navController : NavController
