@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -36,14 +37,23 @@ import com.photi.aos.view.activity.FeedActivity
 import com.photi.aos.view.adapter.CommentsAdapter
 import com.photi.aos.view.ui.component.popup.FeedActionPopup
 import com.photi.aos.view.ui.component.toast.CustomToast
+import com.photi.aos.view.ui.util.InstagramStory
 import com.photi.aos.viewmodel.FeedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class FeedDetailDialog(
-    val feedId: Int,
-    private val onLikeChanged: ((isLike: Boolean) -> Unit)? = null
-) : DialogFragment(),CustomTwoButtonDialogInterface  {
+class FeedDetailDialog : DialogFragment(), CustomTwoButtonDialogInterface {
+    companion object {
+            private const val KEY_FEED_ID = "key_feed_id"
+            fun newInstance(feedId: Int) = FeedDetailDialog().apply {
+                    arguments = bundleOf(KEY_FEED_ID to feedId)
+                }
+    }
+
+    private val feedId: Int by lazy { requireArguments().getInt(KEY_FEED_ID) }
+    private var onLikeChanged: ((Boolean) -> Unit)? = null
+    fun setOnLikeChanged(listener: (Boolean) -> Unit) { onLikeChanged = listener }
+
     private var _binding: DialogFeedDetailBinding? = null
     private val binding get() = _binding!!
     private val feedViewModel by activityViewModels<FeedViewModel>()
@@ -53,7 +63,7 @@ class FeedDetailDialog(
     private var isFirstInput = true
     private var isFirstAdd = true
     private var feedUserName : String? = null
-
+    private var feedBgImg : String ?= null
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -124,6 +134,7 @@ class FeedDetailDialog(
         feedViewModel.challengeFeedDetail.observe(viewLifecycleOwner) { data ->
             with(binding) {
                 if (data != null) {
+                    feedBgImg = data.feedImageUrl
                     feedUserName = data.username
                     idTextView.text = feedUserName
                     heartCntTextView.text = if (data.likeCnt == 0) "" else data.likeCnt.toString()
@@ -131,7 +142,7 @@ class FeedDetailDialog(
                     setHeartButtonClickListener(data,binding.heartBtn)
 
                     Glide.with(feedImgView)
-                        .load(data.feedImageUrl)
+                        .load(feedBgImg)
                         .into(feedImgView)
 
                     if(data.userImageUrl != ""){
@@ -352,7 +363,22 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
             isMyFeed = (feedUserName == myId),
             listener = object : FeedActionPopup.Listener {
                 override fun onShare() {
-                    Toast.makeText(context, "인스타 공유하기", Toast.LENGTH_SHORT).show()
+                    if(feedBgImg.isNullOrBlank()){
+                        CustomToast.createToast(activity, "공유할 이미지가 없어요.", "circle")?.show()
+                        return
+                    }
+                    val appId = requireContext().getString(R.string.facebook_app_id)
+                    lifecycleScope.launch {
+
+
+                        InstagramStory.shareDrawableBgAndStickerUrl(
+                            activity = requireActivity(),
+                            context = requireContext(),
+                            bgResId = R.drawable.ig_bg,
+                            stickerImageUrl = feedBgImg!!,
+                            sourceAppId = appId
+                        )
+                    }
                 }
                 override fun onDelete() {
                     CustomTwoButtonDialog(
