@@ -63,7 +63,7 @@ class ChallengeCommendFragment : Fragment() {
         hashCardAdapter = HashCardAdapter(this, photiViewModel)
         binding.hashtagRecyclerView.adapter = hashCardAdapter
         binding.hashtagRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        binding.hashtagRecyclerView.setHasFixedSize(true)
+        binding.hashtagRecyclerView.setHasFixedSize(false)
 
         photiViewModel.resetApiResponseValue()
         photiViewModel.resetPopularResponseValue()
