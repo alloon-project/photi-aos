@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -29,6 +28,7 @@ import com.photi.aos.databinding.ItemProofShotsGalleryBinding
 import com.photi.aos.view.activity.FeedActivity
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.InstagramStory
+import com.photi.aos.view.ui.util.LoadingDialogManager
 import com.photi.aos.view.ui.util.RoundedCornersTransformation
 import com.photi.aos.viewmodel.PhotiViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -102,7 +102,10 @@ class FeedHistoryDialog : DialogFragment() {
 
 
     private fun setLoading(loading: Boolean) {
-        // TODO: 로딩 : true면 로딩 키고 false면 로딩 꺼주세요
+        if (loading)
+            LoadingDialogManager.show(requireActivity())
+        else
+            LoadingDialogManager.hide()
     }
 
     fun shareToInstagram(feedBgImg: String, appId: String) {

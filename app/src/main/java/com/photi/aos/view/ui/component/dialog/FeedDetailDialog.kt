@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
@@ -38,6 +37,7 @@ import com.photi.aos.view.adapter.CommentsAdapter
 import com.photi.aos.view.ui.component.popup.FeedActionPopup
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.InstagramStory
+import com.photi.aos.view.ui.util.LoadingDialogManager
 import com.photi.aos.viewmodel.FeedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -390,7 +390,10 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
     }
 
     private fun setLoading(loading: Boolean) {
-        // TODO: 로딩 : true면 로딩 키고 false면 로딩 꺼주세요
+        if (loading)
+            LoadingDialogManager.show(requireActivity())
+        else
+            LoadingDialogManager.hide()
     }
 
     fun shareToInstagram(feedBgImg: String, appId: String) {
