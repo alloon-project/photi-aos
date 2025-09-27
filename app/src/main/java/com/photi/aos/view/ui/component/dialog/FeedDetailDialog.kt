@@ -41,6 +41,7 @@ import com.photi.aos.view.ui.util.InstagramStory
 import com.photi.aos.viewmodel.FeedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class FeedDetailDialog : DialogFragment(), CustomTwoButtonDialogInterface {
     companion object {
@@ -367,18 +368,8 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
                         CustomToast.createToast(activity, "공유할 이미지가 없어요.", "circle")?.show()
                         return
                     }
-                    val appId = requireContext().getString(R.string.facebook_app_id)
-                    lifecycleScope.launch {
+                    shareToInstagram(feedBgImg!!,requireContext().getString(R.string.facebook_app_id))
 
-
-                        InstagramStory.shareDrawableBgAndStickerUrl(
-                            activity = requireActivity(),
-                            context = requireContext(),
-                            bgResId = R.drawable.ig_bg,
-                            stickerImageUrl = feedBgImg!!,
-                            sourceAppId = appId
-                        )
-                    }
                 }
                 override fun onDelete() {
                     CustomTwoButtonDialog(
@@ -398,7 +389,31 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
         ).show(anchor)
     }
 
+    private fun setLoading(loading: Boolean) {
+        // TODO: 로딩 : true면 로딩 키고 false면 로딩 꺼주세요
+    }
 
+    fun shareToInstagram(feedBgImg: String, appId: String) {
+        setLoading(true)
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                InstagramStory.shareDrawableBgAndStickerUrl(
+                    activity = requireActivity(),
+                    context = requireContext(),
+                    bgResId = R.drawable.ig_bg,
+                    stickerImageUrl = feedBgImg,
+                    sourceAppId = appId
+                )
+            } catch (ce: CancellationException) {
+                throw ce
+            } catch (e: Exception) {
+                CustomToast.createToast(activity, "공유에 실패했어요. 다시 시도해주세요.", "circle")?.show()
+
+            } finally {
+                setLoading(false)
+            }
+        }
+    }
 
     override fun onClickFisrtButton() {}
 

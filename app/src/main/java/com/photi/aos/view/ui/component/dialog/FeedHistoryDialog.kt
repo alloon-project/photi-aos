@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -20,14 +21,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.photi.aos.R
 import com.photi.aos.data.model.response.FeedHistoryContent
 import com.photi.aos.databinding.DialogFeedHistoryBinding
 import com.photi.aos.databinding.ItemProofShotsGalleryBinding
 import com.photi.aos.view.activity.FeedActivity
 import com.photi.aos.view.ui.component.toast.CustomToast
+import com.photi.aos.view.ui.util.InstagramStory
+import com.photi.aos.view.ui.util.RoundedCornersTransformation
 import com.photi.aos.viewmodel.PhotiViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class FeedHistoryDialog : DialogFragment() {
 
@@ -79,10 +85,48 @@ class FeedHistoryDialog : DialogFragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = FeedHistoryAdapter(requireActivity())
+        adapter = FeedHistoryAdapter(
+            requireActivity(),
+            onShareClick = { imageUrl ->
+                if (imageUrl.isBlank()) {
+                    CustomToast.createToast(requireActivity(), "공유할 이미지가 없어요.", "circle")?.show()
+                    return@FeedHistoryAdapter
+                }
+
+                shareToInstagram( imageUrl,getString(R.string.facebook_app_id))
+            }
+        )
         binding.challengeRecyclerview.adapter = adapter
         binding.challengeRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
     }
+
+
+    private fun setLoading(loading: Boolean) {
+        // TODO: 로딩 : true면 로딩 키고 false면 로딩 꺼주세요
+    }
+
+    fun shareToInstagram(feedBgImg: String, appId: String) {
+        setLoading(true)
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                InstagramStory.shareDrawableBgAndStickerUrl(
+                    activity = requireActivity(),
+                    context = requireContext(),
+                    bgResId = R.drawable.ig_bg,
+                    stickerImageUrl = feedBgImg,
+                    sourceAppId = appId
+                )
+            } catch (ce: CancellationException) {
+                throw ce
+            } catch (e: Exception) {
+                CustomToast.createToast(activity, "공유에 실패했어요. 다시 시도해주세요.", "circle")?.show()
+
+            } finally {
+                setLoading(false)
+            }
+        }
+    }
+
 
     private fun observeLiveData() {
 
@@ -119,13 +163,15 @@ class FeedHistoryDialog : DialogFragment() {
     }
 
 
-    class FeedHistoryAdapter(private val activity :FragmentActivity) : PagingDataAdapter<FeedHistoryContent, FeedHistoryAdapter.ViewHolder>(DiffCallback()) {
+    class FeedHistoryAdapter(private val activity :FragmentActivity,   private val onShareClick: (imageUrl: String) -> Unit) : PagingDataAdapter<FeedHistoryContent, FeedHistoryAdapter.ViewHolder>(DiffCallback()) {
 
         inner class ViewHolder(val binding: ItemProofShotsGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(data: FeedHistoryContent) {
                 Glide.with(binding.challengeImgView.context)
                     .load(data.imageUrl)
+                    .transform(CenterCrop(), RoundedCornersTransformation(20f, 76f))
                     .into(binding.challengeImgView)
+
                 binding.chipBtn.text = data.name
                 binding.dateTextView.text = data.createdDate.replace("-", ".") + " 인증"
 
@@ -134,9 +180,6 @@ class FeedHistoryDialog : DialogFragment() {
                }else{
                    bindActiveChallengeUI(binding, data)
                }
-
-
-
 
             }
         }
@@ -166,7 +209,7 @@ class FeedHistoryDialog : DialogFragment() {
             binding.shortcutImgBtn.apply {
                 visibility = View.VISIBLE
                 setOnClickListener {
-                    // TODO 인스타 공유
+                onShareClick(data.imageUrl)
                 }
             }
         }

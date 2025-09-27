@@ -11,7 +11,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
-import android.graphics.Rect
 import android.graphics.RectF
 import android.net.Uri
 import android.os.Build
@@ -98,17 +97,18 @@ object InstagramStory {
         // 배경: WEBP(30+) 또는 JPEG (캐시 재사용)
         val bgUri = drawableToWebpOrJpegContentUri(context, bgResId)
 
-        // 스티커: PNG 640x480 (캐시 재사용)
-        //val stickerUri = fetchStickerToContentUri(context, stickerImageUrl)
         val stickerUri = fetchStickerRoundedToContentUri(
             context = context,
             imageUrl = stickerImageUrl,
-            outSize = 640,        // 필요 시 조절
             cornerDp =16f,       // 둥근 정도
             circle = false,       // true면 완전 원형
-            borderPx = 8,         // 테두리 두께(px). 없으면 0
-            borderColorRes =  R.color.green100,
-            paddingPx = 0
+            borderPx = 16,         // 테두리 두께(px). 없으면 0
+            borderColorRes = R.color.green100,
+            paddingPx = 0,
+            overlayResId = R.drawable.ic_camera_default, // res/drawable/ic_my_vector.xml
+            overlayWidthPx = 62,
+            overlayHeightPx = 12,
+            overlayBottomMarginPx = 34,
         )
 
         val bgMime = if (Build.VERSION.SDK_INT >= 30) "image/webp" else "image/jpeg"
@@ -211,7 +211,6 @@ object InstagramStory {
         outH: Int = 1920,
         useWebp: Boolean = true
     ): Uri = withContext(Dispatchers.IO) {
-        // Glide로 다운샘플해서 비트맵 획득
         val bmp = Glide.with(context)
             .asBitmap()
             .load(imageUrl)
@@ -238,7 +237,7 @@ object InstagramStory {
         imageUrl: String,
         filename: String = "ig_st_${imageUrl.hashCode()}.png",
         outW: Int = 640,
-        outH: Int = 480
+        outH: Int = 640
     ): Uri = withContext(Dispatchers.IO) {
         val bmp = Glide.with(context)
             .asBitmap()
@@ -296,90 +295,144 @@ object InstagramStory {
      * @param borderColor 외곽선 색
      * @param paddingPx 내용물 패딩(px)
      */
-    suspend fun fetchStickerRoundedToContentUri(
+   private suspend fun fetchStickerRoundedToContentUri(
         context: Context,
         imageUrl: String,
-        outSize: Int = 640,
+        maxWidth: Int = 640,
+        maxHeight: Int = 640,
         cornerDp: Float = 16f,
         circle: Boolean = false,
-        borderPx: Int = 0,
+        borderPx: Int = 16,
         @ColorRes borderColorRes: Int = R.color.green100,
-        paddingPx: Int = 0
-    ): Uri = withContext(Dispatchers.IO) {
+        paddingPx: Int = 0,
+        @DrawableRes overlayResId: Int? = null,     // ⬅︎ 추가: 벡터(xml)
+        overlayWidthPx: Int? = null,                // ⬅︎ 추가: 크기 지정 없으면 intrinsic
+        overlayHeightPx: Int? = null,
+        overlayBottomMarginPx: Int = 16,
+        ): Uri = withContext(Dispatchers.IO) {
+        val original = withContext(Dispatchers.IO) {
+            Glide.with(context)
+                .asBitmap()
+                .load(imageUrl)
+                .submit(maxWidth, maxHeight)
+                .get()
+        }
 
-        // 1) 다운샘플된 비트맵 가져오기 (정사각)
-        val src = Glide.with(context)
-            .asBitmap()
-            .load(imageUrl)
-            .submit(outSize, outSize)
-            .get()
+        val src: Bitmap = original.copy(Bitmap.Config.ARGB_8888, /*mutable=*/ false)
+
 
         // 2) 출력 비트맵 (투명 배경)
-        val outBmp = Bitmap.createBitmap(outSize, outSize, Bitmap.Config.ARGB_8888)
+        val outW = src.width
+        val outH = src.height
+        val outBmp = Bitmap.createBitmap(outW, outH, Bitmap.Config.ARGB_8888)
 
         // 3) 캔버스에 마스크 -> SRC_IN 로 원본 그려서 잘라내기
         val r = RectF(
             paddingPx.toFloat(),
             paddingPx.toFloat(),
-            (outSize - paddingPx).toFloat(),
-            (outSize - paddingPx).toFloat()
+            (outW - paddingPx).toFloat(),
+            (outH - paddingPx).toFloat()
         )
         val cornerPx = dp(context, cornerDp)
+        val strokeInset = borderPx / 2f
 
         outBmp.applyCanvas {
-            val maskPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.WHITE}
+            val maskPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.WHITE }
             val contentPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-            // 마스크 그리기
-            if (circle) {
-                drawOval(r, maskPaint)
-            } else {
-                drawRoundRect(r, cornerPx, cornerPx, maskPaint)
-            }
+            val maskInset = (paddingPx.toFloat() + borderPx.toFloat()).coerceAtLeast(0f)
+            val rm = RectF(r).apply { inset(maskInset, maskInset) } // 사진이 실제로 보일 영역
+            val maskRadius = (cornerPx + strokeInset).coerceAtLeast(0f)
 
-            // 마스크와 합성 레이어
             val checkpoint = saveLayer(null, null)
 
-            // (레이어 위에 다시 마스크를 그린 뒤)
+            // ① 마스크도 rm 기준
             if (circle) {
-                drawOval(r, maskPaint)
+                drawOval(rm, maskPaint)                  // <-- r -> rm
             } else {
-                drawRoundRect(r, cornerPx, cornerPx, maskPaint)
+                drawRoundRect(rm, maskRadius, maskRadius, maskPaint)
             }
 
-            // 합성 모드: SRC_IN -> 마스크 영역 안에만 비트맵 보이게
+            // ② 비트맵도 rm에 맞춰서 합성
             contentPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-
-            // 원본을 r 영역에 맞춰 그림
-            val srcRect = Rect(0, 0, src.width, src.height)
-            drawBitmap(src, srcRect, r, contentPaint)
-
+            drawBitmap(src, null, rm, contentPaint)     // <-- r -> rm
             contentPaint.xfermode = null
+
             restoreToCount(checkpoint)
 
-            // 4) 외곽선(선택)
+            // ③ 테두리를 '사진 안쪽으로만' 보이게
+            // ③ 테두리를 '사진 안쪽으로만' 정확히 맞춰 그리기 (EVEN_ODD 링)
             if (borderPx > 0) {
                 val resolvedBorderColor = ContextCompat.getColor(context, borderColorRes)
-                val stroke = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                    style = Paint.Style.STROKE
+
+                // 사진이 실제로 보이는 영역과 반경(= 마스크 기준) : rm / maskRadius
+                val ringOuter = RectF(rm)
+                val ringInner = RectF(rm).apply { inset(borderPx.toFloat(), borderPx.toFloat()) }
+
+                val ringOuterRadius = maskRadius                      // 마스크와 동일 반경
+                val ringInnerRadius = (maskRadius - borderPx).coerceAtLeast(0f)
+
+                val ringPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    style = Paint.Style.FILL
                     color = resolvedBorderColor
-                    strokeWidth = borderPx.toFloat()
+                    isDither = true
+                    isFilterBitmap = true
                 }
-                val inset = borderPx / 2f
-                val br = RectF(r).apply { inset(inset, inset) }
-                if (circle) drawOval(br, stroke) else drawRoundRect(br, cornerPx, cornerPx, stroke)
+
+                val path = android.graphics.Path().apply {
+                    fillType = android.graphics.Path.FillType.EVEN_ODD
+                    addRoundRect(ringOuter, ringOuterRadius, ringOuterRadius, android.graphics.Path.Direction.CW)
+                    addRoundRect(ringInner, ringInnerRadius, ringInnerRadius, android.graphics.Path.Direction.CW)
+                }
+                drawPath(path, ringPaint)
             }
+            overlayResId?.let { resId ->
+                val d = ContextCompat.getDrawable(context, resId) ?: return@let
+
+
+                // 크기: 지정값 우선, 없으면 intrinsic 사용
+                val ow = (overlayWidthPx ?: d.intrinsicWidth.coerceAtLeast(1))
+                val oh = (overlayHeightPx ?: d.intrinsicHeight.coerceAtLeast(1))
+
+                // rm(사진 보이는 사각형) 기준 가운데 정렬 + 하단에서 overlayBottomMarginPx 위
+                val left   = (rm.centerX() - ow / 2f).toInt()
+                val top    = (rm.bottom - overlayBottomMarginPx - oh).toInt()
+                val right  = left + ow
+                val bottom = top + oh
+
+                // 안전 가드(경계 밖으로 안나가게)
+                val safeLeft = left.coerceAtLeast(0)
+                val safeTop = top.coerceAtLeast(0)
+                val safeRight = right.coerceAtMost(outW)
+                val safeBottom = bottom.coerceAtMost(outH)
+
+                d.setBounds(safeLeft, safeTop, safeRight, safeBottom)
+                d.draw(this) // this == Canvas
+            }
+
         }
 
         // 5) PNG로 저장 후 content Uri 반환
+        val colorInt = ContextCompat.getColor(context, borderColorRes)
+        val colorHex = Integer.toHexString(colorInt) // aarrggbb
+        val cacheKey = buildString {
+            append(imageUrl.hashCode())
+            append("_${outW}x${outH}")
+            append("_b$borderPx")
+            append("_rad${cornerPx.toInt()}")
+            append("_circle$circle")
+            append("_pad$paddingPx")
+            append("_col$colorHex")
+        }
         val dir = File(context.cacheDir, "ig_share").apply { mkdirs() }
-        val file = File(dir, "ig_st_round_${imageUrl.hashCode()}_${outSize}.png")
-        if (!file.exists()) {
+        val file = File(dir, "ig_st_round_$cacheKey.png")
+        if (!file.exists() ) {
             FileOutputStream(file).use { out ->
                 outBmp.compress(Bitmap.CompressFormat.PNG, 100, out)
             }
         }
-        // 원본 메모리 정리 (선택)
+
+        // 원본 메모리 정리
         if (!src.isRecycled) src.recycle()
         if (!outBmp.isRecycled) outBmp.recycle()
 
