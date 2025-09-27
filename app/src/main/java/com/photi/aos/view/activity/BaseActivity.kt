@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import com.photi.aos.view.ui.util.InsetStore
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -31,6 +32,8 @@ abstract class BaseActivity : AppCompatActivity() {
                 systemInsets.right,
                 systemInsets.bottom
             )
+            if (InsetStore.initialTopInset == null) InsetStore.initialTopInset = systemInsets.top
+            if (InsetStore.initialBottomInset == null) InsetStore.initialBottomInset = systemInsets.bottom
             insets
         }
     }

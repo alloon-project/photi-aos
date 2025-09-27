@@ -7,17 +7,14 @@ class SharedPreferencesManager @Inject constructor(
 ) {
 
     companion object {
-        private const val GOAL_KEY = "myGaol"
-        private const val FEED_ID = "feedId"
         private const val USER_NAME = "userName"
     }
 
     //user name
-    fun saveUserName(name: String){
+    fun saveUserName(name: String) {
         sharedPreferences.setString(USER_NAME, name)
     }
-
-    fun getUserName() : String?{
+    fun getUserName() : String? {
         return sharedPreferences.getString(USER_NAME, null)
     }
 }

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.photi.aos.databinding.DialogUploadCardBinding
+import com.photi.aos.view.ui.util.InsetStore
 
 interface UploadCardDialogInterface {
     fun onClickUploadButton()
@@ -55,11 +56,14 @@ class UploadCardDialog(val uploadCardDialogInterface: UploadCardDialogInterface,
             val fullWidth = displayMetrics.widthPixels
             val fullHeight = displayMetrics.heightPixels
 
+            val top = InsetStore.initialTopInset
+            val bottom = InsetStore.initialBottomInset
+
             val marginHorizontal = (24 * density).toInt()
             val width = fullWidth - 2 * marginHorizontal
 
             val marginVertical = (111 * density).toInt()
-            val height = fullHeight - 2 * marginVertical
+            val height = fullHeight - 2 * marginVertical - top!! - bottom!!
 
             val params = window.attributes
             params.dimAmount = 0.4f

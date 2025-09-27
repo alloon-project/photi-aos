@@ -36,6 +36,7 @@ import com.photi.aos.view.activity.FeedActivity
 import com.photi.aos.view.adapter.CommentsAdapter
 import com.photi.aos.view.ui.component.popup.FeedActionPopup
 import com.photi.aos.view.ui.component.toast.CustomToast
+import com.photi.aos.view.ui.util.InsetStore
 import com.photi.aos.view.ui.util.InstagramStory
 import com.photi.aos.view.ui.util.LoadingDialogManager
 import com.photi.aos.viewmodel.FeedViewModel
@@ -265,9 +266,12 @@ class FeedDetailDialog : DialogFragment(), CustomTwoButtonDialogInterface {
             val marginHorizontal = (24 * density).toInt() // 좌우 24dp
             val marginVertical = (69 * density).toInt()        // 위 69dp
 
+            val top = InsetStore.initialTopInset
+            val bottom = InsetStore.initialBottomInset
+
             // 최종 크기 계산
             val width = fullWidth - 2 * marginHorizontal
-            val height = fullHeight - 2 * marginVertical
+            val height = fullHeight - 2 * marginVertical - top!! - bottom!!
 
             // 다이얼로그의 레이아웃 속성 설정
             val params = window.attributes
