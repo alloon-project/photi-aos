@@ -72,13 +72,10 @@ class FeedAdapter(
             setHeartButtonClickListener(data, binding.heartButton, binding.proofshotShape)
 
             binding.feedLayout.setOnClickListener {
-                val dialog = FeedDetailDialog(
-                    feedId = data.id,
-                    onLikeChanged = {isLike ->
-                        data.isLike = isLike
-                        renderLikeUi(data,binding.heartButton)
-                    })
-                dialog.show(fragmentManager, "FeedDetailDialog")
+              val dialog =  FeedDetailDialog.newInstance(data.id)
+                    .apply { setOnLikeChanged { isLike ->data.isLike = isLike
+                        renderLikeUi(data,binding.heartButton) } }
+                    .show(fragmentManager, "FeedDetailDialog")
             }
         }
     }
