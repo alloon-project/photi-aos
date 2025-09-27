@@ -79,8 +79,10 @@ class FeedActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         val challengeId = intent.getIntExtra("CHALLENGE_ID", -1)
         val feedId = intent.getIntExtra("FEED_ID", -1)
         if(feedId != -1){
-            val dialog = FeedDetailDialog(feedId = feedId)
-            dialog.show(supportFragmentManager, "FeedDetailDialog")
+            FeedDetailDialog.newInstance(feedId)
+                .show(supportFragmentManager, "FeedDetailDialog")
+
+      //TODO 하트 로직
         }
 
         feedViewModel.challengeId = challengeId

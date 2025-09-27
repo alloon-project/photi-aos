@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
@@ -28,7 +29,18 @@ import com.photi.aos.viewmodel.PhotiViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class FeedHistoryDialog(val count : Int): DialogFragment() {
+class FeedHistoryDialog : DialogFragment() {
+
+    companion object {
+        private const val KEY_COUNT = "key_count"
+
+        fun newInstance(count: Int) = FeedHistoryDialog().apply {
+            arguments = bundleOf(KEY_COUNT to count)
+        }
+    }
+
+    private val count: Int by lazy { requireArguments().getInt(KEY_COUNT) }
+
     private var _binding: DialogFeedHistoryBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter:FeedHistoryAdapter
