@@ -70,6 +70,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout4"
+                    android:onClick="@{() ->fragment.showProofShotsDialog()}"
                     android:layout_width="0dp"
                     android:layout_marginRight="4dp"
                     android:layout_height="88dp"
@@ -96,7 +97,7 @@
                         android:layout_marginBottom="16dp" />
 
                     <TextView
-                        android:onClick="@{() ->fragment.showProofShotsDialog()}"
+
                         android:id="@+id/verify_count_textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -111,6 +112,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout5"
+                    android:onClick="@{() ->fragment.showEndedChallengesDialog()}"
                     android:layout_width="0dp"
                     android:layout_height="88dp"
                     android:layout_marginLeft="4dp"
@@ -138,7 +140,6 @@
 
                     <TextView
                         android:id="@+id/challenge_ended_textView"
-                        android:onClick="@{() ->fragment.showEndedChallengesDialog()}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/suit_bold"

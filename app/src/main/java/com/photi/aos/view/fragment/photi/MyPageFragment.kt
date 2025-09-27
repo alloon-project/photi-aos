@@ -40,10 +40,15 @@ class MyPageFragment : Fragment() {
     private var curY : Int = 0
     private var curM : Int = 0
     private var curD : Int = 0
+    private val tzSeoul = ZoneId.of("Asia/Seoul")
+    private val todaySeoul: LocalDate = LocalDate.now(tzSeoul)
+    private val monthStart: LocalDate = todaySeoul.withDayOfMonth(1)
+    private val monthEnd: LocalDate = todaySeoul.withDayOfMonth(todaySeoul.lengthOfMonth())
+
     private var maxCalDay: CalendarDay =
-        LocalDate.now( ZoneId.of("Asia/Seoul")).run { CalendarDay.from(year, monthValue, lengthOfMonth()) }
+        CalendarDay.from(monthEnd.year, monthEnd.monthValue, monthEnd.dayOfMonth)
     private var minCalDay: CalendarDay =
-        LocalDate.now( ZoneId.of("Asia/Seoul")).run { CalendarDay.from(year, monthValue, lengthOfMonth()) }
+        CalendarDay.from(monthStart.year, monthStart.monthValue, 1)
     private var feedCnt : Int = 0
     private var endedChallengeCnt : Int = 0
 
@@ -57,7 +62,6 @@ class MyPageFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_page, container, false)
         binding.fragment = this
         binding.viewModel = photiViewModel
-        val mActivity = activity as PhotiActivity
 
         setCalendarView()
         setCalendarDecorator()
@@ -68,9 +72,20 @@ class MyPageFragment : Fragment() {
     }
 
     override fun onResume() {
+        super.onResume()
+        fetchData()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden && isResumed) {
+            fetchData()
+        }
+    }
+
+    fun fetchData() {
         photiViewModel.fetchChallengeHistory()
         photiViewModel.fetchCalendarData()
-        super.onResume()
     }
 
     private fun setObserve() {
@@ -87,11 +102,18 @@ class MyPageFragment : Fragment() {
                     ?.date?.withDayOfMonth(1)
                     ?.let { CalendarDay.from(it.year, it.monthValue, 1) }
                     ?: minCalDay
-                materialCalendarView.state().edit().apply {
-                    setMinimumDate(minCalDay)
-                    setMaximumDate(maxCalDay)
-                }.commit()
+            }else {
+                minCalDay = CalendarDay.from(monthStart.year, monthStart.monthValue, 1)
+                maxCalDay = CalendarDay.from(monthEnd.year, monthEnd.monthValue, monthEnd.dayOfMonth)
+                materialCalendarView.setCurrentDate(
+                    CalendarDay.from(todaySeoul.year, todaySeoul.monthValue, todaySeoul.dayOfMonth)
+                )
             }
+            materialCalendarView.state().edit().apply {
+                setMinimumDate(minCalDay)
+                setMaximumDate(maxCalDay)
+            }.commit()
+            setCalendarDecorator()
         }
 
         photiViewModel.challengeRecodData.observe(viewLifecycleOwner) {
@@ -151,8 +173,14 @@ class MyPageFragment : Fragment() {
         materialCalendarView.setWeekDayFormatter { dayOfWeek ->
             koWeekDays[dayOfWeek.ordinal]
         }
-        materialCalendarView.state().edit()
-            .commit()
+        materialCalendarView.state().edit().apply {
+            setMinimumDate(minCalDay)
+            setMaximumDate(maxCalDay)
+        }.commit()
+
+
+        materialCalendarView.currentDate =
+            CalendarDay.from(todaySeoul.year, todaySeoul.monthValue, todaySeoul.dayOfMonth)
     }
 
     private fun setLisetener() {
@@ -180,7 +208,7 @@ class MyPageFragment : Fragment() {
         todayDecorator = TodayDecorator(requireContext(), curM)
         val eventDecorator = EventDecorator(requireContext(), curM, calendarList)
 
-        materialCalendarView.addDecorators(todayDecorator, eventDecorator)
+        materialCalendarView.addDecorators( eventDecorator,todayDecorator,)
         calendarYearMonth.set("${curY}년 ${curM}월")
 
         val curYM = YearMonth.of(curY, curM)
@@ -193,7 +221,6 @@ class MyPageFragment : Fragment() {
         binding.backImgBtn.isEnabled = canGoBack
         binding.forwardImgBtn.isEnabled = canGoForward
 
-        Log.d("calendarr", "canGoBack $canGoBack $canGoForward")
         binding.backImgBtn.setImageResource(
             if (canGoBack) R.drawable.ic_back_enabled
             else  R.drawable.ic_back_disabled
