@@ -112,12 +112,19 @@ class FeedHistoryDialog : DialogFragment() {
         setLoading(true)
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                InstagramStory.shareDrawableBgAndStickerUrl(
+                InstagramStory.shareSingleImageBgAndStickerUrl(
                     activity = requireActivity(),
                     context = requireContext(),
                     bgResId = R.drawable.ig_bg,
                     stickerImageUrl = feedBgImg,
-                    sourceAppId = appId
+                    sourceAppId = appId,
+                    stickerBottomOffsetPx = null,     // 중앙 정렬 그대로면 null
+                    cornerDp = 16f,
+                    circle = false,
+                    borderPx = 16,
+                    overlayResId = R.drawable.graphic_photi_logo_white,
+                    overlayWidthPx = 62,
+                    overlayHeightPx = 12,
                 )
             } catch (ce: CancellationException) {
                 throw ce
