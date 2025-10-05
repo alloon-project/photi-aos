@@ -65,6 +65,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
 
     fun showInputForm(){
         binding.textView.visibility = View.GONE
+        binding.describeTextView.visibility = View.GONE
         binding.keepButton.visibility = View.GONE
         binding.cancleButton.visibility = View.GONE
 
