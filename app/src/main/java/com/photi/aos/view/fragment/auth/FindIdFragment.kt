@@ -19,6 +19,8 @@ import com.photi.aos.view.activity.AuthActivity
 import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialog
 import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialogInterface
 import com.photi.aos.view.ui.util.KeyboardListener
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.AuthViewModel
 
@@ -102,6 +104,7 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
 
     fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
+            binding.nextButton.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     CustomOneButtonDialog(
@@ -127,6 +130,11 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
                 }
             }
         }
+    }
+
+    fun checkSignedUp() {
+        binding.nextButton.showLoading()
+        authViewModel.checkSignedUp()
     }
 
 }
