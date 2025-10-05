@@ -35,8 +35,7 @@
             android:text="취소하기"
             android:textSize="14dp"
             android:textColor="@color/gray600"
-            android:theme="@style/Theme.small_round"
-            android:stateListAnimator="@null"/>
+            android:theme="@style/Theme.small_round"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/upload_btn"
@@ -45,7 +44,6 @@
             android:layout_marginLeft="16dp"
             android:background="@drawable/btn_round_primary"
             android:text="올리기"
-            android:stateListAnimator="@null"
             android:theme="@style/materialButton"
             app:backgroundTint="@color/blue400"
             app:icon="@drawable/ic_rocket"

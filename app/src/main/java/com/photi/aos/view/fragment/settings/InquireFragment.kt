@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -55,13 +56,23 @@ class InquireFragment : Fragment() {
     }
 
     fun setListener() {
+        binding.root.setOnClickListener {
+            if (activity != null && requireActivity().currentFocus != null) {
+                val inputManager: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+
         KeyboardListener.setKeyboardVisibilityListener(binding.root, object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) binding.contentsEditText.background =
                     mContext.getDrawable(R.drawable.textarea_line_focus)
-                else binding.contentsEditText.background =
-                    mContext.getDrawable(R.drawable.textarea_line_default)
+                else {
+                    binding.contentsEditText.background =
+                        mContext.getDrawable(R.drawable.textarea_line_default)
+                    binding.contentsEditText.clearFocus()
+                }
             }
         })
 

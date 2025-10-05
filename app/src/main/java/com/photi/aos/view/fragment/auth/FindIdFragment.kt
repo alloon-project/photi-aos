@@ -7,6 +7,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -50,6 +51,13 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
     }
 
     fun setListener() {
+        binding.root.setOnClickListener {
+            if (activity != null && requireActivity().currentFocus != null) {
+                val inputManager: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
@@ -57,8 +65,11 @@ class FindIdFragment : Fragment(), CustomOneButtonDialogInterface {
                     binding.emailLinearlayout.visibility = View.GONE
                     binding.emailEditText.background =
                         mContext.getDrawable(R.drawable.input_line_focus)
-                } else if(binding.emailEditText.text.isNotEmpty()){
-                    checkEmailValidation()
+                } else {
+                    binding.emailEditText.clearFocus()
+                    if(binding.emailEditText.text.isNotEmpty()){
+                        checkEmailValidation()
+                    }
                 }
             }
         })

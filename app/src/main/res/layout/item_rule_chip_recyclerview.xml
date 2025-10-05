@@ -15,7 +15,6 @@
         android:paddingRight="8dp"
         android:background="@drawable/chip_gray"
         android:fontFamily="@font/suit_medium"
-        android:stateListAnimator="@null"
         android:text="해시태그"
         android:textSize="12dp"
         android:textColor="@color/gray600"/>

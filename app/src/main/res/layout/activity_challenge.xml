@@ -447,7 +447,6 @@
                             android:text="@string/seeall"
                             android:textColor="@color/green500"
                             android:theme="@style/Theme.xsmall_round"
-                            android:stateListAnimator="@null"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
