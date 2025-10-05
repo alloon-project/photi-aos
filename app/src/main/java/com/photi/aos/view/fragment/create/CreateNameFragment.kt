@@ -77,7 +77,10 @@ class CreateNameFragment : Fragment() {
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible)    binding.nameEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
-                else    binding.nameEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
+                else {
+                    binding.nameEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
+                    binding.nameEdittext.clearFocus()
+                }
             }
         })
 

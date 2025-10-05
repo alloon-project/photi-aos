@@ -23,6 +23,8 @@ import com.photi.aos.view.ui.component.bottomsheet.TimeBottomSheet
 import com.photi.aos.view.ui.component.bottomsheet.TimeBottomSheetInterface
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.KeyboardListener
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.CreateViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -63,6 +65,11 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkData()
+    }
+
     private fun setModifyLayout() {
         mActivity.setTitle("챌린지 소개 수정")
         binding.progress.visibility = View.GONE
@@ -86,6 +93,7 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
 
     fun setObserver() {
         createViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            binding.nextBtn.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     view?.findNavController()?.navigate(R.id.action_createContentFragment_to_createImageFragment)
@@ -123,8 +131,10 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
             } else {
                 if (mActivity.isFromChallenge)
                     mActivity.modifyContent()
-                else
+                else {
+                    binding.nextBtn.showLoading()
                     createViewModel.getExamImg()
+                }
             }
         }
 
@@ -139,7 +149,10 @@ class CreateContentFragment : Fragment(), TimeBottomSheetInterface, DateBottomSh
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible)    binding.contentEdittext.background = mContext.getDrawable(R.drawable.textarea_line_focus)
-                else    binding.contentEdittext.background = mContext.getDrawable(R.drawable.textarea_line_default)
+                else {
+                    binding.contentEdittext.background = mContext.getDrawable(R.drawable.textarea_line_default)
+                    binding.contentEdittext.clearFocus()
+                }
             }
         })
 

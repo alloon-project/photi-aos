@@ -489,7 +489,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btn_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -507,7 +507,9 @@
                     android:background="@drawable/btn_round_primary"
                     android:text="@string/join"
                     android:visibility="gone"
-                    android:theme="@style/Theme.xlarge_round"/>
+                    android:theme="@style/Theme.xlarge_round"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/create_btn"
@@ -516,7 +518,9 @@
                     android:background="@drawable/btn_round_primary"
                     android:text="@string/create"
                     android:visibility="gone"
-                    android:theme="@style/Theme.xlarge_round"/>
+                    android:theme="@style/Theme.xlarge_round"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <Button
                     android:id="@+id/modify_btn"
@@ -525,9 +529,11 @@
                     android:background="@drawable/btn_round_secondary"
                     android:text="@string/modify"
                     android:theme="@style/Theme.xlarge_round"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
-            </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -19,16 +19,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.photi.aos.R
+import com.photi.aos.databinding.BottomsheetListBinding
 import com.photi.aos.databinding.FragmentSignupPwBinding
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.activity.AuthActivity
 import com.photi.aos.view.ui.component.bottomsheet.ListBottomSheet
 import com.photi.aos.view.ui.component.bottomsheet.ListBottomSheetInterface
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.viewmodel.AuthViewModel
 import java.util.regex.Pattern
 
 class SignupPwFragment : ListBottomSheetInterface,Fragment() {
     private lateinit var binding : FragmentSignupPwBinding
+    private lateinit var bottomsheetListBinding: BottomsheetListBinding
     private lateinit var mContext: Context
     private val authViewModel by activityViewModels<AuthViewModel>()
     private lateinit var mActivity: AuthActivity
@@ -145,6 +149,9 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
 
     fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
+            if (::bottomsheetListBinding.isInitialized)
+                bottomsheetListBinding.btn.hideLoading()
+
             when (response.code) {
                 "201 CREATED" -> {
                     mActivity.finishActivity()
@@ -248,7 +255,9 @@ class SignupPwFragment : ListBottomSheetInterface,Fragment() {
         startActivity(intent)
     }
 
-    override fun onClickButton() {
+    override fun onClickButton(binding: BottomsheetListBinding) {
+        bottomsheetListBinding = binding
+        bottomsheetListBinding.btn.showLoading()
         authViewModel.signUp()
     }
 }

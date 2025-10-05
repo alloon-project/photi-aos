@@ -81,11 +81,8 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn"
-        android:text="버튼"
-        android:theme="@style/Theme.xlarge_round"
-        android:background="@drawable/btn_round_primary"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btn_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
@@ -93,6 +90,18 @@
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/linearLayout3"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_round_primary"
+            android:text="버튼"
+            android:theme="@style/Theme.xlarge_round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

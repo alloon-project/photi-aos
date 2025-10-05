@@ -87,7 +87,10 @@ class CreateHashtagFragment : Fragment() {
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible)    binding.hashEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
-                else    binding.hashEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
+                else {
+                    binding.hashEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
+                    binding.hashEdittext.clearFocus()
+                }
             }
         })
 

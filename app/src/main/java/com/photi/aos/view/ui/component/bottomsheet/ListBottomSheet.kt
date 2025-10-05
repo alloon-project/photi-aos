@@ -10,7 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 interface ListBottomSheetInterface {
     fun onClickImgButton1()
     fun onClickImgButton2()
-    fun onClickButton()
+    fun onClickButton(binding: BottomsheetListBinding)
 }
 // ModalBottomSheet.kt
 class ListBottomSheet(val listBottomSheetInterface: ListBottomSheetInterface, val title: String, val text1: String, val text2: String, val buttonText : String) : BottomSheetDialogFragment()  {
@@ -26,8 +26,7 @@ class ListBottomSheet(val listBottomSheetInterface: ListBottomSheetInterface, va
         binding.btn.text = buttonText
 
         binding.btn.setOnClickListener {
-            listBottomSheetInterface.onClickButton()
-            dismiss()
+            listBottomSheetInterface.onClickButton(binding)
         }
 
         binding.imgBtn1.setOnClickListener{

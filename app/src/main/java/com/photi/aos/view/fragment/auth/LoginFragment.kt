@@ -19,6 +19,8 @@ import com.photi.aos.R
 import com.photi.aos.databinding.FragmentLoginBinding
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.activity.AuthActivity
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.viewmodel.AuthViewModel
 
 class LoginFragment : Fragment() {
@@ -52,8 +54,10 @@ class LoginFragment : Fragment() {
     fun onClickLogin() {
         if (binding.idEdittext.text.isEmpty() || binding.pwEdittext.text.isEmpty())
             CustomToast.createToast(mActivity,"아이디와 비밀번호 모두 입력해주세요")?.show()
-        else
+        else {
+            binding.loginBtn.showLoading()
             authViewModel.login()
+        }
     }
 
     fun moveFrag(fragNum : Int){
@@ -125,6 +129,7 @@ class LoginFragment : Fragment() {
 
     fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
+            binding.loginBtn.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     mActivity.finishActivity()

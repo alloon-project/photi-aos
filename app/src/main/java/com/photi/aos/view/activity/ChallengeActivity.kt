@@ -31,6 +31,8 @@ import com.photi.aos.view.ui.component.dialog.PrivateCodeDialog
 import com.photi.aos.view.ui.component.dialog.PrivateCodeDialogInterface
 import com.photi.aos.view.ui.component.dialog.RuleCardDialog
 import com.photi.aos.view.ui.component.toast.CustomToast
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.viewmodel.ChallengeViewModel
 
 class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, BaseActivity() {
@@ -289,10 +291,12 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         }
 
         binding.createBtn.setOnClickListener {
+            binding.createBtn.showLoading()
             challengeViewModel.createChallenge(this)
         }
 
         binding.modifyBtn.setOnClickListener {
+            binding.modifyBtn.showLoading()
             challengeViewModel.modifyChallenge(this)
         }
     }
@@ -326,6 +330,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
     fun setCreateObserve() {
         challengeViewModel.apiResponse.observe(this) { response ->
+            binding.createBtn.hideLoading()
             when (response.code) {
                 "201 CREATED" -> {
                     startFeed()
@@ -360,6 +365,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
     fun setModifyObserve() {
         challengeViewModel.apiResponse.observe(this) { response ->
+            binding.modifyBtn.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     returnFeed()

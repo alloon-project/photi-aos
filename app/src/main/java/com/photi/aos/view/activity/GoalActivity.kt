@@ -14,6 +14,8 @@ import com.photi.aos.R
 import com.photi.aos.databinding.ActivityGoalBinding
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.KeyboardListener
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.GoalViewModel
 
@@ -100,6 +102,7 @@ class GoalActivity : BaseActivity() {
         })
 
         binding.nextBtn.setOnClickListener {
+            binding.nextBtn.showLoading()
             if (isFromFeed)
                 goalViewModel.setGoal()
             else
@@ -120,6 +123,7 @@ class GoalActivity : BaseActivity() {
 
     fun setObserver() {
         goalViewModel.apiResponse.observe(this) { response ->
+            binding.nextBtn.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     if (isFromFeed)
