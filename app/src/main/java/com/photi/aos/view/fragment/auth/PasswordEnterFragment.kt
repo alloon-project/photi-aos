@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -50,6 +51,13 @@ class PasswordEnterFragment : Fragment() {
 
 
     fun setListener(){
+        binding.root.setOnClickListener {
+            if (activity != null && requireActivity().currentFocus != null) {
+                val inputManager: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+
         KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
@@ -58,6 +66,7 @@ class PasswordEnterFragment : Fragment() {
                     binding.newPasswordEditText.background =
                         mContext.getDrawable(R.drawable.input_line_focus)
                 } else {
+                    binding.newPasswordEditText.clearFocus()
                     binding.newPasswordEditText.background = mContext.getDrawable(R.drawable.input_line_default)
                     if(binding.newPasswordEditText.text.isNotEmpty()) binding.nextButton.isEnabled = true
                     else binding.nextButton.isEnabled = false
