@@ -79,10 +79,9 @@ class SignupIdFragment : Fragment() {
             OnKeyboardVisibilityListener {
             override fun onVisibilityChanged(visible: Boolean) {
                 if (visible) {
-                    binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
-                    binding.idLinearlayout.isVisible = false
+                    setFocusMode()
                 } else {
-                    binding.checkBtn.isEnabled = true
+                    binding.idEdittext.clearFocus()
                     binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_default)
 
                     val length = binding.idEdittext.text.length
@@ -107,7 +106,11 @@ class SignupIdFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.nextBtn.isEnabled = false
-                binding.checkBtn.isEnabled = false
+                setFocusMode()
+                if (s!!.length < 5)
+                    binding.checkBtn.isEnabled = false
+                else
+                    binding.checkBtn.isEnabled = true
             }
         })
     }
@@ -138,6 +141,11 @@ class SignupIdFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setFocusMode() {
+        binding.idEdittext.background = mContext.getDrawable(R.drawable.input_line_focus)
+        binding.idLinearlayout.isVisible = false
     }
 
     private fun setErrorMsg() {
