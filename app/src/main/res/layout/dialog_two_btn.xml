@@ -49,7 +49,6 @@
         android:background="@drawable/btn_round_quaternary"
         android:fontFamily="@font/suit_bold"
         android:letterSpacing="-0.03"
-        android:stateListAnimator="@null"
         android:text="버튼"
         android:textColor="@color/textcolor_btn_round_quaternary"
         android:theme="@style/Theme.small_round"

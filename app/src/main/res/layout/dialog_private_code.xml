@@ -44,7 +44,6 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginTop="24dp"
-        android:stateListAnimator="@null"
         android:theme="@style/Theme.btn_lock_closed_icon"
         android:background="@drawable/btn_icon_primary"
         app:layout_constraintEnd_toEndOf="parent"

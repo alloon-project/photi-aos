@@ -185,16 +185,14 @@
                 android:layout_height="wrap_content"
                 android:onClick="@{() ->fragment.moveFrag(2)}"
                 android:text="@string/findid"
-                android:textColor="@color/gray600"
-                android:stateListAnimator="@null"/>
+                android:textColor="@color/gray600"/>
 
             <Button
                 android:id="@+id/find_divider"
                 android:layout_width="1dp"
                 android:layout_height="10dp"
                 android:layout_marginLeft="8dp"
-                android:background="@drawable/ic_divider"
-                android:stateListAnimator="@null" />
+                android:background="@drawable/ic_divider"/>
 
             <Button
                 android:id="@+id/find_pw_btn"
@@ -204,8 +202,7 @@
                 android:layout_marginLeft="8dp"
                 android:onClick="@{() ->fragment.moveFrag(3)}"
                 android:text="@string/findpw"
-                android:textColor="@color/gray600"
-                android:stateListAnimator="@null"/>
+                android:textColor="@color/gray600"/>
         </LinearLayout>
 
         <Button
@@ -214,7 +211,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/btn_round_line_primary"
             android:onClick="@{() ->fragment.moveFrag(1)}"
-            android:stateListAnimator="@null"
             android:text="회원가입"
             android:textColor="@color/blue500"
             android:theme="@style/Theme.btn_round_line_xlarge"

@@ -109,7 +109,6 @@
                     android:id="@+id/delete_all_btn"
                     android:layout_width="70dp"
                     android:layout_height="35dp"
-                    android:stateListAnimator="@null"
                     android:text="전체삭제"
                     android:textColor="@color/gray600"
                     android:theme="@style/Theme.text_xsmall"
