@@ -20,6 +20,8 @@ import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialogInterface
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.activity.AuthActivity
 import com.photi.aos.view.ui.util.KeyboardListener
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.AuthViewModel
 import java.util.regex.Pattern
@@ -129,6 +131,7 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
 
     fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
+            binding.nextButton.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     CustomOneButtonDialog(
@@ -233,5 +236,10 @@ class PasswordChangeFragment : Fragment(), CustomOneButtonDialogInterface {
         }
 
         view?.findNavController()?.navigate(R.id.action_passwordChangeFragment_to_loginFragment)
+    }
+
+    fun modifyPassword() {
+        binding.nextButton.showLoading()
+        authViewModel.modifyPassword()
     }
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -18,6 +19,10 @@ import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialog
 import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialogInterface
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.activity.SettingsActivity
+import com.photi.aos.view.ui.util.KeyboardListener
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
+import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.SettingsViewModel
 
 class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
@@ -48,6 +53,21 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     }
 
     fun setListener(){
+        binding.root.setOnClickListener {
+            if (activity != null && requireActivity().currentFocus != null) {
+                val inputManager: InputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+
+        KeyboardListener.setKeyboardVisibilityListener(binding.root,object :
+            OnKeyboardVisibilityListener {
+            override fun onVisibilityChanged(visible: Boolean) {
+                if (!visible)
+                    binding.passwordEditText.clearFocus()
+            }
+        })
+
         binding.passwordEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
@@ -70,7 +90,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
         binding.cancleButton.visibility = View.GONE
 
         binding.enterPasswordLayout.visibility = View.VISIBLE
-        binding.nextButton.visibility = View.VISIBLE
+        binding.nextButtonLayout.visibility = View.VISIBLE
     }
 
     fun changeInputType(n : Int) {
@@ -93,6 +113,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
 
     fun setObserve() {
         settingsViewmodel.actionApiResponse.observe(viewLifecycleOwner) { response ->
+            binding.nextButton.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     val mActivity = activity as SettingsActivity
@@ -122,5 +143,10 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
 
     override fun onClickYesButton() {
         binding.passwordEditText.setText("")
+    }
+
+    fun deleteUser() {
+        binding.nextButton.showLoading()
+        settingsViewmodel.deleteUser()
     }
 }

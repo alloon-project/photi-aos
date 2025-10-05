@@ -14,12 +14,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.photi.aos.R
 import com.photi.aos.databinding.FragmentProfilePasswordBinding
 import com.photi.aos.view.activity.AuthActivity
 import com.photi.aos.view.activity.SettingsActivity
 import com.photi.aos.view.ui.component.toast.CustomToast
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.viewmodel.AuthViewModel
 
 class ProfilePasswordFragment : Fragment() {
@@ -72,10 +75,11 @@ class ProfilePasswordFragment : Fragment() {
 
     private fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
-
+            binding.nextButton.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     CustomToast.createToast(activity, "비밀번호 변경이 완료됐어요")?.show()
+                    view?.findNavController()?.popBackStack()
                 }
 
                 "PASSWORD_DUPLICATE_INVALID" -> {
@@ -88,7 +92,6 @@ class ProfilePasswordFragment : Fragment() {
                 }
 
                 "LOGIN_UNAUTHENTICATED" -> {
-
                     binding.passwordErrorLayout.visibility = View.VISIBLE
                 }
 
@@ -231,5 +234,10 @@ class ProfilePasswordFragment : Fragment() {
                 binding.scrollView.smoothScrollBy(0, scrollAmount)
             }
         }
+    }
+
+    fun modifyPassword() {
+        binding.nextButton.showLoading()
+        authViewModel.modifyPassword()
     }
 }

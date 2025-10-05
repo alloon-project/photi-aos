@@ -17,6 +17,8 @@ import com.photi.aos.databinding.FragmentPasswordSendBinding
 import com.photi.aos.view.activity.AuthActivity
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.KeyboardListener
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.AuthViewModel
 
@@ -97,6 +99,7 @@ class PasswordSendFragment : Fragment() {
 
     fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
+            binding.nextButton.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     view?.findNavController()?.navigate(R.id.action_passwordSendFragment_to_passwordEnterFragment)
@@ -134,4 +137,8 @@ class PasswordSendFragment : Fragment() {
         }
     }
 
+    fun sendNewPassword() {
+        binding.nextButton.showLoading()
+        authViewModel.sendNewPassword()
+    }
 }
