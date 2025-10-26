@@ -135,72 +135,78 @@
                     android:tag="ETC" />
             </RadioGroup>
         </FrameLayout>
-            <LinearLayout
-                android:id="@+id/contents_layout"
+        <LinearLayout
+            android:id="@+id/contents_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="32dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/suit_medium"
+                android:letterSpacing="-0.03"
+                android:text="자세한 내용을 적어주시면 신고에 도움이 돼요"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+            <EditText
+                android:id="@+id/report_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:layout_marginTop="32dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginLeft="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+                android:layout_marginTop="24dp"
+                android:background="@drawable/textarea_line_default"
+                android:ems="10"
+                android:maxLength="120"
+                android:fontFamily="@font/suit_medium"
+                android:gravity="top"
+                android:hint="신고 내용을 상세히 알려주세요"
+                android:text="@={viewModel.content}"
+                android:textColorHint="@color/gray400"
+                android:textSize="14dp"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
+                android:scrollHorizontally="false" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/suit_medium"
-                    android:letterSpacing="-0.03"
-                    android:text="자세한 내용을 적어주시면 신고에 도움이 돼요"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
+            <TextView
+                android:id="@+id/num_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/suit_medium"
+                android:text="0/120"
+                android:textColor="@color/gray400"
+                android:textSize="12dp" />
+        </LinearLayout>
 
-                <EditText
-                    android:id="@+id/report_edittext"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/textarea_line_default"
-                    android:ems="10"
-                    android:maxLength="120"
-                    android:fontFamily="@font/suit_medium"
-                    android:gravity="top"
-                    android:hint="신고 내용을 상세히 알려주세요"
-                    android:text="@={viewModel.content}"
-                    android:textColorHint="@color/gray400"
-                    android:textSize="14dp"
-                    android:inputType="textMultiLine"
-                    android:singleLine="false"
-                    android:scrollHorizontally="false" />
-
-                <TextView
-                    android:id="@+id/num_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/suit_medium"
-                    android:text="0/120"
-                    android:textColor="@color/gray400"
-                    android:textSize="12dp" />
-            </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <Button
                 android:id="@+id/next_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background = "@drawable/btn_round_primary"
+                android:background="@drawable/btn_round_primary"
                 android:onClick="@{() ->fragment.click()}"
                 android:text="신고하기"
                 android:theme="@style/Theme.xlarge_round"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginLeft="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

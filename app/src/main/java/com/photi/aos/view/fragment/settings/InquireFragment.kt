@@ -20,6 +20,8 @@ import com.photi.aos.databinding.FragmentInquireBinding
 import com.photi.aos.view.activity.SettingsActivity
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.KeyboardListener
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.SettingsViewModel
 
@@ -101,6 +103,7 @@ class InquireFragment : Fragment() {
 
     fun setObserver() {
         settingsViewModel.code.observe(viewLifecycleOwner) { code ->
+            binding.nextButton.hideLoading()
             when (code) {
                 "201 CREATED" -> {
                     view?.findNavController()
@@ -129,7 +132,6 @@ class InquireFragment : Fragment() {
                     )
                 }
 
-
                 "IO_Exception" -> {
                     CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
                 }
@@ -146,7 +148,7 @@ class InquireFragment : Fragment() {
     }
 
     fun Click() {
-        
+        binding.nextButton.showLoading()
         settingsViewModel.sendInquiries(selectedInquiryType!!)
     }
 }

@@ -33,8 +33,8 @@ class ReportActivity : BaseActivity() {
         else finish()
 
         setLayout()
-        setListener()
 
+        binding.actionBar.setNavigationOnClickListener { finish() }
         binding.actionBar.setNavigationIcon(R.drawable.ic_back_enabled)
     }
 
@@ -64,22 +64,16 @@ class ReportActivity : BaseActivity() {
         }
     }
 
-    fun setListener() {
-        binding.actionBar.setNavigationOnClickListener {
-            finish()
-        }
-
-        reportViewModel.code.observe(this) {code ->
-            when(code) {
-                "201 CREATED" -> {
-                    val resultIntent = Intent()
-                    resultIntent.putExtra("IS_FROM_REPORT",true)
-                    setResult(Activity.RESULT_OK, resultIntent)
-                    finish()
-                }
-                else -> {
-                    handleApiError(code)
-                }
+    fun observeReportCode(code: String) {
+        when(code) {
+            "201 CREATED" -> {
+                val resultIntent = Intent()
+                resultIntent.putExtra("IS_FROM_REPORT",true)
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
+            }
+            else -> {
+                handleApiError(code)
             }
         }
     }

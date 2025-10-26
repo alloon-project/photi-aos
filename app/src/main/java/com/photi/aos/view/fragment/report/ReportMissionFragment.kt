@@ -17,8 +17,10 @@ import androidx.fragment.app.activityViewModels
 import com.photi.aos.R
 import com.photi.aos.data.enum.ReasonType
 import com.photi.aos.databinding.FragmentReportMissionBinding
-import com.photi.aos.view.ui.component.toast.CustomToast
+import com.photi.aos.view.activity.ReportActivity
 import com.photi.aos.view.ui.util.KeyboardListener
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.ReportViewModel
 
@@ -26,6 +28,7 @@ class ReportMissionFragment : Fragment() {
     private lateinit var binding : FragmentReportMissionBinding
     private lateinit var mContext: Context
     private lateinit var radioTag: String
+    private lateinit var mActivity: ReportActivity
     private val reportViewModel by activityViewModels<ReportViewModel>()
 
     override fun onCreateView(
@@ -36,6 +39,8 @@ class ReportMissionFragment : Fragment() {
         binding.fragment = this
         binding.viewModel = reportViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        mActivity = activity as ReportActivity
 
         setListener()
         return binding.root
@@ -98,9 +103,15 @@ class ReportMissionFragment : Fragment() {
                 else binding.nextBtn.isEnabled = true
             }
         })
+
+        reportViewModel.code.observe(viewLifecycleOwner) {code ->
+            binding.nextBtn.hideLoading()
+            mActivity.observeReportCode(code)
+        }
     }
 
     fun click(){
+        binding.nextBtn.showLoading()
         reportViewModel.sendReport()
     }
 
