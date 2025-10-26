@@ -23,6 +23,8 @@ import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.KeyboardListener
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.view.activity.AuthActivity
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.viewmodel.AuthViewModel
 
 class SignupAuthFragment : Fragment() {
@@ -93,6 +95,7 @@ class SignupAuthFragment : Fragment() {
 
     fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
+            binding.nextBtn.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     authViewModel.resetIdValue()
@@ -120,4 +123,8 @@ class SignupAuthFragment : Fragment() {
         }
     }
 
+    fun verifyEmailCode() {
+        binding.nextBtn.showLoading()
+        authViewModel.verifyEmailCode()
+    }
 }

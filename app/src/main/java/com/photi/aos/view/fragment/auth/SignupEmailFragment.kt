@@ -23,6 +23,8 @@ import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.view.activity.AuthActivity
 import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialog
 import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialogInterface
+import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
+import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.viewmodel.AuthViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -96,6 +98,7 @@ class SignupEmailFragment : Fragment(), CustomOneButtonDialogInterface {
 
     fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
+            binding.nextBtn.hideLoading()
             when (response.code) {
                 "201 CREATED" -> {
                     authViewModel.resetAuthCodeValue()
@@ -134,6 +137,11 @@ class SignupEmailFragment : Fragment(), CustomOneButtonDialogInterface {
         }
     }
 
+
+    fun sendEmailCode() {
+        binding.nextBtn.showLoading()
+        authViewModel.sendEmailCode()
+    }
 
     private fun daysUntilDate(date: String): Int {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

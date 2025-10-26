@@ -203,6 +203,7 @@
                 android:background="@drawable/btn_round_primary"
                 android:onClick="@{() ->fragment.click()}"
                 android:text="신고하기"
+                android:enabled="false"
                 android:theme="@style/Theme.xlarge_round"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
