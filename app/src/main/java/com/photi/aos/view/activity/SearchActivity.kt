@@ -31,6 +31,8 @@ import com.photi.aos.databinding.ItemSearchChipRecyclerviewBinding
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.viewmodel.SearchViewModel
 import com.google.android.material.tabs.TabLayout
+import com.photi.aos.MyApplication
+import com.photi.aos.data.storage.SharedPreferencesManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -39,6 +41,7 @@ class SearchActivity : BaseActivity() {
     private val searchViewModel : SearchViewModel by viewModels()
     lateinit var hashAdapter: SearchHashAdapter
     lateinit var challengAdapter: SearchChallengeAdpater
+    private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +61,8 @@ class SearchActivity : BaseActivity() {
         binding.challengeRecyclerview.layoutManager = GridLayoutManager(this, 2)
         binding.challengeRecyclerview.setHasFixedSize(true)
 
+        searchViewModel.setHashList(sharedPreferencesManager.getSearchHistory())
+
         setListener()
         setObserve()
     }
@@ -68,6 +73,11 @@ class SearchActivity : BaseActivity() {
             setBeforeLayout()
         else
             setAfterLayout()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sharedPreferencesManager.saveSearchHistory(searchViewModel.getHashList())
     }
 
     override fun onDestroy() {

@@ -160,6 +160,16 @@ class SearchViewModel : ViewModel() {
         hashs.value = _hashs
     }
 
+    fun setHashList(list: List<String>) {
+        list.takeIf { list.isNotEmpty() }?.let {
+            _hashs.addAll(list)
+            hashs.value = _hashs
+        }
+    }
+    fun getHashList() : List<String> {
+        return if (_hashs.isNotEmpty()) _hashs else listOf()
+    }
+
 
     var searchText = MutableLiveData<String>()
     fun setSearchText(text : String){
