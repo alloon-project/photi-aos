@@ -6,27 +6,27 @@ import com.photi.aos.data.model.response.AuthResponse
 import com.photi.aos.data.model.response.InquiryResponse
 import com.photi.aos.data.model.response.ProfileImageData
 import com.photi.aos.data.model.response.UserProfile
-import com.photi.aos.data.remote.ApiService
+import com.photi.aos.data.remote.AuthService
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SettingsRepository(private val apiService: ApiService) {
+class SettingsRepository(private val authService: AuthService) {
     suspend fun getUsers(): Response<ApiResponse<UserProfile>> {
-        return apiService.get_users()
+        return authService.get_users()
     }
 
     suspend fun postImage(imageFile: MultipartBody.Part): Response<ApiResponse<ProfileImageData>> {
-        return apiService.post_image(imageFile)
+        return authService.post_image(imageFile)
     }
 
     suspend fun postInquiries(inquiryRequest: InquiryRequest): Response<ApiResponse<InquiryResponse>> {
-        return apiService.post_inquiries(inquiryRequest)
+        return authService.post_inquiries(inquiryRequest)
     }
 
     fun deleteUser(pwd: Map<String, String>, callback: MainRepositoryCallback<AuthResponse>) {
-        apiService.patch_deleteUser(pwd).enqueue(object : Callback<AuthResponse> {
+        authService.patch_deleteUser(pwd).enqueue(object : Callback<AuthResponse> {
             override fun onResponse(call: Call<AuthResponse>, response: Response<AuthResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)

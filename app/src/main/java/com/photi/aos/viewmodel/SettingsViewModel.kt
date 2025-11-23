@@ -23,7 +23,7 @@ class SettingsViewModel : ViewModel() {
         private const val TAG = "Settings"
     }
 
-    private val apiService = RetrofitClient.apiService
+    private val apiService = RetrofitClient.authService
 
     private val settingsRepository = SettingsRepository(apiService)
 

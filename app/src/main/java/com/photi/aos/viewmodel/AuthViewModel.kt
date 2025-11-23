@@ -28,7 +28,7 @@ class AuthViewModel : ViewModel() {
         private const val TAG = "AUTH"
     }
 
-    private val apiService = RetrofitClient.apiService
+    private val apiService = RetrofitClient.authService
     private val repository = AuthRepository(apiService)
 
     private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)

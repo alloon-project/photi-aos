@@ -27,81 +27,81 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Query
 
-interface ApiService {
+interface AuthService {
     @Headers("Content-Type: application/json")
-    @POST("/api/contacts")
+    @POST("/api/v2/auth/code")
     fun post_sendEmailCode(
         @Body params: Map<String, String>
     )
-            : Call<AuthResponse>
+    : Call<AuthResponse>
 
-    @PATCH("/api/users")
+    @PATCH("/api/v2/auth")
     fun patch_deleteUser(
         @Body params: Map<String, String>
     ): Call<AuthResponse>
 
-    @PATCH("/api/contacts/verify")
+    @PATCH("/api/v2/auth/code")
     fun patch_verifyEmailCode(
         @Body params: EmailCode
     )
-            : Call<AuthResponse>
+    : Call<AuthResponse>
 
-    @GET("/api/users/username")
+    @GET("/api/v2/auth/validate/name")
     fun get_verifyId(
         @Query("username") name: String
     )
-            : Call<AuthResponse>
+    : Call<AuthResponse>
 
-    @POST("/api/users/register")
+    @POST("/api/v2/auth")
     fun post_signUp(
         @Body parmas: UserData
     ): Call<AuthResponse>
 
-    @POST("/api/users/find-username")
+    @POST("/api/v2/auth/username")
     fun post_findId(
         @Body parmas: Map<String, String>
     ): Call<AuthResponse>
 
-    @POST("/api/users/find-password")
+    @POST("/api/v2/auth/password")
     fun post_findPwd(
         @Body parmas: UserData
     ): Call<AuthResponse>
 
-    @POST("/api/users/deleted-date")
+    @POST("/api/v2/auth/deleted-date")
     suspend fun post_deletedDate(
         @Body params: Email
     ): Response<ApiResponse<DeletedDateResponse>>
 
-    @POST("/api/users/login")
+    @POST("/api/v2/auth/login")
     fun post_login(
         @Body parmas: UserData
     ): Call<AuthResponse>
 
-    @PATCH("/api/users/password")
+    @PATCH("/api/v2/auth/password")
     fun patch_modifyPwd(
         @Body parmas: NewPwd
     ): Call<AuthResponse>
 
-    @POST("/api/users/token")
+    @POST("/api/v2/auth/token")
     fun post_token(
         @Header("Refresh-Token") token: String
     ): Call<TokenResponse>
 
-    @GET("/api/users")
+    @GET("/api/v2/users")
     suspend fun get_users(): Response<ApiResponse<UserProfile>>
 
-    @POST("/api/inquiries")
+    @POST("/api/v2/inquiries")
     suspend fun post_inquiries(
         @Body params: InquiryRequest
     ): Response<ApiResponse<InquiryResponse>>
 
     @Multipart
-    @POST("/api/users/image")
+    @POST("/api/v2/users/image")
     suspend fun post_image(
         @Part imageFile: MultipartBody.Part
     ): Response<ApiResponse<ProfileImageData>>
 
-    @POST("/api/app-version")
+    @POST("/api/v2/app-version")
     suspend fun post_appVersion(
         @Body params: AppVersionRequest
     ): Response<ApiResponse<AppVersionResponse>>

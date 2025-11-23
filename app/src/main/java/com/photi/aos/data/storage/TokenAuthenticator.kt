@@ -2,7 +2,7 @@ package com.photi.aos.data.storage
 
 import android.util.Log
 import com.photi.aos.MyApplication
-import com.photi.aos.data.remote.RetrofitClient.apiService
+import com.photi.aos.data.remote.RetrofitClient.authService
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -46,7 +46,7 @@ class TokenAuthenticator @Inject constructor( // 401 에러(토큰 관련 에러
         val newAccessToken = runBlocking {
             try {
                 Log.d("TokenAuthenticator", "Making API request to refresh token...")
-                val tokenResponse = apiService.post_token(refreshToken).execute()
+                val tokenResponse = authService.post_token(refreshToken).execute()
 
                 Log.d("TokenAuthenticator", "API request executed. Response received. ($tokenResponse)")
 
