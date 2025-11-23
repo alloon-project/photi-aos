@@ -30,12 +30,12 @@ import retrofit2.http.Query
 interface FeedApiService {
     @Headers("Content-Type: application/json")
 
-    @GET("/api/challenges/{challengeId}")
-    suspend fun get_challenge( //챌린지 소개 조회
+    @GET("/api/v2/challenges/{challengeId}")
+    suspend fun get_challenge( //챌린지 개별 조회
         @Path("challengeId") challengeId: Int
     ): Response<ApiResponse<FeedChallengeData>>
 
-    @GET("/api/challenges/{challengeId}/feeds/v2")
+    @GET("/api/v2/feeds/{challengeId}/v2")
     suspend fun get_challengeFeeds(
         @Path("challengeId") challengeId: Int,
         @Query("page") page: Int = 0,
@@ -43,32 +43,27 @@ interface FeedApiService {
         @Query("sort") sort: String = "LATEST"
     ): Response<ApiResponse<ChallengeFeedsData>>
 
-    @GET("/api/challenges/{challengeId}/feed-members")
-    suspend fun get_challengeFeedCount(
-        @Path("challengeId") challengeId: Int,
-    ): Response<ApiResponse<ChallengeFeedsData>> //TODO response type 수정
-
     //피드 챌린지 소개
-    @GET("/api/challenges/{challengeId}/info")
-    suspend fun get_challengeInfo(
+    @GET("/api/v2/challenges/{challengeId}/intro")
+    suspend fun get_challengeInfo( //챌린지 소개 조회
         @Path("challengeId") challengeId: Int
     ): Response<ApiResponse<ChallengeInfoData>>
 
     //피드 개별 조회
-    @GET("/api/challenges/{challengeId}/feeds/{feedId}")
+    @GET("/api/v2/feeds/{challengeId}/{feedId}")
     suspend fun get_challengeFeedDetail(
         @Path("challengeId") challengeId: Int,
         @Path("feedId") feedId: Int
     ): Response<ApiResponse<FeedDetailData>>
 
-    @GET("/api/challenges/{challengeId}/challenge-members")
+    @GET("/api/v2/challenge-members/{challengeId}")
     suspend fun get_challengeMembers(
         @Path("challengeId") challengeId: Int
     ): Response<ApiResponse<List<ChallengeMember>>>
 
 
     //댓글리스트 조회
-    @GET("/api/challenges/feeds/{feedId}/comments")
+    @GET("/api/v2/feed-comments/{feedId}")
     suspend fun get_feedComments(
         @Path("feedId") feedId: Int,
         @Query("page") page: Int = 0,
@@ -76,30 +71,30 @@ interface FeedApiService {
     ): Response<ApiResponse<FeedCommentsData>>
 
     // 챌린지 개인 목표 업데이트
-    @PATCH("/api/challenges/{challengeId}/challenge-members/goal")
+    @PATCH("/api/v2/challenge-members/{challengeId}/goal")
     suspend fun updateGoal(
         @Path("challengeId") challengeId: Int, // 챌린지 ID
         @Body goal: Map<String, String>
     ): ApiResponse<SuccessMessageReponse>
 
-    //챌린지 인증
+    //피드 인증
     @Multipart
-    @POST("/api/challenges/{challengeId}/feeds")
+    @POST("/api/v2/feeds/{challengeId}")
     suspend fun postChallengeFeed(
         @Path("challengeId") challengeId: Int, // 챌린지 ID
         @Part image: MultipartBody.Part // 이미지 파일
     ): Response<ApiResponse<SuccessMessageReponse>>
 
     //댓글 등록
-    @POST("/api/challenges/{challengeId}/feeds/{feedId}/comments")
+    @POST("/api/v2/feed-comments/{challengeId}/{feedId}")
     suspend fun postComment(
         @Path("challengeId") challengeId: Int,
         @Path("feedId") feedId: Int,
         @Body comment: CommentRequest
     ): Response<ApiResponse<CommentResponse>>
 
-    //댓글 등록
-    @DELETE("/api/challenges/{challengeId}/feeds/{feedId}/comments/{commentId}")
+    //댓글 삭제
+    @DELETE("/api/v2/feed-comments/{challengeId}/{feedId}/{commentId}")
     suspend fun deleteComment(
         @Path("challengeId") challengeId: Int,
         @Path("feedId") feedId: Int,
@@ -109,46 +104,46 @@ interface FeedApiService {
 
 
     //신고 등록
-    @POST("/api/reports/{targetId}")
+    @POST("/api/v2/reports/{targetId}")
     suspend fun post_reports(
         @Path("targetId") targetId: Int,
         @Body params: ReportRequest
     ): Response<ApiResponse<SuccessMessageReponse>>
 
     // 피드 좋아요 추가
-    @POST("/api/challenges/{challengeId}/feeds/{feedId}/like")
+    @POST("/api/v2/feed-likes/{challengeId}/{feedId}")
     suspend fun postFeedLike(
         @Path("challengeId") challengeId: Int,
         @Path("feedId") feedId: Int,
     ): Response<ApiResponse<SuccessMessageReponse>>
 
     // 피드 좋아요 취소
-    @DELETE("/api/challenges/{challengeId}/feeds/{feedId}/like")
+    @DELETE("/api/v2/feed-likes/{challengeId}/{feedId}")
     suspend fun deleteFeedLike(
         @Path("challengeId") challengeId: Int,
         @Path("feedId") feedId: Int,
     ): Response<ApiResponse<SuccessMessageReponse>>
 
     //피드 당일 인증 파티원 수 조회
-    @GET("/api/challenges/{challengeId}/feed-members")
+    @GET("/api/v2/feeds/{challengeId}/member-count")
     suspend fun get_verifiedMemberCount(
         @Path("challengeId") challengeId: Int,
     ): Response<ApiResponse<VerifiedMemberCount>>
 
     //피드 오늘 인증 여부
-    @GET("/api/users/challenges/{challengeId}/prove")
+    @GET("/api/v2/users/{challengeId}/prove")
     suspend fun get_is_user_verified_today(
         @Path("challengeId") challengeId: Int,
     ): Response<ApiResponse<UserVerificationStatus>>
 
     //챌린지 인증 피드 존재 여부
-    @GET("/api/challenges/{challengeId}/feed-existence")
+    @GET("/api/v2/challenges/{challengeId}/feed")
     suspend fun get_is_verified_feed_exist(
         @Path("challengeId") challengeId: Int,
     ): Response<ApiResponse<VerifiedFeedExistence>>
 
     //피드 삭제
-    @DELETE("/api/challenges/{challengeId}/feeds/{feedId}")
+    @DELETE("/api/v2/feeds/{challengeId}/{feedId}")
     suspend fun delete_feed(
         @Path("challengeId") challengeId: Int,
         @Path("feedId") feedId: Int,

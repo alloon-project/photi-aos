@@ -18,8 +18,6 @@ data class AuthData(
     val username: String,
     @field:Json(name = "imageUrl")
     val imageUrl: String,
-    @field:Json(name = "temporaryPasswordYn")
-    val temporaryPasswordYn: Boolean
 )
 
 data class TokenResponse(
