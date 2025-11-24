@@ -145,7 +145,6 @@ class SearchViewModel : ViewModel() {
     val _hashs = arrayListOf<String>()
 
     fun addHash(){
-        // 이미 있으면 지웠다 더하기
         if(_hashs.contains(search))
             _hashs.remove(search)
         _hashs.add(0,search)
@@ -161,10 +160,9 @@ class SearchViewModel : ViewModel() {
     }
 
     fun setHashList(list: List<String>) {
-        list.takeIf { list.isNotEmpty() }?.let {
-            _hashs.addAll(list)
-            hashs.value = _hashs
-        }
+        _hashs.clear()
+        _hashs.addAll(list)
+        hashs.value = _hashs
     }
     fun getHashList() : List<String> {
         return if (_hashs.isNotEmpty()) _hashs else listOf()
