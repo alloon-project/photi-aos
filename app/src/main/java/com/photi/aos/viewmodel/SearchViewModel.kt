@@ -21,6 +21,7 @@ import com.photi.aos.data.remote.RetrofitClient
 import com.photi.aos.data.repository.ChallengeRepository
 import com.photi.aos.data.repository.ChallengeRepositoryCallback
 import com.photi.aos.data.repository.ErrorHandler
+import com.photi.aos.data.storage.MyChallengeList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -49,18 +50,13 @@ class SearchViewModel : ViewModel() {
     var memberImg: List<MemberImg> = listOf()
     var memberCnt = -1
     var imgFile = ""
-    var myIdList = arrayListOf<Int>()
 
     fun resetApiResponseValue() {
         challengeResponse.value = ActionApiResponse()
     }
 
     fun checkUserInChallenge(): Boolean {
-        for (id in myIdList) {
-            if (this.id == id)
-                return true
-        }
-        return false
+        return MyChallengeList.checkUserInChallenge(id)
     }
 
     fun getData(): MyData {

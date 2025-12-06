@@ -16,12 +16,16 @@ import com.photi.aos.viewmodel.AuthViewModel
 
 class SplashActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
     private val authViewModel : AuthViewModel by viewModels()
+    private var isFromRouter: Boolean = false
+    private var deepLinkId: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        checkFromRouter(intent)
 
-        authViewModel.needUpdate.observe(this) {
-            if (it) {
+        authViewModel.needUpdate.observe(this) { needUpdate ->
+            if (needUpdate) {
                 CustomTwoButtonDialog(this@SplashActivity,
                     "업데이트가 필요해요",
                     "최신 버전 업데이트를 위해\n" + "스토어로 이동합니다.",
@@ -30,9 +34,13 @@ class SplashActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
             } else {
                 Handler().postDelayed(Runnable {
                     val i = Intent(this@SplashActivity,PhotiActivity::class.java)
+                    if (isFromRouter) {
+                        i.putExtra("fromRouter", true)
+                        i.putExtra("deepLinkId", deepLinkId)
+                    }
                     startActivity(i)
                     finish()
-                }, 2000)
+                }, 500)
             }
         }
 
@@ -51,10 +59,13 @@ class SplashActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun checkFromRouter(intent: Intent) {
+        isFromRouter = intent.getBooleanExtra("fromRouter", false)
+        deepLinkId = intent.getIntExtra("deepLinkId", -1)
+
         authViewModel.checkUpdate(BuildConfig.VERSION_NAME)
     }
+
 
     override fun onClickFisrtButton() {
         finishAffinity()

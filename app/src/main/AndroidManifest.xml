@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission
         android:name="com.google.android.gms.permission.AD_ID"
         tools:node="remove" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <queries>
         <package android:name="com.instagram.android" />
     </queries>
@@ -27,13 +29,14 @@
         <!-- Facebook SDK 설정 -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+            android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
-            android:value="@string/facebook_client_token"/>
+            android:value="@string/facebook_client_token" />
         <meta-data
             android:name="com.facebook.sdk.AdvertiserIDCollectionEnabled"
-            android:value="false"/>
+            android:value="false" />
+
         <activity
             android:name=".view.activity.SplashActivity"
             android:exported="true">
@@ -44,10 +47,28 @@
         </activity>
 
         <activity
+            android:name=".view.activity.RouterActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="www.photi.store"
+                    android:path="/open" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".view.activity.PhotiActivity"
             android:exported="true" />
         <activity
             android:name=".view.activity.FeedActivity"
+            android:launchMode="singleTask"
             android:exported="false" />
         <activity
             android:name=".view.activity.ReportActivity"
@@ -55,22 +76,22 @@
         <activity
             android:name=".view.activity.SettingsActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.activity.AuthActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".view.activity.GoalActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".view.activity.CreateActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".view.activity.ChallengeActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".view.activity.SearchActivity"
-            android:exported="true"/>
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -81,7 +102,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <provider android:authorities="com.facebook.app.FacebookContentProvider1178922380714530"
+        <provider
+            android:authorities="com.facebook.app.FacebookContentProvider1178922380714530"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true" />
 

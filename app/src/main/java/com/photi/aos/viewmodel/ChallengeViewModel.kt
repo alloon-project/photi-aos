@@ -19,6 +19,7 @@ import com.photi.aos.data.remote.RetrofitClient
 import com.photi.aos.data.repository.ChallengeRepository
 import com.photi.aos.data.repository.ChallengeRepositoryCallback
 import com.photi.aos.data.repository.ErrorHandler
+import com.photi.aos.data.storage.MyChallengeList
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -55,6 +56,10 @@ class ChallengeViewModel : ViewModel() {
     fun resetApiResponseValue() {
         apiResponse.value = ActionApiResponse()
         joinResponse.value = ActionApiResponse()
+    }
+
+    fun checkUserInChallenge(): Boolean {
+        return MyChallengeList.checkUserInChallenge(id)
     }
 
     fun setChallengeId(id: Int) {
