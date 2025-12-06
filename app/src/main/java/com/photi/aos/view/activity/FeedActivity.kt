@@ -169,28 +169,29 @@ class FeedActivity : BaseActivity(), CustomTwoButtonDialogInterface {
         }
     }
 
-    private fun sendInviteMsg() { //TODO
-//        val challengeId = feedViewModel.challengeId
-//        val inviteCode = feedViewModel.invitecode
-//        val challengeTitle = feedChallengeData.name
-//
-//        // 딥링크 URL 구성
-//        val appLink = "https://photi.test/invite?challengeId=$challengeId"
-//
-//        // 메시지 구성
-//        val message = if (!feedChallengeData.isPublic) {
-//            "[Photi] '$challengeTitle' 챌린지에 함께 참여해 보세요!\n* 초대코드: $inviteCode\n\n$appLink"
-//        } else {
-//            "[Photi] '$challengeTitle' 챌린지에 함께 참여해 보세요!\n\n$appLink"
-//        }
-//
-//        val sendIntent = Intent(Intent.ACTION_SEND).apply {
-//            type = "text/plain"
-//            putExtra(Intent.EXTRA_TEXT, message)
-//        }
-//
-//        val chooser = Intent.createChooser(sendIntent, challengeTitle)
-//        startActivity(chooser)
+    private fun sendInviteMsg() {
+        val challengeId = feedViewModel.challengeId
+        val inviteCode = feedViewModel.invitecode
+        val challengeTitle = feedChallengeData.name
+        val isPublic = feedChallengeData.isPublic
+
+        // 딥링크 URL 구성
+        val appLink = "https://www.photi.store/open?page=$challengeId"
+
+        // 메시지 구성
+        val message = if (!isPublic && inviteCode.isNotEmpty()) {
+            "[Photi] '$challengeTitle' 챌린지에 함께 참여해 보세요!\n* 초대코드: $inviteCode\n\n$appLink"
+        } else {
+            "[Photi] '$challengeTitle' 챌린지에 함께 참여해 보세요!\n\n$appLink"
+        }
+
+        val sendIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, message)
+        }
+
+        val chooser = Intent.createChooser(sendIntent, challengeTitle)
+        startActivity(chooser)
     }
 
     @RequiresApi(Build.VERSION_CODES.S)

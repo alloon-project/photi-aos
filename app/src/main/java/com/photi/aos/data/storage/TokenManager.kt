@@ -21,7 +21,6 @@ class TokenManager @Inject constructor(
 
     fun saveAccessToken(token: String){
         sharedPreferences.setString(ACCESS_TOKEN_KEY, token)
-        Log.d("test","get access : "+getAccessToken())
     }
 
     fun deleteAccessToken(){
@@ -34,7 +33,6 @@ class TokenManager @Inject constructor(
 
     fun saveRefreshToken(token: String){
         sharedPreferences.setString(REFRESH_TOKEN_KEY, token)
-        Log.d("test","get refresh : "+getRefreshToken())
     }
 
     fun deleteRefreshToken(){

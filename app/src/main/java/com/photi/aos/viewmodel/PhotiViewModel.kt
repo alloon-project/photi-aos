@@ -40,6 +40,7 @@ import com.photi.aos.data.repository.ErrorHandler
 import com.photi.aos.data.repository.FeedRepository
 import com.photi.aos.data.repository.UserRepository
 import com.photi.aos.data.repository.handleApiCall
+import com.photi.aos.data.storage.MyChallengeList
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -104,6 +105,18 @@ class PhotiViewModel : ViewModel() {
         popularResponse.value = ActionApiResponse()
         hashListResponse.value = ActionApiResponse()
     }
+
+
+//    //loading 상태 관리
+//    private val _loadingCount = MutableStateFlow(0)
+//    val loadingCount: StateFlow<Int> = _loadingCount
+//
+//    fun incrementLoading() {
+//        _loadingCount.value += 1
+//    }
+//    fun decrementLoading() {
+//        _loadingCount.value = (_loadingCount.value - 1).coerceAtLeast(0)
+//    }
 
 
     //userData
@@ -186,11 +199,7 @@ class PhotiViewModel : ViewModel() {
 
     //챌린지 참여 여부
     fun checkUserInChallenge(): Boolean {
-        for (id in myIdList) {
-            if (this.id == id)
-                return true
-        }
-        return false
+        return MyChallengeList.checkUserInChallenge(id)
     }
 
 
@@ -350,7 +359,7 @@ class PhotiViewModel : ViewModel() {
     var currentItem: MyChallengeData? = null
     var completeProof = false
 
-    var myIdList = arrayListOf<Int>()
+    var myChallengeList = MutableLiveData<List<Int>>()
 
     fun updateCurrentItem(item: MyChallengeData) {
         currentItem = item
@@ -360,7 +369,7 @@ class PhotiViewModel : ViewModel() {
         proofItems = arrayListOf()
         completeItems = arrayListOf()
         allItems = arrayListOf()
-        myIdList = arrayListOf()
+        MyChallengeList.clearList()
     }
 
     fun setMyChallenge(list: List<ChallengeContent>) {
@@ -372,8 +381,9 @@ class PhotiViewModel : ViewModel() {
             else
                 proofItems.add(newItem)
             allItems.add(newItem)
-            myIdList.add(item.id)
+            MyChallengeList.addId(item.id)
         }
+        myChallengeList.postValue(MyChallengeList.getList())
         _allItems.value = allItems
 
         if (completeProof) {

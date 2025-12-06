@@ -3,7 +3,6 @@ package com.photi.aos.view.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
@@ -37,13 +36,14 @@ class PhotiActivity : BaseActivity(), CustomTwoButtonDialogInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        checkFromRouter()
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_photi)
         mContext = this
 
         setBottomNavigation(TAG_HOME)
         setListener()
         setObserver()
-        //setDeepLink()
 
         val isFrom = intent.getStringExtra("IS_FROM")
         when(isFrom){
@@ -60,12 +60,6 @@ class PhotiActivity : BaseActivity(), CustomTwoButtonDialogInterface {
 
         photiViewModel.resetAllResponseValue()
 
-//        val challengeId = intent.getStringExtra("challengeId")
-//        if (!challengeId.isNullOrEmpty()) {
-//            photiViewModel.id = challengeId.toInt()
-//            photiViewModel.getChallenge()
-//        }
-
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data?.getBooleanExtra("IS_FROM_LOGIN",false)
@@ -77,19 +71,16 @@ class PhotiActivity : BaseActivity(), CustomTwoButtonDialogInterface {
         }
     }
 
-    private fun setDeepLink() { //TODO
-        val intent = intent
-        val action = intent.action
-        val data: Uri? = intent.data
+    private fun checkFromRouter() {
+        val isFromRouter = intent.getBooleanExtra("fromRouter", false)
+        val deepLinkId = intent.getIntExtra("deepLinkId", -1)
 
-        if (Intent.ACTION_VIEW == action && data != null) {
-            val inviteCode = data.getQueryParameter("inviteCode")
-            if (inviteCode != null) {
-                val intent = Intent(this, ChallengeActivity::class.java)
-                intent.putExtra("IS_FROM_HOME",true)
-                intent.putExtra("code", inviteCode)
-                startActivity(intent)
-            }
+        if (isFromRouter) {
+            startActivity(
+                Intent(this, RouterActivity::class.java)
+                    .putExtra("fromRouter", true)
+                    .putExtra("deepLinkId", deepLinkId)
+            )
         }
     }
 

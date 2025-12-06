@@ -51,7 +51,6 @@ class ChallengeFragment : Fragment(), JoinGuestDialogInterface {
     private fun setListener() {
         binding.searchEdittext.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putIntegerArrayListExtra("IDList", photiViewModel.myIdList)
             startActivity(intent)
         }
 

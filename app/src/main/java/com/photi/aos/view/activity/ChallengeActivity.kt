@@ -34,6 +34,7 @@ import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
 import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.viewmodel.ChallengeViewModel
+import com.photi.aos.viewmodel.PhotiViewModel
 
 class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, BaseActivity() {
     lateinit var binding : ActivityChallengeBinding
@@ -42,6 +43,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
     lateinit var hashAdapter: RuleHashAdapter
     private lateinit var privateCodeDialog: PrivateCodeDialog
     private val challengeViewModel : ChallengeViewModel by viewModels()
+    private val photiViewModel : PhotiViewModel by viewModels()
     private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var startForResult: ActivityResultLauncher<Intent>
@@ -69,7 +71,7 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         val imageFile = intent.getStringExtra("image")
         val isUri = intent.getBooleanExtra("isUri",false)
 
-        challengeId?.let {
+        challengeId.let {
             challengeViewModel.setChallengeId(it)
         }
         challengeData?.let {
@@ -140,9 +142,15 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data?.getBooleanExtra("IS_FROM_LOGIN",false)
-                if(data == true) {
+                if (data == true) {
                     val id = result.data?.getStringExtra("id")
                     CustomToast.createToast(this, "${id}님 환영합니다!")?.show()
+
+                    photiViewModel.fetchMyChallenges()
+                    photiViewModel.myChallengeList.observe(this) {
+                        if (challengeViewModel.checkUserInChallenge())
+                            startFeed()
+                    }
                 }
             }
         }

@@ -21,6 +21,7 @@ import com.photi.aos.data.remote.RetrofitClient
 import com.photi.aos.data.repository.ChallengeRepository
 import com.photi.aos.data.repository.ChallengeRepositoryCallback
 import com.photi.aos.data.repository.ErrorHandler
+import com.photi.aos.data.storage.MyChallengeList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -49,18 +50,13 @@ class SearchViewModel : ViewModel() {
     var memberImg: List<MemberImg> = listOf()
     var memberCnt = -1
     var imgFile = ""
-    var myIdList = arrayListOf<Int>()
 
     fun resetApiResponseValue() {
         challengeResponse.value = ActionApiResponse()
     }
 
     fun checkUserInChallenge(): Boolean {
-        for (id in myIdList) {
-            if (this.id == id)
-                return true
-        }
-        return false
+        return MyChallengeList.checkUserInChallenge(id)
     }
 
     fun getData(): MyData {
@@ -145,7 +141,6 @@ class SearchViewModel : ViewModel() {
     val _hashs = arrayListOf<String>()
 
     fun addHash(){
-        // 이미 있으면 지웠다 더하기
         if(_hashs.contains(search))
             _hashs.remove(search)
         _hashs.add(0,search)
@@ -161,10 +156,9 @@ class SearchViewModel : ViewModel() {
     }
 
     fun setHashList(list: List<String>) {
-        list.takeIf { list.isNotEmpty() }?.let {
-            _hashs.addAll(list)
-            hashs.value = _hashs
-        }
+        _hashs.clear()
+        _hashs.addAll(list)
+        hashs.value = _hashs
     }
     fun getHashList() : List<String> {
         return if (_hashs.isNotEmpty()) _hashs else listOf()

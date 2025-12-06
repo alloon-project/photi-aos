@@ -49,7 +49,6 @@ class SearchActivity : BaseActivity() {
         binding.viewModel = searchViewModel
 
         searchViewModel.resetApiResponseValue()
-        searchViewModel.myIdList = intent.getIntegerArrayListExtra("IDList")!!
 
         hashAdapter = SearchHashAdapter()
         binding.hashRecyclerview.adapter = hashAdapter
