@@ -10,6 +10,7 @@ import com.photi.aos.data.enum.InquiryType
 import com.photi.aos.data.model.ActionApiResponse
 import com.photi.aos.data.model.request.InquiryRequest
 import com.photi.aos.data.model.response.AuthResponse
+import com.photi.aos.data.remote.PresignedPutUploader
 import com.photi.aos.data.remote.RetrofitClient
 import com.photi.aos.data.repository.ErrorHandler
 import com.photi.aos.data.repository.MainRepositoryCallback
@@ -117,11 +118,12 @@ class SettingsViewModel : ViewModel() {
      fun sendProfileImage(file: File, contentType: String) {
          viewModelScope.launch {
              try{
-                 val presignedUrl  =  getPresignedUrl(file.name)
-
-
+                 val presignedUrl = PresignedPutUploader.getPresignedUrl(
+                     call = { settingsRepository.postUserImagePresignedUrl(file.name) },
+                     extractor = { body -> body.data.preSignedUrl }
+                 )
                  withContext(Dispatchers.IO) {
-                     uploadPut(presignedUrl, file, contentType)
+                     PresignedPutUploader.putFile(presignedUrl, file, contentType)
                  }
 
                  updateUserProfileImage(presignedUrl)
@@ -135,26 +137,6 @@ class SettingsViewModel : ViewModel() {
 
          }
 
-    }
-
-    private suspend fun getPresignedUrl(imageName: String) : String{
-        val response = settingsRepository.postUserImagePresignedUrl(imageName) // Response<ApiResponse<...>>
-        if (!response.isSuccessful) throw IOException("Presigned API failed: ${response.code()}")
-        val body = response.body() ?: throw IOException("Empty body")
-        return body.data.preSignedUrl
-    }
-
-    private fun uploadPut(url: String, file: File, contentType: String) {
-        val client = OkHttpClient()
-        val req = Request.Builder()
-            .url(url)
-            .put(file.asRequestBody(contentType.toMediaType()))
-            .header("Content-Type", contentType)
-            .build()
-
-        client.newCall(req).execute().use { res ->
-            if (!res.isSuccessful) throw IOException("Upload failed: ${res.code}")
-        }
     }
 
     private suspend fun updateUserProfileImage(presignedUrl : String){
