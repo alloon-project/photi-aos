@@ -101,3 +101,19 @@ data class ProfileImageData(
     val username: String,
     val email: String
 )
+
+data class UserImagePresignedUrlRequest(
+    val imageName: String
+)
+
+data class UserImagePresignedUrlResponse(
+    val preSignedUrl : String
+)
+
+data class UpdateUserProfileImageRequest(
+    val preSignedUrl : String
+)
+
+data class UpdateUserProfileImageResponse(
+    val successMessage : String
+)

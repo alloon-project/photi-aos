@@ -13,6 +13,10 @@ import com.photi.aos.data.model.response.DeletedDateResponse
 import com.photi.aos.data.model.response.InquiryResponse
 import com.photi.aos.data.model.response.ProfileImageData
 import com.photi.aos.data.model.response.TokenResponse
+import com.photi.aos.data.model.response.UpdateUserProfileImageRequest
+import com.photi.aos.data.model.response.UpdateUserProfileImageResponse
+import com.photi.aos.data.model.response.UserImagePresignedUrlRequest
+import com.photi.aos.data.model.response.UserImagePresignedUrlResponse
 import com.photi.aos.data.model.response.UserProfile
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -95,15 +99,19 @@ interface AuthService {
         @Body params: InquiryRequest
     ): Response<ApiResponse<InquiryResponse>>
 
-    @Multipart
-    @POST("/api/v2/users/image")
-    suspend fun post_image(
-        @Part imageFile: MultipartBody.Part
-    ): Response<ApiResponse<ProfileImageData>>
-
     @POST("/api/v2/app-version")
     suspend fun post_appVersion(
         @Body params: AppVersionRequest
     ): Response<ApiResponse<AppVersionResponse>>
+
+    @POST("/api/v2/users/image/pre-signed-url")
+    suspend fun post_user_image_presigne_url(
+        @Body request: UserImagePresignedUrlRequest
+    ) : Response<ApiResponse<UserImagePresignedUrlResponse>>
+
+    @PATCH("/api/v2/users/image")
+    suspend fun patch_user_profile_image_url(
+        @Body request : UpdateUserProfileImageRequest
+    ) : Response<ApiResponse<UpdateUserProfileImageResponse>>
 }
 

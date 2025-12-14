@@ -30,7 +30,6 @@ import java.io.File
 
 class ProfileModifyFragment : Fragment() {
     private lateinit var binding: FragmentProfileModifyBinding
-    private lateinit var mContext: Context
     private val settingsViewModel by activityViewModels<SettingsViewModel>()
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
     private var isModified = false
@@ -101,8 +100,8 @@ class ProfileModifyFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val selectedImageUri: Uri? = result.data?.data
                 selectedImageUri?.let {
-                    val imageFile = createMultipartFromUri(it)
-                    settingsViewModel.sendProfileImage(imageFile)
+                    val (file, mime) = createTempFileFromUri(it)
+                    settingsViewModel.sendProfileImage(file, mime)
                     isModified = true
                 } ?: run {
                     Log.e("Gallery", "이미지 선택에 실패했습니다.")
@@ -111,20 +110,26 @@ class ProfileModifyFragment : Fragment() {
         }
     }
 
+    private fun createTempFileFromUri(uri: Uri): Pair<File, String> {
+        val cr = requireContext().contentResolver
+        val mime = cr.getType(uri) ?: "image/jpeg"
 
-    private fun createMultipartFromUri(uri: Uri): MultipartBody.Part {
-        val contentResolver = requireContext().contentResolver
-        val inputStream = contentResolver.openInputStream(uri) ?: throw IllegalArgumentException("Invalid URI")
-        val fileName = System.currentTimeMillis().toString() + ".jpg"
-        val tempFile = File(requireContext().cacheDir, fileName)
-
-        tempFile.outputStream().use { outputStream ->
-            inputStream.copyTo(outputStream)
+        val ext = when (mime) {
+            "image/png" -> "png"
+            "image/webp" -> "webp"
+            else -> "jpg"
         }
 
-        val requestBody = tempFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData("imageFile", tempFile.name, requestBody)
+        val fileName = "profile_${System.currentTimeMillis()}.$ext"
+        val tempFile = File(requireContext().cacheDir, fileName)
+
+        cr.openInputStream(uri)!!.use { input ->
+            tempFile.outputStream().use { output -> input.copyTo(output) }
+        }
+
+        return tempFile to mime
     }
+
 
 
     fun openGallery() {

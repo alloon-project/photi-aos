@@ -32,7 +32,7 @@ object ApiConfig {
         "/api/v2/users/ended-challenges" to "GET",
         "/api/v2/users/challenge-count" to "GET", // 사용자 참여중인 챌린지 갯수 조회
         "/api/v2/users/challenge-history" to "GET", // 챌린지 기록 조회
-        "/api/v2/users/image" to "POST", // 이미지 업로드
+        "/api/v2/users/image" to "PATCH", // 이미지 업로드
 
         // feed
         "/api/v2/challenges/{challengeId}/intro" to "GET",                 // 챌린지 소개 조회
