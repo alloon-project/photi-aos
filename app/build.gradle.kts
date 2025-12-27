@@ -1,9 +1,11 @@
+
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
 }
-
 android {
     namespace = "com.photi.aos"
     compileSdk = 35
@@ -16,6 +18,26 @@ android {
         versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        val localProperties =
+            Properties().apply {
+                val file = rootProject.file("local.properties")
+                if (file.exists()) {
+                    load(file.inputStream())
+                }
+            }
+
+        val kakaoNativeAppKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY") ?: ""
+
+        buildConfigField(
+            "String",
+            "KAKAO_NATIVE_APP_KEY",
+            "\"$kakaoNativeAppKey\"",
+        )
+
+        manifestPlaceholders["kakaoNativeAppKey"] = kakaoNativeAppKey
+
     }
 
     buildFeatures {
@@ -90,6 +112,7 @@ dependencies {
     //Lottie
     implementation("com.airbnb.android:lottie:5.0.2")
 
+
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
@@ -99,4 +122,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.kakao.sdk.user)
+
 }

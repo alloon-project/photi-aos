@@ -1,5 +1,6 @@
 package com.photi.aos.view.fragment.auth
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -15,6 +16,10 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.user.UserApiClient
 import com.photi.aos.R
 import com.photi.aos.databinding.FragmentLoginBinding
 import com.photi.aos.view.ui.component.toast.CustomToast
@@ -31,7 +36,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.fragment = this
         binding.viewModel = authViewModel
@@ -60,6 +65,31 @@ class LoginFragment : Fragment() {
         }
     }
 
+
+    fun onClickKakaoLogin() {
+        val act = activity ?: return
+
+        launchKakaoLogin(
+            activity = act,
+            onSuccess = { idToken ->
+                // TODO 서버 연동전
+                Log.d("KakaoLogin", "SUCCESS idToken=$idToken")
+                CustomToast.createToast(mActivity, "카카오 로그인 성공(임시)", "circle")?.show()
+            },
+            onFailure = { t ->
+                Log.e("KakaoLogin", "FAIL", t)
+                 if (t is ClientError && t.reason == ClientErrorCause.Cancelled) return@launchKakaoLogin
+                CustomToast.createToast(mActivity, "카카오 로그인에 실패했어요. 다시 시도해주세요.", "circle")?.show()
+            }
+        )
+    }
+
+
+    fun onClickGoogleLogin() {
+    }
+
+
+
     fun moveFrag(fragNum : Int){
         /*
         * 1 : login to signUp
@@ -82,7 +112,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    fun setListener(){
+    private   fun setListener(){
         binding.idEdittext.onFocusChangeListener =
             OnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
@@ -127,7 +157,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    fun setObserve() {
+   private fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             binding.loginBtn.hideLoading()
             when (response.code) {
@@ -151,5 +181,59 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+    }
+}
+
+private fun launchKakaoLogin(
+    activity: Activity,
+    onSuccess: (String) -> Unit,
+    onFailure: (Throwable) -> Unit,
+) {
+    // 공통: 카카오계정 로그인 콜백
+    val accountCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        if (error != null) {
+            onFailure(error)
+        } else if (token == null) {
+            onFailure(IllegalStateException("Kakao login token is null"))
+        } else {
+            val idToken = token.idToken
+            if (idToken.isNullOrBlank()) {
+                onFailure(IllegalStateException("Kakao login idToken is null or blank"))
+            } else {
+                onSuccess(idToken)
+            }
+        }
+    }
+
+    if (UserApiClient.instance.isKakaoTalkLoginAvailable(activity)) {
+        UserApiClient.instance.loginWithKakaoTalk(activity) { token, error ->
+
+            if (error != null) {
+                // 사용자가 취소한 경우(뒤로가기 등)
+                if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                    onFailure(error)
+                    return@loginWithKakaoTalk
+                }
+
+                // 카카오톡 로그인 실패 → 카카오계정 로그인으로 fallback
+                UserApiClient.instance.loginWithKakaoAccount(activity, callback = accountCallback)
+                return@loginWithKakaoTalk
+            }
+
+            if (token == null) {
+                onFailure(IllegalStateException("Kakao login token is null"))
+                return@loginWithKakaoTalk
+            }
+
+            val idToken = token.idToken
+            if (idToken.isNullOrBlank()) {
+                onFailure(IllegalStateException("Kakao login idToken is null or blank"))
+                return@loginWithKakaoTalk
+            }
+
+            onSuccess(idToken)
+        }
+    } else {
+        UserApiClient.instance.loginWithKakaoAccount(activity, callback = accountCallback)
     }
 }
