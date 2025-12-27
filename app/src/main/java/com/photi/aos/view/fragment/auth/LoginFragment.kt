@@ -13,13 +13,22 @@ import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.NoCredentialException
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.photi.aos.BuildConfig
 import com.photi.aos.R
 import com.photi.aos.databinding.FragmentLoginBinding
 import com.photi.aos.view.ui.component.toast.CustomToast
@@ -27,6 +36,9 @@ import com.photi.aos.view.activity.AuthActivity
 import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
 import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.viewmodel.AuthViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.security.SecureRandom
 
 class LoginFragment : Fragment() {
     private lateinit var binding : FragmentLoginBinding
@@ -86,6 +98,26 @@ class LoginFragment : Fragment() {
 
 
     fun onClickGoogleLogin() {
+        val act = activity ?: return
+
+        val webClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID
+
+        launchGoogleLogin(
+            activity = act,
+            webClientId = webClientId,
+            scope = viewLifecycleOwner.lifecycleScope,
+            onSuccess = { idToken ->
+                Log.d("GoogleLogin", "SUCCESS idToken=$idToken")
+                CustomToast.createToast(mActivity, "구글 로그인 성공(임시)", "circle")?.show()
+            },
+            onFailure = { t ->
+                Log.e("GoogleLogin", "FAIL", t)
+                if (t is GetCredentialCancellationException) return@launchGoogleLogin
+
+                CustomToast.createToast(mActivity, "구글 로그인에 실패했어요. 다시 시도해주세요.", "circle")?.show()
+            }
+        )
+
     }
 
 
@@ -235,5 +267,58 @@ private fun launchKakaoLogin(
         }
     } else {
         UserApiClient.instance.loginWithKakaoAccount(activity, callback = accountCallback)
+    }
+}
+
+
+private fun launchGoogleLogin(
+    activity: Activity,
+    webClientId: String,
+    scope: CoroutineScope,
+    onSuccess: (String) -> Unit,
+    onFailure: (Throwable) -> Unit,
+) {
+    val credentialManager = CredentialManager.create(activity)
+
+    val googleOption = GetSignInWithGoogleOption.Builder(webClientId)
+        .setNonce(generateSecureRandomNonce())
+        .build()
+
+    val request = GetCredentialRequest.Builder()
+        .addCredentialOption(googleOption)
+        .build()
+
+    scope.launch {
+        try {
+            val result = credentialManager.getCredential(
+                request = request,
+                context = activity,
+            )
+
+            val credential = result.credential
+            val googleIdTokenCredential = GoogleIdTokenCredential
+                .createFrom(credential.data)
+
+            val idToken = googleIdTokenCredential.idToken
+
+            onSuccess(idToken)
+
+        }
+        catch (e: NoCredentialException) {
+            // 사용 가능한 계정/자격증명이 없거나 사용자가 선택을 취소한 경우가 섞여 들어올 수 있음
+            onFailure(e)
+        } catch (e: GetCredentialException) {
+            onFailure(e)
+        } catch (t: Throwable) {
+            onFailure(t)
+        }
+    }
+}
+
+private fun generateSecureRandomNonce(length: Int = 32): String {
+    val charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._"
+    val random = SecureRandom()
+    return buildString(length) {
+        repeat(length) { append(charset[random.nextInt(charset.length)]) }
     }
 }

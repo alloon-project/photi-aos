@@ -29,6 +29,7 @@ android {
             }
 
         val kakaoNativeAppKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY") ?: ""
+        val googleWebClientId =  localProperties.getProperty("GOOGLE_WEB_CLIENT_ID") ?: ""
 
         buildConfigField(
             "String",
@@ -38,6 +39,11 @@ android {
 
         manifestPlaceholders["kakaoNativeAppKey"] = kakaoNativeAppKey
 
+        buildConfigField(
+            "String",
+            "GOOGLE_WEB_CLIENT_ID",
+            "\"$googleWebClientId\"",
+        )
     }
 
     buildFeatures {
@@ -90,6 +96,9 @@ dependencies {
 
     //glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.googleid)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.0")
 
     //Retrofit
