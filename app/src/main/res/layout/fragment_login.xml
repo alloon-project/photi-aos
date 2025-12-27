@@ -204,6 +204,90 @@
                 android:text="@string/findpw"
                 android:textColor="@color/gray600"/>
         </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/sns_section"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/find_linearlayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <View
+                android:id="@+id/sns_divider_left"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray300"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/sns_title"
+                app:layout_constraintTop_toTopOf="@+id/sns_title"
+                app:layout_constraintBottom_toBottomOf="@+id/sns_title"
+                android:layout_marginEnd="12dp" />
+
+            <TextView
+                android:id="@+id/sns_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="다른 방법으로 로그인"
+                android:textSize="12dp"
+                android:textColor="@color/gray600"
+                android:fontFamily="@font/suit_medium"
+                android:background="@color/white"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/sns_divider_right"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray300"
+                app:layout_constraintStart_toEndOf="@+id/sns_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/sns_title"
+                app:layout_constraintBottom_toBottomOf="@+id/sns_title"
+                android:layout_marginStart="12dp" />
+
+            <LinearLayout
+                android:id="@+id/sns_button_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/sns_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <ImageButton
+                    android:id="@+id/btn_google_login"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_social_circle_google"
+                    android:src="@drawable/ic_google"
+                    android:scaleType="fitCenter"
+                    android:padding="6dp"
+                    android:contentDescription="Google Login" />
+                <ImageButton
+                    android:id="@+id/btn_kakao_login"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="16dp"
+                    android:padding="6dp"
+                    android:background="@drawable/bg_social_circle_kakao"
+                    android:src="@drawable/ic_kakao"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="Kakao Login" />
+
+
+
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/signup_btn"
