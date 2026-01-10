@@ -81,7 +81,8 @@ class ReportActivity : BaseActivity() {
     private fun handleApiError(code: String) {
         val errorMessages = mapOf(
             "TOKEN_UNAUTHENTICATED" to "승인되지 않은 요청입니다. 다시 로그인 해주세요.",
-            "TOKEN_UNAUTHORIZED" to "권한이 없는 요청입니다. 로그인 후 다시 시도해주세요.",
+            "EXPIRED_TOKEN" to "만료된 토큰입니다.",
+            "INVALID_TOKEN" to "유효하지 않은 토큰입니다.",
             "USER_NOT_FOUND" to "존재하지 않는 회원입니다.",
             "CHALLENGE_NOT_FOUND" to "존재하지 않는 챌린지입니다.",
             "CHALLENGE_MEMBER_NOT_FOUND" to "존재하지 않는 챌린지 파티원입니다.",

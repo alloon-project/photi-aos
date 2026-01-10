@@ -129,10 +129,17 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
                     CustomToast.createToast(activity, "네트워크가 불안정해요. 다시 시도해주세요.", "circle")?.show()
                 }
 
-                "TOKEN_UNAUTHORIZED" -> {
-                    Log.d("Observer", "response code: ${response.code} ")
+                "TOKEN_UNAUTHENTICATED" -> {
+                    CustomToast.createToast(activity, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
                 }
 
+                "EXPIRED_TOKEN" -> {
+                    CustomToast.createToast(activity, "만료된 토큰입니다.")?.show()
+                }
+
+                "INVALID_TOKEN" -> {
+                    CustomToast.createToast(activity, "유효하지 않은 토큰입니다.")?.show()
+                }
 
                 else -> {
                     Log.d("Observer", "Unhandled response code: ${response.code}")

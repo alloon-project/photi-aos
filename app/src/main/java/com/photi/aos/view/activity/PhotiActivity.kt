@@ -128,8 +128,11 @@ class PhotiActivity : BaseActivity(), CustomTwoButtonDialogInterface {
                 "TOKEN_UNAUTHENTICATED" -> {
                     CustomToast.createToast(this@PhotiActivity, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
                 }
-                "TOKEN_UNAUTHORIZED" -> {
-                    CustomToast.createToast(this@PhotiActivity, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                "EXPIRED_TOKEN" -> {
+                    CustomToast.createToast(this, "만료된 토큰입니다.")?.show()
+                }
+                "INVALID_TOKEN" -> {
+                    CustomToast.createToast(this, "유효하지 않은 토큰입니다.")?.show()
                 }
                 "CHALLENGE_NOT_FOUND" -> {
                     CustomToast.createToast(this@PhotiActivity, "존재하지 않는 챌린지입니다.", "circle")?.show()

@@ -125,10 +125,17 @@ class InquireFragment : Fragment() {
                     )
                 }
 
-                "TOKEN_UNAUTHORIZED" -> {
+                "EXPIRED_TOKEN" -> {
                     Log.e(
                         "InquireFragment",
-                        "Error: TOKEN_UNAUTHORIZED - 권한이 없는 요청입니다. 로그인 후 다시 시도해주세요." //TODO 로그아웃
+                        "Error: EXPIRED_TOKEN - 만료된 토큰입니다." //TODO 로그아웃
+                    )
+                }
+
+                "INVALID_TOKEN" -> {
+                    Log.e(
+                        "InquireFragment",
+                        "Error: INVALID_TOKEN - 유효하지 않은 토큰입니다." //TODO 로그아웃
                     )
                 }
 

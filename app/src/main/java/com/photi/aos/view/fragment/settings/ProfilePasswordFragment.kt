@@ -95,9 +95,16 @@ class ProfilePasswordFragment : Fragment() {
                     binding.passwordErrorLayout.visibility = View.VISIBLE
                 }
 
-                "TOKEN_UNAUTHORIZED" -> {
-                    CustomToast.createToast(activity, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")
-                        ?.show() //로그아웃 추가
+                "TOKEN_UNAUTHENTICATED" -> { //로그아웃 추가
+                    CustomToast.createToast(activity, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
+                }
+
+                "EXPIRED_TOKEN" -> {
+                    CustomToast.createToast(activity, "만료된 토큰입니다.")?.show()
+                }
+
+                "INVALID_TOKEN" -> {
+                    CustomToast.createToast(activity, "유효하지 않은 토큰입니다.")?.show()
                 }
 
                 "IO_Exception" -> {

@@ -349,8 +349,11 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                 "TOKEN_UNAUTHENTICATED" -> {
                     CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
                 }
-                "TOKEN_UNAUTHORIZED" -> {
-                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                "EXPIRED_TOKEN" -> {
+                    CustomToast.createToast(this, "만료된 토큰입니다.")?.show()
+                }
+                "INVALID_TOKEN" -> {
+                    CustomToast.createToast(this, "유효하지 않은 토큰입니다.")?.show()
                 }
                 "USER_NOT_FOUND" -> {
                     CustomToast.createToast(this, "존재하지 않는 회원입니다.")?.show()
@@ -381,8 +384,11 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
                 "TOKEN_UNAUTHENTICATED" -> {
                     CustomToast.createToast(this, "승인되지 않은 요청입니다. 다시 로그인 해주세요.")?.show()
                 }
-                "TOKEN_UNAUTHORIZED" -> {
-                    CustomToast.createToast(this, "권한이 없는 요청입니다. 로그인 후에 다시 시도 해주세요.")?.show()
+                "EXPIRED_TOKEN" -> {
+                    CustomToast.createToast(this, "만료된 토큰입니다.")?.show()
+                }
+                "INVALID_TOKEN" -> {
+                    CustomToast.createToast(this, "유효하지 않은 토큰입니다.")?.show()
                 }
                 "CHALLENGE_CREATOR_FORBIDDEN" -> {
                     CustomToast.createToast(this, "챌린지 파티장 권한이 없습니다.")?.show()
