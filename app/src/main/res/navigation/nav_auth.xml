@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_loginFragment_to_signupEmailFragment"
             app:destination="@id/signupEmailFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_oAuthIdSetupFragment"
+            app:destination="@id/oAuthIdSetupFragment" />
     </fragment>
     <fragment
         android:id="@+id/findIdFragment"
@@ -100,5 +103,11 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/oAuthIdSetupFragment"
+        android:name="com.photi.aos.view.fragment.auth.OAuthIdSetupFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_o_auth_id_setup">
     </fragment>
 </navigation>

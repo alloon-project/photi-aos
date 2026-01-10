@@ -84,14 +84,11 @@ class LoginFragment : Fragment() {
         launchKakaoLogin(
             activity = act,
             onSuccess = { idToken ->
-                // TODO 서버 연동전
-                Log.d("KakaoLogin", "SUCCESS idToken=$idToken")
-                CustomToast.createToast(mActivity, "카카오 로그인 성공(임시)", "circle")?.show()
+                authViewModel.loginOauth("KAKAO", idToken)
             },
             onFailure = { t ->
                 Log.e("KakaoLogin", "FAIL", t)
                  if (t is ClientError && t.reason == ClientErrorCause.Cancelled) return@launchKakaoLogin
-                CustomToast.createToast(mActivity, "카카오 로그인에 실패했어요. 다시 시도해주세요.", "circle")?.show()
             }
         )
     }
@@ -107,14 +104,11 @@ class LoginFragment : Fragment() {
             webClientId = webClientId,
             scope = viewLifecycleOwner.lifecycleScope,
             onSuccess = { idToken ->
-                Log.d("GoogleLogin", "SUCCESS idToken=$idToken")
-                CustomToast.createToast(mActivity, "구글 로그인 성공(임시)", "circle")?.show()
+                authViewModel.loginOauth("GOOGLE", idToken)
             },
             onFailure = { t ->
                 Log.e("GoogleLogin", "FAIL", t)
                 if (t is GetCredentialCancellationException) return@launchGoogleLogin
-
-                CustomToast.createToast(mActivity, "구글 로그인에 실패했어요. 다시 시도해주세요.", "circle")?.show()
             }
         )
 
@@ -127,6 +121,7 @@ class LoginFragment : Fragment() {
         * 1 : login to signUp
         * 2 : login to findId
         * 3 : login to findPassword
+        * 4 : login to signUpId(OAuth)
         * */
 
         val ft = view?.findNavController()
@@ -140,6 +135,9 @@ class LoginFragment : Fragment() {
             }
             3 ->{
                 ft?.navigate(R.id.action_loginFragment_to_findPasswordFragment)
+            }
+            4 ->{
+                ft?.navigate(R.id.action_loginFragment_to_oAuthIdSetupFragment)
             }
         }
     }
@@ -195,6 +193,10 @@ class LoginFragment : Fragment() {
             when (response.code) {
                 "200 OK" -> {
                     mActivity.finishActivity()
+                }
+
+                "OAUTH_NEED_NICKNAME" -> {
+                    moveFrag(4)
                 }
 
                 "LOGIN_UNAUTHENTICATED", "DELETED_USER" -> {

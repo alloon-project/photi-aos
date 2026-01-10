@@ -13,6 +13,8 @@ import com.photi.aos.data.model.request.EmailCode
 import com.photi.aos.data.model.request.NewPwd
 import com.photi.aos.data.model.request.UserData
 import com.photi.aos.data.model.response.AuthResponse
+import com.photi.aos.data.model.response.UpdateOAuthUserNameRequest
+import com.photi.aos.data.model.response.UpdateOAuthUserNameResponse
 import com.photi.aos.data.remote.RetrofitClient
 import com.photi.aos.data.repository.AuthRepository
 import com.photi.aos.data.repository.ErrorHandler
@@ -278,4 +280,43 @@ class AuthViewModel : ViewModel() {
             )
         }
     }
+
+    fun loginOauth(provider: String, idToken : String) {
+        viewModelScope.launch {
+            handleApiCall(
+                call = {
+                    repository.loginOauth(provider, idToken)
+                },
+                onSuccess = { data ->
+                    if (data?.username.isNullOrBlank()) {
+                        actionApiResponse.value = ActionApiResponse(code = "OAUTH_NEED_NICKNAME")
+                    } else {
+                        actionApiResponse.value = ActionApiResponse(code = "200 OK")
+                    }
+                },
+                onFailure = { errorCode ->
+                    actionApiResponse.value = ActionApiResponse(errorCode)
+                }
+            )
+        }
+    }
+
+    fun updateOAuthUserName(username: String) {
+        viewModelScope.launch {
+            handleApiCall(
+                call = {
+                    repository.updateOAuthUserName(
+                        UpdateOAuthUserNameRequest(username)
+                    )
+                },
+                onSuccess = {
+                    actionApiResponse.value = ActionApiResponse(code = "OAUTH_LOGIN_SUCCESS")
+                },
+                onFailure = { errorCode ->
+                    actionApiResponse.value = ActionApiResponse(errorCode)
+                }
+            )
+        }
+    }
+
 }
