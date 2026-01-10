@@ -117,3 +117,15 @@ data class UpdateUserProfileImageRequest(
 data class UpdateUserProfileImageResponse(
     val successMessage : String
 )
+
+data class LoginOAuthResponse(
+    val username: String?
+)
+
+data class UpdateOAuthUserNameRequest(
+    val username: String
+)
+
+data class UpdateOAuthUserNameResponse(
+    val successMessage: String
+)

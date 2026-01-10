@@ -6,6 +6,10 @@ import com.photi.aos.data.model.response.ApiResponse
 import com.photi.aos.data.model.response.AppVersionResponse
 import com.photi.aos.data.model.response.AuthResponse
 import com.photi.aos.data.model.response.DeletedDateResponse
+import com.photi.aos.data.model.response.LoginOAuthResponse
+import com.photi.aos.data.model.response.UpdateOAuthUserNameRequest
+import com.photi.aos.data.model.response.UpdateOAuthUserNameResponse
+import com.photi.aos.data.model.response.UpdateUserProfileImageResponse
 import com.photi.aos.data.remote.AuthService
 import com.photi.aos.data.storage.TokenManager
 import retrofit2.Call
@@ -178,6 +182,30 @@ class AuthRepository(private val authService: AuthService) {
 
     suspend fun checkUpdate(appVersionRequest: AppVersionRequest): Response<ApiResponse<AppVersionResponse>> {
         return authService.post_appVersion(appVersionRequest)
+    }
+    suspend fun loginOauth(
+        provider: String,
+        idToken: String,
+    ): Response<ApiResponse<LoginOAuthResponse>> {
+
+        val response = authService.get_oauth_login(provider, idToken)
+
+        if (response.isSuccessful) {
+            val accessToken = response.headers()["authorization"]
+                ?.removePrefix("Bearer ")
+                ?.trim()
+
+            val refreshToken = response.headers()["refresh-Token"]
+
+            accessToken?.let(tokenManager::saveAccessToken)
+            refreshToken?.let(tokenManager::saveRefreshToken)
+        }
+
+        return response
+    }
+
+    suspend fun updateOAuthUserName(updateOAuthUserNameRequest: UpdateOAuthUserNameRequest): Response<ApiResponse<UpdateOAuthUserNameResponse>> {
+        return authService.post_oauth_username(updateOAuthUserNameRequest)
     }
 
 }

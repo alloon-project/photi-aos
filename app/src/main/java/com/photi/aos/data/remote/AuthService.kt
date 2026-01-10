@@ -11,8 +11,11 @@ import com.photi.aos.data.model.response.AppVersionResponse
 import com.photi.aos.data.model.response.AuthResponse
 import com.photi.aos.data.model.response.DeletedDateResponse
 import com.photi.aos.data.model.response.InquiryResponse
+import com.photi.aos.data.model.response.LoginOAuthResponse
 import com.photi.aos.data.model.response.ProfileImageData
 import com.photi.aos.data.model.response.TokenResponse
+import com.photi.aos.data.model.response.UpdateOAuthUserNameRequest
+import com.photi.aos.data.model.response.UpdateOAuthUserNameResponse
 import com.photi.aos.data.model.response.UpdateUserProfileImageRequest
 import com.photi.aos.data.model.response.UpdateUserProfileImageResponse
 import com.photi.aos.data.model.response.UserImagePresignedUrlRequest
@@ -29,6 +32,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface AuthService {
@@ -113,5 +117,16 @@ interface AuthService {
     suspend fun patch_user_profile_image_url(
         @Body request : UpdateUserProfileImageRequest
     ) : Response<ApiResponse<UpdateUserProfileImageResponse>>
+
+    @GET("/api/v2/oauth/{provider}/login")
+    suspend fun get_oauth_login(
+        @Path("provider") provider: String,
+        @Query("id_token") idToken: String,
+    ) : Response<ApiResponse<LoginOAuthResponse>>
+
+    @POST("/api/v2/oauth/username")
+    suspend fun post_oauth_username(
+        @Body request : UpdateOAuthUserNameRequest
+    ) : Response<ApiResponse<UpdateOAuthUserNameResponse>>
 }
 
