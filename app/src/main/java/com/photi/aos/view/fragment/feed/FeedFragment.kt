@@ -20,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.photi.aos.R
 import com.photi.aos.databinding.FragmentFeedBinding
@@ -27,12 +28,15 @@ import com.photi.aos.view.activity.FeedActivity
 import com.photi.aos.view.adapter.FeedAdapter
 import com.photi.aos.view.ui.component.bottomsheet.AlignBottomSheet
 import com.photi.aos.view.ui.component.bottomsheet.AlignBottomSheetInterface
+import com.photi.aos.view.ui.component.dialog.LoadingDialog
 import com.photi.aos.view.ui.component.dialog.UploadCardDialog
 import com.photi.aos.view.ui.component.dialog.UploadCardDialogInterface
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.ui.util.CameraHelper
 import com.photi.aos.viewmodel.FeedViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -50,6 +54,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
     private lateinit var photoUri: Uri
     private lateinit var progressBar: ProgressBar
     private lateinit var tag : ConstraintLayout
+    private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,9 +65,9 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         binding.viewModel = feedViewModel
         binding.lifecycleOwner = viewLifecycleOwner
         mActivity = activity as FeedActivity
+        loadingDialog = LoadingDialog(requireContext())
 
-        feedAdapter = FeedAdapter(requireActivity().supportFragmentManager,feedViewModel,  lifecycle = viewLifecycleOwner.lifecycle
-            )
+        feedAdapter = FeedAdapter(requireActivity().supportFragmentManager,feedViewModel,  lifecycle = viewLifecycleOwner.lifecycle)
 
 
         val layoutManager = GridLayoutManager(context, 2)
@@ -172,6 +177,24 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                feedAdapter.loadStateFlow
+                    .map { it.refresh }
+                    .distinctUntilChangedBy { it }
+                    .collect { refreshState ->
+                        when (refreshState) {
+                            is LoadState.Loading -> loadingDialog.startAnimation()
+                            is LoadState.NotLoading -> loadingDialog.stopAnimation()
+                            is LoadState.Error -> {
+                                loadingDialog.stopAnimation()
+                                CustomToast.createToast(activity, "피드를 불러오지 못했어요. 다시 시도해주세요.", "circle")?.show()
+                            }
+                        }
+                    }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 feedViewModel.challengeFeeds.collectLatest { pagingData ->
                     feedAdapter.submitData(pagingData)
                 }
@@ -241,6 +264,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         selected_order = "first"
 
         binding.sortingButton.text = "최신순"
+        loadingDialog.startAnimation()
         feedViewModel.fetchChallengeFeeds("LATEST")
     }
 
@@ -248,6 +272,7 @@ class FeedFragment : Fragment(),AlignBottomSheetInterface,UploadCardDialogInterf
         selected_order = "second"
 
         binding.sortingButton.text = "인기순"
+        loadingDialog.startAnimation()
         feedViewModel.fetchChallengeFeeds("POPULAR")
     }
 
