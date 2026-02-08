@@ -192,7 +192,7 @@ class ChallengeViewModel : ViewModel() {
                     else -> { Log.d(TAG, "Unknown Action") }
                 }
             }catch (e : Exception){
-                Log.e(TAG, "Failed to make Presigned Url")
+                Log.e(TAG, "Failed to make Presigned Url : $e")
             }finally {
 
             }

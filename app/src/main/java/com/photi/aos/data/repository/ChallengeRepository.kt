@@ -171,11 +171,7 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
 
     //PATCH
     fun modifyChallenge(challengeId: Int, challenge: ModifyData, callback: ChallengeRepositoryCallback<MessageResponse>) {
-        val gson = Gson()
-        val json = gson.toJson(challenge)
-        val dataPart = json.toRequestBody("application/json".toMediaTypeOrNull())
-
-        challengeService.patch_modifyChallenge(challengeId, dataPart).enqueue(object : Callback<MessageResponse> {
+        challengeService.patch_modifyChallenge(challengeId, challenge).enqueue(object : Callback<MessageResponse> {
             override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
@@ -211,11 +207,7 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
 
     //POST
     fun createChallenge(challenge: CreateData, callback: ChallengeRepositoryCallback<ChallengeResponse>) {
-        val gson = Gson()
-        val json = gson.toJson(challenge)
-        val dataPart = json.toRequestBody("application/json".toMediaTypeOrNull())
-
-        challengeService.post_createChallenge(dataPart).enqueue(object : Callback<ChallengeResponse> {
+        challengeService.post_createChallenge(challenge).enqueue(object : Callback<ChallengeResponse> {
             override fun onResponse(call: Call<ChallengeResponse>, response: Response<ChallengeResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)

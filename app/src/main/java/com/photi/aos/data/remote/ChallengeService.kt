@@ -1,6 +1,9 @@
 package com.photi.aos.data.remote
 
+import com.photi.aos.data.model.request.CreateData
 import com.photi.aos.data.model.request.Goal
+import com.photi.aos.data.model.request.ModifyData
+import com.photi.aos.data.model.response.ChallengeData
 import com.photi.aos.data.model.response.ChallengeListResponse
 import com.photi.aos.data.model.response.ChallengeResponse
 import com.photi.aos.data.model.response.ChipListResponse
@@ -90,11 +93,10 @@ interface ChallengeService {
     ): Response<PagingListResponse>
 
     //PATCH
-    @Multipart
     @PATCH("/api/v2/challenges/{challengeId}")
     fun patch_modifyChallenge( //챌린지 수정
         @Path("challengeId") challengeId: Int,
-        @Part("request") request: RequestBody
+        @Body params: ModifyData
     ): Call<MessageResponse>
 
     @PATCH("/api/v2/challenge-members/{challengeId}/goal")
@@ -104,10 +106,9 @@ interface ChallengeService {
     ): Call<MessageResponse>
 
     //POST
-    @Multipart
     @POST("/api/v2/challenges")
     fun post_createChallenge( //챌린지 생성
-        @Part("request") request: RequestBody
+        @Body params: CreateData
     ): Call<ChallengeResponse>
 
     @POST("/api/v2/challenges/{challengeId}/join")

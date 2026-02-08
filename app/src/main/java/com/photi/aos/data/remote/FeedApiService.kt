@@ -79,7 +79,6 @@ interface FeedApiService {
     ): ApiResponse<SuccessMessageReponse>
 
     //피드 인증
-    @Multipart
     @POST("/api/v2/feeds/{challengeId}")
     suspend fun postChallengeFeed(
         @Path("challengeId") challengeId: Int, // 챌린지 ID
