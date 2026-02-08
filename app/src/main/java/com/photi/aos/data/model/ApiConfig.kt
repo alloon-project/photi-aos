@@ -14,6 +14,11 @@ object ApiConfig {
 
         "/api/v2/reports/{targetId}" to "POST", // 신고 등록
 
+        //oauth
+        "/api/v2/oauth/username" to "POST",
+        "/api/v2/oauth/{provider}/withdraw" to "PATCH",
+
+
         // challenge
         "/api/v2/challenges/{challengeId}" to mapOf(
             "DELETE" to "챌린지 탈퇴", // 챌린지 탈퇴
@@ -25,6 +30,7 @@ object ApiConfig {
         "/api/v2/challenges/{challengeId}/join" to "POST", // 챌린지 참여하기
 
         // user
+        "/api/v2/users" to "GET",
         "/api/v2/users/challenges" to "GET", // 사용자 참여중인 챌린지 조회
         "/api/v2/users/feed-dates" to "GET",
         "/api/v2/users/feeds-by-date" to "GET",
