@@ -142,22 +142,28 @@ class HomeChallengeFragment : UploadCardDialogInterface, Fragment() {
     }
 
     override fun onClickUploadButton() {
-        val imageFile = createMultipartFromUri(photoUri)
-        photiViewModel.fetchChallengeFeed(imageFile)
+        val (file, mime) = createTempFileFromUri(photoUri)
+        photiViewModel.fetchChallengeFeed(file, mime)
     }
 
-    private fun createMultipartFromUri(uri: Uri): MultipartBody.Part {
-        val contentResolver = requireContext().contentResolver
-        val inputStream = contentResolver.openInputStream(uri) ?: throw IllegalArgumentException("Invalid URI")
-        val fileName = System.currentTimeMillis().toString() + ".jpg"
-        val tempFile = File(requireContext().cacheDir, fileName)
+    private fun createTempFileFromUri(uri: Uri): Pair<File, String> {
+        val cr = requireContext().contentResolver
+        val mime = cr.getType(uri) ?: "image/jpeg"
 
-        tempFile.outputStream().use { outputStream ->
-            inputStream.copyTo(outputStream)
+        val ext = when (mime) {
+            "image/png" -> "png"
+            "image/webp" -> "webp"
+            else -> "jpg"
         }
 
-        val requestBody = tempFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData("imageFile", tempFile.name, requestBody)
+        val fileName = "profile_${System.currentTimeMillis()}.$ext"
+        val tempFile = File(requireContext().cacheDir, fileName)
+
+        cr.openInputStream(uri)!!.use { input ->
+            tempFile.outputStream().use { output -> input.copyTo(output) }
+        }
+
+        return tempFile to mime
     }
 
     private fun handleApiError(code: String) {

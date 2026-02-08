@@ -94,8 +94,7 @@ interface ChallengeService {
     @PATCH("/api/v2/challenges/{challengeId}")
     fun patch_modifyChallenge( //챌린지 수정
         @Path("challengeId") challengeId: Int,
-        @Part("request") request: RequestBody,
-        @Part imageFile: MultipartBody.Part
+        @Part("request") request: RequestBody
     ): Call<MessageResponse>
 
     @PATCH("/api/v2/challenge-members/{challengeId}/goal")
@@ -108,8 +107,7 @@ interface ChallengeService {
     @Multipart
     @POST("/api/v2/challenges")
     fun post_createChallenge( //챌린지 생성
-        @Part("request") request: RequestBody,
-        @Part imageFile: MultipartBody.Part
+        @Part("request") request: RequestBody
     ): Call<ChallengeResponse>
 
     @POST("/api/v2/challenges/{challengeId}/join")

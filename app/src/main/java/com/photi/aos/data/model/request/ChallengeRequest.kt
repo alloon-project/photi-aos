@@ -10,18 +10,18 @@ data class CreateData(
     var goal: String? = null,
     var proveTime: String? = null,
     var endDate: String? = null,
+    var preSignedUrl: String? = null,
     var rules: List<Rule> = emptyList(),
-    var hashtags: List<HashTag> = emptyList(),
-    var imageFile: MultipartBody.Part? = null
+    var hashtags: List<HashTag> = emptyList()
 )
 data class ModifyData(
     var name: String? = null,
     var goal: String? = null,
     var proveTime: String? = null,
     var endDate: String? = null,
+    var preSignedUrl: String? = null,
     var rules: List<Rule> = emptyList(),
-    var hashtags: List<HashTag> = emptyList(),
-    var imageFile: MultipartBody.Part? = null
+    var hashtags: List<HashTag> = emptyList()
 )
 
 @Parcelize

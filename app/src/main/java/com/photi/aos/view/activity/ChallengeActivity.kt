@@ -300,12 +300,22 @@ class ChallengeActivity : PrivateCodeDialogInterface, JoinGuestDialogInterface, 
 
         binding.createBtn.setOnClickListener {
             binding.createBtn.showLoading()
-            challengeViewModel.createChallenge(this)
+            makeFile("create")
         }
 
         binding.modifyBtn.setOnClickListener {
             binding.modifyBtn.showLoading()
-            challengeViewModel.modifyChallenge(this)
+            makeFile("modify")
+        }
+    }
+
+    private fun makeFile(action: String) {
+        challengeViewModel.makeFile(this) { pair ->
+            if (pair != null) {
+                challengeViewModel.makePresignedUrl(pair.first, pair.second, action)
+            } else {
+                Log.e("CHALLENGE", "Failed to make file")
+            }
         }
     }
 

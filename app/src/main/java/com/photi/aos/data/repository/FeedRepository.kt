@@ -1,5 +1,6 @@
 package com.photi.aos.data.repository
 
+import com.photi.aos.data.model.request.ChallengeFeedImageRequest
 import com.photi.aos.data.model.request.ReportRequest
 import com.photi.aos.data.model.response.ApiResponse
 import com.photi.aos.data.model.response.ChallengeFeedsData
@@ -73,9 +74,9 @@ class FeedRepository(private val apiService: FeedApiService) {
     // 챌린지 인증 등록
     suspend fun postChallengeFeed(
         challengeId: Int,
-        image: MultipartBody.Part
+        presignedUrl : String
     ): Response<ApiResponse<SuccessMessageReponse>> {
-        return apiService.postChallengeFeed(challengeId, image)
+        return apiService.postChallengeFeed(challengeId, ChallengeFeedImageRequest(presignedUrl))
     }
 
     // 댓글 등록

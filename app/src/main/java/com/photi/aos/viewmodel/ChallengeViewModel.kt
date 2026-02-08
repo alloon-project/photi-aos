@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.photi.aos.data.model.ActionApiResponse
 import com.photi.aos.data.model.MyData
 import com.photi.aos.data.model.request.CreateData
@@ -15,11 +16,16 @@ import com.photi.aos.data.model.request.Rule
 import com.photi.aos.data.model.response.ChallengeResponse
 import com.photi.aos.data.model.response.MatchResponse
 import com.photi.aos.data.model.response.MessageResponse
+import com.photi.aos.data.remote.PresignedPutUploader
 import com.photi.aos.data.remote.RetrofitClient
 import com.photi.aos.data.repository.ChallengeRepository
 import com.photi.aos.data.repository.ChallengeRepositoryCallback
 import com.photi.aos.data.repository.ErrorHandler
+import com.photi.aos.data.repository.SettingsRepository
 import com.photi.aos.data.storage.MyChallengeList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -33,6 +39,9 @@ class ChallengeViewModel : ViewModel() {
 
     private val challengeService = RetrofitClient.challengeService
     private val repository = ChallengeRepository(challengeService)
+
+    private val authService = RetrofitClient.authService
+    private val settingsRepository = SettingsRepository(authService)
 
     val apiResponse = MutableLiveData<ActionApiResponse>()
     val joinResponse = MutableLiveData<ActionApiResponse>()
@@ -94,15 +103,15 @@ class ChallengeViewModel : ViewModel() {
     }
 
 
-    fun makeFile(context : Context, callback: (File?) -> Unit){
+    fun makeFile(context : Context, callback: (Pair<File, String>?) -> Unit){
         try {
             if (isUri) {
-                val makefile = getFileFromUri(Uri.parse(imageFile), context)
-                callback(makefile)
+                val (file, mime) = getFileFromUri(Uri.parse(imageFile), context)!!
+                callback(file to mime)
             } else {
-                downloadImage(imageFile, context) { file ->
-                    if (file != null) {
-                        callback(file)
+                downloadImage(imageFile, context) { pair ->
+                    if (pair != null) {
+                        callback(pair.first to pair.second)
                     }
                     else {
                         callback(null)
@@ -116,11 +125,13 @@ class ChallengeViewModel : ViewModel() {
         }
     }
 
-    fun getFileFromUri(uri: Uri, context: Context): File? {
+    fun getFileFromUri(uri: Uri, context: Context): Pair<File, String>? {
         val fileName = uri.lastPathSegment // 또는 적절한 이름을 직접 지정할 수 있음
         val file = File(context.cacheDir, fileName)
 
         try {
+            val mime = context.contentResolver.getType(uri)!!
+
             val inputStream = context.contentResolver.openInputStream(uri)
             val outputStream = FileOutputStream(file)
 
@@ -128,7 +139,7 @@ class ChallengeViewModel : ViewModel() {
             inputStream?.close()
             outputStream.close()
 
-            return file
+            return file to mime
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -136,7 +147,7 @@ class ChallengeViewModel : ViewModel() {
         return null
     }
 
-    fun downloadImage(imageUrl: String, context: Context, callback: (File?) -> Unit) {
+    fun downloadImage(imageUrl: String, context: Context, callback: (Pair<File, String>?) -> Unit) {
         Thread {
             try {
                 val url = URL(imageUrl)
@@ -144,16 +155,17 @@ class ChallengeViewModel : ViewModel() {
                 connection.requestMethod = "GET"
                 connection.connect()
 
-                val inputStream: InputStream = connection.inputStream
+                val mime = connection.contentType
 
                 val fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1)
                 val file = File(context.cacheDir, fileName)
 
+                val inputStream: InputStream = connection.inputStream
                 val outputStream = FileOutputStream(file)
 
                 inputStream.copyTo(outputStream)
 
-                callback(file)
+                callback(file to mime)
 
                 outputStream.close()
                 inputStream.close()
@@ -163,51 +175,62 @@ class ChallengeViewModel : ViewModel() {
         }.start()
     }
 
+    fun makePresignedUrl(file: File, mime: String, action: String) {
+        viewModelScope.launch {
+            try{
+                val presignedUrl = PresignedPutUploader.getPresignedUrl(
+                    call = { settingsRepository.postUserImagePresignedUrl(file.name) },
+                    extractor = { body -> body.data.preSignedUrl }
+                )
+                withContext(Dispatchers.IO) {
+                    PresignedPutUploader.putFile(presignedUrl, file, mime)
+                }
 
-    fun modifyChallenge(context: Context) {
-        makeFile(context) { file ->
-            if (file != null) {
-                repository.modifyChallenge(id, file, ModifyData(name, goal, proveTime, endDate, rules, hashs), object :
-                    ChallengeRepositoryCallback<MessageResponse> {
-                    override fun onSuccess(data: MessageResponse) {
-                        val result = data.code
-                        val mes = data.message
-                        apiResponse.value = ActionApiResponse(result, "modifyChallenge")
-                        Log.d(TAG, "modifyChallenge: $id $mes $result")
-                    }
+                when (action) {
+                    "create" -> { createChallenge(presignedUrl) }
+                    "modify" -> { modifyChallenge(presignedUrl) }
+                    else -> { Log.d(TAG, "Unknown Action") }
+                }
+            }catch (e : Exception){
+                Log.e(TAG, "Failed to make Presigned Url")
+            }finally {
 
-                    override fun onFailure(error: Throwable) {
-                        handleFailure(error)
-                    }
-                })
-            } else {
-                Log.e(TAG, "Failed to make file")
             }
         }
     }
 
-    fun createChallenge(context : Context) {
-        makeFile(context) { file ->
-            if (file != null) {
-                repository.createChallenge(file, CreateData(name, isPublic, goal, proveTime, endDate, rules, hashs), object :
-                    ChallengeRepositoryCallback<ChallengeResponse> {
-                    override fun onSuccess(data: ChallengeResponse) {
-                        val result = data.code
-                        val mes = data.message
-                        val data = data.data
-                        setChallengeId(data.id)
-                        apiResponse.value = ActionApiResponse(result, "createChallenge")
-                        Log.d(TAG, "createChallenge: $id $mes $result")
-                    }
-
-                    override fun onFailure(error: Throwable) {
-                        handleFailure(error)
-                    }
-                })
-            } else {
-                Log.e(TAG, "Failed to make file")
+    fun modifyChallenge(presignedUrl: String) {
+        repository.modifyChallenge(id, ModifyData(name, goal, proveTime, endDate, presignedUrl, rules, hashs), object :
+            ChallengeRepositoryCallback<MessageResponse> {
+            override fun onSuccess(data: MessageResponse) {
+                val result = data.code
+                val mes = data.message
+                apiResponse.value = ActionApiResponse(result, "modifyChallenge")
+                Log.d(TAG, "modifyChallenge: $id $mes $result")
             }
-        }
+
+            override fun onFailure(error: Throwable) {
+                handleFailure(error)
+            }
+        })
+    }
+
+    fun createChallenge(presignedUrl: String) {
+        repository.createChallenge(CreateData(name, isPublic, goal, proveTime, endDate, presignedUrl, rules, hashs), object :
+            ChallengeRepositoryCallback<ChallengeResponse> {
+            override fun onSuccess(data: ChallengeResponse) {
+                val result = data.code
+                val mes = data.message
+                val data = data.data
+                setChallengeId(data.id)
+                apiResponse.value = ActionApiResponse(result, "createChallenge")
+                Log.d(TAG, "createChallenge: $id $mes $result")
+            }
+
+            override fun onFailure(error: Throwable) {
+                handleFailure(error)
+            }
+        })
     }
 
     fun matchInviteCode() {

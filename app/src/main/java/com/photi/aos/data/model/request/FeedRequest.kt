@@ -15,3 +15,7 @@ data class ReportRequest(
     val reason: ReasonType,
     val content: String
 )
+
+data class ChallengeFeedImageRequest(
+    val preSignedUrl : String
+)

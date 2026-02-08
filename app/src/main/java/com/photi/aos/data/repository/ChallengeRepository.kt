@@ -16,8 +16,6 @@ import com.photi.aos.data.remote.ChallengeService
 import com.photi.aos.data.storage.TokenManager
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,12 +29,6 @@ interface ChallengeRepositoryCallback<T> {
 }
 
 class ChallengeRepository(private val challengeService: ChallengeService) {
-    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
-
-    fun createImagePart(file: File): MultipartBody.Part {
-        val requestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(), file)
-        return MultipartBody.Part.createFormData("imageFile", file.name, requestBody)
-    }
 
     //DELETE
     fun deleteChallenge(id:Int, callback: ChallengeRepositoryCallback<MessageResponse>) {
@@ -178,13 +170,12 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
 
 
     //PATCH
-    fun modifyChallenge(challengeId: Int, imageFile: File, challenge: ModifyData, callback: ChallengeRepositoryCallback<MessageResponse>) {
+    fun modifyChallenge(challengeId: Int, challenge: ModifyData, callback: ChallengeRepositoryCallback<MessageResponse>) {
         val gson = Gson()
         val json = gson.toJson(challenge)
         val dataPart = json.toRequestBody("application/json".toMediaTypeOrNull())
-        val imagePart = createImagePart(imageFile)
 
-        challengeService.patch_modifyChallenge(challengeId, dataPart, imagePart).enqueue(object : Callback<MessageResponse> {
+        challengeService.patch_modifyChallenge(challengeId, dataPart).enqueue(object : Callback<MessageResponse> {
             override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)
@@ -219,13 +210,12 @@ class ChallengeRepository(private val challengeService: ChallengeService) {
 
 
     //POST
-    fun createChallenge(imageFile: File, challenge: CreateData, callback: ChallengeRepositoryCallback<ChallengeResponse>) {
+    fun createChallenge(challenge: CreateData, callback: ChallengeRepositoryCallback<ChallengeResponse>) {
         val gson = Gson()
         val json = gson.toJson(challenge)
         val dataPart = json.toRequestBody("application/json".toMediaTypeOrNull())
-        val imagePart = createImagePart(imageFile)
 
-        challengeService.post_createChallenge(dataPart, imagePart).enqueue(object : Callback<ChallengeResponse> {
+        challengeService.post_createChallenge(dataPart).enqueue(object : Callback<ChallengeResponse> {
             override fun onResponse(call: Call<ChallengeResponse>, response: Response<ChallengeResponse>) {
                 if (response.isSuccessful) {
                     callback.onSuccess(response.body()!!)

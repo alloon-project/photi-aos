@@ -33,11 +33,13 @@ import com.photi.aos.data.paging.AllChallengesPagingSource
 import com.photi.aos.data.paging.EndedChallengePagingSource
 import com.photi.aos.data.paging.FeedHistoryPagingSource
 import com.photi.aos.data.paging.HashChallengePagingSource
+import com.photi.aos.data.remote.PresignedPutUploader
 import com.photi.aos.data.remote.RetrofitClient
 import com.photi.aos.data.repository.ChallengeRepository
 import com.photi.aos.data.repository.ChallengeRepositoryCallback
 import com.photi.aos.data.repository.ErrorHandler
 import com.photi.aos.data.repository.FeedRepository
+import com.photi.aos.data.repository.SettingsRepository
 import com.photi.aos.data.repository.UserRepository
 import com.photi.aos.data.repository.handleApiCall
 import com.photi.aos.data.storage.MyChallengeList
@@ -47,8 +49,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
+import kotlinx.coroutines.withContext
 import org.threeten.bp.LocalDate
+import java.io.File
+import java.io.IOException
 
 data class Item(
     val title: String,
@@ -72,6 +76,9 @@ class PhotiViewModel : ViewModel() {
 
     private val userService = RetrofitClient.userService
     private val user_repository = UserRepository(userService)
+
+    private val authService = RetrofitClient.authService
+    private val settingsRepository = SettingsRepository(authService)
 
     val apiResponse = MutableLiveData<ActionApiResponse>()
     val popularResponse = MutableLiveData<ActionApiResponse>()
@@ -429,19 +436,36 @@ class PhotiViewModel : ViewModel() {
 
 
     //피드 인증
-    fun fetchChallengeFeed(image: MultipartBody.Part) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleApiCall(
-                call = { feed_repository.postChallengeFeed(id, image) },
-                onSuccess = { data ->
-                    _feedUploadPhoto.postValue(true)
-                },
-                onFailure = { errorCode ->
-                    _feedUploadPhoto.postValue(false)
-                    _code.postValue(errorCode)
+    fun fetchChallengeFeed(file: File, contentType: String) {
+        viewModelScope.launch {
+            try{
+                val presignedUrl = PresignedPutUploader.getPresignedUrl(
+                    call = { settingsRepository.postUserImagePresignedUrl(file.name) },
+                    extractor = { body -> body.data.preSignedUrl }
+                )
+                withContext(Dispatchers.IO) {
+                    PresignedPutUploader.putFile(presignedUrl, file, contentType)
                 }
-            )
+
+                updateChallengeFeedImage(presignedUrl)
+            }catch (e : Exception){
+                _code.value = e.message ?: "UNKNOWN_ERROR"
+            }finally {
+
+            }
         }
+    }
+
+    private suspend fun updateChallengeFeedImage(presignedUrl : String){
+        val response = feed_repository.postChallengeFeed(id, presignedUrl)
+
+        if (response.isSuccessful) _feedUploadPhoto.postValue(true)
+        else {
+            _feedUploadPhoto.postValue(false)
+            throw IOException("Challenge Image POST failed: ${response.code()}")
+        }
+
+        val body = response.body() ?: throw IOException("Empty body")
     }
 
 

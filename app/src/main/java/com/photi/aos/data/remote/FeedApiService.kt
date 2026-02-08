@@ -1,5 +1,6 @@
 package com.photi.aos.data.remote
 
+import com.photi.aos.data.model.request.ChallengeFeedImageRequest
 import com.photi.aos.data.model.request.ReportRequest
 import com.photi.aos.data.model.response.ApiResponse
 import com.photi.aos.data.model.response.ChallengeFeedsData
@@ -82,7 +83,7 @@ interface FeedApiService {
     @POST("/api/v2/feeds/{challengeId}")
     suspend fun postChallengeFeed(
         @Path("challengeId") challengeId: Int, // 챌린지 ID
-        @Part image: MultipartBody.Part // 이미지 파일
+        @Body request: ChallengeFeedImageRequest // 이미지 url
     ): Response<ApiResponse<SuccessMessageReponse>>
 
     //댓글 등록
