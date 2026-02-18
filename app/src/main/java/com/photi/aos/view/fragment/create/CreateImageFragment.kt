@@ -2,6 +2,7 @@ package com.photi.aos.view.fragment.create
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -33,7 +34,7 @@ class CreateImageFragment : Fragment() {
     private lateinit var thumbnailAdapter: ThumbnailAdapter
     private val createViewModel by activityViewModels<CreateViewModel>()
     private lateinit var mActivity: CreateActivity
-    private lateinit var pickImageLauncher: ActivityResultLauncher<String>
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -108,8 +109,12 @@ class CreateImageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             uri?.let {
+                requireContext().contentResolver.takePersistableUriPermission(
+                    it,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
                 createViewModel.select(4)
                 createViewModel.setUriToURL(uri)
             }
@@ -117,7 +122,7 @@ class CreateImageFragment : Fragment() {
     }
 
     private fun pickImageFromGallery() {
-        pickImageLauncher.launch("image/*")
+        pickImageLauncher.launch(arrayOf("image/*"))
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

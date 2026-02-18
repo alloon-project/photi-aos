@@ -31,6 +31,7 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import androidx.core.net.toUri
 
 class ChallengeViewModel : ViewModel() {
     companion object {
@@ -106,7 +107,7 @@ class ChallengeViewModel : ViewModel() {
     fun makeFile(context : Context, callback: (Pair<File, String>?) -> Unit){
         try {
             if (isUri) {
-                val (file, mime) = getFileFromUri(Uri.parse(imageFile), context)!!
+                val (file, mime) = getFileFromUri(imageFile.toUri(), context)!!
                 callback(file to mime)
             } else {
                 downloadImage(imageFile, context) { pair ->
