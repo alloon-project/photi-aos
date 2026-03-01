@@ -18,7 +18,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.photi.aos.MyApplication
 import com.photi.aos.R
+import com.photi.aos.data.storage.SharedPreferencesManager
+import com.photi.aos.data.storage.TokenManager
 import com.photi.aos.databinding.FragmentProfileModifyBinding
 import com.photi.aos.view.activity.SettingsActivity
 import com.photi.aos.view.ui.component.toast.CustomToast
@@ -27,12 +30,16 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import javax.inject.Inject
+
 
 class ProfileModifyFragment : Fragment() {
     private lateinit var binding: FragmentProfileModifyBinding
     private val settingsViewModel by activityViewModels<SettingsViewModel>()
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
     private var isModified = false
+
+    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -147,6 +154,17 @@ class ProfileModifyFragment : Fragment() {
             }
 
             2 -> {
+                //TODO 임시
+                val oauthSet = tokenManager.getOAuthTokenSet()
+                Log.d("ProfileModifyFragment","provider :${oauthSet?.provider} idToken :${oauthSet?.idToken}")
+                if (oauthSet != null) {
+                    CustomToast.createToast(
+                        activity,
+                        "기능을 준비 중입니다. 고객센터로 문의해 주세요.",
+                        "circle"
+                    )?.show()
+                    return
+                }
                 view?.findNavController()
                     ?.navigate(R.id.action_profileModifyFragment_to_unSubscribeFragment)
             }
