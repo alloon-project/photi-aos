@@ -10,6 +10,7 @@ import com.photi.aos.data.model.response.LoginOAuthResponse
 import com.photi.aos.data.model.response.UpdateOAuthUserNameRequest
 import com.photi.aos.data.model.response.UpdateOAuthUserNameResponse
 import com.photi.aos.data.model.response.UpdateUserProfileImageResponse
+import com.photi.aos.data.model.response.WithdrawOAuthResponse
 import com.photi.aos.data.remote.AuthService
 import com.photi.aos.data.storage.TokenManager
 import retrofit2.Call
@@ -202,6 +203,13 @@ class AuthRepository(private val authService: AuthService) {
         }
 
         return response
+    }
+
+    suspend fun withdrawOauth(
+        provider: String,
+        idToken: String,
+    ): Response<ApiResponse<WithdrawOAuthResponse>> {
+        return authService.patch_oauth_withdraw(provider, idToken)
     }
 
     suspend fun updateOAuthUserName(updateOAuthUserNameRequest: UpdateOAuthUserNameRequest): Response<ApiResponse<UpdateOAuthUserNameResponse>> {

@@ -122,6 +122,10 @@ data class LoginOAuthResponse(
     val username: String?
 )
 
+data class WithdrawOAuthResponse(
+    val successMessage: String
+)
+
 data class UpdateOAuthUserNameRequest(
     val username: String
 )
