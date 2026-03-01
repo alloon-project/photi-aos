@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.photi.aos.MyApplication
+import com.photi.aos.data.enum.OAuthProvider
 import com.photi.aos.data.model.ActionApiResponse
 import com.photi.aos.data.model.request.AppVersionRequest
 import com.photi.aos.data.model.request.Email
@@ -21,6 +22,7 @@ import com.photi.aos.data.repository.ErrorHandler
 import com.photi.aos.data.repository.MainRepositoryCallback
 import com.photi.aos.data.repository.handleApiCall
 import com.photi.aos.data.storage.SharedPreferencesManager
+import com.photi.aos.data.storage.TokenManager
 import com.photi.aos.view.ui.util.StringUtil
 import kotlinx.coroutines.launch
 
@@ -33,6 +35,7 @@ class AuthViewModel : ViewModel() {
     private val apiService = RetrofitClient.authService
     private val repository = AuthRepository(apiService)
 
+    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
     private val sharedPreferencesManager = SharedPreferencesManager(MyApplication.mySharedPreferences)
 
     val actionApiResponse = MutableLiveData<ActionApiResponse>()
@@ -281,13 +284,14 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun loginOauth(provider: String, idToken : String) {
+    fun loginOauth(provider: OAuthProvider, idToken : String) {
         viewModelScope.launch {
             handleApiCall(
                 call = {
-                    repository.loginOauth(provider, idToken)
+                    repository.loginOauth(provider.name, idToken)
                 },
                 onSuccess = { data ->
+                    tokenManager.saveOAuthTokenSet(provider,idToken)
                     if (data?.username.isNullOrBlank()) {
                         actionApiResponse.value = ActionApiResponse(code = "OAUTH_NEED_NICKNAME")
                     } else {

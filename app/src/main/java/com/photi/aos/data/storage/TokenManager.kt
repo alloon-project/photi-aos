@@ -1,6 +1,7 @@
 package com.photi.aos.data.storage
 
 import android.util.Log
+import com.photi.aos.data.enum.OAuthProvider
 import javax.inject.Inject
 
 class TokenManager @Inject constructor(
@@ -9,6 +10,8 @@ class TokenManager @Inject constructor(
     companion object {
         const val ACCESS_TOKEN_KEY = "access_token"
         const val REFRESH_TOKEN_KEY = "refresh_token"
+        private const val OAUTH_PROVIDER = "oauthProvider"
+        private const val OAUTH_ID_TOKEN = "oauthIdToken"
     }
 
     fun hasNoTokens(): Boolean {
@@ -42,5 +45,33 @@ class TokenManager @Inject constructor(
     fun deleteAllToken() {
         deleteAccessToken()
         deleteRefreshToken()
+        clearOAuthTokenSet()
+    }
+
+
+    // oauth
+    data class OAuthTokenSet(
+        val provider: OAuthProvider,
+        val idToken: String,
+    )
+
+    fun saveOAuthTokenSet(provider: OAuthProvider, idToken: String) {
+        sharedPreferences.setString(OAUTH_PROVIDER, provider.name)
+        sharedPreferences.setString(OAUTH_ID_TOKEN, idToken)
+    }
+
+    fun getOAuthTokenSet(): OAuthTokenSet? {
+        val providerRaw = sharedPreferences.getString(OAUTH_PROVIDER, null) ?: return null
+        val idToken = sharedPreferences.getString(OAUTH_ID_TOKEN, null) ?: return null
+
+        val provider = runCatching { OAuthProvider.valueOf(providerRaw) }.getOrNull() ?: return null
+        if (idToken.isBlank()) return null
+
+        return OAuthTokenSet(provider, idToken)
+    }
+
+    fun clearOAuthTokenSet() {
+        sharedPreferences.remove(OAUTH_PROVIDER)
+        sharedPreferences.remove(OAUTH_ID_TOKEN)
     }
 }

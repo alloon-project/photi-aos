@@ -30,6 +30,7 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.photi.aos.BuildConfig
 import com.photi.aos.R
+import com.photi.aos.data.enum.OAuthProvider
 import com.photi.aos.databinding.FragmentLoginBinding
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.activity.AuthActivity
@@ -84,7 +85,7 @@ class LoginFragment : Fragment() {
         launchKakaoLogin(
             activity = act,
             onSuccess = { idToken ->
-                authViewModel.loginOauth("KAKAO", idToken)
+                authViewModel.loginOauth(OAuthProvider.KAKAO, idToken)
             },
             onFailure = { t ->
                 Log.e("KakaoLogin", "FAIL", t)
@@ -104,7 +105,7 @@ class LoginFragment : Fragment() {
             webClientId = webClientId,
             scope = viewLifecycleOwner.lifecycleScope,
             onSuccess = { idToken ->
-                authViewModel.loginOauth("GOOGLE", idToken)
+                authViewModel.loginOauth(OAuthProvider.GOOGLE, idToken)
             },
             onFailure = { t ->
                 Log.e("GoogleLogin", "FAIL", t)
