@@ -44,10 +44,10 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        
         if (tokenManager.hasNoTokens()) {
             childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
         } else {
+            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
             photiViewModel.fetchChallengeCount()
         }
     }
@@ -57,8 +57,6 @@ class HomeFragment : Fragment() {
             if(data != null) {
                 if (data.challengeCnt > 0)
                     childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, challengHome).commit()
-                else
-                    childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
             }
         }
 
