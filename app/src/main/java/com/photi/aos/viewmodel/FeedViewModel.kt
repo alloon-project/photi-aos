@@ -85,6 +85,7 @@ class FeedViewModel : ViewModel() {
     var invitecode = ""
     var feedId = -1
     var memberId = -1
+    var isChallengeEnded = false
 
 
     fun deleteChallenge() {
@@ -214,6 +215,7 @@ class FeedViewModel : ViewModel() {
                 call = { feedRepository.getChallengeInfo(challengeId) },
                 onSuccess = { data ->
                     _challengeInfo.postValue(data)
+                    isChallengeEnded = LocalDate.parse(data!!.endDate).isBefore(LocalDate.now())
                 },
                 onFailure = { errorCode ->
                     _challengeInfo.postValue(null)
@@ -421,6 +423,7 @@ class FeedViewModel : ViewModel() {
     }
 
     fun fetchIsUserVerifiedToday() {
+        if (isChallengeEnded) return
         viewModelScope.launch(Dispatchers.IO) {
             handleApiCall(
                 call = { feedRepository.getIsUserVerifiedToday(challengeId) },

@@ -114,7 +114,7 @@ class FeedActivity : BaseActivity(), CustomTwoButtonDialogInterface {
                 when(tab?.position){
                     0 ->{
                         fragmentTransaction.replace(R.id.frag_layout,feedFragment).commit()
-                        if(feedViewModel.isUserVerifiedToday.value == true) {
+                        if(feedViewModel.isUserVerifiedToday.value == true || feedViewModel.isChallengeEnded) {
                             fixedButton.visibility = View.GONE
                             fixedView.visibility = View.GONE
                         } else {
@@ -407,7 +407,7 @@ class FeedActivity : BaseActivity(), CustomTwoButtonDialogInterface {
 
         feedViewModel.isUserVerifiedToday.observe(this) { isProve ->
             isProve?.let {
-                if (it) {
+                if (it || feedViewModel.isChallengeEnded) {
                     fixedButton.visibility = View.GONE
                     fixedView.visibility = View.GONE
                 } else {
