@@ -47,7 +47,7 @@ class OAuthIdSetupFragment :ListBottomSheetInterface, Fragment() {
         binding.viewModel = authViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val mActivity = activity as AuthActivity
+        mActivity = activity as AuthActivity
         mActivity.setAppBar("")
 
         blue  = mContext.getColor(R.color.blue400)
@@ -189,7 +189,7 @@ class OAuthIdSetupFragment :ListBottomSheetInterface, Fragment() {
     override fun onClickButton(binding: BottomsheetListBinding) {
         this@OAuthIdSetupFragment.bottomsheetListBinding = binding
         this@OAuthIdSetupFragment.bottomsheetListBinding.btn.showLoading()
-        authViewModel.updateOAuthUserName(this.binding.idEdittext.toString())
+        authViewModel.updateOAuthUserName(this.binding.idEdittext.text.toString())
     }
 
 }
