@@ -85,7 +85,7 @@ interface ChallengeService {
     fun get_exampleImg( //예시 이미지 리스트 조회
     ): Call<ExamImgResponse>
 
-    @GET("/api/v2/challenges/hashtags")
+    @GET("/api/v2/challenges/hashtag")
     suspend fun get_challengeHashtag( //해시태그 모아보기 조회
         @Query("hashtag") hashtag: String,
         @Query("page") page: Int,
