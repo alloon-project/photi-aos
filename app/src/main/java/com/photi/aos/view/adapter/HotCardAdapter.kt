@@ -2,6 +2,7 @@ package com.photi.aos.view.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -46,6 +47,16 @@ class HotCardAdapter(private val fragment: ChallengeCommendFragment, private val
                             }
                         }
                     }
+                }
+
+                binding.chipScroll.setOnTouchListener { v, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE ->
+                            v.parent.requestDisallowInterceptTouchEvent(true)
+                        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
+                            v.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                    false
                 }
 
                 Glide
