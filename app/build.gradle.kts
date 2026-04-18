@@ -99,6 +99,8 @@ dependencies {
     implementation(libs.googleid)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.0")
 
     //Retrofit
