@@ -47,7 +47,10 @@ class HomeFragment : Fragment() {
         if (tokenManager.hasNoTokens()) {
             childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, guestHome).commit()
         } else {
-            childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
+            val current = childFragmentManager.findFragmentById(R.id.home_frameLayout)
+            if (current !is HomeChallengeFragment) {
+                childFragmentManager.beginTransaction().replace(R.id.home_frameLayout, noChallengeHome).commit()
+            }
             photiViewModel.fetchChallengeCount()
         }
     }
