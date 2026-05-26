@@ -84,8 +84,9 @@ class LoginFragment : Fragment() {
 
         launchKakaoLogin(
             activity = act,
-            onSuccess = { idToken ->
-                authViewModel.loginOauth(OAuthProvider.KAKAO, idToken)
+            onSuccess = { idToken, sub ->
+-                Log.d("KakaoLogin", "idToken: $idToken")
+                authViewModel.loginOauth(OAuthProvider.KAKAO, idToken, sub)
             },
             onFailure = { t ->
                 Log.e("KakaoLogin", "FAIL", t)
@@ -104,8 +105,9 @@ class LoginFragment : Fragment() {
             activity = act,
             webClientId = webClientId,
             scope = viewLifecycleOwner.lifecycleScope,
-            onSuccess = { idToken ->
-                authViewModel.loginOauth(OAuthProvider.GOOGLE, idToken)
+            onSuccess = { idToken, sub ->
+                Log.d("GoogleLogin", "idToken: $idToken")
+                authViewModel.loginOauth(OAuthProvider.GOOGLE, idToken, sub)
             },
             onFailure = { t ->
                 Log.e("GoogleLogin", "FAIL", t)
@@ -221,10 +223,9 @@ class LoginFragment : Fragment() {
 
 private fun launchKakaoLogin(
     activity: Activity,
-    onSuccess: (String) -> Unit,
+    onSuccess: (idToken: String, sub: String) -> Unit,
     onFailure: (Throwable) -> Unit,
 ) {
-    // 공통: 카카오계정 로그인 콜백
     val accountCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
             onFailure(error)
@@ -232,10 +233,11 @@ private fun launchKakaoLogin(
             onFailure(IllegalStateException("Kakao login token is null"))
         } else {
             val idToken = token.idToken
-            if (idToken.isNullOrBlank()) {
-                onFailure(IllegalStateException("Kakao login idToken is null or blank"))
+            val sub = idToken?.let { extractSubFromJwt(it) }
+            if (idToken.isNullOrBlank() || sub.isNullOrBlank()) {
+                onFailure(IllegalStateException("Kakao login idToken or sub is null or blank"))
             } else {
-                onSuccess(idToken)
+                onSuccess(idToken, sub)
             }
         }
     }
@@ -244,13 +246,10 @@ private fun launchKakaoLogin(
         UserApiClient.instance.loginWithKakaoTalk(activity) { token, error ->
 
             if (error != null) {
-                // 사용자가 취소한 경우(뒤로가기 등)
                 if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                     onFailure(error)
                     return@loginWithKakaoTalk
                 }
-
-                // 카카오톡 로그인 실패 → 카카오계정 로그인으로 fallback
                 UserApiClient.instance.loginWithKakaoAccount(activity, callback = accountCallback)
                 return@loginWithKakaoTalk
             }
@@ -261,12 +260,13 @@ private fun launchKakaoLogin(
             }
 
             val idToken = token.idToken
-            if (idToken.isNullOrBlank()) {
-                onFailure(IllegalStateException("Kakao login idToken is null or blank"))
+            val sub = idToken?.let { extractSubFromJwt(it) }
+            if (idToken.isNullOrBlank() || sub.isNullOrBlank()) {
+                onFailure(IllegalStateException("Kakao login idToken or sub is null or blank"))
                 return@loginWithKakaoTalk
             }
 
-            onSuccess(idToken)
+            onSuccess(idToken, sub)
         }
     } else {
         UserApiClient.instance.loginWithKakaoAccount(activity, callback = accountCallback)
@@ -278,7 +278,7 @@ private fun launchGoogleLogin(
     activity: Activity,
     webClientId: String,
     scope: CoroutineScope,
-    onSuccess: (String) -> Unit,
+    onSuccess: (idToken: String, sub: String) -> Unit,
     onFailure: (Throwable) -> Unit,
 ) {
     val credentialManager = CredentialManager.create(activity)
@@ -299,16 +299,19 @@ private fun launchGoogleLogin(
             )
 
             val credential = result.credential
-            val googleIdTokenCredential = GoogleIdTokenCredential
-                .createFrom(credential.data)
+            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
 
             val idToken = googleIdTokenCredential.idToken
+            val sub = extractSubFromJwt(idToken)
 
-            onSuccess(idToken)
+            if (sub.isNullOrBlank()) {
+                onFailure(IllegalStateException("Google login sub is null or blank"))
+                return@launch
+            }
 
-        }
-        catch (e: NoCredentialException) {
-            // 사용 가능한 계정/자격증명이 없거나 사용자가 선택을 취소한 경우가 섞여 들어올 수 있음
+            onSuccess(idToken, sub)
+
+        } catch (e: NoCredentialException) {
             onFailure(e)
         } catch (e: GetCredentialException) {
             onFailure(e)
@@ -323,5 +326,15 @@ private fun generateSecureRandomNonce(length: Int = 32): String {
     val random = SecureRandom()
     return buildString(length) {
         repeat(length) { append(charset[random.nextInt(charset.length)]) }
+    }
+}
+
+private fun extractSubFromJwt(jwt: String): String? {
+    return try {
+        val payload = jwt.split(".").getOrNull(1) ?: return null
+        val decoded = String(android.util.Base64.decode(payload, android.util.Base64.URL_SAFE or android.util.Base64.NO_PADDING))
+        org.json.JSONObject(decoded).getString("sub")
+    } catch (e: Exception) {
+        null
     }
 }
