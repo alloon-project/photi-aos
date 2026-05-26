@@ -22,6 +22,7 @@ import com.photi.aos.data.model.response.UserImagePresignedUrlRequest
 import com.photi.aos.data.model.response.UserImagePresignedUrlResponse
 import com.photi.aos.data.model.response.UserProfile
 import com.photi.aos.data.model.response.WithdrawOAuthResponse
+import com.photi.aos.data.model.response.WithdrawOAuthUserRequest
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
@@ -126,10 +127,9 @@ interface AuthService {
     ) : Response<ApiResponse<LoginOAuthResponse>>
 
 
-    @PATCH("/api/v2/oauth/{provider}/withdraw")
+    @PATCH("/api/v2/oauth/withdraw")
     suspend fun patch_oauth_withdraw(
-        @Path("provider") provider: String,
-        @Query("access_token") accessToken: String,
+        @Body request : WithdrawOAuthUserRequest
     ) : Response<ApiResponse<WithdrawOAuthResponse>>
 
 

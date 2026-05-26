@@ -10,6 +10,8 @@ import com.photi.aos.data.model.response.UpdateUserProfileImageResponse
 import com.photi.aos.data.model.response.UserImagePresignedUrlRequest
 import com.photi.aos.data.model.response.UserImagePresignedUrlResponse
 import com.photi.aos.data.model.response.UserProfile
+import com.photi.aos.data.model.response.WithdrawOAuthResponse
+import com.photi.aos.data.model.response.WithdrawOAuthUserRequest
 import com.photi.aos.data.remote.AuthService
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -48,6 +50,10 @@ class SettingsRepository(private val authService: AuthService) {
 
     suspend fun postInquiries(inquiryRequest: InquiryRequest): Response<ApiResponse<InquiryResponse>> {
         return authService.post_inquiries(inquiryRequest)
+    }
+
+    suspend fun withdrawOauth(provider: String, sub: String): Response<ApiResponse<WithdrawOAuthResponse>> {
+        return authService.patch_oauth_withdraw(WithdrawOAuthUserRequest(provider = provider, sub = sub))
     }
 
     fun deleteUser(pwd: Map<String, String>, callback: MainRepositoryCallback<AuthResponse>) {

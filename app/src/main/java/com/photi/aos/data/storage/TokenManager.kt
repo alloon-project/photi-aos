@@ -11,7 +11,7 @@ class TokenManager @Inject constructor(
         const val ACCESS_TOKEN_KEY = "access_token"
         const val REFRESH_TOKEN_KEY = "refresh_token"
         private const val OAUTH_PROVIDER = "oauthProvider"
-        private const val OAUTH_ID_TOKEN = "oauthIdToken"
+        private const val OAUTH_SUB = "oauthSub"
     }
 
     fun hasNoTokens(): Boolean {
@@ -52,26 +52,26 @@ class TokenManager @Inject constructor(
     // oauth
     data class OAuthTokenSet(
         val provider: OAuthProvider,
-        val idToken: String,
+        val sub: String,
     )
 
-    fun saveOAuthTokenSet(provider: OAuthProvider, idToken: String) {
+    fun saveOAuthTokenSet(provider: OAuthProvider, sub: String) {
         sharedPreferences.setString(OAUTH_PROVIDER, provider.name)
-        sharedPreferences.setString(OAUTH_ID_TOKEN, idToken)
+        sharedPreferences.setString(OAUTH_SUB, sub)
     }
 
     fun getOAuthTokenSet(): OAuthTokenSet? {
         val providerRaw = sharedPreferences.getString(OAUTH_PROVIDER, null) ?: return null
-        val idToken = sharedPreferences.getString(OAUTH_ID_TOKEN, null) ?: return null
+        val sub = sharedPreferences.getString(OAUTH_SUB, null) ?: return null
 
         val provider = runCatching { OAuthProvider.valueOf(providerRaw) }.getOrNull() ?: return null
-        if (idToken.isBlank()) return null
+        if (sub.isBlank()) return null
 
-        return OAuthTokenSet(provider, idToken)
+        return OAuthTokenSet(provider, sub)
     }
 
     fun clearOAuthTokenSet() {
         sharedPreferences.remove(OAUTH_PROVIDER)
-        sharedPreferences.remove(OAUTH_ID_TOKEN)
+        sharedPreferences.remove(OAUTH_SUB)
     }
 }

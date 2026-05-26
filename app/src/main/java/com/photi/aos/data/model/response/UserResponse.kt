@@ -114,6 +114,11 @@ data class UpdateUserProfileImageRequest(
     val preSignedUrl : String
 )
 
+data class WithdrawOAuthUserRequest(
+    val provider : String,
+    val sub : String,
+)
+
 data class UpdateUserProfileImageResponse(
     val successMessage : String
 )

@@ -16,7 +16,7 @@ object ApiConfig {
 
         //oauth
         "/api/v2/oauth/username" to "POST",
-        "/api/v2/oauth/{provider}/withdraw" to "PATCH",
+        "/api/v2/oauth/withdraw" to "PATCH",
 
 
         // challenge
