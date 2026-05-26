@@ -111,9 +111,11 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     private fun revokeKakaoThenWithdraw() {
         UserApiClient.instance.unlink { error ->
             if (error != null) {
+                Log.e("UnSubscribe", "Kakao revoke FAIL", error)
                 binding.keepButton.hideLoading()
                 CustomToast.createToast(activity, "카카오 연동 해제에 실패했어요. 다시 시도해주세요.", "circle")?.show()
             } else {
+                Log.d("UnSubscribe", "Kakao revoke SUCCESS")
                 settingsViewmodel.withdrawOauth()
             }
         }
@@ -124,8 +126,10 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
             try {
                 val credentialManager = CredentialManager.create(requireContext())
                 credentialManager.clearCredentialState(ClearCredentialStateRequest())
+                Log.d("UnSubscribe", "Google revoke SUCCESS")
                 settingsViewmodel.withdrawOauth()
             } catch (e: Exception) {
+                Log.e("UnSubscribe", "Google revoke FAIL", e)
                 binding.keepButton.hideLoading()
                 CustomToast.createToast(activity, "구글 연동 해제에 실패했어요. 다시 시도해주세요.", "circle")?.show()
             }
