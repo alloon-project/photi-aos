@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.photi.aos.MyApplication
 import com.photi.aos.data.enum.InquiryType
 import com.photi.aos.data.model.ActionApiResponse
 import com.photi.aos.data.model.request.InquiryRequest
@@ -16,6 +17,7 @@ import com.photi.aos.data.repository.ErrorHandler
 import com.photi.aos.data.repository.MainRepositoryCallback
 import com.photi.aos.data.repository.SettingsRepository
 import com.photi.aos.data.repository.handleApiCall
+import com.photi.aos.data.storage.TokenManager
 import com.photi.aos.view.ui.util.StringUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,6 +38,7 @@ class SettingsViewModel : ViewModel() {
     private val apiService = RetrofitClient.authService
 
     private val settingsRepository = SettingsRepository(apiService)
+    private val tokenManager = TokenManager(MyApplication.mySharedPreferences)
 
     val actionApiResponse = MutableLiveData<ActionApiResponse>()
 
@@ -57,6 +60,30 @@ class SettingsViewModel : ViewModel() {
 
     fun resetCode() {
         _code.value = ""
+    }
+
+    fun isOAuthUser(): Boolean = tokenManager.getOAuthTokenSet() != null
+
+    fun getOAuthProvider() = tokenManager.getOAuthTokenSet()?.provider
+
+    fun withdrawOauth() {
+        val oauthTokenSet = tokenManager.getOAuthTokenSet() ?: return
+        viewModelScope.launch {
+            handleApiCall(
+                call = {
+                    settingsRepository.withdrawOauth(
+                        provider = oauthTokenSet.provider.name,
+                        sub = oauthTokenSet.sub
+                    )
+                },
+                onSuccess = {
+                    actionApiResponse.value = ActionApiResponse(code = "200 OK")
+                },
+                onFailure = { errorCode ->
+                    actionApiResponse.value = ActionApiResponse(errorCode)
+                }
+            )
+        }
     }
 
     fun deleteUser() {

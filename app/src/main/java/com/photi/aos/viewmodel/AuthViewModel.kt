@@ -284,19 +284,41 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun loginOauth(provider: OAuthProvider, idToken : String) {
+    fun loginOauth(provider: OAuthProvider, idToken: String, sub: String) {
         viewModelScope.launch {
             handleApiCall(
                 call = {
                     repository.loginOauth(provider.name, idToken)
                 },
                 onSuccess = { data ->
-                    tokenManager.saveOAuthTokenSet(provider,idToken)
+                    tokenManager.saveOAuthTokenSet(provider, sub)
                     if (data?.username.isNullOrBlank()) {
                         actionApiResponse.value = ActionApiResponse(code = "OAUTH_NEED_NICKNAME")
                     } else {
+                        id = data?.username ?: ""
+                        sharedPreferencesManager.saveUserName(id)
                         actionApiResponse.value = ActionApiResponse(code = "200 OK")
                     }
+                },
+                onFailure = { errorCode ->
+                    actionApiResponse.value = ActionApiResponse(errorCode)
+                }
+            )
+        }
+    }
+
+    fun withdrawOauth() {
+        val oauthTokenSet = tokenManager.getOAuthTokenSet() ?: return
+        viewModelScope.launch {
+            handleApiCall(
+                call = {
+                    repository.withdrawOauth(
+                        provider = oauthTokenSet.provider.name,
+                        sub = oauthTokenSet.sub
+                    )
+                },
+                onSuccess = {
+                    actionApiResponse.value = ActionApiResponse(code = "200 OK")
                 },
                 onFailure = { errorCode ->
                     actionApiResponse.value = ActionApiResponse(errorCode)
@@ -314,6 +336,8 @@ class AuthViewModel : ViewModel() {
                     )
                 },
                 onSuccess = {
+                    id = username
+                    sharedPreferencesManager.saveUserName(username)
                     actionApiResponse.value = ActionApiResponse(code = "OAUTH_LOGIN_SUCCESS")
                 },
                 onFailure = { errorCode ->

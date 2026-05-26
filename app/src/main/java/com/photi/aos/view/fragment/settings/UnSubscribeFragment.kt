@@ -10,10 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.kakao.sdk.user.UserApiClient
 import com.photi.aos.R
+import com.photi.aos.data.enum.OAuthProvider
 import com.photi.aos.databinding.FragmentUnSubscribeBinding
 import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialog
 import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialogInterface
@@ -24,6 +29,7 @@ import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
 import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.SettingsViewModel
+import kotlinx.coroutines.launch
 
 class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     private lateinit var binding : FragmentUnSubscribeBinding
@@ -83,14 +89,47 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
         })
     }
 
-    fun showInputForm(){
-        binding.textView.visibility = View.GONE
-        binding.describeTextView.visibility = View.GONE
-        binding.keepButton.visibility = View.GONE
-        binding.cancleButton.visibility = View.GONE
+    fun showInputForm() {
+        if (settingsViewmodel.isOAuthUser()) {
+            binding.keepButton.showLoading()
+            when (settingsViewmodel.getOAuthProvider()) {
+                OAuthProvider.KAKAO -> revokeKakaoThenWithdraw()
+                OAuthProvider.GOOGLE -> revokeGoogleThenWithdraw()
+                null -> binding.keepButton.hideLoading()
+            }
+        } else {
+            binding.textView.visibility = View.GONE
+            binding.describeTextView.visibility = View.GONE
+            binding.keepButton.visibility = View.GONE
+            binding.cancleButton.visibility = View.GONE
 
-        binding.enterPasswordLayout.visibility = View.VISIBLE
-        binding.nextButtonLayout.visibility = View.VISIBLE
+            binding.enterPasswordLayout.visibility = View.VISIBLE
+            binding.nextButtonLayout.visibility = View.VISIBLE
+        }
+    }
+
+    private fun revokeKakaoThenWithdraw() {
+        UserApiClient.instance.unlink { error ->
+            if (error != null) {
+                binding.keepButton.hideLoading()
+                CustomToast.createToast(activity, "카카오 연동 해제에 실패했어요. 다시 시도해주세요.", "circle")?.show()
+            } else {
+                settingsViewmodel.withdrawOauth()
+            }
+        }
+    }
+
+    private fun revokeGoogleThenWithdraw() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val credentialManager = CredentialManager.create(requireContext())
+                credentialManager.clearCredentialState(ClearCredentialStateRequest())
+                settingsViewmodel.withdrawOauth()
+            } catch (e: Exception) {
+                binding.keepButton.hideLoading()
+                CustomToast.createToast(activity, "구글 연동 해제에 실패했어요. 다시 시도해주세요.", "circle")?.show()
+            }
+        }
     }
 
     fun changeInputType(n : Int) {
@@ -114,6 +153,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     fun setObserve() {
         settingsViewmodel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             binding.nextButton.hideLoading()
+            binding.keepButton.hideLoading()
             when (response.code) {
                 "200 OK" -> {
                     val mActivity = activity as SettingsActivity
