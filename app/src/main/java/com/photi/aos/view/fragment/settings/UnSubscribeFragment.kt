@@ -25,8 +25,7 @@ import com.photi.aos.view.ui.component.dialog.CustomOneButtonDialogInterface
 import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.activity.SettingsActivity
 import com.photi.aos.view.ui.util.KeyboardListener
-import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
-import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
+import com.photi.aos.view.ui.util.LoadingDialogManager
 import com.photi.aos.view.ui.util.OnKeyboardVisibilityListener
 import com.photi.aos.viewmodel.SettingsViewModel
 import kotlinx.coroutines.launch
@@ -91,11 +90,11 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
 
     fun showInputForm() {
         if (settingsViewmodel.isOAuthUser()) {
-            binding.keepButton.showLoading()
+            LoadingDialogManager.show(requireActivity())
             when (settingsViewmodel.getOAuthProvider()) {
                 OAuthProvider.KAKAO -> revokeKakaoThenWithdraw()
                 OAuthProvider.GOOGLE -> revokeGoogleThenWithdraw()
-                null -> binding.keepButton.hideLoading()
+                null -> LoadingDialogManager.hide()
             }
         } else {
             binding.textView.visibility = View.GONE
@@ -112,8 +111,8 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
         UserApiClient.instance.unlink { error ->
             if (error != null) {
                 Log.e("UnSubscribe", "Kakao revoke FAIL", error)
-                binding.keepButton.hideLoading()
-                CustomToast.createToast(activity, "카카오 연동 해제에 실패했어요. 다시 시도해주세요.", "circle")?.show()
+                LoadingDialogManager.hide()
+                CustomToast.createToast(activity, "잠시후 다시 시도해주세요.", "circle")?.show()
             } else {
                 Log.d("UnSubscribe", "Kakao revoke SUCCESS")
                 settingsViewmodel.withdrawOauth()
@@ -130,8 +129,8 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
                 settingsViewmodel.withdrawOauth()
             } catch (e: Exception) {
                 Log.e("UnSubscribe", "Google revoke FAIL", e)
-                binding.keepButton.hideLoading()
-                CustomToast.createToast(activity, "구글 연동 해제에 실패했어요. 다시 시도해주세요.", "circle")?.show()
+                LoadingDialogManager.hide()
+                CustomToast.createToast(activity, "잠시후 다시 시도해주세요.", "circle")?.show()
             }
         }
     }
@@ -156,8 +155,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
 
     fun setObserve() {
         settingsViewmodel.actionApiResponse.observe(viewLifecycleOwner) { response ->
-            binding.nextButton.hideLoading()
-            binding.keepButton.hideLoading()
+            LoadingDialogManager.hide()
             when (response.code) {
                 "200 OK" -> {
                     val mActivity = activity as SettingsActivity
@@ -197,7 +195,7 @@ class UnSubscribeFragment : Fragment(), CustomOneButtonDialogInterface {
     }
 
     fun deleteUser() {
-        binding.nextButton.showLoading()
+        LoadingDialogManager.show(requireActivity())
         settingsViewmodel.deleteUser()
     }
 }
