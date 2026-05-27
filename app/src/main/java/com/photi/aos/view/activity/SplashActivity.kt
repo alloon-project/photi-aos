@@ -39,6 +39,7 @@ class SplashActivity : AppCompatActivity(), CustomTwoButtonDialogInterface {
                         i.putExtra("deepLinkId", deepLinkId)
                     }
                     startActivity(i)
+                    overridePendingTransition(0, 0)
                     finish()
                 }, 500)
             }

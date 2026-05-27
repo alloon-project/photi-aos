@@ -2,6 +2,10 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Photi" parent="Theme.AppCompat.Light.NoActionBar"/>
 
+    <style name="Theme.Photi.Splash" parent="Theme.Photi">
+        <item name="android:windowBackground">@color/blue400</item>
+    </style>
+
     <style name="Theme.Photi" parent="Base.Theme.Photi">
         <item name="colorPrimary">@color/btn_color_blue</item>
         <item name="colorSecondary">@color/btn_color_green</item>
