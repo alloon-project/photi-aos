@@ -87,13 +87,13 @@ class FeedHistoryDialog : DialogFragment() {
     private fun setupRecyclerView() {
         adapter = FeedHistoryAdapter(
             requireActivity(),
-            onShareClick = { imageUrl ->
+            onShareClick = { imageUrl, challengeName ->
                 if (imageUrl.isBlank()) {
                     CustomToast.createToast(requireActivity(), "공유할 이미지가 없어요.", "circle")?.show()
                     return@FeedHistoryAdapter
                 }
 
-                shareToInstagram( imageUrl,getString(R.string.facebook_app_id))
+                shareToInstagram(imageUrl, challengeName, getString(R.string.facebook_app_id))
             }
         )
         binding.challengeRecyclerview.adapter = adapter
@@ -108,7 +108,7 @@ class FeedHistoryDialog : DialogFragment() {
             LoadingDialogManager.hide()
     }
 
-    fun shareToInstagram(feedBgImg: String, appId: String) {
+    fun shareToInstagram(feedBgImg: String, challengeTitle: String, appId: String) {
         setLoading(true)
         viewLifecycleOwner.lifecycleScope.launch {
             try {
@@ -117,8 +117,9 @@ class FeedHistoryDialog : DialogFragment() {
                     context = requireContext(),
                     bgResId = R.drawable.ig_bg,
                     stickerImageUrl = feedBgImg,
+                    challengeTitle = challengeTitle,
                     sourceAppId = appId,
-                    stickerBottomOffsetPx = null,     // 중앙 정렬 그대로면 null
+                    stickerBottomOffsetPx = null,
                     cornerDp = 16f,
                     circle = false,
                     borderPx = 16,
@@ -174,7 +175,7 @@ class FeedHistoryDialog : DialogFragment() {
     }
 
 
-    class FeedHistoryAdapter(private val activity :FragmentActivity,   private val onShareClick: (imageUrl: String) -> Unit) : PagingDataAdapter<FeedHistoryContent, FeedHistoryAdapter.ViewHolder>(DiffCallback()) {
+    class FeedHistoryAdapter(private val activity :FragmentActivity,   private val onShareClick: (imageUrl: String, challengeName: String) -> Unit) : PagingDataAdapter<FeedHistoryContent, FeedHistoryAdapter.ViewHolder>(DiffCallback()) {
 
         inner class ViewHolder(val binding: ItemProofShotsGalleryBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(data: FeedHistoryContent) {
@@ -220,7 +221,7 @@ class FeedHistoryDialog : DialogFragment() {
             binding.shortcutImgBtn.apply {
                 visibility = View.VISIBLE
                 setOnClickListener {
-                onShareClick(data.imageUrl)
+                    onShareClick(data.imageUrl, data.name)
                 }
             }
         }

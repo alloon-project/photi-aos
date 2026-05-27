@@ -403,6 +403,7 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
 
     fun shareToInstagram(feedBgImg: String, appId: String) {
         setLoading(true)
+        val challengeTitle = feedViewModel.challenge.value?.name ?: ""
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 InstagramStory.shareSingleImageBgAndStickerUrl(
@@ -410,8 +411,9 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
                     context = requireContext(),
                     bgResId = R.drawable.ig_bg,
                     stickerImageUrl = feedBgImg,
+                    challengeTitle = challengeTitle,
                     sourceAppId = appId,
-                    stickerBottomOffsetPx = null,     // 중앙 정렬 그대로면 null
+                    stickerBottomOffsetPx = null,
                     cornerDp = 16f,
                     circle = false,
                     borderPx = 16,

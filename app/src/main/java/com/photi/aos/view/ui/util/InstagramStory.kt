@@ -14,7 +14,6 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
@@ -96,6 +95,7 @@ object InstagramStory {
         @DrawableRes bgResId: Int? = null,
         bgImageUrl: String? = null,
         stickerImageUrl: String,
+        challengeTitle: String = "",
         // 원하는 비율 지정: 9:16 or 9:18
         targetAspectW: Int = 9,
         targetAspectH: Int = 16,
@@ -191,13 +191,14 @@ object InstagramStory {
         canvas.drawBitmap(bgSrc, srcRect, dstRect, paint)
 
         // 6) 스티커 비트맵(라운드/원형+보더+overlay 포함) 생성
-        val stickerBmp = buildRoundedStickerBitmap(
+    val stickerBmp = buildRoundedStickerBitmap(
             context = context,
             imageUrl = stickerImageUrl,
             maxWidth = 1080,
             maxHeight = 640,
             cornerDp = cornerDp,
             circle = circle,
+            borderPx = dp(context, 8f).toInt(),
             borderColorRes = borderColorRes,
             paddingPx = paddingPx,
             overlayResId = null,           // ← 오버레이는 여기서 그리지 않음
@@ -206,21 +207,33 @@ object InstagramStory {
             overlayBottomMarginPx = 0
         )
 
-        // 7) 스티커 배치(가운데 기준, 필요 시 아래로 offset)
+        // 7) 스티커 배치 — 스티커+텍스트+배지 그룹 전체를 캔버스 중앙 정렬
+        val marginBelowStickerPx = 20f
+        val badgeMarginTopPx = dp(context, 12f)
+        val badgeHeightPx = dp(context, 50f)
+        val textSizePx = 48f
+
         val stickerDst = run {
-        val targetW = stickerTargetWidthPx ?: stickerBmp.width
-        val scale = targetW.toFloat() / stickerBmp.width.toFloat()
-        val sw = (stickerBmp.width * scale).toInt()
-        val sh = (stickerBmp.height * scale).toInt()
+            val targetW = stickerTargetWidthPx ?: stickerBmp.width
+            val scale = targetW.toFloat() / stickerBmp.width.toFloat()
+            val sw = (stickerBmp.width * scale).toInt()
+            val sh = (stickerBmp.height * scale).toInt()
 
-        val left = (finalW - sw) / 2f
-        val topCenter = (finalH - sh) / 2f
-        val top = stickerBottomOffsetPx?.let { topCenter + it } ?: topCenter
+            val left = (finalW - sw) / 2f
 
-      RectF(left, top, left + sw, top + sh).also { dst ->
-            canvas.drawBitmap(stickerBmp, null, dst, Paint(Paint.ANTI_ALIAS_FLAG))
+            // 그룹 총 높이: 스티커 + 여백 + 텍스트 + (배지여백 + 배지)
+            val tmpFm = Paint().apply { textSize = textSizePx }.fontMetrics
+            val textHeight = -tmpFm.ascent + tmpFm.descent
+            val badgeBlock = if (challengeTitle.isNotBlank()) badgeMarginTopPx + badgeHeightPx else 0f
+            val totalGroupHeight = sh + marginBelowStickerPx + textHeight + badgeBlock
+
+            val groupTop = (finalH - totalGroupHeight) / 2f
+            val top = stickerBottomOffsetPx?.let { groupTop + it } ?: groupTop
+
+            RectF(left, top, left + sw, top + sh).also { dst ->
+                canvas.drawBitmap(stickerBmp, null, dst, Paint(Paint.ANTI_ALIAS_FLAG))
+            }
         }
-    }
 
         overlayResId?.let { resId ->
             val d = ContextCompat.getDrawable(context, resId) ?: return@let
@@ -243,45 +256,109 @@ object InstagramStory {
             d.draw(canvas)
         }
 
-        run {
-            val TEXT_CONTENT = "오늘의 인증 완료!"
-            val TEXT_COLOR = Color.WHITE
-            val TEXT_SIZE_PX = 48f
-            val MARGIN_BELOW_STICKER_PX = 20f
-
+        val textBottomY = run {
             val tf = ResourcesCompat.getFont(context, R.font.suit_bold)
-
             val p = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = TEXT_COLOR
-                textSize = TEXT_SIZE_PX
+                color = Color.WHITE
+                textSize = textSizePx
                 textAlign = Paint.Align.CENTER
                 typeface = tf
                 isDither = true
             }
-
             val fm = p.fontMetrics
-            val textTop = stickerDst.bottom + MARGIN_BELOW_STICKER_PX
+            val textTop = stickerDst.bottom + marginBelowStickerPx
             val baselineY = textTop - fm.ascent
-            val centerX = finalW / 2f
-
-            // 하단 넘침 방지(옵션)
             val safeBaselineY = baselineY.coerceAtMost(finalH - (-fm.descent))
-            canvas.drawText(TEXT_CONTENT, centerX, safeBaselineY, p)
+            canvas.drawText("오늘의 인증 완료!", finalW / 2f, safeBaselineY, p)
+            safeBaselineY + fm.descent
+        }
+
+        if (challengeTitle.isNotBlank()) {
+            val badgeCornerPx = dp(context, 16f)
+            val badgeBorderPx = dp(context, 6f)
+            val badgeTextSizePx = 34f
+            val badgeFillColor = ContextCompat.getColor(context, R.color.green0)
+            val badgeBorderColor = ContextCompat.getColor(context, R.color.green200)
+            val badgeTextColor = ContextCompat.getColor(context, R.color.green700)
+            val badgePadH = dp(context, 15f)
+            val iconGap = dp(context, 9f)
+            val iconSizePx = dp(context, 22f)
+
+            val badgeTop = textBottomY + badgeMarginTopPx
+            val badgeRect = RectF(stickerDst.left, badgeTop, stickerDst.right, badgeTop + badgeHeightPx)
+
+            // 배경
+            val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = badgeFillColor
+                style = Paint.Style.FILL
+            }
+            canvas.drawRoundRect(badgeRect, badgeCornerPx, badgeCornerPx, fillPaint)
+
+            // 테두리
+            val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = badgeBorderColor
+                style = Paint.Style.STROKE
+                strokeWidth = badgeBorderPx
+                isDither = true
+            }
+            canvas.drawRoundRect(badgeRect, badgeCornerPx, badgeCornerPx, strokePaint)
+
+            // 아이콘: 벡터를 Bitmap으로 래스터화 후 그리기
+            val iconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_instagram_circle_close)
+            if (iconDrawable != null) {
+                val sz = iconSizePx.toInt()
+                val iconBmp = Bitmap.createBitmap(sz, sz, Bitmap.Config.ARGB_8888)
+                iconDrawable.setBounds(0, 0, sz, sz)
+                iconDrawable.draw(android.graphics.Canvas(iconBmp))
+
+                val iconTop = badgeRect.centerY() - iconSizePx / 2f
+                val iconPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { isFilterBitmap = true }
+                // 왼쪽 아이콘
+                canvas.drawBitmap(iconBmp, badgeRect.left + badgePadH, iconTop, iconPaint)
+                // 오른쪽 아이콘
+                canvas.drawBitmap(iconBmp, badgeRect.right - badgePadH - iconSizePx, iconTop, iconPaint)
+
+                iconBmp.recycle()
+            }
+
+            // 텍스트 (아이콘 사이 영역 중앙)
+            val textAreaLeft = badgeRect.left + badgePadH + iconSizePx + iconGap
+            val textAreaRight = badgeRect.right - badgePadH - iconSizePx - iconGap
+            val maxTextWidth = textAreaRight - textAreaLeft
+
+            val tf = ResourcesCompat.getFont(context, R.font.suit_bold)
+            val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = badgeTextColor
+                textSize = badgeTextSizePx
+                textAlign = Paint.Align.CENTER
+                typeface = tf
+                isDither = true
+            }
+            var displayTitle = challengeTitle
+            if (textPaint.measureText(displayTitle) > maxTextWidth) {
+                while (displayTitle.isNotEmpty() && textPaint.measureText("$displayTitle...") > maxTextWidth) {
+                    displayTitle = displayTitle.dropLast(1)
+                }
+                displayTitle = "$displayTitle..."
+            }
+            val tfm = textPaint.fontMetrics
+            val textBaselineY = badgeRect.centerY() - (tfm.ascent + tfm.descent) / 2f
+            val textCenterX = (textAreaLeft + textAreaRight) / 2f
+            canvas.drawText(displayTitle, textCenterX, textBaselineY, textPaint)
         }
 
         // 8) 저장(WebP on 30+, JPEG fallback)
-        val dir = File(context.cacheDir, "ig_share").apply { mkdirs() }
         val useWebp = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
         val ext = if (useWebp) "webp" else "jpg"
-        val key = "ig_single_spec_${(bgResId ?: bgImageUrl.hashCode())}_${stickerImageUrl.hashCode()}_" +
-                "${finalW}x${finalH}_asp${targetAspectW}x${targetAspectH}"
-        val file = File(dir, "$key.$ext")
-
-        if (!file.exists()) {
-            FileOutputStream(file).use { out ->
-                if (useWebp) canvasBmp.compress(Bitmap.CompressFormat.WEBP_LOSSY, 90, out)
-                else canvasBmp.compress(Bitmap.CompressFormat.JPEG, 92, out)
-            }
+        val dir = File(context.cacheDir, "ig_share").apply {
+            // 이전 공유 파일 전부 삭제 후 새 파일 저장
+            listFiles()?.forEach { it.delete() }
+            mkdirs()
+        }
+        val file = File(dir, "ig_story.$ext")
+        FileOutputStream(file).use { out ->
+            if (useWebp) canvasBmp.compress(Bitmap.CompressFormat.WEBP_LOSSY, 90, out)
+            else canvasBmp.compress(Bitmap.CompressFormat.JPEG, 92, out)
         }
 
         // 메모리 정리
@@ -330,10 +407,21 @@ object InstagramStory {
             val maskInset = (paddingPx.toFloat() + borderPx.toFloat()).coerceAtLeast(0f)
             val rm = RectF(r).apply { inset(maskInset, maskInset) }
             val maskRadius = (cornerPx + strokeInset).coerceAtLeast(0f)
+            val brMaskRadius = (dp(context, 99f) + strokeInset).coerceAtLeast(0f)
+
+            // 오른쪽 아래만 99dp, 나머지는 기본 radius
+            val stickerPath = android.graphics.Path().apply {
+                addRoundRect(rm, floatArrayOf(
+                    maskRadius, maskRadius,
+                    maskRadius, maskRadius,
+                    brMaskRadius, brMaskRadius,
+                    maskRadius, maskRadius
+                ), android.graphics.Path.Direction.CW)
+            }
 
             val checkpoint = saveLayer(null, null)
 
-            if (circle) drawOval(rm, maskPaint) else drawRoundRect(rm, maskRadius, maskRadius, maskPaint)
+            if (circle) drawOval(rm, maskPaint) else drawPath(stickerPath, maskPaint)
 
             contentPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
             drawBitmap(src, null, rm, contentPaint)
@@ -347,6 +435,7 @@ object InstagramStory {
                 val ringInner = RectF(rm).apply { inset(borderPx.toFloat(), borderPx.toFloat()) }
                 val ringOuterRadius = maskRadius
                 val ringInnerRadius = (maskRadius - borderPx).coerceAtLeast(0f)
+                val brRingInnerRadius = (brMaskRadius - borderPx).coerceAtLeast(0f)
 
                 val ringPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                     style = Paint.Style.FILL
@@ -356,10 +445,37 @@ object InstagramStory {
                 }
                 val path = android.graphics.Path().apply {
                     fillType = android.graphics.Path.FillType.EVEN_ODD
-                    addRoundRect(ringOuter, ringOuterRadius, ringOuterRadius, android.graphics.Path.Direction.CW)
-                    addRoundRect(ringInner, ringInnerRadius, ringInnerRadius, android.graphics.Path.Direction.CW)
+                    addRoundRect(ringOuter, floatArrayOf(
+                        ringOuterRadius, ringOuterRadius,
+                        ringOuterRadius, ringOuterRadius,
+                        brMaskRadius, brMaskRadius,
+                        ringOuterRadius, ringOuterRadius
+                    ), android.graphics.Path.Direction.CW)
+                    addRoundRect(ringInner, floatArrayOf(
+                        ringInnerRadius, ringInnerRadius,
+                        ringInnerRadius, ringInnerRadius,
+                        brRingInnerRadius, brRingInnerRadius,
+                        ringInnerRadius, ringInnerRadius
+                    ), android.graphics.Path.Direction.CW)
                 }
                 drawPath(path, ringPaint)
+
+                // 오른쪽 아래 종이 말림: borderRadius 16dp, 크기=brMaskRadius(코너 전체 채움)
+                val curlSizePx = brMaskRadius - 2f
+                val curlRadiusPx = dp(context, 16f)
+                val curlRect = RectF(
+                    rm.right - curlSizePx, rm.bottom - curlSizePx,
+                    rm.right, rm.bottom
+                )
+                val curlPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    color = resolvedBorderColor
+                    style = Paint.Style.FILL
+                    isDither = true
+                }
+                save()
+                clipPath(stickerPath)
+                drawRoundRect(curlRect, curlRadiusPx, curlRadiusPx, curlPaint)
+                restore()
             }
 
             overlayResId?.let { resId ->
@@ -385,7 +501,6 @@ object InstagramStory {
         }
         if (!src.isRecycled) src.recycle()
         outBmp
-
     }
 
     /**
@@ -397,6 +512,7 @@ object InstagramStory {
         @DrawableRes bgResId: Int? = null,
         bgImageUrl: String? = null,
         stickerImageUrl: String,
+        challengeTitle: String = "",
         outW: Int = 1080,
         outH: Int = 1920,
         cornerDp: Float = 16f,
@@ -412,13 +528,11 @@ object InstagramStory {
     ) {
         val uri = composeSingleImageBgUriExact(
             context = context,
-            bgResId = R.drawable.ig_bg,         // 또는 bgImageUrl = "https://..."
+            bgResId = R.drawable.ig_bg,
             stickerImageUrl = stickerImageUrl,
+            challengeTitle = challengeTitle,
             targetAspectW = 9,
-            targetAspectH = 16,                  // ← 9:16 강제
-            // 출력 해상도를 직접 주고 싶으면:
-            // outW = 1080, outH = 1920,
-            // (미지정 시 1080x1920(9:16), 1080x2160(9:18) 자동)
+            targetAspectH = 16,
             cornerDp = 16f,
             circle = false,
             overlayResId = overlayResId,
