@@ -70,6 +70,7 @@
                     android:fontFamily="@font/suit_medium"
                     android:hint="아이디"
                     android:inputType="text"
+                    android:maxLength="20"
                     android:text="@={viewModel.id}"
                     android:textColorHint="@color/gray400"
                     android:textSize="14dp" />
