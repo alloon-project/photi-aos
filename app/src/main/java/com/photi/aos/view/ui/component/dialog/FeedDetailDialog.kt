@@ -74,6 +74,7 @@ class FeedDetailDialog : DialogFragment(), CustomTwoButtonDialogInterface {
         val view = binding.root
 
         setupRecyclerView()
+        setupInputBlur()
         observeLiveData()
 
         binding.ellipsisImgBtn.setOnClickListener { view ->
@@ -86,12 +87,23 @@ class FeedDetailDialog : DialogFragment(), CustomTwoButtonDialogInterface {
         return view
     }
 
+    private fun setupInputBlur() {
+        val root = binding.dialogRoot
+        listOf(binding.inputBlurView, binding.ellipsisBlurView, binding.heartBlurView).forEach { blurView ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                blurView.setupWith(root, eightbitlab.com.blurview.RenderEffectBlur()).setBlurRadius(4f)
+            } else {
+                blurView.setupWith(root, eightbitlab.com.blurview.RenderScriptBlur(requireContext())).setBlurRadius(4f)
+            }
+        }
+    }
+
     private fun setupRecyclerView() {
         val lm = LinearLayoutManager(requireContext()).apply {
             reverseLayout = true
             stackFromEnd  = true
         }
-        adapter = CommentsAdapter(feedViewModel, lifecycle, feedId, myId)
+        adapter = CommentsAdapter(feedViewModel, lifecycle, feedId, myId, binding.dialogRoot)
         binding.commentsRecyclerView.adapter = adapter
         binding.commentsRecyclerView.layoutManager = lm
         binding.commentsRecyclerView.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->

@@ -94,6 +94,9 @@ dependencies {
     implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
     implementation("com.jakewharton.threetenabp:threetenabp:1.1.1")
 
+    //blurview
+    implementation("com.github.Dimezis:BlurView:version-2.0.3")
+
     //glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation(libs.googleid)
