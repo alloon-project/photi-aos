@@ -6,14 +6,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.paging.PagingData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.photi.aos.data.model.response.Comment
 import com.photi.aos.databinding.ItemFeedCommentBinding
 import com.photi.aos.viewmodel.FeedViewModel
 
 class CommentsAdapter(val feedViewModel: FeedViewModel, private val lifecycle: Lifecycle,
-                      val feedId : Int, val myId : String, val recyclerView: RecyclerView
+                      val feedId : Int, val myId : String
 )
     : PagingDataAdapter<Comment, CommentsAdapter.ViewHolder>(DiffCallback()) {
 
@@ -45,17 +44,6 @@ class CommentsAdapter(val feedViewModel: FeedViewModel, private val lifecycle: L
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
     }
-    fun addComment(comment: Comment) {
-        val current = snapshot().items.toMutableList()  // 현재까지 로드된 아이템
-        current.add(0,comment)                           // 맨 앞에 삽입
-        submitData(lifecycle, PagingData.from(current))
-
-        recyclerView.post {
-            (recyclerView.layoutManager as LinearLayoutManager)
-                .scrollToPositionWithOffset(0, 0)
-        }
-    }
-
     fun removeCommentById(commentId: Int) {
         val current = snapshot().items.toMutableList()
         val idx = current.indexOfFirst { it.id.toInt() == commentId }
@@ -63,11 +51,6 @@ class CommentsAdapter(val feedViewModel: FeedViewModel, private val lifecycle: L
             current.removeAt(idx)
             submitData(lifecycle, PagingData.from(current))
         }
-        recyclerView.post {
-            (recyclerView.layoutManager as LinearLayoutManager)
-                .scrollToPositionWithOffset(0, 0)
-        }
-
     }
     class DiffCallback : DiffUtil.ItemCallback<Comment>() {
         override fun areItemsTheSame(oldItem: Comment, newItem: Comment): Boolean {

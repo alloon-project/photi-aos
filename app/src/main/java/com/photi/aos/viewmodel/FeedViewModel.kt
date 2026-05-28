@@ -487,15 +487,12 @@ class FeedViewModel : ViewModel() {
 //        }
 //    }
 //
-    fun postComment(feedId: Int, comment: String,myId : String) {
+    fun postComment(feedId: Int, comment: String) {
         viewModelScope.launch(Dispatchers.IO) {
             handleApiCall(
                 call = { feedRepository.postComment(challengeId, feedId, CommentRequest(comment = comment)) },
                 onSuccess = { data ->
-                    if (data != null) {
-                        _postCommentResponse.postValue(Comment(id = data.id.toLong(), username = myId, comment = comment))
-                    }
-                    refreshFeedComments(feedId)
+                    _postCommentResponse.postValue(Comment(id = data!!.id.toLong(), username = "", comment = comment))
                 },
                 onFailure = { errorCode ->
                     _postCommentResponse.postValue(null)
@@ -507,6 +504,7 @@ class FeedViewModel : ViewModel() {
 
     fun consumeScrollFlag() { _scrollToBottom.value = false }
     fun consumePostedComment() { _postCommentResponse.value = null }
+    fun prepareScrollToBottom() { _scrollToBottom.value = true }
 
     fun deleteComment(feedId: Int, commentId: Int,  onComplete: () -> Unit,onFailure: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {

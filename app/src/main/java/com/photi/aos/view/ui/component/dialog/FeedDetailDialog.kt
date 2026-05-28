@@ -91,7 +91,7 @@ class FeedDetailDialog : DialogFragment(), CustomTwoButtonDialogInterface {
             reverseLayout = true
             stackFromEnd  = true
         }
-        adapter = CommentsAdapter(feedViewModel,lifecycle,feedId,myId,binding.commentsRecyclerView)
+        adapter = CommentsAdapter(feedViewModel, lifecycle, feedId, myId)
         binding.commentsRecyclerView.adapter = adapter
         binding.commentsRecyclerView.layoutManager = lm
         binding.commentsRecyclerView.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
@@ -192,7 +192,7 @@ class FeedDetailDialog : DialogFragment(), CustomTwoButtonDialogInterface {
                             val newCommentText = commentEditText.text.toString()
 
                             if (newCommentText.isNotEmpty()) {
-                                feedViewModel.postComment(feedId, newCommentText, myId)
+                                feedViewModel.postComment(feedId, newCommentText)
                                 commentEditText.setText("")
 
                                 if (isFirstAdd) {
@@ -220,13 +220,10 @@ class FeedDetailDialog : DialogFragment(), CustomTwoButtonDialogInterface {
 
 
         feedViewModel.postCommentResponse.observe(viewLifecycleOwner) { comment ->
-            if(comment != null){
-                adapter.addComment(comment)
-
+            if (comment != null) {
                 feedViewModel.consumePostedComment()
-
-                feedViewModel.refreshFeedComments(feedId)
-
+                feedViewModel.prepareScrollToBottom()
+                adapter.refresh()
             }
         }
 
