@@ -376,6 +376,7 @@ private fun setHeartButtonClickListener(data: FeedDetailData, heartButton: Image
         FeedActionPopup(
             context = requireContext(),
             isMyFeed = (feedUserName == myId),
+            rootView = binding.dialogRoot,
             listener = object : FeedActionPopup.Listener {
                 override fun onShare() {
                     if(feedBgImg.isNullOrBlank()){

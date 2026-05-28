@@ -222,6 +222,11 @@ class FeedActivity : BaseActivity(), CustomTwoButtonDialogInterface {
     private fun setCustomPopUp(view: View) {
         val popupViewBinding = CustomPopupMenuBinding.inflate(layoutInflater)
         val popupWindow = PopupWindow(popupViewBinding.root, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            popupViewBinding.popupBlurView.setupWith(binding.feed, eightbitlab.com.blurview.RenderEffectBlur()).setBlurRadius(10f)
+        } else {
+            popupViewBinding.popupBlurView.setupWith(binding.feed, eightbitlab.com.blurview.RenderScriptBlur(this)).setBlurRadius(10f)
+        }
 
         with(popupViewBinding){
             if (isLeader)

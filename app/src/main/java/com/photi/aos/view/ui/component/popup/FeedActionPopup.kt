@@ -1,11 +1,14 @@
 package com.photi.aos.view.ui.component.popup
 
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import com.photi.aos.databinding.CustomPopupMenuBinding
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 
 /**
  * 피드 액션(공유 / 삭제 / 신고)용 팝업.
@@ -16,7 +19,8 @@ import com.photi.aos.databinding.CustomPopupMenuBinding
 class FeedActionPopup(
     private val context: Context,
     private val isMyFeed: Boolean,
-    private val listener: Listener
+    private val listener: Listener,
+    private val rootView: ViewGroup? = null
 ) {
 
     interface Listener {
@@ -34,6 +38,13 @@ class FeedActionPopup(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             true
         )
+        rootView?.let { root ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                binding.popupBlurView.setupWith(root, RenderEffectBlur()).setBlurRadius(10f)
+            } else {
+                binding.popupBlurView.setupWith(root, RenderScriptBlur(context)).setBlurRadius(10f)
+            }
+        }
 
         // ───── UI 구성 ─────
         if (isMyFeed) {
