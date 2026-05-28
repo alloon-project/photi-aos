@@ -67,6 +67,8 @@ class FeedActivity : BaseActivity(), CustomTwoButtonDialogInterface {
         fixedButton = binding.fixedImageButton
         fixedView = binding.fixedBgView
 
+        setupChipBlur()
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frag_layout, feedFragment)
@@ -381,24 +383,24 @@ class FeedActivity : BaseActivity(), CustomTwoButtonDialogInterface {
                 when (hashtags.size) {
                     1 -> {
                         binding.chip1Btn.text = hashtags[0]
-                        binding.chip1Btn.visibility = View.VISIBLE
-                        binding.chip2Btn.visibility = View.GONE
+                        binding.chip1BlurView.visibility = View.VISIBLE
+                        binding.chip2BlurView.visibility = View.GONE
                     }
 
                     2 -> {
                         binding.chip1Btn.text = hashtags[0]
                         binding.chip2Btn.text = hashtags[1]
-                        binding.chip1Btn.visibility = View.VISIBLE
-                        binding.chip2Btn.visibility = View.VISIBLE
+                        binding.chip1BlurView.visibility = View.VISIBLE
+                        binding.chip2BlurView.visibility = View.VISIBLE
                     }
 
                     3 -> {
                         binding.chip1Btn.text = hashtags[0]
                         binding.chip2Btn.text = hashtags[1]
                         binding.chip3Btn.text = hashtags[2]
-                        binding.chip1Btn.visibility = View.VISIBLE
-                        binding.chip2Btn.visibility = View.VISIBLE
-                        binding.chip3Btn.visibility = View.VISIBLE
+                        binding.chip1BlurView.visibility = View.VISIBLE
+                        binding.chip2BlurView.visibility = View.VISIBLE
+                        binding.chip3BlurView.visibility = View.VISIBLE
                     }
                 }
             }
@@ -490,5 +492,16 @@ class FeedActivity : BaseActivity(), CustomTwoButtonDialogInterface {
     override fun onBackPressed() {
         finishActivity()
         super.onBackPressed()
+    }
+
+    private fun setupChipBlur() {
+        val root = binding.feed
+        listOf(binding.chip1BlurView, binding.chip2BlurView, binding.chip3BlurView, binding.tabBlurView).forEach { blurView ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                blurView.setupWith(root, eightbitlab.com.blurview.RenderEffectBlur()).setBlurRadius(4f)
+            } else {
+                blurView.setupWith(root, eightbitlab.com.blurview.RenderScriptBlur(this)).setBlurRadius(4f)
+            }
+        }
     }
 }

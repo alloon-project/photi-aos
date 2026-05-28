@@ -116,51 +116,70 @@
                         app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginTop="16dp">
 
-                        <Button
-                            android:id="@+id/chip1_btn"
+                        <eightbitlab.com.blurview.BlurView
+                            android:id="@+id/chip1_blur_view"
                             android:layout_width="wrap_content"
                             android:layout_height="27dp"
                             android:background="@drawable/chip_white"
-                            android:fontFamily="@font/suit_medium"
+                            android:clipToOutline="true"
                             android:minWidth="41dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
-                            android:text=""
-                            android:textAllCaps="false"
-                            android:textColor="@color/white"
-                            android:textSize="12dp"
-                            android:visibility="gone"/>
+                            android:visibility="gone">
+                            <TextView
+                                android:id="@+id/chip1_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/suit_medium"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="12dp"/>
+                        </eightbitlab.com.blurview.BlurView>
 
-                        <Button
-                            android:id="@+id/chip2_btn"
+                        <eightbitlab.com.blurview.BlurView
+                            android:id="@+id/chip2_blur_view"
                             android:layout_width="wrap_content"
                             android:layout_height="27dp"
                             android:background="@drawable/chip_white"
-                            android:fontFamily="@font/suit_medium"
+                            android:clipToOutline="true"
                             android:minWidth="41dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
-                            android:text=""
-                            android:textAllCaps="false"
-                            android:textColor="@color/white"
-                            android:textSize="12dp"
                             android:layout_marginLeft="8dp"
-                            android:visibility="gone"/>
-                        <Button
-                            android:id="@+id/chip3_btn"
+                            android:visibility="gone">
+                            <TextView
+                                android:id="@+id/chip2_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/suit_medium"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="12dp"/>
+                        </eightbitlab.com.blurview.BlurView>
+
+                        <eightbitlab.com.blurview.BlurView
+                            android:id="@+id/chip3_blur_view"
                             android:layout_width="wrap_content"
                             android:layout_height="27dp"
                             android:background="@drawable/chip_white"
-                            android:fontFamily="@font/suit_medium"
+                            android:clipToOutline="true"
                             android:minWidth="41dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
-                            android:text="고능해지자"
-                            android:textAllCaps="false"
-                            android:textColor="@color/white"
-                            android:textSize="12dp"
                             android:layout_marginLeft="8dp"
-                            android:visibility="gone"/>
+                            android:visibility="gone">
+                            <TextView
+                                android:id="@+id/chip3_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/suit_medium"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="12dp"/>
+                        </eightbitlab.com.blurview.BlurView>
 
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -176,42 +195,49 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
+            <eightbitlab.com.blurview.BlurView
+                android:id="@+id/tab_blur_view"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
-                app:tabBackground="@drawable/selector_tab_button"
-                app:tabSelectedTextColor="@color/gray800"
-                app:tabTextAppearance="@style/tab_text"
-                app:tabTextColor="@color/white"
-                app:tabIndicator="@drawable/divider_dotted_line"
-                app:tabIndicatorColor="@color/gray300"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/frag_layout">
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/suit_bold"
-                    android:text="피드"
-                    android:textSize="14dp" />
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:tabBackground="@drawable/selector_tab_button"
+                    app:tabSelectedTextColor="@color/gray800"
+                    app:tabTextAppearance="@style/tab_text"
+                    app:tabTextColor="@color/white"
+                    app:tabIndicator="@drawable/divider_dotted_line"
+                    app:tabIndicatorColor="@color/gray300">
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/suit_bold"
-                    android:text="소개"
-                    android:textSize="14dp" />
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suit_bold"
+                        android:text="피드"
+                        android:textSize="14dp" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/suit_bold"
-                    android:text="파티원"
-                    android:textSize="14dp" />
-            </com.google.android.material.tabs.TabLayout>
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suit_bold"
+                        android:text="소개"
+                        android:textSize="14dp" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/suit_bold"
+                        android:text="파티원"
+                        android:textSize="14dp" />
+                </com.google.android.material.tabs.TabLayout>
+
+            </eightbitlab.com.blurview.BlurView>
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/frag_layout"
@@ -222,7 +248,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tab_layout"
+                app:layout_constraintTop_toBottomOf="@+id/tab_blur_view"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
