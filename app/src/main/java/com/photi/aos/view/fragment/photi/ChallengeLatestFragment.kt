@@ -1,5 +1,6 @@
 package com.photi.aos.view.fragment.photi
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -79,6 +80,17 @@ class ChallengeLatestFragment : Fragment() {
     class LatestCardAdapter(private val mActivity: PhotiActivity, private val photiViewModel: PhotiViewModel) : PagingDataAdapter<ChallengeData, LatestCardAdapter.ViewHolder>(DiffCallback()){
 
         inner class ViewHolder(var binding : ItemCardMissionSmallRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root){
+
+            init {
+                val root = binding.root as ViewGroup
+                listOf(binding.chip1BlurView, binding.chip2BlurView, binding.chip3BlurView).forEach { blurView ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        blurView.setupWith(root, eightbitlab.com.blurview.RenderEffectBlur()).setBlurRadius(4f)
+                    } else {
+                        blurView.setupWith(root, eightbitlab.com.blurview.RenderScriptBlur(root.context)).setBlurRadius(4f)
+                    }
+                }
+            }
             fun bind(data: ChallengeData) {
                 binding.titleTextView.text = data.name
                 val formattedEnd = runCatching {
@@ -92,18 +104,18 @@ class ChallengeLatestFragment : Fragment() {
                         when (index) {
                             0 -> {
                                 binding.chip1Btn.text = hashtag.hashtag
-                                binding.chip1Btn.visibility = View.VISIBLE
-                                binding.chip2Btn.visibility = View.GONE
-                                binding.chip3Btn.visibility = View.GONE
+                                binding.chip1BlurView.visibility = View.VISIBLE
+                                binding.chip2BlurView.visibility = View.GONE
+                                binding.chip3BlurView.visibility = View.GONE
                             }
                             1 -> {
                                 binding.chip2Btn.text = hashtag.hashtag
-                                binding.chip2Btn.visibility = View.VISIBLE
-                                binding.chip3Btn.visibility = View.GONE
+                                binding.chip2BlurView.visibility = View.VISIBLE
+                                binding.chip3BlurView.visibility = View.GONE
                             }
                             2 -> {
                                 binding.chip3Btn.text = hashtag.hashtag
-                                binding.chip3Btn.visibility = View.VISIBLE
+                                binding.chip3BlurView.visibility = View.VISIBLE
                             }
                         }
                     }

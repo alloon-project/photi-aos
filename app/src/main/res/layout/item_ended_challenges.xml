@@ -65,15 +65,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <eightbitlab.com.blurview.BlurView
                 android:id="@+id/linearLayout10"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="#4DFFFFFF"
-                android:orientation="horizontal"
+                android:background="@drawable/shape_challenge_card_search_blur"
+                android:clipToOutline="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/avatar_one_layout"
@@ -231,7 +238,8 @@
                         android:textColor="@color/white"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </eightbitlab.com.blurview.BlurView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

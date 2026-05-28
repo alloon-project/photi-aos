@@ -3,6 +3,7 @@ package com.photi.aos.view.ui.component.dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -117,6 +118,17 @@ class EndedChallengesDialog(val count: Int) : DialogFragment() {
 
         inner class ViewHolder(private val binding: ItemEndedChallengesBinding) :
             RecyclerView.ViewHolder(binding.root) {
+
+            init {
+                val root = binding.root as ViewGroup
+                listOf(binding.linearLayout10).forEach { blurView ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        blurView.setupWith(root, eightbitlab.com.blurview.RenderEffectBlur()).setBlurRadius(2f)
+                    } else {
+                        blurView.setupWith(root, eightbitlab.com.blurview.RenderScriptBlur(root.context)).setBlurRadius(2f)
+                    }
+                }
+            }
             fun bind(data: EndedChallengeContent) {
                 binding.titleTextView.text = data.name
                 binding.dateTextView.text = data.endDate.replace("-", ".") + " 종료"
