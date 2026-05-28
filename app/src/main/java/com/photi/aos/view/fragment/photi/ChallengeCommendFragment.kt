@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,6 +66,13 @@ class ChallengeCommendFragment : Fragment() {
         binding.hashtagRecyclerView.adapter = hashCardAdapter
         binding.hashtagRecyclerView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.hashtagRecyclerView.setHasFixedSize(false)
+
+        hashCardAdapter.addLoadStateListener { loadState ->
+            val isLoading = loadState.source.refresh is LoadState.Loading
+            val isEmpty = !isLoading && hashCardAdapter.itemCount == 0
+            binding.hashtagRecyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
+            binding.noChallengeTextview.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        }
 
         photiViewModel.resetApiResponseValue()
         photiViewModel.resetPopularResponseValue()
