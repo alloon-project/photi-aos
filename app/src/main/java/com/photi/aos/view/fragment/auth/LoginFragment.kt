@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
-import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
 import androidx.databinding.DataBindingUtil
@@ -36,6 +35,7 @@ import com.photi.aos.view.ui.component.toast.CustomToast
 import com.photi.aos.view.activity.AuthActivity
 import com.photi.aos.view.ui.util.LoadingButtonManager.hideLoading
 import com.photi.aos.view.ui.util.LoadingButtonManager.showLoading
+import com.photi.aos.view.ui.util.LoadingDialogManager
 import com.photi.aos.viewmodel.AuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -81,16 +81,16 @@ class LoginFragment : Fragment() {
 
     fun onClickKakaoLogin() {
         val act = activity ?: return
+        LoadingDialogManager.show(requireActivity())
 
         launchKakaoLogin(
             activity = act,
             onSuccess = { idToken, sub ->
--                Log.d("KakaoLogin", "idToken: $idToken")
                 authViewModel.loginOauth(OAuthProvider.KAKAO, idToken, sub)
             },
             onFailure = { t ->
+                LoadingDialogManager.hide()
                 Log.e("KakaoLogin", "FAIL", t)
-                 if (t is ClientError && t.reason == ClientErrorCause.Cancelled) return@launchKakaoLogin
             }
         )
     }
@@ -98,6 +98,7 @@ class LoginFragment : Fragment() {
 
     fun onClickGoogleLogin() {
         val act = activity ?: return
+        LoadingDialogManager.show(requireActivity())
 
         val webClientId = BuildConfig.GOOGLE_WEB_CLIENT_ID
 
@@ -106,12 +107,11 @@ class LoginFragment : Fragment() {
             webClientId = webClientId,
             scope = viewLifecycleOwner.lifecycleScope,
             onSuccess = { idToken, sub ->
-                Log.d("GoogleLogin", "idToken: $idToken")
                 authViewModel.loginOauth(OAuthProvider.GOOGLE, idToken, sub)
             },
             onFailure = { t ->
+                LoadingDialogManager.hide()
                 Log.e("GoogleLogin", "FAIL", t)
-                if (t is GetCredentialCancellationException) return@launchGoogleLogin
             }
         )
 
@@ -193,6 +193,7 @@ class LoginFragment : Fragment() {
    private fun setObserve() {
         authViewModel.actionApiResponse.observe(viewLifecycleOwner) { response ->
             binding.loginBtn.hideLoading()
+            LoadingDialogManager.hide()
             when (response.code) {
                 "200 OK" -> {
                     mActivity.finishActivity()
