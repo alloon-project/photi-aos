@@ -8,12 +8,12 @@ plugins {
 }
 android {
     namespace = "com.photi.aos"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.photi.aos"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 12
         versionName = "2.1.0"
 
