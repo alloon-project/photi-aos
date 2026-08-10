@@ -15,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -68,6 +69,12 @@ class FeedActivity : BaseActivity(), CustomTwoButtonDialogInterface {
         fixedView = binding.fixedBgView
 
         setupChipBlur()
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finishActivity()
+            }
+        })
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -492,11 +499,6 @@ class FeedActivity : BaseActivity(), CustomTwoButtonDialogInterface {
             startActivity(intent)
         }
         finish()
-    }
-
-    override fun onBackPressed() {
-        finishActivity()
-        super.onBackPressed()
     }
 
     private fun setupChipBlur() {
